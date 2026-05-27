@@ -1,0 +1,442 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Sora:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AUVP Design System — Design Tokens
+   Default: AUVP Capital (Green)
+   .escola: AUVP Escola (Gold)
+   All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* === AUVP Capital (Verde) === */
+    --font-display: 'Anek Latin', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+    --font-ui: 'Sora', sans-serif;
+
+    --background: 0 0% 100%;
+    --foreground: 110 78% 9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 110 78% 9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 110 78% 9%;
+
+    --primary: 155 93% 11%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 55% 18%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 120 10% 95%;
+    --muted-foreground: 110 10% 40%;
+
+    --accent: 155 93% 11%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* === Status semânticos (Capital) === */
+    --success: 142 71% 35%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 15% 15%;
+    --info: 210 90% 50%;
+    --info-foreground: 0 0% 100%;
+    --error: 0 84% 55%;
+    --error-foreground: 0 0% 100%;
+
+    --border: 120 10% 88%;
+    --input: 120 10% 88%;
+    --ring: 155 93% 11%;
+
+    --radius: 0.75rem;
+
+    /* Brand-specific tokens */
+    --brand: 155 93% 11%;
+    --brand-foreground: 0 0% 100%;
+    --brand-dark: 110 78% 9%;
+    --brand-hover: 155 80% 15%;
+    --brand-gradient-from: 155 93% 11%;
+    --brand-gradient-to: 140 70% 20%;
+
+    /* CTA (sites/LPs) — always green */
+    --cta: 155 93% 11%;
+    --cta-foreground: 0 0% 100%;
+
+    --sidebar-background: 110 78% 9%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 155 93% 11%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 155 50% 16%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 120 20% 15%;
+    --sidebar-ring: 155 93% 11%;
+
+    /* === Data Visualization Palette (Capital) ===
+       Paleta categórica de 8 cores derivadas da identidade verde,
+       balanceada para tabelas, gráficos de pizza, barras e linhas.
+       Ordem otimizada para distinção máxima em séries categóricas. */
+    --chart-1: 152 80% 30%;   /* Verde AUVP */
+    --chart-2: 270 60% 55%;   /* Violeta */
+    --chart-3: 38 92% 55%;    /* Âmbar */
+    --chart-4: 199 89% 48%;   /* Azul */
+    --chart-5: 340 75% 55%;   /* Magenta */
+    --chart-6: 15 80% 50%;    /* Vermelho-tijolo */
+    --chart-7: 90 55% 40%;    /* Oliva */
+    --chart-8: 220 30% 35%;   /* Grafite azulado */
+
+    /* Escala sequencial — para mapas de calor, intensidade, progressão */
+    --chart-seq-1: 145 40% 92%;
+    --chart-seq-2: 150 50% 78%;
+    --chart-seq-3: 152 60% 60%;
+    --chart-seq-4: 154 75% 40%;
+    --chart-seq-5: 155 93% 11%;
+
+    /* Escala divergente — para variação positivo/negativo */
+    --chart-div-neg: 0 72% 51%;
+    --chart-div-mid: 40 30% 92%;
+    --chart-div-pos: 155 93% 25%;
+  }
+
+  .escola {
+    /* === AUVP Escola (Dourado) === */
+    --foreground: 220 15% 15%;
+
+    --primary: 42 84% 63%;
+    --primary-foreground: 220 15% 15%;
+
+    --secondary: 40 64% 54%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 40 30% 95%;
+    --muted-foreground: 40 15% 40%;
+
+    --accent: 42 83% 62%;
+    --accent-foreground: 220 15% 15%;
+
+    /* === Status semânticos (Escola) === */
+    --success: 145 60% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 95% 52%;
+    --warning-foreground: 220 15% 15%;
+    --info: 205 80% 48%;
+    --info-foreground: 0 0% 100%;
+    --error: 0 78% 52%;
+    --error-foreground: 0 0% 100%;
+
+    --ring: 42 84% 63%;
+
+    --radius: 0.75rem;
+
+    /* Brand-specific tokens */
+    --brand: 42 84% 63%;
+    --brand-foreground: 220 15% 15%;
+    --brand-dark: 42 100% 33%;
+    --brand-hover: 40 64% 54%;
+    --brand-gradient-from: 38 100% 79%;
+    --brand-gradient-to: 42 100% 33%;
+
+    --sidebar-background: 42 100% 33%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 42 84% 63%;
+    --sidebar-primary-foreground: 220 15% 15%;
+    --sidebar-accent: 42 70% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 42 50% 28%;
+    --sidebar-ring: 42 84% 63%;
+
+    /* === Data Visualization Palette (Escola) ===
+       Paleta categórica derivada do dourado, com complementares
+       que mantêm hierarquia e legibilidade. */
+    --chart-1: 42 84% 55%;    /* Dourado AUVP */
+    --chart-2: 15 75% 55%;    /* Telha */
+    --chart-3: 200 75% 45%;   /* Azul ardósia */
+    --chart-4: 350 70% 55%;   /* Coral rosado */
+    --chart-5: 160 55% 40%;   /* Verde sálvia */
+    --chart-6: 270 55% 55%;   /* Violeta (afastado do telha série 2) */
+    --chart-7: 90 50% 45%;    /* Oliva (afastado do verde sálvia série 5) */
+    --chart-8: 220 25% 35%;   /* Grafite */
+
+    --chart-seq-1: 45 80% 95%;
+    --chart-seq-2: 44 82% 80%;
+    --chart-seq-3: 43 84% 65%;
+    --chart-seq-4: 38 85% 50%;
+    --chart-seq-5: 32 90% 35%;
+
+    --chart-div-neg: 0 72% 51%;
+    --chart-div-mid: 40 30% 95%;
+    --chart-div-pos: 42 100% 33%;
+  }
+
+  .dark {
+    /* === AUVP Capital — Dark (fundo preto) === */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Base preto/branco/cinza. Verde #5A8770 reservado para acentos
+       pontuais em ícones e textos (ex: numeração da grade curricular). */
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 145 20% 44%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 60% 48%;
+    --success-foreground: 0 0% 5%;
+    --warning: 38 95% 60%;
+    --warning-foreground: 0 0% 5%;
+    --info: 210 90% 65%;
+    --info-foreground: 0 0% 5%;
+    --error: 0 80% 65%;
+    --error-foreground: 0 0% 100%;
+
+    --border: 0 0% 16%;
+    --input: 0 0% 14%;
+    --ring: 145 20% 50%;
+
+    /* Brand verde — acento pontual (#5A8770) */
+    --brand: 145 20% 44%;
+    --brand-foreground: 0 0% 98%;
+    --brand-dark: 0 0% 0%;
+    --brand-hover: 145 20% 54%;
+    --brand-gradient-from: 145 25% 54%;
+    --brand-gradient-to: 145 30% 38%;
+
+    --cta: 0 0% 98%;
+    --cta-foreground: 0 0% 8%;
+
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 92%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 16%;
+    --sidebar-ring: 145 20% 50%;
+
+    /* Data Viz — Dark Capital (paleta colorida para gráficos) */
+    --chart-1: 135 50% 55%;   /* Verde AUVP */
+    --chart-2: 270 65% 70%;   /* Violeta */
+    --chart-3: 38 90% 65%;    /* Âmbar */
+    --chart-4: 199 85% 65%;   /* Azul */
+    --chart-5: 340 75% 70%;   /* Magenta */
+    --chart-6: 15 80% 65%;    /* Vermelho-tijolo claro */
+    --chart-7: 90 55% 60%;    /* Oliva claro */
+    --chart-8: 220 30% 70%;   /* Grafite azulado */
+
+    --chart-seq-1: 135 25% 18%;
+    --chart-seq-2: 135 35% 30%;
+    --chart-seq-3: 135 45% 45%;
+    --chart-seq-4: 135 55% 58%;
+    --chart-seq-5: 130 60% 72%;
+
+    --chart-div-neg: 0 70% 60%;
+    --chart-div-mid: 0 0% 25%;
+    --chart-div-pos: 135 50% 55%;
+  }
+
+  .dark.escola,
+  .escola .dark {
+    /* === AUVP Escola — Dark (fundo preto) === */
+    --background: 0 0% 0%;
+    --foreground: 45 25% 96%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 45 25% 96%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 45 25% 96%;
+
+    --primary: 42 90% 65%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 45 25% 96%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 40 10% 70%;
+
+    --accent: 42 90% 65%;
+    --accent-foreground: 0 0% 8%;
+
+    --border: 40 10% 18%;
+    --input: 40 10% 16%;
+    --ring: 42 90% 65%;
+
+    --brand: 42 90% 65%;
+    --brand-foreground: 0 0% 8%;
+    --brand-dark: 0 0% 0%;
+    --brand-hover: 42 95% 75%;
+    --brand-gradient-from: 42 84% 55%;
+    --brand-gradient-to: 38 80% 25%;
+
+    --cta: 42 90% 65%;
+    --cta-foreground: 0 0% 8%;
+
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 45 25% 92%;
+    --sidebar-primary: 42 90% 65%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 45 25% 96%;
+    --sidebar-border: 40 10% 18%;
+    --sidebar-ring: 42 90% 65%;
+
+    --chart-1: 42 84% 65%;    /* Dourado AUVP */
+    --chart-2: 15 80% 65%;    /* Telha */
+    --chart-3: 200 80% 60%;   /* Azul ardósia */
+    --chart-4: 350 75% 65%;   /* Coral rosado */
+    --chart-5: 160 55% 55%;   /* Verde sálvia */
+    --chart-6: 270 65% 70%;   /* Violeta */
+    --chart-7: 90 50% 60%;    /* Oliva claro */
+    --chart-8: 220 20% 65%;   /* Grafite claro */
+
+    --chart-seq-1: 45 25% 18%;
+    --chart-seq-2: 44 50% 32%;
+    --chart-seq-3: 43 70% 50%;
+    --chart-seq-4: 38 85% 65%;
+    --chart-seq-5: 32 90% 78%;
+
+    --chart-div-neg: 0 70% 60%;
+    --chart-div-mid: 40 15% 25%;
+    --chart-div-pos: 42 85% 60%;
+  }
+
+  .dark body {
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+
+  button, [role="button"], input, select, textarea, label {
+    font-family: var(--font-body);
+  }
+}
+
+/* Utility classes for brand gradient */
+@layer utilities {
+  .bg-brand-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--brand-gradient-from)),
+      hsl(var(--brand-gradient-to))
+    );
+  }
+
+  .text-brand {
+    color: hsl(var(--brand));
+  }
+
+  .bg-brand {
+    background-color: hsl(var(--brand));
+  }
+
+  .border-brand {
+    border-color: hsl(var(--brand));
+  }
+}
+
+/* === Dark mode contrast overrides ===
+   Camada defensiva para neutralizar classes Tailwind hardcoded
+   garantindo contraste adequado em fundo preto. */
+.dark .bg-white { background-color: hsl(var(--card)) !important; }
+.dark .bg-black { background-color: hsl(var(--background)) !important; }
+.dark .text-white { color: hsl(0 0% 98%) !important; }
+.dark .text-black { color: hsl(var(--foreground)) !important; }
+
+.dark .bg-gray-50, .dark .bg-gray-100,
+.dark .bg-slate-50, .dark .bg-slate-100,
+.dark .bg-zinc-50, .dark .bg-zinc-100,
+.dark .bg-neutral-50, .dark .bg-neutral-100 { background-color: hsl(var(--muted)) !important; }
+
+.dark .bg-gray-200, .dark .bg-slate-200,
+.dark .bg-zinc-200, .dark .bg-neutral-200 { background-color: hsl(var(--secondary)) !important; }
+
+.dark .bg-gray-800, .dark .bg-gray-900,
+.dark .bg-slate-800, .dark .bg-slate-900,
+.dark .bg-zinc-800, .dark .bg-zinc-900,
+.dark .bg-neutral-800, .dark .bg-neutral-900 { background-color: hsl(var(--card)) !important; }
+
+.dark .text-gray-900, .dark .text-gray-800, .dark .text-gray-700,
+.dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700,
+.dark .text-zinc-900, .dark .text-zinc-800, .dark .text-zinc-700,
+.dark .text-neutral-900, .dark .text-neutral-800, .dark .text-neutral-700 { color: hsl(var(--foreground)) !important; }
+
+.dark .text-gray-600, .dark .text-gray-500, .dark .text-gray-400,
+.dark .text-slate-600, .dark .text-slate-500, .dark .text-slate-400,
+.dark .text-zinc-600, .dark .text-zinc-500, .dark .text-zinc-400,
+.dark .text-neutral-600, .dark .text-neutral-500, .dark .text-neutral-400 { color: hsl(var(--muted-foreground)) !important; }
+
+.dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300,
+.dark .border-slate-100, .dark .border-slate-200, .dark .border-slate-300,
+.dark .border-zinc-100, .dark .border-zinc-200, .dark .border-zinc-300,
+.dark .border-neutral-100, .dark .border-neutral-200, .dark .border-neutral-300 { border-color: hsl(var(--border)) !important; }
+
+.dark .border-white, .dark .border-black { border-color: hsl(var(--border)) !important; }
+
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: hsl(var(--border)) !important; }
+
+/* Timeline scrollbar (Trilha Horizontal) */
+.timeline-scrollbar::-webkit-scrollbar { height: 4px; }
+.timeline-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 9999px;
+}
+.timeline-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 9999px;
+  transition: background 0.2s;
+}
+.timeline-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+.timeline-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.3) hsl(var(--muted));
+}
+
+/* Livro — animação fechado → aberto no hover */
+.group\/livro:hover .livro-inner {
+  transform: rotateY(-28deg) rotateX(4deg);
+}
