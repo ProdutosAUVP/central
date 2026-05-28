@@ -75,7 +75,75 @@
   </label>
 </div>
 
+<!-- Checkbox Group (multi-select) -->
+<div class="gx-choice-group" role="group" aria-label="Selecione um plano" style="margin-top:24px;">
+  <label class="gx-choice gx-choice--checkbox">
+    <input type="checkbox" name="plans" value="trial" />
+    <span class="gx-choice__indicator"></span>
+    <span class="gx-choice__body">
+      <span class="gx-choice__title">Pro Trial</span>
+      <span class="gx-choice__desc">Grátis por duas semanas</span>
+    </span>
+  </label>
+  <label class="gx-choice gx-choice--checkbox">
+    <input type="checkbox" name="plans" value="pro" />
+    <span class="gx-choice__indicator"></span>
+    <span class="gx-choice__body">
+      <span class="gx-choice__title">Pro</span>
+      <span class="gx-choice__desc">Comece agora</span>
+    </span>
+  </label>
+</div>
+
+<!-- Grupo desabilitado + item individual desabilitado -->
+<div style="display:flex; flex-direction:column; gap:24px; margin-top:24px;">
+  <div>
+    <span class="gx-choice-label">Grupo desabilitado</span>
+    <div class="gx-choice-group" role="radiogroup" aria-label="Grupo desabilitado">
+      <label class="gx-choice gx-choice--radio">
+        <input type="radio" disabled />
+        <span class="gx-choice__indicator"></span>
+        <span class="gx-choice__body">
+          <span class="gx-choice__title">Pro Trial</span>
+          <span class="gx-choice__desc">Grátis por duas semanas</span>
+        </span>
+      </label>
+      <label class="gx-choice gx-choice--radio">
+        <input type="radio" disabled />
+        <span class="gx-choice__indicator"></span>
+        <span class="gx-choice__body">
+          <span class="gx-choice__title">Pro</span>
+          <span class="gx-choice__desc">Comece agora</span>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div>
+    <span class="gx-choice-label">Item individual desabilitado</span>
+    <div class="gx-choice-group" role="group" aria-label="Item individual desabilitado">
+      <label class="gx-choice gx-choice--checkbox">
+        <input type="checkbox" disabled />
+        <span class="gx-choice__indicator"></span>
+        <span class="gx-choice__body">
+          <span class="gx-choice__title">Pro Trial</span>
+          <span class="gx-choice__desc">Grátis por duas semanas</span>
+        </span>
+      </label>
+      <label class="gx-choice gx-choice--checkbox">
+        <input type="checkbox" />
+        <span class="gx-choice__indicator"></span>
+        <span class="gx-choice__body">
+          <span class="gx-choice__title">Pro</span>
+          <span class="gx-choice__desc">Comece agora</span>
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+
 <script>
+  // Toggle visual (radio: único; checkbox: independente)
   document.querySelectorAll('.gx-choice-group').forEach(group => {
     group.querySelectorAll('.gx-choice').forEach(item => {
       item.addEventListener('click', () => {

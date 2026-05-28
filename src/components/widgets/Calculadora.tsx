@@ -671,6 +671,231 @@ export function Calculadora() {
     </div>
   );
 }`
+          },
+          {
+            label: "HTML / CSS / JS",
+            language: "html",
+            code: `<!-- Calculadora de Câmbio — HTML standalone -->
+<link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;600;700&family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: 142 64% 9%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 142 64% 9%;
+    --foreground: 0 0% 10%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --card: 0 0% 100%;
+    --border: 0 0% 90%;
+  }
+  .calc { max-width: 480px; margin: 0 auto; background: hsl(var(--card));
+    padding: 24px; border-radius: 16px; border: 1px solid hsl(var(--border));
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15); font-family: 'Roboto', sans-serif; color: hsl(var(--foreground)); }
+  .tab-wrap { position: relative; display: flex; padding: 4px; margin-bottom: 24px;
+    background: hsl(var(--primary) / 0.05); border-radius: 12px; overflow: hidden; }
+  .tab-slider { position: absolute; top: 4px; bottom: 4px; width: calc(50% - 8px);
+    background: hsl(var(--card)); border-radius: 8px; transition: left .3s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); left: 4px; }
+  .tab-btn { flex: 1; padding: 8px 16px; font-size: 14px; font-weight: 500;
+    position: relative; z-index: 1; background: transparent; border: 0; cursor: pointer;
+    color: hsl(var(--muted-foreground)); border-radius: 8px; }
+  .tab-btn.active { color: hsl(var(--foreground)); }
+  .entity { display: flex; justify-content: center; align-items: center; gap: 4px;
+    margin-bottom: 24px; font-size: 14px; color: hsl(var(--muted-foreground)); position: relative; }
+  .entity-btn { background: 0; border: 0; cursor: pointer; font-weight: 600;
+    color: hsl(var(--accent)); display: inline-flex; align-items: center; gap: 4px; }
+  .invest-wrap { overflow: hidden; transition: all .3s ease-in-out; max-height: 100px; opacity: 1; margin-bottom: 24px; }
+  .invest-wrap.hidden { max-height: 0; opacity: 0; margin-bottom: 0; }
+  .invest { width: fit-content; margin: 0 auto; display: flex; align-items: center;
+    gap: 8px; padding: 12px 16px; background: hsl(var(--primary) / 0.05); border-radius: 12px; }
+  .field { background: hsl(var(--muted) / 0.5); padding: 16px; border-radius: 12px;
+    border: 1px solid hsl(var(--border)); margin-bottom: 16px; }
+  .field label { display: block; font-size: 12px; color: hsl(var(--muted-foreground)); margin-bottom: 4px; font-weight: 500; }
+  .field-row { display: flex; align-items: center; justify-content: space-between; position: relative; }
+  .currency-btn { display: flex; align-items: center; gap: 8px; background: 0; border: 0; cursor: pointer; font-weight: 600; }
+  .field input { background: transparent; border: 0; outline: 0; text-align: right;
+    width: 100%; font-size: 24px; font-weight: 600; font-family: 'Anek Latin', sans-serif; color: hsl(var(--foreground)); }
+  .summary { display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; color: hsl(var(--muted-foreground)); margin-bottom: 24px; }
+  .details-link { background: 0; border: 0; cursor: pointer; color: hsl(var(--accent)); font-weight: 500; }
+  .cta { width: 100%; padding: 12px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground));
+    border: 0; border-radius: 12px; font-weight: 600; font-family: 'Sora', sans-serif; cursor: pointer; }
+  .dropdown { position: absolute; left: 0; top: 100%; margin-top: 8px; width: 224px;
+    background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-height: 240px; overflow-y: auto; z-index: 10; }
+  .dropdown button { display: flex; align-items: center; gap: 8px; width: 100%;
+    text-align: left; padding: 12px; background: 0; border: 0; cursor: pointer; font-size: 14px; }
+  .dropdown button:hover { background: hsl(var(--muted)); }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none;
+    align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+  .modal.open { display: flex; }
+  .modal-card { background: hsl(var(--card)); border-radius: 16px; padding: 24px;
+    max-width: 480px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+  .modal-row { display: flex; justify-content: space-between; padding: 8px 0; }
+</style>
+
+<div class="calc">
+  <div class="tab-wrap">
+    <div class="tab-slider" id="slider"></div>
+    <button class="tab-btn active" id="tab-send" onclick="setDirection('send')">Enviar</button>
+    <button class="tab-btn" id="tab-receive" onclick="setDirection('receive')">Receber</button>
+  </div>
+
+  <div class="entity">
+    como&nbsp;
+    <button class="entity-btn" onclick="toggleEntity()">
+      <span id="entity-label">pessoa física</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="dropdown" id="entity-drop" style="display:none; right:0; left:auto; width:192px;">
+      <button onclick="setEntity('pf')">Pessoa Física</button>
+      <button onclick="setEntity('pj')">Pessoa Jurídica</button>
+    </div>
+  </div>
+
+  <div class="invest-wrap" id="invest-wrap">
+    <div class="invest">
+      <input type="checkbox" id="invest-check" checked onchange="recalc()" style="width:20px;height:20px;accent-color:hsl(var(--primary));">
+      <label for="invest-check" style="font-size:14px;font-weight:500;">Estou enviando esse dinheiro para investir no exterior</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label id="brl-label">Você envia</label>
+    <div class="field-row">
+      <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:24px;">🇧🇷</span><span style="font-weight:600;">BRL</span></div>
+      <input type="text" inputmode="decimal" id="brl-input" value="5.000,00" oninput="onBrlInput()">
+    </div>
+  </div>
+
+  <div class="field">
+    <label id="fx-label">Beneficiário recebe</label>
+    <div class="field-row">
+      <button class="currency-btn" onclick="toggleCurrency()">
+        <span style="font-size:24px;" id="cur-flag">🇺🇸</span>
+        <span id="cur-code">USD</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="dropdown" id="cur-drop" style="display:none;"></div>
+      <input type="text" inputmode="decimal" id="fx-input" placeholder="0,00" oninput="onFxInput()">
+    </div>
+  </div>
+
+  <div class="summary">
+    <span>Câmbio: 1 <span id="rate-code">USD</span> = BRL <span id="rate-val">5,5350</span></span>
+    <button class="details-link" onclick="openModal()">Detalhes →</button>
+  </div>
+
+  <button class="cta" id="cta-btn">Enviar dinheiro</button>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <h2 style="font-size:20px;font-weight:600;margin:0;">Detalhes da Operação</h2>
+      <button onclick="closeModal()" style="background:0;border:0;cursor:pointer;font-size:24px;">×</button>
+    </div>
+    <div class="modal-row"><span>IOF</span><span id="m-iof">R$ 0,00</span></div>
+    <div class="modal-row"><span>Taxa Administrativa</span><span id="m-spread">R$ 0,00</span></div>
+    <div class="modal-row" id="m-pj-row" style="display:none;"><span>Custos transacionais</span><span>R$ 90,00</span></div>
+    <div class="modal-row"><span>VET</span><span id="m-vet">1 USD = BRL 5,5350</span></div>
+    <button class="cta" onclick="closeModal()" style="margin-top:24px;">Fechar</button>
+  </div>
+</div>
+
+<script>
+  const RATES = { usd:5.45, eur:5.92, gbp:6.89, chf:6.12, jpy:0.0365, cny:0.752, aud:3.56, cad:4.01 };
+  const CURRENCIES = [
+    ['usd','Dólar Americano','🇺🇸'],['eur','Euro','🇪🇺'],['gbp','Libra Esterlina','🇬🇧'],
+    ['chf','Franco Suíço','🇨🇭'],['jpy','Iene Japonês','🇯🇵'],['cny','Yuan Chinês','🇨🇳'],
+    ['aud','Dólar Australiano','🇦🇺'],['cad','Dólar Canadense','🇨🇦'],
+  ];
+  const IOF = {
+    'send-pf-investment':0.011,'send-pf-other':0.035,
+    'receive-pf-investment':0.0038,'receive-pf-other':0.0038,
+    'send-pj-investment':0.011,'send-pj-other':0.035,
+    'receive-pj-investment':0,'receive-pj-other':0,
+  };
+  let direction='send', userType='pf', currency='usd', isInvest=true, brl=5000, fx=0;
+
+  function getSpread(v, t){
+    const ranges = t==='pj'
+      ? [[2499.99,0.015],[4999.99,0.01],[9999.99,0.005],[Infinity,0.0025]]
+      : [[25000,0.015],[50000,0.0135],[100000,0.0128],[250000,0.012],[500000,0.0105],[1000000,0.0098],[Infinity,0.009]];
+    for (const [m,r] of ranges) if (v<=m) return r;
+    return 0.015;
+  }
+  function vetCalc(rate, iof, sp, t, brl){
+    let v = rate * (1+sp+iof);
+    if (t!=='pj' || !brl) return v;
+    const q = brl/v;
+    return (v*q + 90)/q;
+  }
+  function fmt(v){ return isNaN(v)?'0,00':v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmtRate(v){ return isNaN(v)?'0,0000':v.toFixed(4).replace('.',','); }
+  function parseBR(s){ return (parseInt(String(s).replace(/[^\\d]/g,''),10)||0)/100; }
+
+  function recalc(){
+    const rate = RATES[currency];
+    const iof = IOF[direction+'-'+userType+'-'+(isInvest?'investment':'other')] || 0;
+    const sp = getSpread(fx || brl/rate, userType);
+    if (direction==='send'){
+      const vet = vetCalc(rate, iof, sp, userType, brl);
+      fx = brl/vet;
+    } else {
+      fx = brl / (rate*(1-sp-iof));
+    }
+    document.getElementById('fx-input').value = fmt(fx);
+    document.getElementById('rate-val').textContent = fmtRate(vetCalc(rate, iof, sp, userType, brl));
+    document.getElementById('rate-code').textContent = currency.toUpperCase();
+  }
+
+  function setDirection(d){
+    direction = d;
+    document.getElementById('slider').style.left = d==='send' ? '4px' : 'calc(50% + 4px)';
+    document.getElementById('tab-send').classList.toggle('active', d==='send');
+    document.getElementById('tab-receive').classList.toggle('active', d==='receive');
+    document.getElementById('brl-label').textContent = d==='send'?'Você envia':'Você recebe';
+    document.getElementById('fx-label').textContent = d==='send'?'Beneficiário recebe':'Você envia';
+    document.getElementById('cta-btn').textContent = d==='send'?'Enviar dinheiro':'Receber dinheiro';
+    updateInvestVisibility();
+    recalc();
+  }
+  function toggleEntity(){ const d=document.getElementById('entity-drop'); d.style.display = d.style.display==='none'?'block':'none'; }
+  function setEntity(t){ userType=t; document.getElementById('entity-label').textContent = t==='pf'?'pessoa física':'pessoa jurídica';
+    document.getElementById('entity-drop').style.display='none'; updateInvestVisibility(); recalc(); }
+  function updateInvestVisibility(){
+    document.getElementById('invest-wrap').classList.toggle('hidden', !(direction==='send' && userType==='pf'));
+  }
+  function toggleCurrency(){
+    const d = document.getElementById('cur-drop');
+    if (!d.children.length) {
+      CURRENCIES.forEach(([c,n,f])=>{
+        const b = document.createElement('button');
+        b.innerHTML = '<span style="font-size:20px;">'+f+'</span><span>'+n+' ('+c.toUpperCase()+')</span>';
+        b.onclick = ()=>{ currency=c; document.getElementById('cur-flag').textContent=f;
+          document.getElementById('cur-code').textContent=c.toUpperCase(); d.style.display='none'; recalc(); };
+        d.appendChild(b);
+      });
+    }
+    d.style.display = d.style.display==='none'?'block':'none';
+  }
+  function onBrlInput(){ const i=document.getElementById('brl-input'); brl = parseBR(i.value); i.value=fmt(brl); recalc(); }
+  function onFxInput(){ const i=document.getElementById('fx-input'); fx = parseBR(i.value);
+    const rate=RATES[currency], iof=IOF[direction+'-'+userType+'-'+(isInvest?'investment':'other')]||0, sp=getSpread(fx,userType);
+    brl = direction==='send' ? fx*vetCalc(rate,iof,sp,userType,brl) : fx*rate*(1-sp-iof);
+    document.getElementById('brl-input').value = fmt(brl); recalc(); }
+  function openModal(){
+    const rate=RATES[currency], iof=IOF[direction+'-'+userType+'-'+(isInvest?'investment':'other')]||0, sp=getSpread(fx,userType);
+    document.getElementById('m-iof').textContent='R$ '+fmt(brl*iof);
+    document.getElementById('m-spread').textContent='R$ '+fmt(brl*sp);
+    document.getElementById('m-pj-row').style.display = userType==='pj'?'flex':'none';
+    document.getElementById('m-vet').textContent='1 '+currency.toUpperCase()+' = BRL '+fmtRate(vetCalc(rate,iof,sp,userType,brl));
+    document.getElementById('modal').classList.add('open');
+  }
+  function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+  recalc();
+</script>`
           }
         ]}
       />

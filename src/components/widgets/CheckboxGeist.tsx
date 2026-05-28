@@ -58,8 +58,12 @@ export function CheckboxDisabled() {
   return (
     <div className="flex flex-col items-stretch justify-start gap-4 flex-initial">
       <GeistCheckbox disabled>Disabled</GeistCheckbox>
-      <GeistCheckbox checked disabled>Disabled Checked</GeistCheckbox>
-      <GeistCheckbox disabled indeterminate>Disabled Indeterminate</GeistCheckbox>
+      <GeistCheckbox checked disabled>
+        Disabled Checked
+      </GeistCheckbox>
+      <GeistCheckbox disabled indeterminate>
+        Disabled Indeterminate
+      </GeistCheckbox>
     </div>
   );
 }

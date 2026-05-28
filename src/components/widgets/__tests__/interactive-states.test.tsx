@@ -92,6 +92,7 @@ describe("PlataformaPlaylist — três estados de item", () => {
     expect(text).toContain("Concluído");
     expect(text).toContain("03. O poder dos juros compostos");
 
+    // Estados via classes
     const items = container.querySelectorAll(".rounded-lg.flex.gap-3");
     const states = Array.from(items).slice(0, 4).map((el) => {
       const cls = el.className;

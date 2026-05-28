@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 
+/**
+ * Componente Livro — inspirado no Book do Geist (Vercel).
+ * Capa dividida em bloco superior colorido + área inferior branca com título.
+ * Animação: estado 1 (fechado, plano) → estado 2 (aberto, levemente girado em 3D).
+ */
+
 type Variant = "default" | "simple" | "stripe";
 type ResponsiveWidth = number | { sm?: number; md?: number; lg?: number };
 
 type LivroProps = {
   title: string;
+  /** Cor do bloco superior da capa (padrão: laranja). */
   color?: string;
+  /** Cor do texto do título (sobre fundo branco). */
   textColor?: string;
   width?: ResponsiveWidth;
   variant?: Variant;
@@ -16,11 +24,11 @@ type LivroProps = {
 function useResponsiveWidth(width: ResponsiveWidth): number {
   const [w, setW] = useState<number>(() => {
     if (typeof width === "number") return width;
-    if (typeof window === "undefined") return (width as any).md ?? (width as any).sm ?? 196;
+    if (typeof window === "undefined") return width.md ?? width.sm ?? 196;
     const vw = window.innerWidth;
-    if (vw >= 1024 && (width as any).lg) return (width as any).lg;
-    if (vw >= 768 && (width as any).md) return (width as any).md;
-    return (width as any).sm ?? (width as any).md ?? 196;
+    if (vw >= 1024 && width.lg) return width.lg;
+    if (vw >= 768 && width.md) return width.md;
+    return width.sm ?? width.md ?? 196;
   });
 
   useEffect(() => {
@@ -30,9 +38,9 @@ function useResponsiveWidth(width: ResponsiveWidth): number {
     }
     const update = () => {
       const vw = window.innerWidth;
-      if (vw >= 1024 && (width as any).lg) setW((width as any).lg);
-      else if (vw >= 768 && (width as any).md) setW((width as any).md);
-      else setW((width as any).sm ?? (width as any).md ?? 196);
+      if (vw >= 1024 && width.lg) setW(width.lg);
+      else if (vw >= 768 && width.md) setW(width.md);
+      else setW(width.sm ?? width.md ?? 196);
     };
     update();
     window.addEventListener("resize", update);
@@ -58,6 +66,7 @@ export function Livro({
 
   const showStripe = variant === "stripe";
 
+  // Triângulo padrão quando nenhuma ilustração for passada.
   const defaultIllustration = (
     <svg width={Math.max(14, w * 0.09)} height={Math.max(14, w * 0.09)} viewBox="0 0 24 24" aria-hidden>
       <polygon points="12,4 22,20 2,20" fill="currentColor" />
@@ -73,6 +82,7 @@ export function Livro({
         className="livro-inner relative w-full h-full transition-transform duration-500 ease-out"
         style={{ transformStyle: "preserve-3d" }}
       >
+        {/* Páginas (lateral direita) — só aparece quando "aberto" pelo hover */}
         <div
           aria-hidden
           className="absolute top-1 bottom-1 opacity-0 transition-opacity duration-500 group-hover/livro:opacity-100"
@@ -80,11 +90,13 @@ export function Livro({
             right: 0,
             width: depth,
             transform: `translateZ(-${depth / 2}px) translateX(${depth / 2}px) rotateY(90deg)`,
-            background: "repeating-linear-gradient(90deg, hsl(0 0% 96%) 0 1px, hsl(0 0% 88%) 1px 2px)",
+            background:
+              "repeating-linear-gradient(90deg, hsl(0 0% 96%) 0 1px, hsl(0 0% 88%) 1px 2px)",
             borderRadius: 2,
           }}
         />
 
+        {/* Lombada — só aparece quando "aberto" pelo hover */}
         <div
           aria-hidden
           className="absolute top-0 bottom-0 opacity-0 transition-opacity duration-500 group-hover/livro:opacity-100"
@@ -97,16 +109,22 @@ export function Livro({
           }}
         />
 
+        {/* Capa */}
         <div
           className="absolute inset-0 overflow-hidden flex flex-col bg-white"
           style={{
             borderRadius: radius,
-            boxShadow: "0 12px 24px -16px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.06)",
+            boxShadow:
+              "0 12px 24px -16px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.06)",
           }}
         >
+          {/* Bloco superior colorido */}
           <div
             className="relative"
-            style={{ background: color, height: "52%" }}
+            style={{
+              background: color,
+              height: "52%",
+            }}
           >
             {showStripe && (
               <span
@@ -122,13 +140,17 @@ export function Livro({
             )}
           </div>
 
+          {/* Área branca inferior com título e marcador */}
           <div
             className="flex-1 flex flex-col justify-between"
             style={{ padding: Math.max(12, w * 0.08), color: textColor }}
           >
             <h4
               className="font-anek font-bold leading-tight"
-              style={{ fontSize: Math.max(13, w * 0.085), letterSpacing: "-0.01em" }}
+              style={{
+                fontSize: Math.max(13, w * 0.085),
+                letterSpacing: "-0.01em",
+              }}
             >
               {title}
             </h4>
@@ -142,6 +164,8 @@ export function Livro({
   );
 }
 
+/* ============ Variantes para a documentação ============ */
+
 export function LivroDefault() {
   return <Livro title="The user experience of the Frontend Cloud" />;
 }
@@ -149,8 +173,16 @@ export function LivroDefault() {
 export function LivroVariants() {
   return (
     <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">
-      <Livro title="The user experience of the Frontend Cloud" variant="simple" width={196} />
-      <Livro title="The user experience of the Frontend Cloud" variant="stripe" width={196} />
+      <Livro
+        title="The user experience of the Frontend Cloud"
+        variant="simple"
+        width={196}
+      />
+      <Livro
+        title="The user experience of the Frontend Cloud"
+        variant="stripe"
+        width={196}
+      />
     </div>
   );
 }
@@ -158,13 +190,31 @@ export function LivroVariants() {
 export function LivroCustomColor() {
   return (
     <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
-      <Livro color="#9D2127" textColor="#111" title="How Vercel improves your website's search engine ranking" />
-      <Livro color="#7DC1C1" textColor="#111" title="Design Engineering at Vercel" variant="simple" />
-      <Livro color="#F0BF4F" textColor="#111" title="The user experience of the Frontend Cloud" />
+      <Livro
+        color="#9D2127"
+        textColor="#111"
+        title="How Vercel improves your website's search engine ranking"
+      />
+      <Livro
+        color="#7DC1C1"
+        textColor="#111"
+        title="Design Engineering at Vercel"
+        variant="simple"
+      />
+      <Livro
+        color="#F0BF4F"
+        textColor="#111"
+        title="The user experience of the Frontend Cloud"
+      />
     </div>
   );
 }
 
 export function LivroResponsivo() {
-  return <Livro title="The user experience of the Frontend Cloud" width={{ sm: 150, md: 196 }} />;
+  return (
+    <Livro
+      title="The user experience of the Frontend Cloud"
+      width={{ sm: 150, md: 196 }}
+    />
+  );
 }

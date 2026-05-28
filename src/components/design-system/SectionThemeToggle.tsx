@@ -43,6 +43,9 @@ export function SectionThemeToggle({ children, className, bare = false, label, c
     </button>
   );
 
+  // Sempre exibe o bloco "Ver código" para padronizar todos os showcases.
+  // Quando nenhum código é fornecido, mostra um placeholder visível para
+  // garantir que novos componentes nunca sejam adicionados sem snippet.
   const effectiveCode =
     code ??
     `// TODO: snippet React deste componente ainda não foi fornecido.\n// Passe a prop \`code\` (e opcionalmente \`htmlCode\`) ao SectionThemeToggle\n// para que o bloco "Ver código" exiba o conteúdo correto.`;

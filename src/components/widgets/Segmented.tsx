@@ -56,7 +56,38 @@ export function SegmentedWidget() {
     { label: 'Ano', value: 'year' },
   ]}
 />`}
-      htmlCode={`<div class="segmented" id="seg">...</div>`}
+      htmlCode={`<div class="segmented" id="seg">
+  <button data-v="day">Dia</button>
+  <button data-v="week" class="active">Semana</button>
+  <button data-v="month">Mês</button>
+  <button data-v="year">Ano</button>
+</div>
+
+<style>
+  .segmented {
+    display:inline-flex; gap:4px; padding:4px;
+    background:hsl(var(--muted, 120 10% 95%));
+    border-radius:8px;
+  }
+  .segmented button {
+    padding:6px 12px; border:none; background:transparent; border-radius:6px;
+    font-family:'Anek Latin', sans-serif; font-weight:600; font-size:14px;
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    cursor:pointer; transition:.2s;
+  }
+  .segmented button.active {
+    background:hsl(var(--background, 0 0% 100%));
+    color:hsl(var(--foreground, 110 78% 9%));
+    box-shadow:0 1px 2px rgba(0,0,0,.05);
+  }
+</style>
+
+<script>
+  document.querySelectorAll('#seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('#seg button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+  });
+</script>`}
     >
       <Segmented<"day" | "week" | "month" | "year">
         value={v}
@@ -85,7 +116,27 @@ export function SwitchSimplesWidget() {
   checked={checked}
   onCheckedChange={setChecked}
 />`}
-      htmlCode={`<label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>`}
+      htmlCode={`<label class="switch">
+  <input type="checkbox" checked />
+  <span class="slider"></span>
+</label>
+
+<style>
+  .switch { position:relative; display:inline-block; width:44px; height:24px; }
+  .switch input { opacity:0; width:0; height:0; }
+  .slider {
+    position:absolute; cursor:pointer; inset:0;
+    background:hsl(var(--muted, 120 10% 88%));
+    border-radius:9999px; transition:.3s;
+  }
+  .slider:before {
+    position:absolute; content:""; height:20px; width:20px; left:2px; bottom:2px;
+    background:hsl(var(--background, 0 0% 100%));
+    border-radius:50%; transition:.3s; box-shadow:0 1px 3px rgba(0,0,0,.15);
+  }
+  .switch input:checked + .slider { background:hsl(var(--primary, 155 93% 11%)); }
+  .switch input:checked + .slider:before { transform:translateX(20px); }
+</style>`}
     >
       <Switch checked={checked} onCheckedChange={setChecked} />
     </ComponentShowcase>
@@ -107,7 +158,43 @@ export function SwitchDisabledWidget() {
     Alternar disabled
   </Button>
 </div>`}
-      htmlCode={`<input type="checkbox" id="sw-disabled" checked disabled />`}
+      htmlCode={`<div style="display:flex; align-items:center; gap:16px;">
+  <label class="switch">
+    <input type="checkbox" id="sw-disabled" checked disabled />
+    <span class="slider"></span>
+  </label>
+  <button id="sw-toggle" class="sw-btn">Alternar disabled</button>
+</div>
+
+<style>
+  .switch { position:relative; display:inline-block; width:44px; height:24px; }
+  .switch input { opacity:0; width:0; height:0; }
+  .slider {
+    position:absolute; cursor:pointer; inset:0;
+    background:hsl(var(--muted, 120 10% 88%));
+    border-radius:9999px; transition:.3s;
+  }
+  .slider:before {
+    position:absolute; content:""; height:20px; width:20px; left:2px; bottom:2px;
+    background:hsl(var(--background, 0 0% 100%));
+    border-radius:50%; transition:.3s; box-shadow:0 1px 3px rgba(0,0,0,.15);
+  }
+  .switch input:checked + .slider { background:hsl(var(--primary, 155 93% 11%)); }
+  .switch input:checked + .slider:before { transform:translateX(20px); }
+  .switch input:disabled + .slider { opacity:.5; cursor:not-allowed; }
+  .sw-btn {
+    background:hsl(var(--primary, 155 93% 11%));
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    padding:8px 16px; border-radius:8px; border:none;
+    font-family:'Sora', sans-serif; font-weight:700; text-transform:uppercase; font-size:12px;
+    cursor:pointer;
+  }
+</style>
+
+<script>
+  const swInput = document.getElementById('sw-disabled');
+  document.getElementById('sw-toggle').onclick = () => { swInput.disabled = !swInput.disabled; };
+</script>`}
     >
       <div className="flex items-center gap-4">
         <Switch disabled={disabled} defaultChecked />
