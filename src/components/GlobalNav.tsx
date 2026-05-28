@@ -11,15 +11,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Volume2, Palette, ChevronDown, X } from "lucide-react";
+import { Volume2, Palette, ChevronDown, X, Home, Users } from "lucide-react";
 
 const systems = [
+  {
+    id: "hub",
+    label: "Hub",
+    description: "Página inicial e visão geral dos sistemas",
+    icon: Home,
+    path: "/",
+  },
+  {
+    id: "time",
+    label: "Time de Produto",
+    description: "Missão, pilares e estrutura do time de produto",
+    icon: Users,
+    path: "/time",
+  },
   {
     id: "design-system",
     label: "Design System",
     description: "Componentes, cores, tipografia e padrões visuais",
     icon: Palette,
-    path: "/",
+    path: "/design-system",
   },
   {
     id: "tom-e-voz",

@@ -6,6 +6,8 @@ import { BrandProvider } from "@/contexts/BrandContext";
 import { ViewProvider } from "@/contexts/ViewContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
+import Hub from "./pages/Hub";
+import TimePage from "./pages/TimePage";
 import DesignSystem from "./pages/DesignSystem";
 import TomEVozPage from "./pages/TomEVozPage";
 import NotFound from "./pages/NotFound";
@@ -42,10 +44,6 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-// import.meta.env.BASE_URL é configurado pelo Vite de acordo com a opção
-// `base` do vite.config.ts — em produção/GitHub Pages será "/central-de-produto/".
-// Passá-lo ao BrowserRouter garante que as rotas "/" e "/tom-e-voz" caiam
-// sobre os caminhos corretos sem precisar incluir o prefixo manualmente.
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
@@ -56,7 +54,9 @@ const App = () => (
             <Sonner />
             <BrowserRouter basename={import.meta.env.BASE_URL}>
               <Routes>
-                <Route path="/" element={<DesignSystem />} />
+                <Route path="/" element={<Hub />} />
+                <Route path="/time" element={<TimePage />} />
+                <Route path="/design-system" element={<DesignSystem />} />
                 <Route path="/tom-e-voz" element={<TomEVozPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
