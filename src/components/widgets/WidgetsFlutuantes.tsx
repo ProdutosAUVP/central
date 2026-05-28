@@ -368,6 +368,7 @@ export function WidgetsFlutuantes() {
         </div>
       </div>
 
+
       <div>
         <h3 className="text-lg font-bold mb-4 font-anek">Animações Disponíveis</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
@@ -395,24 +396,28 @@ export function WidgetsFlutuantes() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Sem popup */}
           <PopupDemo
             title="Sem popup"
             badge="Mínimo"
             description="Apenas o ícone flutuante. Use quando o contexto já é óbvio (ex.: rodapé com WhatsApp visível) ou quando há outros flutuantes ativos competindo por atenção."
             mode="none"
           />
+          {/* Sempre visível */}
           <PopupDemo
             title="Popup sempre visível"
             badge="Persistente"
             description="O balão aparece junto com o ícone após o slideUp de entrada e permanece. Indicado para campanhas/CTAs de alta prioridade. Inclua um botão de fechar (×) opcional."
             mode="always"
           />
+          {/* Hover */}
           <PopupDemo
             title="Popup ao passar o cursor (hover)"
             badge="Desktop"
             description="O balão aparece com fade + scale quando o cursor entra no ícone e desaparece ao sair. Em mobile (touch), comporta-se como o modo 'clique'. Bom para sites institucionais."
             mode="hover"
           />
+          {/* Clique */}
           <PopupDemo
             title="Popup ao clicar (toggle)"
             badge="Universal"
@@ -437,6 +442,7 @@ export function WidgetsFlutuantes() {
           </div>
         </div>
 
+        {/* Código: comportamento do popup */}
         <div className="mt-6">
           <CodeBlock
             collapsible
@@ -445,19 +451,197 @@ export function WidgetsFlutuantes() {
               {
                 label: "React",
                 language: "tsx",
-                code: `// 4 modos: "none" | "always" | "hover" | "click"\n// Escolha UM modo por página — nunca combine "always" com gatilhos.\ntype PopupMode = "none" | "always" | "hover" | "click";`,
+                code: `// 4 modos: "none" | "always" | "hover" | "click"
+// Escolha UM modo por página — nunca combine "always" com gatilhos.
+type PopupMode = "none" | "always" | "hover" | "click";
+
+// Regras OBRIGATÓRIAS do balão:
+// - max-width: 220px, font-family: 'Anek Latin', font-size: 15px
+// - border-radius: 12px com canto inferior-direito reto (rounded-br-none) + seta
+// - Transição: opacity + translateY(10px) + scale(0.9)
+//   easing: cubic-bezier(0.175, 0.885, 0.32, 1.275); duração 300ms
+// - Modo "always": apareça com delay de 1500ms (depois do slideUp do ícone)
+// - Modo "hover": adicione aria-describedby no botão apontando para o balão
+// - Em mobile/touch, "hover" deve se comportar como "click"
+
+function PopupBubble({ visible, id }: { visible: boolean; id?: string }) {
+  return (
+    <div
+      id={id}
+      role="tooltip"
+      className={[
+        "bg-white text-gray-900 dark:bg-[#2a2a2a] dark:text-white",
+        "p-3 px-4 rounded-xl rounded-br-none shadow-lg mb-2.5 mr-2.5",
+        "max-w-[220px] font-anek text-[15px] leading-snug relative border border-border",
+        "transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] origin-bottom-right",
+        visible
+          ? "opacity-100 visible translate-y-0 scale-100"
+          : "opacity-0 invisible translate-y-2.5 scale-90",
+      ].join(" ")}
+    >
+      <strong>Fale conosco</strong> pelo WhatsApp
+      {/* Seta apontando para o flutuante (canto inferior-direito) */}
+      <span className="absolute -bottom-1.5 right-2.5 w-0 h-0
+                       border-l-[8px] border-l-transparent
+                       border-t-[8px] border-t-white dark:border-t-[#2a2a2a]" />
+    </div>
+  );
+}
+
+function FloatingWidget({ mode }: { mode: PopupMode }) {
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [alwaysOn, setAlwaysOn] = useState(false);
+
+  // Modo "always": delay de 1,5s para não competir com o slideUp do ícone
+  useEffect(() => {
+    if (mode !== "always") return;
+    const t = setTimeout(() => setAlwaysOn(true), 1500);
+    return () => clearTimeout(t);
+  }, [mode]);
+
+  const visible =
+    mode === "always" ? alwaysOn :
+    mode === "hover"  ? hovered  :
+    mode === "click"  ? clicked  : false;
+
+  return (
+    <div
+      className="fixed bottom-5 right-5 z-[99999] flex flex-col items-end"
+      onMouseEnter={() => mode === "hover" && setHovered(true)}
+      onMouseLeave={() => mode === "hover" && setHovered(false)}
+    >
+      {mode !== "none" && <PopupBubble visible={visible} id="wa-tip" />}
+      <WhatsAppButton
+        aria-describedby={mode === "hover" ? "wa-tip" : undefined}
+        onClick={() => mode === "click" && setClicked((v) => !v)}
+      />
+    </div>
+  );
+}`,
               },
               {
                 label: "HTML / CSS / JS",
                 language: "html",
-                code: `<!-- data-popup-mode: "none" | "always" | "hover" | "click" -->`,
+                code: `<!--
+  4 modos (atributo data-popup-mode):
+    "none"   → apenas o ícone
+    "always" → balão persistente (com delay de 1,5s)
+    "hover"  → balão aparece no hover (desktop) / tap (mobile)
+    "click"  → balão alterna por clique/tap
+  Escolha UM modo por página.
+-->
+
+<style>
+  .wa-wrap {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  /* Regras OBRIGATÓRIAS do balão */
+  .wa-bubble {
+    background: #fff;
+    color: #111;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border-bottom-right-radius: 0;   /* canto reto + seta */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    font-family: 'Anek Latin', sans-serif;
+    font-size: 15px;
+    line-height: 1.35;
+    max-width: 220px;                 /* limite obrigatório */
+    margin: 0 10px 10px 0;
+    position: relative;
+    transform-origin: bottom right;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.9);
+    transition:
+      opacity .3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      visibility .3s;
+  }
+  .wa-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -6px; right: 10px;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-top: 8px solid #fff;
+  }
+
+  /* Modo NONE — esconde o balão */
+  .wa-wrap[data-popup-mode="none"] .wa-bubble { display: none; }
+
+  /* Modo ALWAYS — visível após delay de 1,5s (classe .is-on aplicada via JS) */
+  .wa-wrap[data-popup-mode="always"].is-on .wa-bubble {
+    opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+  }
+
+  /* Modo HOVER — desktop */
+  @media (hover: hover) {
+    .wa-wrap[data-popup-mode="hover"]:hover .wa-bubble {
+      opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+    }
+  }
+  /* Touch: hover se comporta como click */
+  @media (hover: none) {
+    .wa-wrap[data-popup-mode="hover"].is-on .wa-bubble {
+      opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Modo CLICK — toggle via classe .is-on */
+  .wa-wrap[data-popup-mode="click"].is-on .wa-bubble {
+    opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+  }
+</style>
+
+<div class="wa-wrap" data-popup-mode="click" id="waWrap">
+  <div class="wa-bubble" id="waBubble" role="tooltip">
+    <strong>Fale conosco</strong> pelo WhatsApp
+  </div>
+  <a class="wa-float" href="https://wa.me/55SEUNUMERO"
+     aria-describedby="waBubble" aria-label="Fale conosco no WhatsApp">
+    <!-- SVG oficial do WhatsApp aqui -->
+  </a>
+</div>
+
+<script>
+  const wrap = document.getElementById('waWrap');
+  const mode = wrap.dataset.popupMode;
+
+  // ALWAYS → delay obrigatório de 1500ms
+  if (mode === 'always') {
+    setTimeout(() => wrap.classList.add('is-on'), 1500);
+  }
+
+  // CLICK (e HOVER em touch) → toggle
+  if (mode === 'click' || mode === 'hover') {
+    wrap.addEventListener('click', (e) => {
+      // 1º clique abre o balão; 2º clique segue o link
+      if (!wrap.classList.contains('is-on')) {
+        e.preventDefault();
+        wrap.classList.add('is-on');
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) wrap.classList.remove('is-on');
+    });
+  }
+</script>`,
               },
             ]}
           />
         </div>
       </div>
 
-      {/* Código: Widget WhatsApp */}
+      {/* Código: Widget WhatsApp (oficial) */}
       <div>
         <h3 className="text-lg font-bold mb-4 font-anek">Código — Widget WhatsApp</h3>
         <p className="text-muted-foreground mb-4">
@@ -473,24 +657,105 @@ export function WidgetsFlutuantes() {
             {
               label: "React",
               language: "tsx",
-              code: `// SVG OFICIAL do WhatsApp — NUNCA substituir por ícone genérico de chat\n// Gradiente: linear-gradient(135deg, #25D366 0%, #128C7E 100%)\n// Pulse: waSoftPulse 12s + waPulseRing 10.5s`,
+              code: `// tailwind.config.ts — keyframes do pulse (lento e cadenciado)
+// waPulseRing: { '0%':   { transform: 'scale(0.98)', opacity: '0.32' },
+//                '100%': { transform: 'scale(1.9)',  opacity: '0' } },
+// waSoftPulse: { '0%,100%': { transform: 'scale(1)' },
+//                '50%':     { transform: 'scale(1.012)' } }
+
+// SVG OFICIAL do WhatsApp — NUNCA substituir por ícone genérico de chat
+const WhatsAppIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 32 32" className={className} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path fill="#ffffff" d="M16.003 5.333c-5.89 0-10.667 4.777-10.667 10.667 0 1.88.493 3.715 1.427 5.333L5.333 26.667l5.493-1.413a10.62 10.62 0 0 0 5.177 1.32h.004c5.89 0 10.667-4.777 10.667-10.667S21.893 5.333 16.003 5.333zm0 19.467h-.004a8.79 8.79 0 0 1-4.48-1.227l-.32-.187-3.253.84.867-3.173-.213-.333a8.8 8.8 0 0 1-1.347-4.72c0-4.867 3.96-8.827 8.827-8.827 2.36 0 4.573.92 6.24 2.587a8.78 8.78 0 0 1 2.587 6.24c0 4.867-3.96 8.8-8.904 8.8zm4.843-6.587c-.267-.133-1.573-.773-1.813-.867-.24-.093-.413-.133-.587.133-.173.267-.667.867-.813 1.04-.147.173-.293.187-.56.067-.267-.133-1.12-.413-2.133-1.32-.787-.707-1.32-1.573-1.467-1.84-.147-.267-.013-.413.117-.547.12-.12.267-.307.4-.467.133-.16.173-.267.267-.44.093-.187.04-.347-.027-.48-.067-.133-.587-1.413-.8-1.933-.213-.507-.427-.44-.587-.453-.147-.013-.32-.013-.493-.013-.173 0-.453.067-.693.32-.24.267-.907.893-.907 2.173 0 1.28.933 2.52 1.067 2.693.133.173 1.84 2.813 4.467 3.947.627.267 1.107.427 1.493.547.627.2 1.2.173 1.653.107.507-.08 1.573-.64 1.787-1.267.213-.627.213-1.16.147-1.267-.067-.107-.24-.173-.507-.307z"/>
+  </svg>
+);
+
+<a
+  href="https://wa.me/55SEUNUMERO"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Fale conosco no WhatsApp"
+  className="fixed bottom-5 right-5 z-[99999] w-[64px] h-[64px] rounded-full
+             flex items-center justify-center shadow-lg
+             bg-[linear-gradient(135deg,#25D366_0%,#128C7E_100%)]
+             hover:scale-110 active:scale-95 transition-transform duration-200
+             animate-[waSoftPulse_12s_ease-in-out_infinite]"
+>
+  {/* Anel pulsante atrás do ícone — lento e cadenciado */}
+  <span aria-hidden
+        className="absolute inset-1 rounded-full bg-[#25D366]
+                   animate-[waPulseRing_10.5s_cubic-bezier(0.22,1,0.36,1)_infinite] -z-0" />
+  {/* Ícone ocupa ~70% do círculo (40px em um botão de 64px) */}
+  <WhatsAppIcon className="relative z-10 h-10 w-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+</a>`,
             },
             {
               label: "HTML / CSS / JS",
               language: "html",
-              code: `<!-- Botão circular 64x64px, gradiente verde WhatsApp, anel pulsante -->`,
+              code: `<style>
+@keyframes waPulseRing {
+   0% { transform: scale(0.98); opacity: 0.32; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes waSoftPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.012); }
+}
+
+.wa-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Gradiente diagonal: verde oficial → verde escuro WhatsApp */
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  box-shadow: 0 4px 15px rgba(0,0,0, 0.2);
+  cursor: pointer;
+  transition: transform .2s ease;
+  animation: waSoftPulse 12s ease-in-out infinite;
+}
+.wa-float::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: #25D366;
+  z-index: 0;
+  animation: waPulseRing 10.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.wa-float svg {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+}
+.wa-float:hover  { transform: scale(1.10); }
+.wa-float:active { transform: scale(0.95); }
+</style>
+
+<a class="wa-float" href="https://wa.me/55SEUNUMERO" target="_blank" rel="noopener noreferrer" aria-label="Fale conosco no WhatsApp">
+  ${WHATSAPP_SVG_HTML}
+</a>`,
             },
           ]}
         />
       </div>
 
-      {/* Código: Flutuante secundário */}
+      {/* Código: Flutuante secundário (genérico) */}
       <div>
         <h3 className="text-lg font-bold mb-4 font-anek">Código — Flutuante secundário</h3>
         <p className="text-muted-foreground mb-4">
           Modelo base para qualquer outro flutuante (Porquinho, promoções, suporte, etc.).
           O ícone deve ficar <strong>dentro de um botão circular</strong> de 60×60px com fundo sólido
-          ou gradiente.
+          ou gradiente. Mantenha a animação <code className="text-xs font-mono bg-accent/10 text-accent px-1.5 py-0.5 rounded">floatPiggy</code>
+          e empilhe acima do WhatsApp respeitando o gap mínimo de 30px.
         </p>
         <CodeBlock
           collapsible
@@ -499,12 +764,125 @@ export function WidgetsFlutuantes() {
             {
               label: "React",
               language: "tsx",
-              code: `// Botão circular 60x60px, floatPiggy animation, slideUpEntrance\n// Gap mínimo de 30px acima do WhatsApp (bottom: 110px)`,
+              code: `const [showBubble, setShowBubble] = useState(false);
+
+useEffect(() => {
+  const t = setTimeout(() => setShowBubble(true), 1500);
+  return () => clearTimeout(t);
+}, []);
+
+<div className="fixed bottom-[110px] right-5 z-[99999] flex flex-col items-end pointer-events-none
+                animate-[slideUpEntrance_1.5s_cubic-bezier(0.22,1,0.36,1)_forwards]">
+  {showBubble && (
+    <div className="bg-white dark:bg-[#2a2a2a] text-gray-900 dark:text-white
+                    p-3 px-4 rounded-xl rounded-br-none shadow-lg mb-2.5 mr-2.5
+                    max-w-[220px] font-anek text-[15px] leading-snug
+                    border border-border pointer-events-auto">
+      Mensagem do widget
+    </div>
+  )}
+  <button
+    onClick={handleClick}
+    aria-label="Abrir widget"
+    className="pointer-events-auto relative w-[60px] h-[60px] rounded-full shadow-lg
+               flex items-center justify-center
+               bg-[linear-gradient(135deg,#FFB6C1_0%,#FF91A4_100%)]
+               hover:scale-110 active:scale-95 transition-transform duration-200
+               animate-[floatPiggy_3s_ease-in-out_infinite]"
+  >
+    {/* Ícone interno ocupa ~70% do círculo */}
+    <img src="/seu-icone.svg" alt="" className="w-[42px] h-[42px]
+               drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+  </button>
+</div>
+
+/* Empilhe acima do WhatsApp: bottom mínimo = 20px (WA) + 60px (ícone) + 30px (gap) = 110px */`,
             },
             {
               label: "HTML / CSS / JS",
               language: "html",
-              code: `<!-- .float-widget + .float-widget__btn + .float-widget__bubble -->`,
+              code: `<style>
+:root {
+  --float-bottom-pos: 110px; /* 20 (WA) + 60 (ícone) + 30 (gap) */
+  --float-right-pos: 20px;
+  --float-size: 60px;
+}
+
+@keyframes slideUpEntrance {
+  from { transform: translateY(150px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+@keyframes floatPiggy {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.float-widget {
+  position: fixed;
+  bottom: var(--float-bottom-pos);
+  right: var(--float-right-pos);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+  animation: slideUpEntrance 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.float-widget__bubble {
+  background: #fff;
+  color: #111;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  font-family: 'Anek Latin', sans-serif;
+  font-size: 15px;
+  max-width: 220px;
+  margin: 0 10px 10px 0;
+  pointer-events: auto;
+}
+.float-widget__btn {
+  position: relative;
+  width: var(--float-size);
+  height: var(--float-size);
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Fundo sólido ou gradiente diagonal coerente com a identidade do widget */
+  background: linear-gradient(135deg, #FFB6C1 0%, #FF91A4 100%);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  cursor: pointer;
+  pointer-events: auto;
+  animation: floatPiggy 3s ease-in-out infinite;
+  transition: transform .2s ease;
+}
+.float-widget__btn > img,
+.float-widget__btn > svg {
+  /* Ícone interno ocupa ~70% do diâmetro do círculo */
+  width: 70%;
+  height: 70%;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+}
+.float-widget__btn:hover  { transform: scale(1.10); }
+.float-widget__btn:active { transform: scale(0.95); }
+
+@media (max-width: 480px) {
+  :root {
+    --float-bottom-pos: 95px;
+    --float-right-pos: 15px;
+    --float-size: 55px;
+  }
+}
+</style>
+
+<div class="float-widget">
+  <div class="float-widget__bubble">Mensagem do widget</div>
+  <button class="float-widget__btn" onclick="handleClick()" aria-label="Abrir widget">
+    <img src="/seu-icone.svg" alt="" />
+  </button>
+</div>`,
             },
           ]}
         />
