@@ -1,0 +1,32 @@
+<!-- Plataforma de Aulas — Grid de Cursos (HTML / CSS standalone) -->
+<style>
+  .pc-wrap { background:hsl(var(--muted,120 10% 95%)/0.5); padding:48px; border-radius:16px; border:1px solid hsl(var(--border,120 10% 88%)); }
+  .pc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; }
+  .pc-card { background:hsl(var(--card,0 0% 100%)); border:1px solid hsl(var(--border,120 10% 88%)); border-radius:16px; overflow:hidden; cursor:pointer; transition:.25s; font-family:'Roboto',sans-serif; }
+  .pc-card:hover { transform:translateY(-4px); box-shadow:0 10px 25px rgba(0,0,0,.08); }
+  .pc-body { padding:20px; }
+  .pc-title { font:700 20px/1.2 'Anek Latin'; margin:0 0 8px; color:hsl(var(--foreground,110 78% 9%)); }
+  .pc-bar { height:6px; background:hsl(var(--muted,120 10% 95%)); border-radius:999px; overflow:hidden; margin-top:6px; }
+  .pc-bar > i { display:block; height:100%; background:hsl(var(--primary,155 93% 11%)); border-radius:999px; }
+</style>
+
+<div class="pc-wrap">
+  <div class="pc-grid">
+    <article class="pc-card">
+      <div class="pc-body">
+        <h4 class="pc-title">Ações Brasileiras</h4>
+        <p style="font:14px/1.4 'Roboto'; color:hsl(var(--muted-foreground,110 10% 40%)); margin:0 0 16px;">Análise fundamentalista e avaliação de empresas listadas na B3.</p>
+        <div style="display:flex; justify-content:space-between; font:700 12px 'Roboto'; color:hsl(var(--muted-foreground,110 10% 40%));"><span>Progresso</span><span style="color:hsl(var(--accent,155 93% 11%));">45%</span></div>
+        <div class="pc-bar"><i style="width:45%"></i></div>
+      </div>
+    </article>
+    <article class="pc-card">
+      <div class="pc-body">
+        <h4 class="pc-title">Reserva de Emergência</h4>
+        <p style="font:14px/1.4 'Roboto'; color:hsl(var(--muted-foreground,110 10% 40%)); margin:0 0 16px;">Aprenda a montar sua base de segurança com liquidez diária.</p>
+        <div style="display:flex; justify-content:space-between; font:700 12px 'Roboto'; color:hsl(var(--muted-foreground,110 10% 40%));"><span>Progresso</span><span style="color:hsl(var(--success,142 71% 45%));">100%</span></div>
+        <div class="pc-bar"><i style="width:100%; background:hsl(var(--success,142 71% 45%));"></i></div>
+      </div>
+    </article>
+  </div>
+</div>

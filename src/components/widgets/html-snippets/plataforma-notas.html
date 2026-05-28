@@ -1,0 +1,20 @@
+<!-- Anotações da Aula (HTML / CSS / JS standalone) -->
+<style>
+  .pn-wrap { background:hsl(var(--card,0 0% 100%)); border:1px solid hsl(var(--border,120 10% 88%)); border-radius:12px; overflow:hidden; max-width:480px; font-family:'Roboto',sans-serif; color:hsl(var(--foreground,110 78% 9%)); }
+  .pn-head { background:hsl(var(--muted,120 10% 95%)/0.5); border-bottom:1px solid hsl(var(--border,120 10% 88%)); padding:12px 20px; display:flex; justify-content:space-between; align-items:center; }
+  .pn-list { padding:16px; display:flex; flex-direction:column; gap:12px; max-height:400px; overflow-y:auto; }
+  .pn-note { background:hsl(var(--card,0 0% 100%)); border:1px solid hsl(var(--border,120 10% 88%)); border-radius:8px; padding:16px; }
+  .pn-text { font:14px/1.5 'Roboto'; color:hsl(var(--foreground,110 78% 9%)/0.8); margin:0; }
+</style>
+
+<div class="pn-wrap">
+  <div class="pn-head">
+    <span style="font:700 14px 'Anek Latin';">Minhas Anotações</span>
+    <button style="font:700 12px 'Sora'; color:hsl(var(--accent,155 93% 11%)); background:none; border:none; cursor:pointer;">+ Nova Nota</button>
+  </div>
+  <div class="pn-list">
+    <article class="pn-note">
+      <p class="pn-text">Conceito de juros compostos: "juros sobre juros". Lembrar da fórmula M = C(1+i)^t.</p>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<!-- Certificado de Conclusão (HTML / CSS / JS standalone) -->
+<style>
+  .pcert-wrap {
+    background:hsl(var(--muted, 120 10% 95%) / 0.5);
+    padding:32px; border-radius:16px;
+    display:flex; justify-content:center;
+  }
+  .pcert {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,.08);
+    max-width:480px; width:100%;
+    padding:32px; text-align:center;
+    font-family:'Roboto', sans-serif;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pcert-cta {
+    width:100%;
+    background:hsl(var(--primary, 155 93% 11%));
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    border:none; padding:14px;
+    border-radius:12px;
+    font:700 13px 'Sora'; text-transform:uppercase; letter-spacing:.05em;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:.2s;
+  }
+  .pcert-cta:hover { background:hsl(var(--primary, 155 93% 11%) / 0.9); }
+</style>
+
+<div class="pcert-wrap">
+  <div class="pcert">
+    <p style="font:700 11px 'Roboto'; text-transform:uppercase; letter-spacing:2px; color:hsl(var(--accent, 155 93% 11%)); margin-bottom:8px;">Certificado de Conclusão</p>
+    <h3 style="font:700 24px 'Anek Latin'; margin:0 0 4px;">AUVP Escola</h3>
+    <p style="font:14px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); margin:0 0 24px;">Certifica que o aluno concluiu com sucesso o módulo</p>
+    <div style="background:hsl(var(--muted, 120 10% 95%)/0.5); border:1px solid hsl(var(--border,120 10% 88%)); border-radius:12px; padding:24px; margin-bottom:24px;">
+      <h4 style="font:700 20px 'Anek Latin'; margin:0 0 4px;">Renda Fixa Avançada</h4>
+      <p style="font:13px 'Roboto'; color:hsl(var(--muted-foreground,110 10% 40%)); margin:0;">12 aulas • 8h30 de conteúdo • Nota: 9.2/10</p>
+    </div>
+    <button class="pcert-cta">Baixar Certificado PDF</button>
+  </div>
+</div>
