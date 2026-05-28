@@ -1,0 +1,23 @@
+<!-- Playlist de Aulas (HTML / CSS / JS standalone) -->
+<style>
+  .pl-wrap { background:hsl(var(--card,0 0% 100%)); border:1px solid hsl(var(--border,120 10% 88%)); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:8px; max-width:400px; list-style:none; margin:0; font-family:'Roboto',sans-serif; }
+  .pl-h { font:700 11px/1 'Roboto'; text-transform:uppercase; letter-spacing:1px; color:hsl(var(--muted-foreground,110 10% 40%)); padding:0 8px; margin-bottom:8px; }
+  .pl-item { display:flex; gap:12px; padding:12px; border-radius:8px; cursor:pointer; border:1px solid transparent; transition:.2s; }
+  .pl-item:hover { background:hsl(var(--muted,120 10% 95%)); }
+  .pl-item.active { background:hsl(var(--accent,155 93% 11%)/0.1); border-color:hsl(var(--accent,155 93% 11%)/0.3); }
+  .pl-title { font:700 14px/1.2 'Anek Latin'; margin:0 0 4px; color:hsl(var(--foreground,110 78% 9%)); }
+  .pl-meta { font:12px 'Roboto'; color:hsl(var(--muted-foreground,110 10% 40%)); }
+</style>
+
+<ul class="pl-wrap">
+  <li class="pl-h">Aulas do Módulo</li>
+  <li class="pl-item active">
+    <div><p class="pl-title">01. O despertar financeiro</p><span class="pl-meta">15:24 • Assistindo</span></div>
+  </li>
+  <li class="pl-item">
+    <div><p class="pl-title">02. Entendendo a inflação</p><span class="pl-meta">22:10 • Concluído</span></div>
+  </li>
+  <li class="pl-item">
+    <div><p class="pl-title">03. O poder dos juros compostos</p><span class="pl-meta">18:45</span></div>
+  </li>
+</ul>

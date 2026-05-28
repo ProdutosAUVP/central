@@ -1,0 +1,17 @@
+<!-- Dashboard do Aluno (HTML / CSS standalone) -->
+<style>
+  .pd { font-family:'Roboto', sans-serif; color:hsl(var(--foreground, 110 78% 9%)); display:flex; flex-direction:column; gap:16px; }
+  .pd-card { background:hsl(var(--card, 0 0% 100%)); border:1px solid hsl(var(--border, 120 10% 88%)); border-radius:12px; padding:20px; }
+  .pd-stats { display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); }
+  .pd-value { font:700 24px/1 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); margin:0; }
+  .pd-label { font:12px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); margin-top:4px; }
+</style>
+
+<div class="pd">
+  <div class="pd-stats">
+    <div class="pd-card"><p class="pd-value">47</p><p class="pd-label">Aulas concluídas</p></div>
+    <div class="pd-card"><p class="pd-value">32h</p><p class="pd-label">Tempo de estudo</p></div>
+    <div class="pd-card"><p class="pd-value">3</p><p class="pd-label">Certificados obtidos</p></div>
+    <div class="pd-card"><p class="pd-value">7 dias</p><p class="pd-label">Sequência de estudos</p></div>
+  </div>
+</div>

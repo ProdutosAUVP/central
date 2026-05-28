@@ -1,0 +1,21 @@
+<!-- Player de Aulas (HTML / CSS / JS standalone) -->
+<style>
+  .pp-wrap { background:hsl(var(--card,0 0% 100%)); border:1px solid hsl(var(--border,120 10% 88%)); border-radius:16px; padding:48px; display:flex; flex-direction:column; gap:32px; font-family:'Roboto',sans-serif; color:hsl(var(--foreground,110 78% 9%)); }
+  .pp-video { aspect-ratio:16/9; background:#000; border-radius:12px; position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+  .pp-play { width:64px; height:64px; border-radius:999px; background:hsl(var(--primary,155 93% 11%)/0.9); color:hsl(var(--primary-foreground,0 0% 100%)); display:flex; align-items:center; justify-content:center; }
+  .pp-play svg { width:28px; height:28px; margin-left:4px; }
+  .pp-title { font:700 30px/1.1 'Anek Latin'; margin:8px 0 16px; color:hsl(var(--foreground,110 78% 9%)); }
+</style>
+
+<div class="pp-wrap">
+  <div class="pp-video">
+    <div class="pp-play">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </div>
+  </div>
+  <div>
+    <span style="font:700 11px 'Roboto'; text-transform:uppercase; letter-spacing:1px; background:hsl(var(--accent,155 93% 11%)/0.1); color:hsl(var(--accent,155 93% 11%)); padding:4px 8px; border-radius:4px;">Módulo 1</span>
+    <h3 class="pp-title">01. O despertar financeiro</h3>
+    <button style="display:inline-flex; align-items:center; gap:8px; background:hsl(var(--card,0 0% 100%)); border:1px solid hsl(var(--border,120 10% 88%)); padding:12px 24px; border-radius:999px; font:700 13px 'Sora'; cursor:pointer;">Concluir Aula</button>
+  </div>
+</div>
