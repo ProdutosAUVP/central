@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BrandProvider } from "@/contexts/BrandContext";
 import { ViewProvider } from "@/contexts/ViewContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import Hub from "./pages/Hub";
@@ -47,6 +48,7 @@ class ErrorBoundary extends React.Component<
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
       <BrandProvider>
         <ViewProvider>
           <TooltipProvider>
@@ -64,6 +66,7 @@ const App = () => (
           </TooltipProvider>
         </ViewProvider>
       </BrandProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   </ErrorBoundary>
 );
