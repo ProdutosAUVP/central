@@ -78,9 +78,26 @@ export function LayoutEspacamento() {
         </div>
       </div>
 
+      {/* Espaçamento entre título e conteúdo / dobras */}
+      <div>
+        <h3 className="text-lg font-bold mb-[32px] font-anek">Espaçamento entre Título, Conteúdo e Dobras</h3>
+        <div className="bg-card border border-border rounded-xl p-6 space-y-0">
+          <div className="bg-muted/50 border border-dashed border-border rounded px-4 py-2 text-sm font-bold font-anek">Título da Seção</div>
+          <div className="h-[32px] bg-accent/20 flex items-center justify-center text-[10px] font-mono font-bold text-accent">32px — Título → Conteúdo</div>
+          <div className="bg-muted border border-dashed border-border rounded px-4 py-6 text-sm text-muted-foreground text-center">Conteúdo da Dobra A</div>
+          <div className="h-[48px] bg-destructive/15 flex items-center justify-center text-[10px] font-mono font-bold text-destructive">48px — Entre Dobras</div>
+          <div className="bg-muted/50 border border-dashed border-border rounded px-4 py-2 text-sm font-bold font-anek">Título da Próxima Seção</div>
+          <div className="h-[32px] bg-accent/20 flex items-center justify-center text-[10px] font-mono font-bold text-accent">32px — Título → Conteúdo</div>
+          <div className="bg-muted border border-dashed border-border rounded px-4 py-6 text-sm text-muted-foreground text-center">Conteúdo da Dobra B</div>
+        </div>
+      </div>
+
       {/* Bento Grid */}
       <div>
         <h3 className="text-lg font-bold mb-[32px] font-anek">Bento Grid (Muitos Cards)</h3>
+        <p className="text-sm text-muted-foreground mb-4 font-roboto">
+          Quando houver muitos cards, organize-os em formato <strong>bento</strong>, com gaps verticais e horizontais de <strong>12 a 16px</strong>.
+        </p>
         <div
           className="w-full grid gap-[16px] p-[16px] bg-muted/40 rounded-xl border border-border"
           style={{
@@ -100,15 +117,19 @@ export function LayoutEspacamento() {
           </div>
           <div className="rounded-[12px] bg-foreground text-background flex flex-col items-center justify-center text-center px-[16px] py-[12px]" style={{ gridArea: "aside2" }}>
             <span className="font-bold font-anek">Aside 2</span>
+            <span className="text-xs opacity-70 font-roboto">Rodapé esquerdo (2x1)</span>
           </div>
           <div className="rounded-[12px] flex flex-col items-center justify-center text-center px-[16px] py-[12px]" style={{ gridArea: "aside3", backgroundColor: "#E9AB53", color: "#1a1a1a" }}>
             <span className="font-bold font-anek">Aside 3</span>
+            <span className="text-xs opacity-80 font-roboto">Coluna alta (2x3)</span>
           </div>
           <div className="rounded-[12px] bg-card border border-border flex flex-col items-center justify-center text-center px-[16px] py-[12px]" style={{ gridArea: "aside4" }}>
             <span className="font-bold font-anek text-foreground">Aside 4</span>
+            <span className="text-xs text-muted-foreground font-roboto">Centro inferior (2x1)</span>
           </div>
           <div className="rounded-[12px] bg-card border border-border flex flex-col items-center justify-center text-center px-[16px] py-[12px]" style={{ gridArea: "aside5" }}>
             <span className="font-bold font-anek text-foreground">Aside 5</span>
+            <span className="text-xs text-muted-foreground font-roboto">Rodapé largo (4x1)</span>
           </div>
         </div>
       </div>
@@ -131,7 +152,25 @@ export function LayoutEspacamento() {
 <main className="space-y-[48px]">
   <section>...</section>
   <section>...</section>
-</main>`
+</main>
+
+// Bento Grid (gap 12-16px)
+<div
+  className="grid gap-[16px] p-[16px]"
+  style={{
+    gridTemplateColumns: "repeat(6, 1fr)",
+    gridTemplateRows: "repeat(4, 1fr)",
+    gridTemplateAreas: \`
+      "hero hero hero hero aside3 aside3"
+      "hero hero hero hero aside3 aside3"
+      "aside2 aside2 aside4 aside4 aside3 aside3"
+      "aside2 aside2 aside5 aside5 aside5 aside5"
+    \`,
+  }}
+>
+  <div style={{ gridArea: "hero" }} className="rounded-[12px] px-[16px] py-[12px]">Hero</div>
+  <div style={{ gridArea: "aside2" }}>...</div>
+</div>`
           },
           {
             label: "HTML / CSS / JS",
@@ -143,7 +182,26 @@ export function LayoutEspacamento() {
 .section-title { margin-bottom: 32px; }
 
 /* Entre dobras (blocos) */
-.fold + .fold { margin-top: 48px; }`
+.fold + .fold { margin-top: 48px; }
+
+/* Bento Grid */
+.bento {
+  display: grid;
+  gap: 16px;          /* 12-16px */
+  padding: 16px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-areas:
+    "hero hero hero hero aside3 aside3"
+    "hero hero hero hero aside3 aside3"
+    "aside2 aside2 aside4 aside4 aside3 aside3"
+    "aside2 aside2 aside5 aside5 aside5 aside5";
+}
+.bento > .hero   { grid-area: hero; }
+.bento > .aside2 { grid-area: aside2; }
+.bento > .aside3 { grid-area: aside3; }
+.bento > .aside4 { grid-area: aside4; }
+.bento > .aside5 { grid-area: aside5; }`
           }
         ]}
       />

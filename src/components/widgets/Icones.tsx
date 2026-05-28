@@ -39,6 +39,7 @@ function IconWeight({ label, prefixLabel, description, strokeWidth, fill, opacit
 export function Icones() {
   return (
     <div className="space-y-12">
+      {/* Pesos e Variações */}
       <div>
         <h3 className="text-lg font-bold mb-4 font-anek">Pesos e Variações (Weights)</h3>
         <p className="text-muted-foreground mb-4">
@@ -52,6 +53,7 @@ export function Icones() {
         </div>
       </div>
 
+      {/* Implementação */}
       <div>
         <h3 className="text-lg font-bold mb-4 font-anek">Implementação e Referência</h3>
         <p className="text-muted-foreground mb-4">

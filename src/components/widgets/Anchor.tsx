@@ -79,7 +79,7 @@ useEffect(() => {
       <div key={a.id} id={a.id} className="rounded-lg border bg-card p-4 min-h-[120px]">
         <h4 className="font-anek font-bold text-lg mb-2">{a.label}</h4>
         <p className="text-sm text-muted-foreground font-roboto">
-          Lorem ipsum dolor sit amet consectetur adipiscing elit.
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus.
         </p>
       </div>
     ))}
@@ -94,7 +94,20 @@ useEffect(() => {
 <style>
   #anchor-nav a { display:block; padding:6px 12px; margin-left:-1px; border-left:2px solid transparent; color:#6b7280; font-family:'Roboto'; text-decoration:none; }
   #anchor-nav a.active { border-color:hsl(var(--primary)); color:hsl(var(--primary)); font-weight:600; }
-</style>`}
+</style>
+
+<script>
+  const links = document.querySelectorAll('#anchor-nav a');
+  function update() {
+    let current = links[0].dataset.id;
+    links.forEach(l => {
+      const el = document.getElementById(l.dataset.id);
+      if (el && el.getBoundingClientRect().top <= 120) current = l.dataset.id;
+    });
+    links.forEach(l => l.classList.toggle('active', l.dataset.id === current));
+  }
+  window.addEventListener('scroll', update); update();
+</script>`}
     >
       <div className="w-full grid grid-cols-[200px_1fr] gap-6">
         <nav className="sticky top-20 self-start border-l border-border">

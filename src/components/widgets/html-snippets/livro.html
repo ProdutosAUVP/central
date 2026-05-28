@@ -30,6 +30,7 @@
       inset 6px 0 12px -6px rgba(0,0,0,.25);
   }
   .lv-cover::before {
+    /* Sulco da lombada (default e stripe) */
     content:""; position:absolute; top:0; bottom:0; left:8px; width:1px;
     background:rgba(0,0,0,.18);
   }
@@ -59,10 +60,70 @@
     margin:0;
   }
   .lv.simple .lv-title { padding-left:4px; }
+
+  .lv.textured .lv-cover {
+    background-image:radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
+    background-size:4px 4px;
+    background-color:var(--color);
+  }
 </style>
 
+<!-- Default -->
 <div class="lv-shelf">
   <div class="lv">
+    <div class="lv-inner">
+      <div class="lv-pages"></div>
+      <div class="lv-spine"></div>
+      <div class="lv-cover">
+        <h4 class="lv-title">The user experience of the Frontend Cloud</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Variantes simple e stripe -->
+<div class="lv-shelf">
+  <div class="lv simple" style="--w:196px;">
+    <div class="lv-inner">
+      <div class="lv-pages"></div>
+      <div class="lv-spine"></div>
+      <div class="lv-cover">
+        <h4 class="lv-title">The user experience of the Frontend Cloud</h4>
+      </div>
+    </div>
+  </div>
+  <div class="lv stripe" style="--w:196px;">
+    <div class="lv-inner">
+      <div class="lv-pages"></div>
+      <div class="lv-spine"></div>
+      <div class="lv-cover">
+        <h4 class="lv-title">The user experience of the Frontend Cloud</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cores customizadas -->
+<div class="lv-shelf">
+  <div class="lv" style="--color:#9D2127; --fg:#fff;">
+    <div class="lv-inner">
+      <div class="lv-pages"></div>
+      <div class="lv-spine"></div>
+      <div class="lv-cover">
+        <h4 class="lv-title">How Vercel improves your website's search engine ranking</h4>
+      </div>
+    </div>
+  </div>
+  <div class="lv simple" style="--color:#7DC1C1; --fg:#fff;">
+    <div class="lv-inner">
+      <div class="lv-pages"></div>
+      <div class="lv-spine"></div>
+      <div class="lv-cover">
+        <h4 class="lv-title">Design Engineering at Vercel</h4>
+      </div>
+    </div>
+  </div>
+  <div class="lv" style="--color:#FED954; --fg:#111;">
     <div class="lv-inner">
       <div class="lv-pages"></div>
       <div class="lv-spine"></div>

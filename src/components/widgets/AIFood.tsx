@@ -591,7 +591,8 @@ const componentCatalog = {
 ## 10. CATÁLOGO COMPLETO PARA FERRAMENTAS
 
 ### Fundamentos aplicáveis
-- **Tipografia** (Anek/Roboto/Sora), **Cores** (paleta da marca + tokens de status (success/warning/info/error) e Data Viz para gráficos).
+- **Tipografia**: Anek (títulos/valores), Roboto (labels/auxiliar), Sora Bold (botões).
+- **Cores**: paleta da marca + tokens de status (success/warning/info/error) e Data Viz para gráficos.
 - **Ícones**: Phosphor Regular padrão; Fill para estados ativos.
 
 ### Entrada (núcleo das ferramentas)

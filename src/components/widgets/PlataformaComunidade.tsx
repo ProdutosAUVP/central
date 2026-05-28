@@ -97,7 +97,7 @@ export function PlataformaComunidade() {
                         <span className="text-[10px] text-muted-foreground font-roboto">há 2 dias</span>
                       </div>
                       <p className="text-sm text-foreground/80 font-roboto leading-relaxed">
-                        Ótima pergunta! A Selic é a taxa básica de juros definida pelo COPOM/Banco Central. O CDI caminha muito próximo da Selic (~0.10% abaixo). Na prática, investimentos de renda fixa usam o CDI como referência porque é a taxa do mercado interbanciário.
+                        Ótima pergunta! A Selic é a taxa básica de juros definida pelo COPOM/Banco Central. O CDI caminha muito próximo da Selic (~0.10% abaixo). Na prática, investimentos de renda fixa usam o CDI como referência porque é a taxa do mercado interbancário.
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <button className="text-xs text-muted-foreground hover:text-accent transition-colors flex items-center gap-1">

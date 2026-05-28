@@ -60,14 +60,22 @@ const navGroups: NavGroup[] = [
 
 const allSectionIds = navGroups.flatMap((g) => g.items.map((i) => i.id));
 
-function SidebarNav({ activeSection, scrollToSection }: { activeSection: string; scrollToSection: (id: string) => void }) {
+function SidebarNav({
+  activeSection,
+  scrollToSection,
+}: {
+  activeSection: string;
+  scrollToSection: (id: string) => void;
+}) {
   return (
     <>
       {navGroups.map((group, gi) => (
         <div key={gi}>
           {gi > 0 && <div className="my-3 border-b border-border" />}
           {group.label && (
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">{group.label}</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
+              {group.label}
+            </p>
           )}
           <ul className="space-y-0.5">
             {group.items.map(({ id, label, icon: Icon }) => (
@@ -76,7 +84,9 @@ function SidebarNav({ activeSection, scrollToSection }: { activeSection: string;
                   onClick={() => scrollToSection(id)}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left leading-tight",
-                    activeSection === id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    activeSection === id
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                 >
                   <Icon className="h-4 w-4 shrink-0" />
@@ -97,7 +107,10 @@ export default function TomEVozPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("fundamentos");
 
-  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem("tom-e-voz-auth") === "true");
+  // Password gate
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("tom-e-voz-auth") === "true";
+  });
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -115,7 +128,9 @@ export default function TomEVozPage() {
 
   useEffect(() => {
     setBrand("capital");
-    return () => { setBrand(previousBrand); };
+    return () => {
+      setBrand(previousBrand);
+    };
   }, []);
 
   useEffect(() => {
@@ -123,15 +138,21 @@ export default function TomEVozPage() {
     const handleScroll = () => {
       const headerOffset = 100;
       let currentId = allSectionIds[0];
+
       for (const id of allSectionIds) {
         const el = document.getElementById(id);
         if (!el) continue;
         const top = el.getBoundingClientRect().top;
-        if (top <= headerOffset) currentId = id;
-        else break;
+        if (top <= headerOffset) {
+          currentId = id;
+        } else {
+          break;
+        }
       }
+
       setActiveSection(currentId);
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
@@ -158,18 +179,38 @@ export default function TomEVozPage() {
             <h1 className="text-xl font-bold font-anek text-foreground">Manual de Tom e Voz</h1>
             <p className="text-sm text-muted-foreground mt-1">Conteúdo restrito — insira a senha para acessar.</p>
           </div>
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input type={showPassword ? "text" : "password"} placeholder="Senha de acesso" value={password} onChange={(e) => { setPassword(e.target.value); setError(false); }} className={cn("pl-10 pr-10", error && "border-destructive focus-visible:ring-destructive")} autoFocus />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Senha de acesso"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setError(false); }}
+                className={cn("pl-10 pr-10", error && "border-destructive focus-visible:ring-destructive")}
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-            {error && <p className="text-xs text-destructive">Senha incorreta. Tente novamente.</p>}
-            <Button type="submit" className="w-full">Acessar manual</Button>
+            {error && (
+              <p className="text-xs text-destructive">Senha incorreta. Tente novamente.</p>
+            )}
+            <Button type="submit" className="w-full">
+              Acessar manual
+            </Button>
           </form>
-          <Link to="/" className="mt-6 inline-flex items-center justify-center text-sm text-muted-foreground hover:text-foreground transition-colors">
+
+          <Link
+            to="/"
+            className="mt-6 inline-flex items-center justify-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
             ← Voltar para o Design System
           </Link>
         </div>
@@ -206,14 +247,17 @@ export default function TomEVozPage() {
                 </nav>
               </SheetContent>
             </Sheet>
+
             <GlobalNav />
           </div>
         </div>
       </header>
+
       <div className="container flex gap-0 relative px-4 md:px-8">
         <nav className="sticky top-16 h-[calc(100vh-4rem)] w-56 shrink-0 border-r py-[30px] pr-[15px] overflow-y-auto hidden md:block">
           <SidebarNav activeSection={activeSection} scrollToSection={scrollToSection} />
         </nav>
+
         <main className="flex-1 py-[60px] pl-0 md:pl-[45px] min-w-0 overflow-hidden max-w-4xl">
           <TomEVoz />
         </main>

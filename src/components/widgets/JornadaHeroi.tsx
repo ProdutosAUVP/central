@@ -47,6 +47,7 @@ export function JornadaHeroi() {
   return (
     <div className="relative overflow-hidden w-full max-w-4xl mx-auto">
       <div className="bg-background/40 rounded-xl p-5 md:p-8 border border-border/60 shadow-sm">
+        {/* Floating tooltip */}
         <div className="flex justify-center mb-8">
           <div className="relative animate-bounce">
             <div className="relative bg-primary text-primary-foreground text-[11px] font-bold uppercase px-3 py-1.5 shadow-lg whitespace-nowrap tracking-wider">
@@ -56,7 +57,9 @@ export function JornadaHeroi() {
           </div>
         </div>
 
+        {/* Timeline */}
         <div className="relative w-full h-14 flex items-center justify-between mb-6 md:mb-10 px-2.5 select-none">
+          {/* Track */}
           <div className="absolute top-1/2 left-[22px] right-[22px] h-[3px] -translate-y-1/2 z-10">
             <div className="absolute inset-0 bg-muted-foreground/15 rounded-full" />
             <div
@@ -65,6 +68,7 @@ export function JornadaHeroi() {
             />
           </div>
 
+          {/* Points */}
           {steps.map((_, i) => {
             const isActive = i <= activeStep;
             return (
@@ -84,6 +88,7 @@ export function JornadaHeroi() {
           })}
         </div>
 
+        {/* Content */}
         <div
           key={activeStep}
           className="text-center md:text-left grid grid-cols-1 md:grid-cols-2 gap-8 items-center animate-in fade-in slide-in-from-bottom-2 duration-300"
@@ -107,6 +112,7 @@ export function JornadaHeroi() {
         </div>
       </div>
 
+      {/* Salary comparison table */}
       <div className="mt-8 bg-background/40 rounded-xl p-5 md:p-8 border border-border/60">
         <h4 className="font-bold text-sm uppercase tracking-wider text-accent mb-4">
           Comparativo de Evolução

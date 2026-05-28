@@ -10,7 +10,7 @@ export function CardsContainers() {
         <p className="text-sm text-foreground/80">Sempre utilizar <strong>Border Radius: 12px</strong> e manter o contraste <strong>baixo</strong> em relação ao fundo da dobra.</p>
       </div>
 
-      {/* Dobra Escura */}
+      {/* Dobra Escura — fundos fixos por demonstração */}
       <div className="bg-black p-4 md:p-8 rounded-xl border border-white/10 shadow-xl">
         <h3 className="text-white font-anek text-2xl font-bold mb-6">Dobra Escura (Preto Puro)</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[15px]">
@@ -27,7 +27,7 @@ export function CardsContainers() {
         </div>
       </div>
 
-      {/* Dobra Cinza Claro */}
+      {/* Dobra Cinza Claro — fundos fixos por demonstração */}
       <div className="p-4 md:p-8 rounded-xl border" style={{ backgroundColor: "#F2F2F2", borderColor: "#E5E7EB" }}>
         <h3 className="font-anek text-2xl font-bold mb-6" style={{ color: "hsl(var(--primary))" }}>Dobra Cinza Claro</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[15px]">
@@ -44,7 +44,7 @@ export function CardsContainers() {
         </div>
       </div>
 
-      {/* Dobra Branca */}
+      {/* Dobra Branca — fundos fixos por demonstração */}
       <div className="p-4 md:p-8 rounded-xl border shadow-sm" style={{ backgroundColor: "#FFFFFF", borderColor: "#E5E7EB" }}>
         <h3 className="font-anek text-2xl font-bold mb-6" style={{ color: "hsl(var(--primary))" }}>Dobra Branca (Branco Puro)</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[15px]">

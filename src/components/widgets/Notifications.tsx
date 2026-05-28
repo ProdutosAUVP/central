@@ -54,6 +54,7 @@ export function Notifications() {
   const anchorRef = useRef<HTMLSpanElement>(null);
   const [isDark, setIsDark] = useState(false);
 
+  // Detecta se algum ancestral (ComponentShowcase) tem .dark, sincronizando com o toggle local
   useEffect(() => {
     const node = anchorRef.current;
     if (!node) return;
@@ -185,6 +186,7 @@ const remove = (id: number) => setItems((prev) => prev.filter((i) => i.id !== id
   }
 </script>`}
       >
+        {/* Sentinela invisível para detectar a classe .dark do toggle do ComponentShowcase */}
         <span ref={anchorRef} aria-hidden="true" className="sr-only" />
         <Button onClick={() => push("success")} className="bg-success hover:bg-success/90 text-success-foreground">
           Success

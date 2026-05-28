@@ -100,6 +100,10 @@ function DataTable({ headers, rows }: {headers: string[];rows: string[][];}) {
 /*  COMPONENTE PRINCIPAL                                               */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/*  COMPONENTE PRINCIPAL                                               */
+/* ------------------------------------------------------------------ */
+
 export function TomEVoz() {
 
   return (
@@ -166,6 +170,8 @@ export function TomEVoz() {
           </div>
           <P>{Data.tomDefinicao.conclusao}</P>
         </CardBox>
+
+
 
       </section>
 
@@ -315,7 +321,7 @@ export function TomEVoz() {
           
         </div>
 
-        {/* Funil de vendas */}
+        {/* Funil de vendas — movido para Marketing conforme PDF */}
         <CardBox>
           <SectionTitle icon={ArrowRight}>Etapas do funil de vendas</SectionTitle>
           <DataTable
@@ -326,7 +332,9 @@ export function TomEVoz() {
         <TomEVozAIFoodInline type="area" id="marketing" label="Marketing" />
       </section>
 
-      {/* COMERCIAL */}
+      {/* ============================================================= */}
+      {/*  COMERCIAL                                                     */}
+      {/* ============================================================= */}
       <section id="comercial" className="space-y-6 scroll-mt-24 pb-[60px]">
         <SectionTitle icon={Users}>Comercial</SectionTitle>
 
@@ -375,7 +383,9 @@ export function TomEVoz() {
         <TomEVozAIFoodInline type="area" id="comercial" label="Comercial" />
       </section>
 
-      {/* ATENDIMENTO */}
+      {/* ============================================================= */}
+      {/*  ATENDIMENTO                                                   */}
+      {/* ============================================================= */}
       <section id="atendimento" className="space-y-6 scroll-mt-24 pb-[60px]">
         <SectionTitle icon={Heart}>Atendimento</SectionTitle>
 
@@ -431,7 +441,9 @@ export function TomEVoz() {
         <TomEVozAIFoodInline type="area" id="atendimento" label="Atendimento" />
       </section>
 
-      {/* CONSULTORIA */}
+      {/* ============================================================= */}
+      {/*  CONSULTORIA                                                   */}
+      {/* ============================================================= */}
       <section id="consultoria" className="space-y-6 scroll-mt-24 pb-[60px]">
         <SectionTitle icon={Landmark}>Consultoria</SectionTitle>
 
@@ -486,7 +498,8 @@ export function TomEVoz() {
         <TomEVozAIFoodInline type="area" id="consultoria" label="Consultoria" />
       </section>
 
-      {/* AUVP Wealth */}
+
+      {/* AUVP Wealth — área da empresa, logo após Consultoria */}
       <section id="produto-wealth" className="space-y-6 scroll-mt-24 pb-[60px]">
         <SectionTitle icon={Building2}>AUVP Wealth</SectionTitle>
         <CardBox>
@@ -513,7 +526,9 @@ export function TomEVoz() {
         <TomEVozAIFoodInline type="produto" id="auvpWealth" label="AUVP Wealth" />
       </section>
 
-      {/* CAPITAL HUMANO */}
+      {/* ============================================================= */}
+      {/*  CAPITAL HUMANO — antes de Produtos conforme PDF               */}
+      {/* ============================================================= */}
       <section id="capital" className="space-y-6 scroll-mt-24 pb-[60px]">
         <SectionTitle icon={Anchor}>Capital Humano</SectionTitle>
 
@@ -556,7 +571,9 @@ export function TomEVoz() {
         <TomEVozAIFoodInline type="area" id="capitalHumano" label="Capital Humano" />
       </section>
 
-      {/* PRODUTO E CX */}
+      {/* ============================================================= */}
+      {/*  PRODUTO E CX — área da empresa, não produto                    */}
+      {/* ============================================================= */}
       <section id="produto-cx" className="space-y-6 scroll-mt-24 pb-[60px]">
         <SectionTitle icon={Sparkles}>{Data.produtoCx.titulo}</SectionTitle>
 
@@ -617,7 +634,10 @@ export function TomEVoz() {
         </CardBox>
       </section>
 
-      {/* PRODUTOS */}
+      {/* ============================================================= */}
+      {/*  PRODUTOS — seções individuais                                  */}
+      {/* ============================================================= */}
+
 
       {/* AUVP Agro */}
       <section id="produto-agro" className="space-y-6 scroll-mt-24 pb-[60px]">

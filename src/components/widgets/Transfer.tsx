@@ -121,7 +121,7 @@ export function TransferWidget() {
   return (
     <ComponentShowcase
       title="Transfer (transferência entre listas)"
-      description="Mover itens entre listas 'disponíveis' e 'selecionados' com checkboxes, busca e ações em massa. útil para gestão de permissões, atribuição de turmas, seleção de ativos."
+      description="Mover itens entre listas 'disponíveis' e 'selecionados' com checkboxes, busca e ações em massa. Útil para gestão de permissões, atribuição de turmas, seleção de ativos."
       code={`interface Item { key: string; label: string }
 
 const SOURCE: Item[] = Array.from({ length: 10 }, (_, i) => ({
