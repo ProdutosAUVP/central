@@ -8,6 +8,10 @@ import { ComponentShowcase } from "@/components/design-system/ComponentShowcase"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
+/* ============================================================
+ * 1) Timeline linear (vertical clássica) — legado
+ * ============================================================ */
+
 type Status = "done" | "active" | "pending" | "error";
 interface LinearItem { status: Status; title: string; description: string; date: string; }
 
@@ -29,6 +33,7 @@ const iconMap = {
 function LinearTimeline() {
   return (
     <ol className="relative w-full space-y-6">
+      {/* Linha vertical centralizada nos nós (nó = 32px → centro em 16px) */}
       <span
         aria-hidden
         className="absolute left-4 top-2 bottom-2 w-px bg-border -translate-x-1/2"
@@ -58,6 +63,11 @@ function LinearTimeline() {
   );
 }
 
+/* ============================================================
+ * 2) Timeline de Trilha (Marcos) — horizontal + vertical
+ *    Inspirada na Trilha do Embaixador.
+ * ============================================================ */
+
 interface Milestone {
   id: number;
   title: string;
@@ -71,7 +81,7 @@ const milestones: Milestone[] = [
   { id: 2, title: "Aspirante",         conversionsRequired: 5,   prize: "Camiseta oficial", prizeDescription: "Edição limitada da marca." },
   { id: 3, title: "Embaixador Bronze", conversionsRequired: 15,  prize: "Certificado", prizeDescription: "Diploma físico de reconhecimento." },
   { id: 4, title: "Embaixador Prata",  conversionsRequired: 30,  prize: "Mentoria 1:1", prizeDescription: "1 hora com especialista." },
-  { id: 5, title: "Embaixador Ouro",   conversionsRequired: 60,  prize: "Immersão presencial", prizeDescription: "Acesso ao evento anual." },
+  { id: 5, title: "Embaixador Ouro",   conversionsRequired: 60,  prize: "Imersão presencial", prizeDescription: "Acesso ao evento anual." },
   { id: 6, title: "Embaixador Platina",conversionsRequired: 100, prize: "Comissão dobrada", prizeDescription: "Bônus permanente nas indicações." },
   { id: 7, title: "Embaixador Master", conversionsRequired: 150, prize: "Viagem internacional", prizeDescription: "Pacote completo para 2 pessoas." },
 ];
@@ -79,6 +89,8 @@ const milestones: Milestone[] = [
 const milestoneIcons: Record<number, React.ElementType> = {
   1: Star, 2: Medal, 3: Award, 4: Crown, 5: Gem, 6: Flame, 7: Trophy,
 };
+
+/* ---------- Horizontal (desktop) ---------- */
 
 interface TrilhaHProps {
   current: number;
@@ -120,6 +132,7 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
 
   return (
     <div className="relative w-full">
+      {/* Fades */}
       {needsScroll && canScrollLeft && (
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-card to-transparent z-10" />
       )}
@@ -127,6 +140,7 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-card to-transparent z-10" />
       )}
 
+      {/* Setas */}
       {needsScroll && canScrollLeft && (
         <button
           type="button"
@@ -148,6 +162,7 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
         </button>
       )}
 
+      {/* Scroll area */}
       <div
         ref={scrollRef}
         className={cn(
@@ -163,6 +178,7 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
             const Icon = milestoneIcons[m.id] ?? Star;
             const isLast = i === milestones.length - 1;
 
+            // Conector da DIREITA do nó atual (metade esquerda do segmento i→i+1)
             const nextReached = milestones[i + 1]?.id <= current;
             const connectorClass = !isLast
               ? reached
@@ -178,9 +194,12 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
                   needsScroll ? "w-[88px] shrink-0" : "flex-1 min-w-[88px]"
                 )}
               >
+                {/* Linha de nó + conector */}
                 <div className="flex items-center w-full">
+                  {/* spacer esquerdo (metade do conector) */}
                   <div className={cn("flex-1 h-[3px] transition-colors duration-300", i === 0 ? "bg-transparent" : connectorClassPrev(i, current))} />
 
+                  {/* Nó */}
                   <button
                     type="button"
                     onClick={() => onSelect(m.id)}
@@ -202,9 +221,11 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
                     />
                   </button>
 
+                  {/* spacer direito (metade do conector seguinte) */}
                   <div className={cn("flex-1 h-[3px] transition-colors duration-300", isLast ? "bg-transparent" : connectorClass)} />
                 </div>
 
+                {/* Label */}
                 <div className="w-[88px] text-center mt-3 px-1">
                   <p className={cn(
                     "text-[10px] font-bold uppercase tracking-wider font-roboto",
@@ -228,15 +249,20 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
   );
 }
 
+// Conector da ESQUERDA do nó atual (metade direita do segmento i-1→i)
 function connectorClassPrev(i: number, current: number) {
+  const prevReached = milestones[i - 1]?.id <= current;
   const thisReached = milestones[i]?.id <= current;
   if (thisReached) return "bg-primary";
+  if (prevReached) return "bg-border dark:bg-[hsl(145_20%_44%/0.6)]";
   return "bg-border dark:bg-[hsl(145_20%_44%/0.6)]";
 }
 
+/* ---------- Vertical (mobile / Trilha mobile) ---------- */
+
 interface TrilhaVProps {
   current: number;
-  progressNow: number;
+  progressNow: number; // ex.: indicações atuais para barra de progresso
 }
 
 function VerticalTrilha({ current, progressNow }: TrilhaVProps) {
@@ -250,6 +276,7 @@ function VerticalTrilha({ current, progressNow }: TrilhaVProps) {
         const isLast = i === milestones.length - 1;
         const Icon = milestoneIcons[m.id] ?? Star;
 
+        // Conector
         const nextReached = milestones[i + 1]?.id <= current;
         const connectorClass = reached && nextReached
           ? "bg-primary"
@@ -257,11 +284,13 @@ function VerticalTrilha({ current, progressNow }: TrilhaVProps) {
           ? "bg-gradient-to-b from-primary to-border"
           : "bg-border";
 
+        // Progresso (só no próximo)
         const remaining = Math.max(0, m.conversionsRequired - progressNow);
         const progressPercent = Math.min(100, (progressNow / m.conversionsRequired) * 100);
 
         return (
           <li key={m.id} className="flex gap-4">
+            {/* Coluna do nó */}
             <div className="flex flex-col items-center shrink-0">
               <div
                 className={cn(
@@ -284,6 +313,7 @@ function VerticalTrilha({ current, progressNow }: TrilhaVProps) {
               )}
             </div>
 
+            {/* Conteúdo */}
             <div className={cn("flex-1 pb-6", isLast && "pb-0")}>
               <div className="flex items-center gap-2 flex-wrap">
                 <h4 className="font-bold text-sm font-anek text-foreground">{m.title}</h4>
@@ -303,11 +333,13 @@ function VerticalTrilha({ current, progressNow }: TrilhaVProps) {
                 {m.conversionsRequired} indicações
               </p>
 
+              {/* Chip de prêmio */}
               <div className="mt-2 inline-flex flex-col items-start bg-muted px-3 py-2 rounded-xl">
                 <p className="text-xs font-bold text-foreground font-roboto">{m.prize}</p>
                 <p className="text-[11px] text-muted-foreground font-roboto">{m.prizeDescription}</p>
               </div>
 
+              {/* Progresso só no próximo */}
               {isNext && (
                 <div className="mt-3">
                   <div className="flex items-center justify-between text-[11px] font-roboto mb-1">
@@ -330,17 +362,84 @@ function VerticalTrilha({ current, progressNow }: TrilhaVProps) {
   );
 }
 
+/* ============================================================
+ * Widget exportado — três variações em abas
+ * ============================================================ */
+
 export function TimelineWidget() {
   const [selected, setSelected] = useState(3);
-  const current = 3;
-  const progressNow = 22;
+  const current = 3; // último marco conquistado
+  const progressNow = 22; // indicações atuais (entre marco 3 e 4)
 
   return (
     <ComponentShowcase
       title="Timeline (linha do tempo)"
       description="Três variações: Linear (eventos com status semânticos), Trilha Horizontal (marcos com nós conectados — desktop) e Trilha Vertical (mobile, com barra de progresso e prêmios)."
-      code={`// Timeline component code`}
-      htmlCode={`<!-- Timeline HTML -->`}
+      code={`// Trilha Horizontal — nós conectados com fade lateral e setas
+const milestones = [
+  { id: 1, title: 'Aspirante', conversionsRequired: 5, ... },
+  ...
+];
+
+const reached = m.id <= current;       // já conquistado
+const isNext  = i === nextIndex;       // próximo marco
+
+<button className={cn(
+  "h-12 w-12 rounded-full border-2 flex items-center justify-center transition-all duration-200",
+  reached
+    ? "bg-primary border-primary text-primary-foreground shadow-[0_0_16px_hsl(var(--primary)/0.3)]"
+    : isNext
+    ? "bg-card border-accent text-accent shadow-[0_0_10px_hsl(var(--primary)/0.2)]"
+    : "bg-muted border-border text-muted-foreground",
+  isSelected && "ring-2 ring-primary ring-offset-2 ring-offset-background scale-110"
+)}>
+  <Icon className="h-5 w-5" fill={reached ? 'currentColor' : 'none'} />
+</button>
+
+// Conector com gradiente entre nós
+const connector = reached && nextReached
+  ? "bg-primary"
+  : reached
+  ? "bg-gradient-to-r from-primary to-border"
+  : "bg-border";`}
+      htmlCode={`<style>
+  .trilha { display:flex; gap:0; align-items:flex-start; padding:8px; }
+  .trilha-step { flex:1; display:flex; flex-direction:column; align-items:center; min-width:88px; }
+  .trilha-row { display:flex; align-items:center; width:100%; }
+  .trilha-line { flex:1; height:3px; background:#e5e7eb; transition:background .3s; }
+  .trilha-line.reached { background:hsl(var(--primary)); }
+  .trilha-line.gradient { background:linear-gradient(to right, hsl(var(--primary)), #e5e7eb); }
+  .trilha-node {
+    width:48px; height:48px; border-radius:50%; border:2px solid #e5e7eb;
+    background:#f3f4f6; color:#6b7280; display:flex; align-items:center; justify-content:center;
+    transition:all .2s; cursor:pointer; flex-shrink:0;
+  }
+  .trilha-node.reached { background:hsl(var(--primary)); color:#fff; border-color:hsl(var(--primary));
+    box-shadow:0 0 16px hsl(var(--primary)/.3); }
+  .trilha-node.next { background:#fff; color:hsl(var(--primary)); border-color:hsl(var(--primary));
+    box-shadow:0 0 10px hsl(var(--primary)/.2); }
+  .trilha-label { width:88px; text-align:center; margin-top:12px; }
+  .trilha-label .ind { font:700 10px/1 'Roboto'; text-transform:uppercase; letter-spacing:.08em; color:#6b7280; }
+  .trilha-label .title { font:400 11px/1.2 'Roboto'; color:#111; margin-top:2px; }
+
+  .timeline-scrollbar::-webkit-scrollbar { height:4px; }
+  .timeline-scrollbar::-webkit-scrollbar-thumb { background:hsl(var(--primary)/.3); border-radius:9999px; }
+</style>
+
+<div class="trilha">
+  <div class="trilha-step">
+    <div class="trilha-row">
+      <div class="trilha-line" style="visibility:hidden"></div>
+      <div class="trilha-node reached">★</div>
+      <div class="trilha-line reached"></div>
+    </div>
+    <div class="trilha-label">
+      <p class="ind">5 ind.</p>
+      <p class="title">Aspirante</p>
+    </div>
+  </div>
+  <!-- demais steps... -->
+</div>`}
     >
       <div className="w-full">
         <Tabs defaultValue="linear" className="w-full">
