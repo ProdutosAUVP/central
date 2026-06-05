@@ -31,11 +31,14 @@ import { PlataformaNotas } from "@/components/widgets/PlataformaNotas";
 import { PlataformaRating } from "@/components/widgets/PlataformaRating";
 import { PlataformaComunidade } from "@/components/widgets/PlataformaComunidade";
 import { PlataformaCertificados } from "@/components/widgets/PlataformaCertificados";
-import { LivroDefault, LivroVariants, LivroCustomColor, LivroResponsivo } from "@/components/widgets/Livro";
+import { LivroDefault, LivroVariants, LivroCustomColor, LivroIcone, LivroIlustrado, LivroTexturado, LivroTamanhos, LivroResponsivo } from "@/components/widgets/Livro";
 import livroBaseHtml from "@/components/widgets/html-snippets/livro-base.html?raw";
 import livroDefaultHtml from "@/components/widgets/html-snippets/livro-default.html?raw";
 import livroVariantsHtml from "@/components/widgets/html-snippets/livro-variants.html?raw";
 import livroCustomHtml from "@/components/widgets/html-snippets/livro-custom.html?raw";
+import livroIconHtml from "@/components/widgets/html-snippets/livro-icon.html?raw";
+import livroIllustrationHtml from "@/components/widgets/html-snippets/livro-illustration.html?raw";
+import livroTexturedHtml from "@/components/widgets/html-snippets/livro-textured.html?raw";
 import livroResponsivoHtml from "@/components/widgets/html-snippets/livro-responsivo.html?raw";
 import { CheckboxDefault, CheckboxDisabled } from "@/components/widgets/CheckboxGeist";
 import checkboxHtml from "@/components/widgets/html-snippets/checkbox.html?raw";
@@ -1558,7 +1561,7 @@ function showTab(tabId) {
             <div className="space-y-6">
               <ComponentShowcase
                 title="Default"
-                description="Capa padrão com cor primária da marca."
+                description="Capa padrão: seção superior colorida + área inferior branca com título e sulco de lombada."
                 code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return <Book title="The user experience of the Frontend Cloud" />;\n}`}
                 htmlCode={livroBaseHtml + "\n" + livroDefaultHtml}
               >
@@ -1567,7 +1570,7 @@ function showTab(tabId) {
 
               <ComponentShowcase
                 title="Variants"
-                description="Variantes simple (apenas título) e stripe (com faixa horizontal)."
+                description="simple remove o sulco da lombada; stripe adiciona uma faixa horizontal decorativa."
                 code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book\n        title="The user experience of the Frontend Cloud"\n        variant="simple"\n        width={196}\n      />\n      <Book\n        title="The user experience of the Frontend Cloud"\n        variant="stripe"\n        width={196}\n      />\n    </div>\n  );\n}`}
                 htmlCode={livroBaseHtml + "\n" + livroVariantsHtml}
               >
@@ -1576,11 +1579,47 @@ function showTab(tabId) {
 
               <ComponentShowcase
                 title="Custom color"
-                description="Cores customizadas via prop color e textColor."
+                description="Cores via color. Ao definir textColor, a capa inteira usa a cor de destaque — ideal para capas monocromáticas."
                 code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book\n        color="#9D2127"\n        title="How Vercel improves your website's search engine ranking"\n      />\n      <Book\n        color="#7DC1C1"\n        textColor="white"\n        title="Design Engineering at Vercel"\n        variant="simple"\n      />\n      <Book color="#FED954" title="The user experience of the Frontend Cloud" />\n    </div>\n  );\n}`}
                 htmlCode={livroBaseHtml + "\n" + livroCustomHtml}
               >
                 <LivroCustomColor />
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Icon"
+                description="Ícone ou logo exibido na seção superior colorida via prop icon."
+                code={`import { Book } from 'geist/components';\nimport { LogoIconVercel, LogoIconNext, LogoIconReact } from '@vercel/geistcn-assets/logos';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book icon={<LogoIconVercel />} title="Vercel Platform Guide" />\n      <Book icon={<LogoIconNext />} title="Next.js Documentation" />\n      <Book icon={<LogoIconReact />} title="React Essentials" />\n    </div>\n  );\n}`}
+                htmlCode={livroBaseHtml + "\n" + livroIconHtml}
+              >
+                <LivroIcone />
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Illustration"
+                description="Ilustração decorativa que preenche a seção superior via prop illustration."
+                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\nimport Lines from './lines';\nimport Icon from './icon';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-stretch justify-start gap-8 flex-initial">\n      <Book\n        illustration={<Lines />}\n        title="The user experience of the Frontend Cloud"\n      />\n      <Book\n        illustration={<Icon />}\n        title="The user experience of the Frontend Cloud"\n        variant="simple"\n      />\n    </div>\n  );\n}`}
+                htmlCode={livroBaseHtml + "\n" + livroIllustrationHtml}
+              >
+                <LivroIlustrado />
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Textured"
+                description="textured aplica uma textura de pontos sobre a capa sólida. Combine com textColor para controlar a cor do título."
+                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-12 flex-initial">\n      <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n        <Book color="#7DC1C1" textured title="Design Engineering at Vercel" />\n        <Book color="#9D2127" textured title="Design Engineering at Vercel" />\n        <Book color="#FED954" textured title="Design Engineering at Vercel" />\n      </div>\n      <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n        <Book color="#7DC1C1" textColor="white" textured title="Design Engineering at Vercel" variant="simple" />\n        <Book color="#9D2127" textColor="#ece4db" textured title="Design Engineering at Vercel" variant="simple" />\n        <Book color="#FED954" textColor="#9d3b05" textured title="Design Engineering at Vercel" variant="simple" />\n      </div>\n    </div>\n  );\n}`}
+                htmlCode={livroBaseHtml + "\n" + livroTexturedHtml}
+              >
+                <LivroTexturado />
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Sizes"
+                description="Largura customizável via prop width (pixels). A altura é calculada automaticamente (ratio 1:1.32)."
+                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book title="The user experience of the Frontend Cloud" width={300} />\n      <Book title="The user experience of the Frontend Cloud" width={200} />\n      <Book title="The user experience of the Frontend Cloud" width={150} />\n    </div>\n  );\n}`}
+                htmlCode={livroBaseHtml + "\n<!-- width={300} -->\n<div class=\"lv\" style=\"--w:300px;\">...</div>\n<!-- width={200} -->\n<div class=\"lv\" style=\"--w:200px;\">...</div>\n<!-- width={150} -->\n<div class=\"lv\" style=\"--w:150px;\">...</div>"}
+              >
+                <LivroTamanhos />
               </ComponentShowcase>
 
               <ComponentShowcase
