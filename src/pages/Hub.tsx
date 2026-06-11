@@ -131,9 +131,14 @@ export default function Hub() {
 
         {/* Novidades */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <Newspaper className="h-5 w-5 text-brand" />
-            <h2 className="text-xl font-bold font-anek text-foreground">Novidades do Mês</h2>
+          <div className="flex items-center justify-between gap-2 mb-6">
+            <div className="flex items-center gap-2">
+              <Newspaper className="h-5 w-5 text-brand" />
+              <h2 className="text-xl font-bold font-anek text-foreground">Novidades do Mês</h2>
+            </div>
+            <Link to="/roadmap" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary hover:underline">
+              Ver mais <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {novidades.map((n, i) => (
