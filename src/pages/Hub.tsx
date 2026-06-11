@@ -136,7 +136,7 @@ export default function Hub() {
               <Newspaper className="h-5 w-5 text-brand" />
               <h2 className="text-xl font-bold font-anek text-foreground">Novidades do Mês</h2>
             </div>
-            <Link to="/roadmap" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary hover:underline">
+            <Link to="/novidades" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary hover:underline">
               Ver mais <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
