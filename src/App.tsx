@@ -11,6 +11,7 @@ import Hub from "./pages/Hub";
 import TimePage from "./pages/TimePage";
 import EscolaPage from "./pages/EscolaPage";
 import RoadmapPage from "./pages/RoadmapPage";
+import NovidadesPage from "./pages/NovidadesPage";
 import DesignSystem from "./pages/DesignSystem";
 import TomEVozPage from "./pages/TomEVozPage";
 import NotFound from "./pages/NotFound";
@@ -62,6 +63,7 @@ const App = () => (
                 <Route path="/time" element={<TimePage />} />
                 <Route path="/escola" element={<EscolaPage />} />
                 <Route path="/roadmap" element={<RoadmapPage />} />
+                <Route path="/novidades" element={<NovidadesPage />} />
                 <Route path="/design-system" element={<DesignSystem />} />
                 <Route path="/tom-e-voz" element={<TomEVozPage />} />
                 <Route path="*" element={<NotFound />} />
