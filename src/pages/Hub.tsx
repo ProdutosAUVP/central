@@ -63,12 +63,12 @@ const accessLinks = [
   { label: "GitHub", desc: "Repositórios", icon: ExternalLink, href: "https://github.com/produtosauvp", internal: false },
   { label: "Notion", desc: "Documentações", icon: FileText, href: "#", internal: false },
   { label: "Analytics", desc: "Métricas de produto", icon: BarChart3, href: "#", internal: false },
-  { label: "AUVP Escola", desc: "Plataforma de cursos", icon: GraduationCap, href: "#", internal: false },
+  { label: "AUVP Escola", desc: "Plataforma de cursos", icon: GraduationCap, to: "/escola", internal: true, newTab: true },
 ];
 
 const produtos = [
   { name: "AUVP Capital", desc: "Plataforma de investimentos", status: "Ativo", statusColor: "bg-green-100 text-green-700" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700", to: "/escola" },
   { name: "AUVP Analítica", desc: "Análise de investimentos", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700" },
@@ -169,7 +169,7 @@ export default function Hub() {
                 </div>
               );
               return link.internal ? (
-                <Link key={i} to={link.to!}>{content}</Link>
+                <Link key={i} to={link.to!} target={link.newTab ? "_blank" : undefined} rel={link.newTab ? "noopener noreferrer" : undefined}>{content}</Link>
               ) : (
                 <a key={i} href={link.href} target="_blank" rel="noopener noreferrer">{content}</a>
               );
@@ -184,15 +184,22 @@ export default function Hub() {
             <h2 className="text-xl font-bold font-anek text-foreground">Produtos Internos</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {produtos.map((p, i) => (
-              <div key={i} className="rounded-lg border bg-card p-4 flex flex-col gap-2">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="font-semibold font-anek text-foreground text-sm">{p.name}</p>
-                  <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", p.statusColor)}>{p.status}</span>
+            {produtos.map((p, i) => {
+              const card = (
+                <div className={cn("rounded-lg border bg-card p-4 flex flex-col gap-2 h-full", p.to && "hover:bg-muted/50 transition-colors cursor-pointer")}>
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="font-semibold font-anek text-foreground text-sm">{p.name}</p>
+                    <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", p.statusColor)}>{p.status}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-roboto">{p.desc}</p>
                 </div>
-                <p className="text-xs text-muted-foreground font-roboto">{p.desc}</p>
-              </div>
-            ))}
+              );
+              return p.to ? (
+                <Link key={i} to={p.to} target="_blank" rel="noopener noreferrer">{card}</Link>
+              ) : (
+                <div key={i}>{card}</div>
+              );
+            })}
           </div>
         </section>
 

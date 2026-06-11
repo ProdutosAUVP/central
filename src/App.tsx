@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import Hub from "./pages/Hub";
 import TimePage from "./pages/TimePage";
+import EscolaPage from "./pages/EscolaPage";
 import DesignSystem from "./pages/DesignSystem";
 import TomEVozPage from "./pages/TomEVozPage";
 import NotFound from "./pages/NotFound";
@@ -58,6 +59,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Hub />} />
                 <Route path="/time" element={<TimePage />} />
+                <Route path="/escola" element={<EscolaPage />} />
                 <Route path="/design-system" element={<DesignSystem />} />
                 <Route path="/tom-e-voz" element={<TomEVozPage />} />
                 <Route path="*" element={<NotFound />} />
