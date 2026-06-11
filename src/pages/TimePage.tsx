@@ -40,23 +40,23 @@ const leadership = [
   },
   {
     name: "Daniel Machado",
-    role: "Tech Lead",
-    area: "Engenharia",
+    role: "Coordenador de Produto",
+    area: "Produto",
     initials: "DM",
     color: "bg-teal-600",
   },
 ];
 
 const team = [
-  { name: "Ana Carolina", role: "Product Manager", initials: "AC", color: "bg-slate-500" },
-  { name: "Bruno Lima", role: "Product Designer", initials: "BL", color: "bg-slate-500" },
-  { name: "Carla Ferreira", role: "UX Researcher", initials: "CF", color: "bg-slate-500" },
-  { name: "Diego Santos", role: "Frontend Engineer", initials: "DS", color: "bg-slate-500" },
-  { name: "Eduarda Costa", role: "Data Analyst", initials: "EC", color: "bg-slate-500" },
-  { name: "Fábio Oliveira", role: "Backend Engineer", initials: "FO", color: "bg-slate-500" },
-  { name: "Gabriela Rocha", role: "QA Engineer", initials: "GR", color: "bg-slate-500" },
-  { name: "Henrique Alves", role: "Product Designer", initials: "HA", color: "bg-slate-500" },
-  { name: "Isabel Martins", role: "Product Manager", initials: "IM", color: "bg-slate-500" },
+  { name: "Ariadne Carneiro",    role: "Product Manager",       area: "Produto",       initials: "AR", color: "bg-slate-500" },
+  { name: "Armando Custódio",    role: "Designer de Produtos",  area: "Produto",       initials: "AC", color: "bg-slate-500" },
+  { name: "Éria Alencar",        role: "Designer de Produtos",  area: "Produto",       initials: "EA", color: "bg-slate-500" },
+  { name: "Mateus Graff",        role: "Redator",               area: "Produto",       initials: "MG", color: "bg-slate-500" },
+  { name: "Ana Beatriz",         role: "Assistente de Produto", area: "Produto",       initials: "AB", color: "bg-slate-500" },
+  { name: "Hiago Felipe",        role: "Assistente de Produto", area: "Produto",       initials: "HF", color: "bg-slate-500" },
+  { name: "Debora Sanders",      role: "Analista de Produto",   area: "Relacionamento",initials: "DS", color: "bg-slate-500" },
+  { name: "Elane Rodrigues",     role: "Analista de Produto",   area: "Produto",       initials: "ER", color: "bg-slate-500" },
+  { name: "Jeniffer Nascimento", role: "Analista de Produto",   area: "Produto",       initials: "JN", color: "bg-slate-500" },
 ];
 
 const pilares = [
@@ -161,6 +161,7 @@ export default function TimePage() {
                 <div className="min-w-0">
                   <p className="font-semibold font-anek text-foreground text-sm truncate">{person.name}</p>
                   <p className="text-xs text-muted-foreground font-roboto truncate">{person.role}</p>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-roboto">{person.area}</span>
                 </div>
               </div>
             ))}
