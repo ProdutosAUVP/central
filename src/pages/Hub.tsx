@@ -164,13 +164,22 @@ function CalendarioWidget() {
   const nextMonthStart = new Date(viewYear, viewMonth + 1, 1);
   const upcoming = eventos
     .filter(e => new Date(e.date) >= nextMonthStart)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(0, 5);
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  // Group upcoming by month label
+  const upcomingByMonth: { label: string; items: Evento[] }[] = [];
+  for (const e of upcoming) {
+    const d = new Date(e.date);
+    const label = `${MESES_PT[d.getMonth()]} ${d.getFullYear()}`;
+    const last = upcomingByMonth[upcomingByMonth.length - 1];
+    if (last && last.label === label) last.items.push(e);
+    else upcomingByMonth.push({ label, items: [e] });
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col md:flex-row gap-6 items-start">
       {/* Calendário */}
-      <div className="rounded-xl border bg-card p-5">
+      <div className="rounded-xl border bg-card p-5 shrink-0 w-full md:w-auto">
         {/* Navegação */}
         <div className="flex items-center justify-between mb-4">
           <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
@@ -237,28 +246,35 @@ function CalendarioWidget() {
         })()}
       </div>
 
-      {/* Próximos eventos */}
-      {upcoming.length > 0 && (
-        <div>
+      {/* Próximas datas marcadas — coluna direita */}
+      {upcomingByMonth.length > 0 && (
+        <div className="flex-1 min-w-0">
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto mb-3">
-            Próximos eventos
+            Próximas datas marcadas
           </p>
-          <div className="space-y-2">
-            {upcoming.map((e, i) => {
-              const d = new Date(e.date);
-              return (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-lg border bg-card">
-                  <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 shrink-0">
-                    <span className="text-[10px] font-bold text-primary font-roboto uppercase">{MESES_PT[d.getMonth()].slice(0,3)}</span>
-                    <span className="text-sm font-bold text-primary font-anek leading-none">{d.getDate()}</span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold font-anek text-foreground truncate">{e.titulo}</p>
-                    <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto", e.tagColor)}>{e.tag}</span>
-                  </div>
+          <div className="space-y-4">
+            {upcomingByMonth.map((group, gi) => (
+              <div key={gi}>
+                <p className="text-[11px] font-bold text-primary uppercase tracking-widest font-roboto mb-2">{group.label}</p>
+                <div className="space-y-2">
+                  {group.items.map((e, i) => {
+                    const d = new Date(e.date);
+                    return (
+                      <div key={i} className="flex items-center gap-3 p-3 rounded-lg border bg-card">
+                        <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 shrink-0">
+                          <span className="text-[10px] font-bold text-primary font-roboto uppercase">{MESES_PT[d.getMonth()].slice(0,3)}</span>
+                          <span className="text-sm font-bold text-primary font-anek leading-none">{d.getDate()}</span>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold font-anek text-foreground truncate">{e.titulo}</p>
+                          <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto", e.tagColor)}>{e.tag}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -455,9 +471,7 @@ export default function Hub() {
             <CalendarDays className="h-5 w-5 text-brand" />
             <h2 className="text-xl font-bold font-anek text-foreground">Calendário</h2>
           </div>
-          <div className="max-w-sm">
-            <CalendarioWidget />
-          </div>
+          <CalendarioWidget />
         </section>
 
         {/* FAQ */}
