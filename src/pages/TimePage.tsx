@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -13,6 +13,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
@@ -48,15 +55,42 @@ const leadership = [
 ];
 
 const team = [
-  { name: "Ariadne Carneiro",    role: "Product Manager",       area: "Produto",       initials: "AR", color: "bg-slate-500" },
-  { name: "Armando Custódio",    role: "Designer de Produtos",  area: "Produto",       initials: "AC", color: "bg-slate-500" },
-  { name: "Éria Alencar",        role: "Designer de Produtos",  area: "Produto",       initials: "EA", color: "bg-slate-500" },
-  { name: "Mateus Graff",        role: "Redator",               area: "Produto",       initials: "MG", color: "bg-slate-500" },
-  { name: "Ana Beatriz",         role: "Assistente de Produto", area: "Produto",       initials: "AB", color: "bg-slate-500" },
-  { name: "Hiago Felipe",        role: "Assistente de Produto", area: "Produto",       initials: "HF", color: "bg-slate-500" },
-  { name: "Debora Sanders",      role: "Analista de Produto",   area: "Relacionamento",initials: "DS", color: "bg-slate-500" },
-  { name: "Elane Rodrigues",     role: "Analista de Produto",   area: "Produto",       initials: "ER", color: "bg-slate-500" },
-  { name: "Jeniffer Nascimento", role: "Analista de Produto",   area: "Produto",       initials: "JN", color: "bg-slate-500" },
+  {
+    name: "Ariadne Carneiro", role: "Product Manager", area: "Produto", initials: "AR", color: "bg-slate-500",
+    funcoes: "Responsável por definir e priorizar o backlog de produto, alinhar stakeholders e garantir a entrega de valor ao usuário final. Conduz rituais de discovery e acompanha métricas de impacto das funcionalidades.",
+  },
+  {
+    name: "Armando Custódio", role: "Designer de Produtos", area: "Produto", initials: "AC", color: "bg-slate-500",
+    funcoes: "Cria interfaces e componentes para as plataformas da AUVP, mantendo consistência com o Design System. Responsável por protótipos, fluxos de usuário e validação de usabilidade.",
+  },
+  {
+    name: "Éria Alencar", role: "Designer de Produtos", area: "Produto", initials: "EA", color: "bg-slate-500",
+    funcoes: "Atua no design de experiência das plataformas digitais, colaborando na criação de interfaces acessíveis e alinhadas às diretrizes do Design System da AUVP.",
+  },
+  {
+    name: "Mateus Graff", role: "Redator", area: "Produto", initials: "MG", color: "bg-slate-500",
+    funcoes: "Responsável pelos textos de produto (UX writing), documentações, comunicados internos e conteúdos institucionais. Garante clareza e consistência com o Manual de Tom e Voz.",
+  },
+  {
+    name: "Ana Beatriz", role: "Assistente de Produto", area: "Produto", initials: "AB", color: "bg-slate-500",
+    funcoes: "Apoia o time nas atividades operacionais de produto, gestão de documentações, acompanhamento de tarefas e organização de informações de projetos em andamento.",
+  },
+  {
+    name: "Hiago Felipe", role: "Assistente de Produto", area: "Produto", initials: "HF", color: "bg-slate-500",
+    funcoes: "Dá suporte às entregas do time de produto, colaborando na organização de processos, levantamento de informações e execução de tarefas de apoio ao ciclo de desenvolvimento.",
+  },
+  {
+    name: "Debora Sanders", role: "Analista de Produto", area: "Relacionamento", initials: "DS", color: "bg-slate-500",
+    funcoes: "Atua na interface entre o time de produto e os clientes, coletando feedback, mapeando dores e traduzindo necessidades do relacionamento em oportunidades para o produto.",
+  },
+  {
+    name: "Elane Rodrigues", role: "Analista de Produto", area: "Produto", initials: "ER", color: "bg-slate-500",
+    funcoes: "Analisa dados de uso, comportamento de usuários e métricas de produto para embasar decisões e identificar oportunidades de melhoria nas plataformas.",
+  },
+  {
+    name: "Jeniffer Nascimento", role: "Analista de Produto", area: "Produto", initials: "JN", color: "bg-slate-500",
+    funcoes: "Acompanha indicadores de produto, realiza análises qualitativas e quantitativas e contribui para o ciclo de discovery e validação de hipóteses do time.",
+  },
 ];
 
 const pilares = [
@@ -101,6 +135,8 @@ const processo = [
 ];
 
 export default function TimePage() {
+  const [selected, setSelected] = useState<typeof team[0] | null>(null);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
@@ -154,7 +190,11 @@ export default function TimePage() {
           {/* Time */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
             {team.map((person) => (
-              <div key={person.name} className="flex items-center gap-3 p-3 rounded-lg border bg-card">
+              <button
+                key={person.name}
+                onClick={() => setSelected(person)}
+                className="flex items-center gap-3 p-3 rounded-lg border bg-card text-left hover:bg-muted/60 hover:border-primary/30 transition-colors cursor-pointer"
+              >
                 <div className={cn("h-9 w-9 rounded-full flex items-center justify-center text-white font-bold font-anek text-sm shrink-0", person.color)}>
                   {person.initials}
                 </div>
@@ -163,9 +203,34 @@ export default function TimePage() {
                   <p className="text-xs text-muted-foreground font-roboto truncate">{person.role}</p>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-roboto">{person.area}</span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
+
+          {/* Modal de detalhes */}
+          <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+            <DialogContent className="max-w-sm">
+              {selected && (
+                <>
+                  <DialogHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={cn("h-12 w-12 rounded-full flex items-center justify-center text-white font-bold font-anek text-base shrink-0", selected.color)}>
+                        {selected.initials}
+                      </div>
+                      <div>
+                        <DialogTitle className="font-anek text-foreground">{selected.name}</DialogTitle>
+                        <p className="text-xs text-muted-foreground font-roboto">{selected.role}</p>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-roboto">{selected.area}</span>
+                      </div>
+                    </div>
+                  </DialogHeader>
+                  <DialogDescription className="text-sm font-roboto text-foreground/80 leading-relaxed">
+                    {selected.funcoes}
+                  </DialogDescription>
+                </>
+              )}
+            </DialogContent>
+          </Dialog>
         </section>
 
         {/* Pilares */}
