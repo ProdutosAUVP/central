@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { GlobalNav } from "@/components/GlobalNav";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   BookOpen, Palette, Volume2, Users, ExternalLink,
-  Sun, Moon, ChevronRight, Newspaper, Zap,
+  Sun, Moon, ChevronRight, ChevronLeft, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
-  FileText, Lightbulb, ImageIcon
+  FileText, Lightbulb, ImageIcon, CalendarDays
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -97,6 +97,175 @@ const portfolio = [
   { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
 ];
 
+interface Evento {
+  date: string; // "YYYY-MM-DD"
+  titulo: string;
+  tag: string;
+  tagColor: string;
+}
+
+const eventos: Evento[] = [
+  { date: "2025-06-02", titulo: "Sprint Planning — Q2 Sprint 6", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
+  { date: "2025-06-09", titulo: "Design Review semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800" },
+  { date: "2025-06-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
+  { date: "2025-06-16", titulo: "Sprint Planning — Q2 Sprint 7", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
+  { date: "2025-06-23", titulo: "Retrospectiva do mês", tag: "Processo", tagColor: "bg-amber-100 text-amber-800" },
+  { date: "2025-06-30", titulo: "Product Roadmap Review Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800" },
+  { date: "2025-07-07", titulo: "Sprint Planning — Q3 Sprint 1", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
+  { date: "2025-07-14", titulo: "Design Review semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800" },
+  { date: "2025-07-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
+  { date: "2025-07-21", titulo: "Workshop de UX Research", tag: "Time", tagColor: "bg-cyan-100 text-cyan-800" },
+  { date: "2025-07-28", titulo: "Retrospectiva Q3 Sprint 1", tag: "Processo", tagColor: "bg-amber-100 text-amber-800" },
+  { date: "2025-08-04", titulo: "Sprint Planning — Q3 Sprint 2", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
+  { date: "2025-08-18", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
+  { date: "2025-08-25", titulo: "Review de OKRs Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800" },
+  { date: "2025-09-01", titulo: "Kick-off Q4", tag: "Processo", tagColor: "bg-amber-100 text-amber-800" },
+  { date: "2025-09-15", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
+];
+
+const MESES_PT = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const DIAS_PT  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+
+function CalendarioWidget() {
+  const hoje = new Date();
+  const [viewYear,  setViewYear]  = useState(hoje.getFullYear());
+  const [viewMonth, setViewMonth] = useState(hoje.getMonth()); // 0-based
+
+  const prevMonth = () => {
+    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
+    else setViewMonth(m => m - 1);
+  };
+  const nextMonth = () => {
+    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
+    else setViewMonth(m => m + 1);
+  };
+
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+  const eventDates = new Set(
+    eventos
+      .filter(e => {
+        const d = new Date(e.date);
+        return d.getFullYear() === viewYear && d.getMonth() === viewMonth;
+      })
+      .map(e => new Date(e.date).getDate())
+  );
+
+  const cells: (number | null)[] = [
+    ...Array(firstDay).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+
+  const isToday = (d: number) =>
+    d === hoje.getDate() && viewMonth === hoje.getMonth() && viewYear === hoje.getFullYear();
+
+  // Upcoming events: months strictly after the viewed month
+  const nextMonthStart = new Date(viewYear, viewMonth + 1, 1);
+  const upcoming = eventos
+    .filter(e => new Date(e.date) >= nextMonthStart)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 5);
+
+  return (
+    <div className="space-y-6">
+      {/* Calendário */}
+      <div className="rounded-xl border bg-card p-5">
+        {/* Navegação */}
+        <div className="flex items-center justify-between mb-4">
+          <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <span className="font-bold font-anek text-foreground text-sm">
+            {MESES_PT[viewMonth]} {viewYear}
+          </span>
+          <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Cabeçalho dias */}
+        <div className="grid grid-cols-7 mb-1">
+          {DIAS_PT.map(d => (
+            <div key={d} className="text-center text-[10px] font-bold text-muted-foreground font-roboto py-1">{d}</div>
+          ))}
+        </div>
+
+        {/* Grid de dias */}
+        <div className="grid grid-cols-7 gap-y-1">
+          {cells.map((day, i) => (
+            <div key={i} className="flex flex-col items-center py-0.5">
+              {day ? (
+                <div className={cn(
+                  "h-8 w-8 flex flex-col items-center justify-center rounded-full text-xs font-roboto font-medium relative",
+                  isToday(day) && "bg-primary text-primary-foreground",
+                  !isToday(day) && eventDates.has(day) && "bg-primary/10 text-primary font-bold",
+                  !isToday(day) && !eventDates.has(day) && "text-foreground"
+                )}>
+                  {day}
+                  {eventDates.has(day) && !isToday(day) && (
+                    <span className="absolute bottom-0.5 h-1 w-1 rounded-full bg-primary" />
+                  )}
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+
+        {/* Eventos do mês visualizado */}
+        {(() => {
+          const thisMonthEvents = eventos.filter(e => {
+            const d = new Date(e.date);
+            return d.getFullYear() === viewYear && d.getMonth() === viewMonth;
+          });
+          if (thisMonthEvents.length === 0) return null;
+          return (
+            <div className="mt-4 pt-4 border-t space-y-2">
+              {thisMonthEvents.map((e, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground font-roboto w-6 shrink-0 text-right">
+                    {new Date(e.date).getDate()}
+                  </span>
+                  <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", e.tagColor)}>
+                    {e.tag}
+                  </span>
+                  <span className="text-xs font-roboto text-foreground truncate">{e.titulo}</span>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
+      </div>
+
+      {/* Próximos eventos */}
+      {upcoming.length > 0 && (
+        <div>
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto mb-3">
+            Próximos eventos
+          </p>
+          <div className="space-y-2">
+            {upcoming.map((e, i) => {
+              const d = new Date(e.date);
+              return (
+                <div key={i} className="flex items-center gap-3 p-3 rounded-lg border bg-card">
+                  <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 shrink-0">
+                    <span className="text-[10px] font-bold text-primary font-roboto uppercase">{MESES_PT[d.getMonth()].slice(0,3)}</span>
+                    <span className="text-sm font-bold text-primary font-anek leading-none">{d.getDate()}</span>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold font-anek text-foreground truncate">{e.titulo}</p>
+                    <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto", e.tagColor)}>{e.tag}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const faqs = [
   { q: "Como acesso o Design System?", a: "Clique em 'Design System' nos Acessos Rápidos ou use o menu de navegação global no canto superior esquerdo." },
   { q: "O que é o Manual de Tom e Voz?", a: "É o guia de comunicação verbal da AUVP, com diretrizes de linguagem para cada área e produto da empresa." },
@@ -107,6 +276,8 @@ const faqs = [
 export default function Hub() {
   const today = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   const todayCapitalized = today.charAt(0).toUpperCase() + today.slice(1);
+  const [portfolioExpanded, setPortfolioExpanded] = useState(false);
+  const portfolioVisible = portfolioExpanded ? portfolio : portfolio.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -221,12 +392,22 @@ export default function Hub() {
 
         {/* Portfólio */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <ImageIcon className="h-5 w-5 text-brand" />
-            <h2 className="text-xl font-bold font-anek text-foreground">Portfólio de Produtos Físicos</h2>
+          <div className="flex items-center justify-between gap-2 mb-6">
+            <div className="flex items-center gap-2">
+              <ImageIcon className="h-5 w-5 text-brand" />
+              <h2 className="text-xl font-bold font-anek text-foreground">Portfólio de Produtos Físicos</h2>
+            </div>
+            {portfolio.length > 4 && (
+              <button
+                onClick={() => setPortfolioExpanded(e => !e)}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary hover:underline"
+              >
+                {portfolioExpanded ? "Ver menos" : "Ver mais"} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform", portfolioExpanded && "rotate-90")} />
+              </button>
+            )}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {portfolio.map((item, i) => (
+            {portfolioVisible.map((item, i) => (
               <div key={i} className="rounded-xl border bg-card overflow-hidden flex flex-col">
                 <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b">
                   {item.img ? (
@@ -265,6 +446,17 @@ export default function Hub() {
                 </a>
               );
             })}
+          </div>
+        </section>
+
+        {/* Calendário */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <CalendarDays className="h-5 w-5 text-brand" />
+            <h2 className="text-xl font-bold font-anek text-foreground">Calendário</h2>
+          </div>
+          <div className="max-w-sm">
+            <CalendarioWidget />
           </div>
         </section>
 
