@@ -7,7 +7,7 @@ import {
   BookOpen, Palette, Volume2, Users, ExternalLink,
   Sun, Moon, ChevronRight, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
-  FileText, Lightbulb, Gift, Trophy
+  FileText, Lightbulb, ImageIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -84,6 +84,17 @@ const docs = [
   { label: "Protocolo de Lanaçamento", icon: Zap, href: "#" },
   { label: "Guia de Pesquisa com Usuário", icon: MessageSquare, href: "#" },
   { label: "Padrões de API e Integrações", icon: Settings, href: "#" },
+];
+
+const portfolio = [
+  { nome: "Kit de Onboarding", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Caderno, caneta e carta de boas-vindas entregues no primeiro dia.", img: "" },
+  { nome: "Camiseta AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Camiseta preta com bordado do olho dourado da AUVP.", img: "" },
+  { nome: "Caneca Sardinha", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Caneca de porcelana com design exclusivo para o time.", img: "" },
+  { nome: "Cartão de Visitas", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Cartão premium com verniz localizado e dados de contato.", img: "" },
+  { nome: "Banner de Evento", tag: "Evento", tagColor: "bg-purple-100 text-purple-800", desc: "Banner retrátil 100×200 cm usado nos eventos e workshops.", img: "" },
+  { nome: "Pasta Corporativa", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Pasta A4 com impressão da marca e bolso interno.", img: "" },
+  { nome: "Ecobag AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Sacola de algodão cru com silk do olho AUVP.", img: "" },
+  { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
 ];
 
 const faqs = [
@@ -208,6 +219,35 @@ export default function Hub() {
           </div>
         </section>
 
+        {/* Portfólio */}
+        <section>
+          <div className="flex items-center gap-2 mb-6">
+            <ImageIcon className="h-5 w-5 text-brand" />
+            <h2 className="text-xl font-bold font-anek text-foreground">Portfólio de Produtos Físicos</h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {portfolio.map((item, i) => (
+              <div key={i} className="rounded-xl border bg-card overflow-hidden flex flex-col">
+                <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b">
+                  {item.img ? (
+                    <img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+                  ) : (
+                    <>
+                      <ImageIcon className="h-8 w-8 text-muted-foreground/40" />
+                      <span className="text-[10px] text-muted-foreground font-roboto">Adicionar foto</span>
+                    </>
+                  )}
+                </div>
+                <div className="p-3 flex flex-col gap-1">
+                  <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded w-fit font-roboto", item.tagColor)}>{item.tag}</span>
+                  <p className="font-semibold font-anek text-foreground text-sm leading-snug">{item.nome}</p>
+                  <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Docs e Playbooks */}
         <section>
           <div className="flex items-center gap-2 mb-6">
@@ -225,28 +265,6 @@ export default function Hub() {
                 </a>
               );
             })}
-          </div>
-        </section>
-
-        {/* Benefícios */}
-        <section>
-          <div className="flex items-center gap-2 mb-6">
-            <Gift className="h-5 w-5 text-brand" />
-            <h2 className="text-xl font-bold font-anek text-foreground">Benefícios e Campanhas</h2>
-          </div>
-          <div className="rounded-lg border bg-muted/30 p-8 text-center">
-            <p className="text-muted-foreground text-sm font-roboto">Em breve — benefícios e campanhas internas do time.</p>
-          </div>
-        </section>
-
-        {/* Gamificação */}
-        <section>
-          <div className="flex items-center gap-2 mb-6">
-            <Trophy className="h-5 w-5 text-brand" />
-            <h2 className="text-xl font-bold font-anek text-foreground">Gamificação</h2>
-          </div>
-          <div className="rounded-lg border bg-muted/30 p-8 text-center">
-            <p className="text-muted-foreground text-sm font-roboto">Em breve — ranking, conquistas e reconhecimento do time.</p>
           </div>
         </section>
 
