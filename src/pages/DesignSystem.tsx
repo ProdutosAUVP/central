@@ -59,8 +59,11 @@ import platRatingHtml from "@/components/widgets/html-snippets/plataforma-rating
 import platComunidadeHtml from "@/components/widgets/html-snippets/plataforma-comunidade.html?raw";
 import platCertificadosHtml from "@/components/widgets/html-snippets/plataforma-certificados.html?raw";
 import tabelaPrecosSrc from "@/components/widgets/TabelaPrecos?raw";
+import tabelaPrecosHtml from "@/components/widgets/html-snippets/tabela-precos.html?raw";
 import jornadaHeroiSrc from "@/components/widgets/JornadaHeroi?raw";
+import jornadaHeroiHtml from "@/components/widgets/html-snippets/jornada-heroi.html?raw";
 import marcaLogosSrc from "@/components/widgets/MarcaLogos?raw";
+import marcaLogosHtml from "@/components/widgets/html-snippets/marca-logos.html?raw";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -655,7 +658,7 @@ export default function DesignSystemPage() {
                 </Button>
               </a>
             </div>
-            <SectionThemeToggle bare code={marcaLogosSrc}><MarcaLogos /></SectionThemeToggle>
+            <SectionThemeToggle bare code={marcaLogosSrc} htmlCode={marcaLogosHtml}><MarcaLogos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1061,7 +1064,7 @@ function showTab(tabId) {
           <section id="pricing">
             <h2 className="text-2xl font-bold mb-2">Tabela de Preços</h2>
             <p className="text-muted-foreground mb-6">Toggle animado com cards translúcidos, badges de desconto e CTA.</p>
-            <SectionThemeToggle bare code={tabelaPrecosSrc}><TabelaPrecos /></SectionThemeToggle>
+            <SectionThemeToggle bare code={tabelaPrecosSrc} htmlCode={tabelaPrecosHtml}><TabelaPrecos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1070,7 +1073,7 @@ function showTab(tabId) {
           <section id="journey">
             <h2 className="text-2xl font-bold mb-2">Jornada do Herói</h2>
             <p className="text-muted-foreground mb-6">Timeline interativa com pontos clicáveis e barra de progresso animada.</p>
-            <SectionThemeToggle bare code={jornadaHeroiSrc}><JornadaHeroi /></SectionThemeToggle>
+            <SectionThemeToggle bare code={jornadaHeroiSrc} htmlCode={jornadaHeroiHtml}><JornadaHeroi /></SectionThemeToggle>
           </section>
           </>}
 

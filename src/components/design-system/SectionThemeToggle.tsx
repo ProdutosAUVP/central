@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { Sun, Moon, ChevronDown } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
@@ -26,8 +27,13 @@ interface SectionThemeToggleProps {
  * `.dark` apenas ao conteúdo interno, mantendo o tema de outras seções intacto.
  */
 export function SectionThemeToggle({ children, className, bare = false, label, code, htmlCode, selfDocumented = false }: SectionThemeToggleProps) {
-  const [isDark, setIsDark] = useState(false);
+  const { theme } = useTheme();
+  const [isDark, setIsDark] = useState(theme === "dark");
   const [showCode, setShowCode] = useState(false);
+
+  useEffect(() => {
+    setIsDark(theme === "dark");
+  }, [theme]);
   const [codeTab, setCodeTab] = useState<"react" | "html">("react");
 
   const button = (
