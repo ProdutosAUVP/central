@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Sun, Moon } from "lucide-react";
+import {
+  Sun, Moon,
+  Crown, Briefcase, Star, User,
+  Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
+  Search, Monitor, PenTool, BarChart2, Settings, Heart,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Dialog,
@@ -57,6 +62,7 @@ const leadership: { name: string; role: string; tier: Tier; initials: string }[]
 
 const teamMembers: { name: string; role: string; tier: Tier; initials: string }[] = [
   { name: "Debora Sanders", role: "Analista de CX Sr. II", tier: "star", initials: "DS" },
+  { name: "Ariadne Carneiro", role: "Product Manager I", tier: "one", initials: "AC" },
   { name: "Armando Neto", role: "Designer de Produto Pl. I", tier: "one", initials: "AN" },
   { name: "Éria Alencar", role: "Designer de Produto Pl. I", tier: "one", initials: "EA" },
   { name: "Elane Rodrigues", role: "Analista de Produto Jr. I", tier: "one", initials: "ER" },
@@ -66,23 +72,23 @@ const teamMembers: { name: string; role: string; tier: Tier; initials: string }[
   { name: "Hiago Felipe Sousa", role: "Assistente de Produto", tier: "one", initials: "HF" },
 ];
 
-const tierMeta: Record<Tier, { emoji: string; avatarClass: string; label: string }> = {
-  brain: { emoji: "🧠", avatarClass: "bg-primary text-primary-foreground", label: "Liderança" },
-  specialist: { emoji: "💼", avatarClass: "bg-purple-600 text-white", label: "Especialista" },
-  star: { emoji: "⭐", avatarClass: "bg-amber-500 text-white", label: "Sênior" },
-  one: { emoji: "1️⃣", avatarClass: "bg-muted text-foreground", label: "Time" },
+const tierMeta: Record<Tier, { icon: React.ElementType; avatarClass: string; label: string }> = {
+  brain: { icon: Crown, avatarClass: "bg-primary text-primary-foreground", label: "Liderança" },
+  specialist: { icon: Briefcase, avatarClass: "bg-purple-600 text-white", label: "Especialista" },
+  star: { icon: Star, avatarClass: "bg-amber-500 text-white", label: "Sênior" },
+  one: { icon: User, avatarClass: "bg-muted text-foreground", label: "Time" },
 };
 
 const pillars = [
-  { emoji: "🔬", title: "Dados", desc: "Realizamos pesquisas com membros e leads, coletamos dados de desempenho e comportamento para tomar decisões que evoluam nossas entregas." },
-  { emoji: "✏️", title: "Design", desc: "Desenhamos interfaces elegantes, protótipos e plataformas finais que garantem a experiência encantadora para cada usuário." },
-  { emoji: "🚀", title: "Inovação", desc: "Mantemos o radar ligado no mercado para acompanhar tendências, boas práticas e ações de concorrentes, para estarmos sempre um passo à frente." },
-  { emoji: "📄", title: "Priorização", desc: "Fazemos a gestão contínua do backlog de produto com base em dados de performance para priorizar demandas do negócio com necessidades reais dos membros." },
-  { emoji: "🎯", title: "Conteúdo", desc: "Escrevemos e revisamos todos os conteúdos dos nossos produtos, além de e-mails, sites e materiais educativos com tom e voz alinhados com a marca." },
-  { emoji: "🤝", title: "Colaboração cross", desc: "Atuamos como ponte entre diversas áreas da empresa para assegurar que todos os times estejam alinhados na direção estratégica dos projetos." },
-  { emoji: "🎁", title: "Experiências", desc: "Não ficamos só no digital. Ativamos os cinco sentidos por meio do planejamento, desenho e produção de experiências com produtos físicos e eventos." },
-  { emoji: "💬", title: "Comunidade", desc: "Fortalecemos o relacionamento com nossos membros por meio de uma comunidade ativa, fornecendo badges, campanhas e dinâmicas que estreitam laços." },
-  { emoji: "💡", title: "Marketing de produto", desc: "Cuidamos da divulgação estratégica com domínio de ferramentas como sites e comunicação ativa na comunidade para agregar ainda mais valor." },
+  { icon: Database, title: "Dados", desc: "Realizamos pesquisas com membros e leads, coletamos dados de desempenho e comportamento para tomar decisões que evoluam nossas entregas." },
+  { icon: Palette, title: "Design", desc: "Desenhamos interfaces elegantes, protótipos e plataformas finais que garantem a experiência encantadora para cada usuário." },
+  { icon: Rocket, title: "Inovação", desc: "Mantemos o radar ligado no mercado para acompanhar tendências, boas práticas e ações de concorrentes, para estarmos sempre um passo à frente." },
+  { icon: ListOrdered, title: "Priorização", desc: "Fazemos a gestão contínua do backlog de produto com base em dados de performance para priorizar demandas do negócio com necessidades reais dos membros." },
+  { icon: FileText, title: "Conteúdo", desc: "Escrevemos e revisamos todos os conteúdos dos nossos produtos, além de e-mails, sites e materiais educativos com tom e voz alinhados com a marca." },
+  { icon: Users, title: "Colaboração cross", desc: "Atuamos como ponte entre diversas áreas da empresa para assegurar que todos os times estejam alinhados na direção estratégica dos projetos." },
+  { icon: Gift, title: "Experiências", desc: "Não ficamos só no digital. Ativamos os cinco sentidos por meio do planejamento, desenho e produção de experiências com produtos físicos e eventos." },
+  { icon: MessageCircle, title: "Comunidade", desc: "Fortalecemos o relacionamento com nossos membros por meio de uma comunidade ativa, fornecendo badges, campanhas e dinâmicas que estreitam laços." },
+  { icon: Lightbulb, title: "Marketing de produto", desc: "Cuidamos da divulgação estratégica com domínio de ferramentas como sites e comunicação ativa na comunidade para agregar ainda mais valor." },
 ];
 
 const network = [
@@ -98,49 +104,49 @@ const network = [
 
 const dayToDay = [
   {
-    emoji: "🔍",
+    icon: Search,
     title: "Pesquisa & Análise de dados",
     tagline: "Mestres em decifrar comportamentos.",
     desc: "Precisa de ajuda com o Typeform ou quer entender o que um dashboard está dizendo? Realizamos pesquisas quantitativas e qualitativas com leads, membros (e até piratas!) para mapear dores e gerar insights reais.",
-    quemChamar: ["Ana Beatriz", "Hiago"],
+    quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"],
   },
   {
-    emoji: "💻",
+    icon: Monitor,
     title: "Plataformas & Tecnologia",
     tagline: "Sua ideia funcionando sem bugs.",
     desc: "Encontrou um erro na plataforma de aulas ou em algum de nossos sites? Nós sabemos como construir e ajustar cada detalhe técnico.",
     quemChamar: ["Elane", "Hiago", "Armando", "Éria", "Mateus", "Ana Beatriz"],
   },
   {
-    emoji: "🎨",
+    icon: Palette,
     title: "Design (Físico & Digital)",
     tagline: "Identidade visual e experiência tangível.",
     desc: "Da estética impecável da AUVP em mídias digitais e OOH, aos produtos que nossos membros amam usar. Se você precisa de cores, logos da AUVP, fotos do Raul, elementos visuais ou quer criar brindes, como meias e bonés a kits exclusivos, este é o lugar.",
     quemChamar: ["Armando", "Éria"],
   },
   {
-    emoji: "✍️",
+    icon: PenTool,
     title: "Copy & Redação",
     tagline: "Estratégia em cada palavra.",
     desc: "De apostilas, roteiros de vídeo e mapas mentais a este texto que você lê agora. Quer revisar uma copy, um playbook ou criar materiais institucionais com narrativa estratégica? Nossa redação está pronta para ajudar.",
     quemChamar: ["Jeniffer", "Mateus", "Ana"],
   },
   {
-    emoji: "📊",
+    icon: BarChart2,
     title: "Monitoramento de mercado & CX",
     tagline: "Encantamento levado a sério.",
     desc: "Quem é nosso público e o que ele busca? Analisamos o mercado para sugerir melhorias e garantir que o CX seja mais do que uma sigla, criando conexões que encantam de verdade.",
     quemChamar: ["Beatriz Henriques", "Debora"],
   },
   {
-    emoji: "⚙️",
+    icon: Settings,
     title: "Produtividade & Gestão",
     tagline: "Fazemos projetos rodarem.",
     desc: "Planilhas, ClickUp, fluxos de trabalho e priorização. Se o desafio é gestão de tempo, de pessoas ou aumentar a eficiência do time, somos especialistas em transformar caos em projetos executados.",
-    quemChamar: ["Beatriz Henriques", "Daniel"],
+    quemChamar: ["Beatriz Henriques", "Daniel", "Ariadne"],
   },
   {
-    emoji: "❤️",
+    icon: Heart,
     title: "Relacionamento com membros",
     tagline: "Cuidando da nossa comunidade de ponta a ponta.",
     desc: "Seja mediando grupos de WhatsApp ou encontrando a resposta ideal para aquele membro que quer crescer conosco. Atuamos diretamente na linha de frente para garantir a melhor convivência.",
@@ -164,6 +170,7 @@ function PersonCard({
   visible?: boolean;
 }) {
   const meta = tierMeta[person.tier];
+  const TierIcon = meta.icon;
   return (
     <button
       onClick={onClick}
@@ -190,12 +197,12 @@ function PersonCard({
           </div>
           <span
             className={cn(
-              "absolute -bottom-1 -right-1 leading-none select-none",
-              large ? "text-lg" : "text-xs"
+              "absolute -bottom-1 -right-1 flex items-center justify-center rounded-full bg-background border border-border",
+              large ? "h-6 w-6" : "h-4 w-4"
             )}
             aria-hidden
           >
-            {meta.emoji}
+            <TierIcon className={cn("text-foreground", large ? "h-3.5 w-3.5" : "h-2.5 w-2.5")} />
           </span>
         </div>
         <div className="min-w-0">
@@ -297,23 +304,16 @@ export default function TimePage() {
               <span className="font-semibold text-foreground">gestão de projetos</span> e,
               é claro, <span className="font-semibold text-foreground">dados</span>.
             </p>
-            <div className="flex items-center gap-6 mt-8 text-sm text-muted-foreground font-roboto">
-              <div className="flex items-center gap-2">
-                <span className="text-base">🧠</span>
-                <span>Liderança</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base">💼</span>
-                <span>Especialista</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base">⭐</span>
-                <span>Sênior</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base">1️⃣</span>
-                <span>Time</span>
-              </div>
+            <div className="flex flex-wrap items-center gap-5 mt-8 text-sm text-muted-foreground font-roboto">
+              {(Object.entries(tierMeta) as [Tier, typeof tierMeta[Tier]][]).map(([tier, meta]) => {
+                const Icon = meta.icon;
+                return (
+                  <div key={tier} className="flex items-center gap-2">
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span>{meta.label}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -330,7 +330,7 @@ export default function TimePage() {
           </p>
 
           {/* Leadership */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {leadership.map((p, i) => (
               <PersonCard
                 key={p.name}
@@ -370,6 +370,7 @@ export default function TimePage() {
           <DialogContent className="max-w-sm">
             {selected && (() => {
               const meta = tierMeta[selected.tier];
+              const TierIcon = meta.icon;
               return (
                 <>
                   <DialogHeader>
@@ -378,7 +379,9 @@ export default function TimePage() {
                         <div className={cn("h-14 w-14 rounded-full flex items-center justify-center font-bold font-anek text-lg", meta.avatarClass)}>
                           {selected.initials}
                         </div>
-                        <span className="absolute -bottom-1 -right-1 text-base" aria-hidden>{meta.emoji}</span>
+                        <span className="absolute -bottom-1 -right-1 flex items-center justify-center h-5 w-5 rounded-full bg-background border border-border" aria-hidden>
+                          <TierIcon className="h-3 w-3 text-foreground" />
+                        </span>
                       </div>
                       <div>
                         <DialogTitle className="font-anek text-foreground leading-tight">{selected.name}</DialogTitle>
@@ -401,22 +404,25 @@ export default function TimePage() {
             Nove princípios que orientam como trabalhamos, priorizamos e entregamos valor.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pillars.map((pilar, i) => (
-              <div
-                key={i}
-                className="group rounded-2xl border bg-card p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="text-3xl leading-none shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300">
-                    {pilar.emoji}
-                  </div>
-                  <div>
-                    <h3 className="font-bold font-anek text-foreground mb-2 leading-tight">{pilar.title}</h3>
-                    <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{pilar.desc}</p>
+            {pillars.map((pilar, i) => {
+              const Icon = pilar.icon;
+              return (
+                <div
+                  key={i}
+                  className="group rounded-2xl border bg-card p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold font-anek text-foreground mb-2 leading-tight">{pilar.title}</h3>
+                      <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{pilar.desc}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Section>
 
@@ -451,36 +457,41 @@ export default function TimePage() {
             Conheça a atuação de cada especialista e saiba exatamente a quem recorrer para resolver seus desafios.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayToDay.map((item, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border bg-card p-6 hover:shadow-md hover:border-primary/20 transition-all duration-300 flex flex-col gap-4"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="text-2xl leading-none shrink-0 mt-0.5">{item.emoji}</div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold font-anek text-foreground leading-tight mb-0.5">{item.title}</h3>
-                    <p className="text-sm font-semibold text-primary font-roboto leading-tight">{item.tagline}</p>
+            {dayToDay.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl border bg-card p-6 hover:shadow-md hover:border-primary/20 transition-all duration-300 flex flex-col gap-4"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="shrink-0 mt-0.5">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold font-anek text-foreground leading-tight mb-0.5">{item.title}</h3>
+                      <p className="text-sm font-semibold text-primary font-roboto leading-tight">{item.tagline}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground font-roboto leading-relaxed">
+                    {item.desc}
+                  </p>
+                  <div className="pt-3 border-t flex items-start gap-2 flex-wrap">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto shrink-0 mt-1.5">
+                      Quem chamar:
+                    </span>
+                    {item.quemChamar.map((name) => (
+                      <span
+                        key={name}
+                        className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto"
+                      >
+                        {name}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground font-roboto leading-relaxed">
-                  {item.desc}
-                </p>
-                <div className="pt-3 border-t flex items-start gap-2 flex-wrap">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto shrink-0 mt-1.5">
-                    Quem chamar:
-                  </span>
-                  {item.quemChamar.map((name) => (
-                    <span
-                      key={name}
-                      className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto"
-                    >
-                      {name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Section>
 
