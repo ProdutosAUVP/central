@@ -16,6 +16,17 @@
     <meta name="twitter:description" content="Central de Produto — Intranet AUVP Capital. Hub interno com Design System, Time de Produto e Manual de Tom e Voz.">
 
     <script>
+      // Aplica o tema antes do React montar para evitar flash de conteúdo claro.
+      (function() {
+        try {
+          var stored = localStorage.getItem('auvp-theme');
+          if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <script>
       // Restaura o path a partir da query string gerada pelo 404.html
       // para que o React Router receba a URL correta ao recarregar a página.
       (function(l) {
