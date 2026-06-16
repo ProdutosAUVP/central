@@ -1,0 +1,132 @@
+<!-- Plataforma de Aulas — Grid de Cursos (HTML / CSS standalone) -->
+<style>
+  .pc-wrap {
+    background:hsl(var(--muted, 120 10% 95%) / 0.5);
+    padding:48px;
+    border-radius:16px;
+    border:1px solid hsl(var(--border, 120 10% 88%));
+  }
+  .pc-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:24px;
+  }
+  .pc-card {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:16px;
+    overflow:hidden; cursor:pointer;
+    transition:.25s;
+    font-family:'Roboto', sans-serif;
+  }
+  .pc-card:hover {
+    transform:translateY(-4px);
+    border-color:hsl(var(--accent, 155 93% 11%) / 0.3);
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+  }
+  .pc-cover {
+    aspect-ratio:16/9;
+    background:hsl(var(--muted, 120 10% 95%));
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    color:hsl(var(--muted-foreground, 110 10% 40%) / 0.4);
+  }
+  .pc-cover svg { width:32px; height:32px; }
+  .pc-badge {
+    position:absolute; top:12px; left:12px;
+    font:700 10px/1 'Roboto'; text-transform:uppercase;
+    letter-spacing:.05em; padding:4px 8px; border-radius:4px;
+    background:hsl(var(--background, 0 0% 100%) / 0.9);
+    color:hsl(var(--foreground, 110 78% 9%));
+    border:1px solid hsl(var(--border, 120 10% 88%) / 0.5);
+  }
+  .pc-badge.done {
+    background:hsl(142 76% 95%);
+    color:hsl(142 71% 25%);
+    border-color:hsl(142 71% 80%);
+  }
+  .pc-badge.new {
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+    color:hsl(var(--accent, 155 93% 11%));
+    border-color:hsl(var(--accent, 155 93% 11%) / 0.2);
+  }
+  .pc-body { padding:20px; }
+  .pc-title {
+    font:700 20px/1.2 'Anek Latin';
+    margin:0 0 8px;
+    color:hsl(var(--foreground, 110 78% 9%));
+    transition:.2s;
+  }
+  .pc-card:hover .pc-title { color:hsl(var(--accent, 155 93% 11%)); }
+  .pc-desc {
+    font:14px/1.4 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    margin:0 0 16px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .pc-prog {
+    display:flex; justify-content:space-between;
+    font:700 12px 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+  }
+  .pc-prog .accent { color:hsl(var(--accent, 155 93% 11%)); }
+  .pc-prog .done { color:hsl(var(--success, 142 71% 45%)); }
+  .pc-bar {
+    height:6px;
+    background:hsl(var(--muted, 120 10% 95%));
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:6px;
+  }
+  .pc-bar > i {
+    display:block; height:100%;
+    background:hsl(var(--primary, 155 93% 11%));
+    border-radius:999px;
+  }
+  .pc-bar > i.done { background:hsl(var(--success, 142 71% 45%)); }
+</style>
+
+<div class="pc-wrap">
+  <div class="pc-grid">
+
+    <article class="pc-card">
+      <div class="pc-cover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span class="pc-badge">Em Andamento</span>
+      </div>
+      <div class="pc-body">
+        <h4 class="pc-title">Ações Brasileiras</h4>
+        <p class="pc-desc">Análise fundamentalista e avaliação de empresas listadas na B3.</p>
+        <div class="pc-prog"><span>Progresso</span><span class="accent">45%</span></div>
+        <div class="pc-bar"><i style="width:45%"></i></div>
+      </div>
+    </article>
+
+    <article class="pc-card">
+      <div class="pc-cover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span class="pc-badge done">Concluído</span>
+      </div>
+      <div class="pc-body">
+        <h4 class="pc-title">Reserva de Emergência</h4>
+        <p class="pc-desc">Aprenda a montar sua base de segurança com liquidez diária.</p>
+        <div class="pc-prog"><span>Progresso</span><span class="done">100%</span></div>
+        <div class="pc-bar"><i class="done" style="width:100%"></i></div>
+      </div>
+    </article>
+
+    <article class="pc-card">
+      <div class="pc-cover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span class="pc-badge new">Novo</span>
+      </div>
+      <div class="pc-body">
+        <h4 class="pc-title">Fundos Imobiliários</h4>
+        <p class="pc-desc">Invista em imóveis de forma inteligente com cotas de FIIs.</p>
+        <div class="pc-prog"><span>Progresso</span><span class="accent">0%</span></div>
+        <div class="pc-bar"><i style="width:0%"></i></div>
+      </div>
+    </article>
+
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<!-- Playlist de Aulas (HTML / CSS / JS standalone) -->
+<style>
+  .pl-wrap {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:12px; padding:16px;
+    display:flex; flex-direction:column; gap:8px;
+    max-width:400px; list-style:none; margin:0;
+    font-family:'Roboto', sans-serif;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .pl-h {
+    font:700 11px/1 'Roboto'; text-transform:uppercase; letter-spacing:1px;
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    padding:0 8px; margin-bottom:8px;
+  }
+  .pl-item {
+    display:flex; gap:12px; padding:12px;
+    border-radius:8px; cursor:pointer;
+    border:1px solid transparent;
+    position:relative; transition:.2s;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pl-item:hover { background:hsl(var(--muted, 120 10% 95%)); }
+
+  .pl-item.active {
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+    border-color:hsl(var(--accent, 155 93% 11%) / 0.3);
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .pl-item.active::before {
+    content:""; position:absolute; left:0; top:50%;
+    transform:translateY(-50%);
+    width:4px; height:32px;
+    background:hsl(var(--primary, 155 93% 11%));
+    border-radius:0 999px 999px 0;
+  }
+
+  .pl-icon {
+    width:24px; height:24px; flex-shrink:0; margin-top:2px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pl-icon svg { width:24px; height:24px; }
+  .pl-icon.play   { color:hsl(var(--accent, 155 93% 11%)); }
+  .pl-icon.done   { color:hsl(var(--success, 142 71% 45%)); opacity:.8; }
+
+  .pl-lock {
+    width:24px; height:24px; border-radius:999px;
+    background:hsl(var(--muted, 120 10% 95%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; margin-top:2px;
+  }
+  .pl-lock svg { width:12px; height:12px; }
+
+  .pl-title {
+    font:700 14px/1.2 'Anek Latin';
+    margin:0 0 4px;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pl-meta {
+    font:12px 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+  }
+  .pl-item.active .pl-meta { color:hsl(var(--accent, 155 93% 11%)); }
+  .pl-item.done .pl-title,
+  .pl-item.done .pl-meta { color:hsl(var(--muted-foreground, 110 10% 40%)); }
+  .pl-item.lock .pl-title,
+  .pl-item.lock .pl-meta { color:hsl(var(--muted-foreground, 110 10% 40%) / 0.6); }
+</style>
+
+<ul class="pl-wrap" id="playlist">
+  <li class="pl-h">Aulas do Módulo</li>
+
+  <li class="pl-item active" data-id="1">
+    <span class="pl-icon play">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+    </span>
+    <div>
+      <p class="pl-title">01. O despertar financeiro</p>
+      <span class="pl-meta">15:24 • Assistindo</span>
+    </div>
+  </li>
+
+  <li class="pl-item done" data-id="2">
+    <span class="pl-icon done">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </span>
+    <div>
+      <p class="pl-title">02. Entendendo a inflação</p>
+      <span class="pl-meta">22:10 • Concluído</span>
+    </div>
+  </li>
+
+  <li class="pl-item lock" data-id="3">
+    <span class="pl-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </span>
+    <div>
+      <p class="pl-title">03. O poder dos juros compostos</p>
+      <span class="pl-meta">18:45</span>
+    </div>
+  </li>
+
+  <li class="pl-item lock" data-id="4">
+    <span class="pl-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </span>
+    <div>
+      <p class="pl-title">04. Reserva de emergência</p>
+      <span class="pl-meta">14:20</span>
+    </div>
+  </li>
+</ul>
+
+<script>
+  document.querySelectorAll('#playlist .pl-item').forEach(el => {
+    if (el.classList.contains('lock')) return;
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#playlist .pl-item').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+    });
+  });
+</script>

@@ -1,0 +1,63 @@
+<!-- Checkbox (Geist) — HTML / CSS standalone -->
+<style>
+  .gx-check {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Roboto', sans-serif; font-size:14px;
+    cursor:pointer; user-select:none;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .gx-check input[type="checkbox"] {
+    appearance:none; width:16px; height:16px;
+    border:1px solid hsl(var(--input, 120 10% 88%));
+    background:hsl(var(--background, 0 0% 100%));
+    border-radius:4px; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:.15s;
+  }
+  .gx-check input[type="checkbox"]:checked,
+  .gx-check input[type="checkbox"]:indeterminate {
+    background:hsl(var(--primary, 155 93% 11%));
+    border-color:hsl(var(--primary, 155 93% 11%));
+  }
+  .gx-check input[type="checkbox"]:checked::after {
+    content:""; width:8px; height:8px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+    background-size:contain; background-repeat:no-repeat;
+  }
+  .gx-check input[type="checkbox"]:indeterminate::after {
+    content:""; width:8px; height:2px;
+    background:hsl(var(--primary-foreground, 0 0% 100%));
+  }
+  .gx-check:has(input:disabled) { opacity:.5; cursor:not-allowed; }
+  .gx-check input[type="checkbox"]:disabled { cursor:not-allowed; }
+  .gx-check-stack { display:flex; flex-direction:column; gap:16px; align-items:flex-start; }
+</style>
+
+<!-- Default (interativo) -->
+<label class="gx-check">
+  <input type="checkbox" />
+  <span>Option 1</span>
+</label>
+
+<!-- Disabled / Disabled Checked / Disabled Indeterminate -->
+<div class="gx-check-stack" style="margin-top:24px;">
+  <label class="gx-check">
+    <input type="checkbox" disabled />
+    <span>Disabled</span>
+  </label>
+  <label class="gx-check">
+    <input type="checkbox" checked disabled />
+    <span>Disabled Checked</span>
+  </label>
+  <label class="gx-check">
+    <input type="checkbox" disabled onchange="" />
+    <span>Disabled Indeterminate</span>
+  </label>
+</div>
+
+<script>
+  // Indeterminate só pode ser definido via JS
+  document.querySelectorAll('.gx-check input[disabled]').forEach((el, i) => {
+    if (i === 2) el.indeterminate = true;
+  });
+</script>

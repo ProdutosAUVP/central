@@ -1,0 +1,114 @@
+<!-- Certificado de Conclusão (HTML / CSS / JS standalone) -->
+<style>
+  .pcert-wrap {
+    background:hsl(var(--muted, 120 10% 95%) / 0.5);
+    padding:32px; border-radius:16px;
+    display:flex; justify-content:center;
+  }
+  .pcert {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,.08);
+    max-width:480px; width:100%;
+    padding:32px; text-align:center;
+    font-family:'Roboto', sans-serif;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pcert-i {
+    width:64px; height:64px; border-radius:999px;
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+    color:hsl(var(--accent, 155 93% 11%));
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 24px;
+  }
+  .pcert-i svg { width:32px; height:32px; }
+
+  .pcert-tag {
+    font:700 11px 'Roboto'; text-transform:uppercase; letter-spacing:2px;
+    color:hsl(var(--accent, 155 93% 11%));
+    margin-bottom:8px;
+  }
+  .pcert-h1 { font:700 24px 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); margin:0 0 4px; }
+  .pcert-p {
+    font:14px 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    margin:0 0 24px;
+  }
+
+  .pcert-box {
+    background:hsl(var(--muted, 120 10% 95%) / 0.5);
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:12px; padding:24px; margin-bottom:24px;
+  }
+  .pcert-box h4 { font:700 20px 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); margin:0 0 4px; }
+  .pcert-box p { font:13px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); margin:0; }
+
+  .pcert-author {
+    display:flex; align-items:center; justify-content:center;
+    gap:8px; margin-bottom:24px;
+  }
+  .pcert-avatar {
+    width:32px; height:32px; border-radius:999px;
+    background:linear-gradient(135deg, hsl(var(--primary, 155 93% 11%)), hsl(var(--primary, 155 93% 11%) / 0.8));
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    display:flex; align-items:center; justify-content:center;
+    font:700 12px 'Roboto';
+  }
+  .pcert-name { text-align:left; font:700 14px 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); line-height:1.1; margin:0; }
+  .pcert-role { text-align:left; font:10px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); margin:0; }
+
+  .pcert-cta {
+    width:100%;
+    background:hsl(var(--primary, 155 93% 11%));
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    border:none; padding:14px;
+    border-radius:12px;
+    font:700 13px 'Sora'; text-transform:uppercase; letter-spacing:.05em;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:.2s;
+  }
+  .pcert-cta:hover { background:hsl(var(--primary, 155 93% 11%) / 0.9); }
+  .pcert-cta svg { width:16px; height:16px; }
+</style>
+
+<div class="pcert-wrap">
+  <div class="pcert">
+    <div class="pcert-i">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+    </div>
+    <p class="pcert-tag">Certificado de Conclusão</p>
+    <h3 class="pcert-h1">AUVP Escola</h3>
+    <p class="pcert-p">Certifica que o aluno concluiu com sucesso o módulo</p>
+
+    <div class="pcert-box">
+      <h4>Renda Fixa Avançada</h4>
+      <p>12 aulas • 8h30 de conteúdo • Nota: 9.2/10</p>
+    </div>
+
+    <div class="pcert-author">
+      <div class="pcert-avatar">R</div>
+      <div>
+        <p class="pcert-name">Raul Sena</p>
+        <p class="pcert-role">Instrutor AUVP</p>
+      </div>
+    </div>
+
+    <button class="pcert-cta" onclick="downloadCertificate()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Baixar Certificado PDF
+    </button>
+  </div>
+</div>
+
+<script>
+  async function downloadCertificate() {
+    const res = await fetch('/api/certificates/123/pdf');
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'certificado-renda-fixa.pdf';
+    a.click();
+  }
+</script>

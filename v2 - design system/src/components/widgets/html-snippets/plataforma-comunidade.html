@@ -1,0 +1,224 @@
+<!-- Comunidade / Dúvidas da Aula (HTML / CSS / JS standalone) -->
+<style>
+  .pco-wrap {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:12px; overflow:hidden;
+    font-family:'Roboto', sans-serif;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pco-head {
+    background:hsl(var(--muted, 120 10% 95%) / 0.5);
+    border-bottom:1px solid hsl(var(--border, 120 10% 88%));
+    padding:16px 24px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+  }
+  .pco-h1 { display:inline-flex; align-items:center; gap:8px; font:700 14px 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); }
+  .pco-h1 svg { width:18px; height:18px; color:hsl(var(--accent, 155 93% 11%)); }
+  .pco-h2 { font:12px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); margin-left:8px; }
+  .pco-actions { display:flex; gap:12px; align-items:center; }
+  .pco-actions select {
+    font:12px 'Roboto'; padding:4px 8px;
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:8px;
+    background:hsl(var(--background, 0 0% 100%));
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+  }
+  .pco-actions button {
+    background:hsl(var(--primary, 155 93% 11%));
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    border:none; padding:6px 16px;
+    border-radius:8px;
+    font:700 12px 'Sora'; text-transform:uppercase;
+    cursor:pointer; transition:.15s;
+  }
+  .pco-actions button:hover { background:hsl(var(--primary, 155 93% 11%) / 0.9); }
+
+  .pco-thread {
+    padding:24px;
+    border-bottom:1px solid hsl(var(--border, 120 10% 88%));
+    display:flex; gap:16px;
+  }
+  .pco-thread:last-child { border-bottom:none; }
+
+  .pco-vote { display:flex; flex-direction:column; align-items:center; gap:4px; flex-shrink:0; padding-top:4px; }
+  .pco-vote button {
+    background:none; border:none; cursor:pointer;
+    color:hsl(var(--muted-foreground, 110 10% 40%) / 0.4);
+    transition:.15s; padding:0;
+  }
+  .pco-vote button svg { width:20px; height:20px; }
+  .pco-vote button:hover { color:hsl(var(--accent, 155 93% 11%)); }
+  .pco-vote button.down:hover { color:hsl(var(--destructive, 0 84% 60%)); }
+  .pco-vote span { font:700 14px 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); }
+
+  .pco-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .pco-avatar {
+    width:28px; height:28px; border-radius:999px;
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font:700 12px 'Roboto';
+  }
+  .pco-name { font:700 14px 'Anek Latin'; color:hsl(var(--foreground, 110 78% 9%)); }
+  .pco-time { font:10px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); }
+
+  .pco-badge-instr {
+    font:700 9px 'Roboto'; text-transform:uppercase; letter-spacing:.05em;
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+    color:hsl(var(--accent, 155 93% 11%));
+    padding:2px 6px; border-radius:4px;
+  }
+  .pco-badge-na {
+    font:700 9px 'Roboto'; text-transform:uppercase; letter-spacing:.05em;
+    background:hsl(28 100% 92%);
+    color:hsl(28 80% 30%);
+    padding:2px 6px; border-radius:4px;
+  }
+
+  .pco-text {
+    font:14px/1.5 'Roboto';
+    color:hsl(var(--foreground, 110 78% 9%) / 0.8);
+    margin:0 0 12px;
+  }
+
+  .pco-actions-row { display:flex; gap:16px; font:12px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); }
+  .pco-actions-row button {
+    background:none; border:none;
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    cursor:pointer; font:inherit;
+    display:inline-flex; align-items:center; gap:4px;
+    transition:.15s;
+  }
+  .pco-actions-row button:hover { color:hsl(var(--accent, 155 93% 11%)); }
+  .pco-actions-row svg { width:14px; height:14px; }
+
+  .pco-replies {
+    margin-top:16px; padding-left:16px;
+    border-left:2px solid hsl(var(--accent, 155 93% 11%) / 0.3);
+  }
+  .pco-replies.hidden { display:none; }
+  .pco-replies .pco-reply { padding:16px; border-radius:8px; margin-bottom:12px; }
+  .pco-replies .pco-reply.instr { background:hsl(var(--primary, 155 93% 11%) / 0.05); }
+  .pco-replies .pco-text { margin-bottom:8px; }
+  .pco-reply-actions { display:flex; gap:8px; }
+  .pco-reply-actions button { display:inline-flex; align-items:center; gap:4px; font:12px 'Roboto'; color:hsl(var(--muted-foreground, 110 10% 40%)); background:none; border:none; cursor:pointer; }
+  .pco-reply-actions button:hover { color:hsl(var(--accent, 155 93% 11%)); }
+  .pco-reply-actions svg { width:14px; height:14px; }
+</style>
+
+<div class="pco-wrap">
+  <div class="pco-head">
+    <div>
+      <span class="pco-h1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Dúvidas da Aula
+      </span>
+      <span class="pco-h2">01. O despertar financeiro</span>
+    </div>
+    <div class="pco-actions">
+      <select onchange="sortThreads(this.value)">
+        <option value="recent">Mais recentes</option>
+        <option value="votes">Mais votados</option>
+        <option value="unanswered">Sem resposta</option>
+      </select>
+      <button onclick="document.getElementById('newQ').classList.toggle('hidden')">Perguntar</button>
+    </div>
+  </div>
+
+  <div id="threads">
+    <article class="pco-thread" data-votes="12">
+      <div class="pco-vote">
+        <button onclick="vote(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
+        <span>12</span>
+        <button class="down" onclick="vote(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div style="flex:1">
+        <div class="pco-meta">
+          <div class="pco-avatar" style="background:linear-gradient(135deg,#60a5fa,#2563eb)">M</div>
+          <span class="pco-name">Maria C.</span>
+          <span class="pco-time">há 3 dias</span>
+        </div>
+        <p class="pco-text">Qual a diferença prática entre a taxa Selic e o CDI? Ambos parecem acompanhar valores similares, mas não entendi quando usar um vs outro como referência.</p>
+        <div class="pco-actions-row">
+          <button onclick="this.closest('.pco-thread').querySelector('.pco-replies').classList.toggle('hidden')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            3 respostas
+          </button>
+          <button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Compartilhar
+          </button>
+        </div>
+
+        <div class="pco-replies hidden">
+          <div class="pco-reply instr">
+            <div class="pco-meta">
+              <div class="pco-avatar" style="background:linear-gradient(135deg, hsl(var(--primary, 155 93% 11%)), hsl(var(--primary, 155 93% 11%) / 0.8));">R</div>
+              <span class="pco-name">Raul Sena</span>
+              <span class="pco-badge-instr">Instrutor</span>
+              <span class="pco-time">há 2 dias</span>
+            </div>
+            <p class="pco-text">Ótima pergunta! A Selic é a taxa básica de juros definida pelo COPOM/Banco Central. O CDI caminha muito próximo da Selic (~0,10% abaixo). Na prática, investimentos de renda fixa usam o CDI como referência porque é a taxa do mercado interbancário.</p>
+            <div class="pco-reply-actions">
+              <button>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                8
+              </button>
+            </div>
+          </div>
+          <div class="pco-reply">
+            <div class="pco-meta">
+              <div class="pco-avatar" style="background:linear-gradient(135deg,#34d399,#059669)">P</div>
+              <span class="pco-name">Pedro R.</span>
+              <span class="pco-time">há 1 dia</span>
+            </div>
+            <p class="pco-text">Complementando: o site do Banco Central publica ambas as taxas diariamente. Vale acompanhar!</p>
+            <div class="pco-reply-actions">
+              <button>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                3
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="pco-thread" data-votes="5">
+      <div class="pco-vote">
+        <button onclick="vote(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
+        <span>5</span>
+        <button class="down" onclick="vote(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div style="flex:1">
+        <div class="pco-meta">
+          <div class="pco-avatar" style="background:linear-gradient(135deg,#a78bfa,#7c3aed)">A</div>
+          <span class="pco-name">Ana L.</span>
+          <span class="pco-time">há 5 horas</span>
+          <span class="pco-badge-na">Sem resposta</span>
+        </div>
+        <p class="pco-text">No minuto 18:30 o Raul menciona "marcação a mercado". Alguém pode explicar de forma simples o que isso significa na prática para quem tem Tesouro IPCA+?</p>
+        <div class="pco-actions-row">
+          <button>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Responder
+          </button>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<script>
+  async function vote(btn, dir) {
+    const span = btn.parentElement.querySelector('span');
+    span.textContent = +span.textContent + dir;
+  }
+  function sortThreads(by) {
+    const c = document.getElementById('threads');
+    const items = [...c.children];
+    if (by === 'votes') items.sort((a, b) => +b.dataset.votes - +a.dataset.votes);
+    items.forEach(el => c.append(el));
+  }
+</script>

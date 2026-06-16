@@ -1,0 +1,172 @@
+<!-- Player de Aulas (HTML / CSS / JS standalone) -->
+<style>
+  .pp-wrap {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:16px;
+    padding:48px;
+    display:flex; flex-direction:column; gap:32px;
+    font-family:'Roboto', sans-serif;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pp-video {
+    aspect-ratio:16/9; background:#000;
+    border-radius:12px; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; overflow:hidden;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  .pp-video::before {
+    content:""; position:absolute; left:0; right:0; bottom:0; height:96px;
+    background:linear-gradient(to top, rgba(0,0,0,.8), transparent);
+    opacity:0; transition:opacity .3s; z-index:1;
+  }
+  .pp-video:hover::before { opacity:1; }
+
+  .pp-play {
+    width:64px; height:64px; border-radius:999px;
+    background:hsl(var(--primary, 155 93% 11%) / 0.9);
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter:blur(4px);
+    box-shadow:0 0 30px hsl(var(--primary, 155 93% 11%) / 0.3);
+    transition:transform .2s; z-index:2;
+  }
+  .pp-play svg { width:28px; height:28px; margin-left:4px; }
+  .pp-video:hover .pp-play { transform:scale(1.1); }
+
+  .pp-bar {
+    position:absolute; left:16px; right:16px; bottom:12px;
+    opacity:0; transition:.3s; color:#fff; z-index:2;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .pp-video:hover .pp-bar { opacity:1; }
+  .pp-progress {
+    width:100%; height:4px;
+    background:rgba(255,255,255,.3);
+    border-radius:999px;
+    cursor:pointer; position:relative;
+  }
+  .pp-progress > i {
+    display:block; height:100%; width:35%;
+    background:hsl(var(--primary, 155 93% 11%));
+    border-radius:999px;
+  }
+  .pp-controls {
+    display:flex; justify-content:space-between; align-items:center;
+    font:12px 'Roboto'; color:#fff;
+  }
+  .pp-controls .group { display:flex; align-items:center; gap:16px; }
+  .pp-controls button { background:none; border:none; color:#fff; cursor:pointer; padding:0; transition:.15s; }
+  .pp-controls button:hover { color:hsl(var(--accent, 155 93% 11%)); }
+  .pp-controls svg { width:20px; height:20px; }
+  .pp-time { font-family:monospace; font-size:11px; opacity:.8; }
+
+  .pp-info {
+    display:grid; grid-template-columns:1fr 1fr; gap:32px;
+  }
+  @media (max-width:768px) { .pp-info { grid-template-columns:1fr; } }
+
+  .pp-tag {
+    display:inline-block;
+    font:700 11px 'Roboto'; text-transform:uppercase; letter-spacing:1px;
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+    color:hsl(var(--accent, 155 93% 11%));
+    padding:4px 8px; border-radius:4px;
+  }
+  .pp-title {
+    font:700 30px/1.1 'Anek Latin';
+    margin:8px 0 16px;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pp-desc {
+    font:14px/1.5 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    margin:0 0 24px;
+  }
+  .pp-cta {
+    display:inline-flex; align-items:center; gap:8px;
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    color:hsl(var(--foreground, 110 78% 9%));
+    padding:12px 24px; border-radius:999px;
+    font:700 13px 'Sora'; text-transform:uppercase;
+    cursor:pointer; transition:.2s;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .pp-cta:hover { background:hsl(var(--muted, 120 10% 95%)); }
+  .pp-cta svg { width:16px; height:16px; }
+
+  .pp-aside {
+    background:hsl(var(--muted, 120 10% 95%) / 0.5);
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:12px; padding:24px;
+  }
+  .pp-aside h4 { font:700 16px 'Anek Latin'; margin:0 0 12px; color:hsl(var(--foreground, 110 78% 9%)); }
+  .pp-aside ul {
+    margin:0; padding:0; list-style:none;
+    display:flex; flex-direction:column; gap:12px;
+    font:14px/1.4 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+  }
+  .pp-aside li { display:flex; gap:8px; align-items:flex-start; }
+  .pp-aside svg { width:16px; height:16px; color:hsl(var(--accent, 155 93% 11%)); flex-shrink:0; margin-top:2px; }
+</style>
+
+<div class="pp-wrap">
+  <div class="pp-video">
+    <div class="pp-play">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </div>
+    <div class="pp-bar">
+      <div class="pp-progress"><i></i></div>
+      <div class="pp-controls">
+        <div class="group">
+          <button title="Pause"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></button>
+          <button title="Volume"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+          <span class="pp-time">12:45 / 35:20</span>
+        </div>
+        <div class="group">
+          <button title="Legendas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15h2"/><path d="M13 15h2"/><path d="M7 11h4"/><path d="M13 11h4"/></svg></button>
+          <button title="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+          <button title="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-info">
+    <div>
+      <span class="pp-tag">Módulo 1: Preparando seu cérebro</span>
+      <h3 class="pp-title">01. O despertar financeiro</h3>
+      <p class="pp-desc">A hierarquia de textos no player enfatiza o nome da aula. Botões de ação como "Marcar como concluída" ou "Avaliar aula" devem vir logo abaixo deste bloco.</p>
+      <button class="pp-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Concluir Aula
+      </button>
+    </div>
+    <aside class="pp-aside">
+      <h4>Diretrizes de Comportamento</h4>
+      <ul>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Auto-hide: Overlay e botões desaparecem após 3s sem movimento do mouse.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Contraste: O vídeo sempre possui fundo preto e controles brancos/dourados.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Play State: O botão central deve ter backdrop-blur para não prejudicar a thumb.
+        </li>
+      </ul>
+    </aside>
+  </div>
+</div>
+
+<script>
+  document.querySelector('.pp-play')?.addEventListener('click', () => {
+    // play / pause real iria aqui (HTMLMediaElement.play())
+  });
+</script>

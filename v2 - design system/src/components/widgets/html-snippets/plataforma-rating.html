@@ -1,0 +1,162 @@
+<!-- Avaliação de Aula (HTML / CSS / JS standalone) -->
+<style>
+  .pr-modal {
+    background:hsl(var(--card, 0 0% 100%));
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,.1);
+    max-width:380px; padding:24px; text-align:center;
+    font-family:'Roboto', sans-serif;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pr-icon {
+    width:56px; height:56px; border-radius:999px;
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+    color:hsl(var(--accent, 155 93% 11%));
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 16px;
+  }
+  .pr-icon svg { width:24px; height:24px; }
+
+  .pr-title {
+    font:700 20px 'Anek Latin';
+    margin:0 0 4px;
+    color:hsl(var(--foreground, 110 78% 9%));
+  }
+  .pr-sub {
+    font:14px 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    margin:0 0 20px;
+  }
+
+  .pr-stars { display:flex; justify-content:center; gap:8px; margin-bottom:12px; }
+  .pr-star {
+    background:none; border:none; cursor:pointer;
+    color:hsl(var(--muted-foreground, 110 10% 40%) / 0.3);
+    transition:color .15s;
+  }
+  .pr-star svg { width:28px; height:28px; }
+  .pr-star.on,
+  .pr-star:hover { color:hsl(var(--accent, 155 93% 11%)); }
+
+  .pr-label {
+    font:14px 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    margin-bottom:16px; min-height:20px;
+  }
+
+  .pr-tags {
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:8px; margin-bottom:16px;
+  }
+  .pr-tag {
+    font:12px 'Roboto'; padding:6px 12px;
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    background:transparent; border-radius:999px;
+    cursor:pointer; transition:.2s;
+  }
+  .pr-tag:hover {
+    border-color:hsl(var(--accent, 155 93% 11%));
+    color:hsl(var(--accent, 155 93% 11%));
+  }
+  .pr-tag.on {
+    border-color:hsl(var(--accent, 155 93% 11%));
+    color:hsl(var(--accent, 155 93% 11%));
+    background:hsl(var(--accent, 155 93% 11%) / 0.1);
+  }
+
+  .pr-text {
+    width:100%; min-height:80px; padding:8px 12px;
+    border:1px solid hsl(var(--border, 120 10% 88%));
+    border-radius:8px;
+    font:14px 'Roboto';
+    background:hsl(var(--background, 0 0% 100%));
+    color:hsl(var(--foreground, 110 78% 9%));
+    resize:none; margin-bottom:16px; box-sizing:border-box;
+    outline:none;
+  }
+  .pr-text:focus { border-color:hsl(var(--accent, 155 93% 11%)); box-shadow:0 0 0 1px hsl(var(--primary, 155 93% 11%) / 0.3); }
+
+  .pr-cta {
+    width:100%;
+    background:hsl(var(--primary, 155 93% 11%));
+    color:hsl(var(--primary-foreground, 0 0% 100%));
+    border:none; padding:12px;
+    border-radius:12px;
+    font:700 13px 'Sora'; text-transform:uppercase; letter-spacing:.05em;
+    cursor:pointer; transition:.2s;
+  }
+  .pr-cta:hover { background:hsl(var(--primary, 155 93% 11%) / 0.9); }
+  .pr-cta:disabled { opacity:.4; cursor:not-allowed; }
+
+  .pr-skip {
+    font:12px 'Roboto';
+    color:hsl(var(--muted-foreground, 110 10% 40%));
+    background:none; border:none; cursor:pointer;
+    margin-top:12px; transition:.15s;
+  }
+  .pr-skip:hover { color:hsl(var(--foreground, 110 78% 9%)); }
+</style>
+
+<div class="pr-modal" id="ratingModal">
+  <div class="pr-icon">
+    <svg viewBox="0 0 24 24" fill="hsl(var(--primary, 155 93% 11%))" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </svg>
+  </div>
+  <h3 class="pr-title">O que achou da aula?</h3>
+  <p class="pr-sub">01. O despertar financeiro</p>
+
+  <div class="pr-stars" id="stars">
+    <button class="pr-star" data-v="1"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+    <button class="pr-star" data-v="2"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+    <button class="pr-star" data-v="3"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+    <button class="pr-star" data-v="4"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+    <button class="pr-star" data-v="5"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+  </div>
+  <p class="pr-label" id="ratingLabel">Selecione uma nota</p>
+
+  <div class="pr-tags" id="tags" style="display:none">
+    <button class="pr-tag" data-t="didatica">Didática excelente</button>
+    <button class="pr-tag" data-t="pratico">Conteúdo prático</button>
+    <button class="pr-tag" data-t="longa">Muito longa</button>
+    <button class="pr-tag" data-t="exemplos">Precisa de exemplos</button>
+    <button class="pr-tag" data-t="audio">Áudio ruim</button>
+  </div>
+
+  <textarea id="comment" class="pr-text" placeholder="Deixe um comentário (opcional)..." style="display:none"></textarea>
+
+  <button id="submit" class="pr-cta" disabled>Enviar Avaliação</button>
+  <button class="pr-skip">Pular</button>
+</div>
+
+<script>
+  const labels = ['', 'Péssima', 'Ruim', 'OK', 'Boa', 'Excelente!'];
+  let rating = 0;
+  const stars = document.querySelectorAll('#stars .pr-star');
+
+  stars.forEach(s => s.addEventListener('click', () => {
+    rating = +s.dataset.v;
+    stars.forEach((x, i) => x.classList.toggle('on', i < rating));
+    document.getElementById('ratingLabel').textContent = labels[rating];
+    document.getElementById('tags').style.display = 'flex';
+    document.getElementById('comment').style.display = 'block';
+    document.getElementById('submit').disabled = false;
+  }));
+
+  document.querySelectorAll('#tags .pr-tag').forEach(t =>
+    t.addEventListener('click', () => t.classList.toggle('on'))
+  );
+
+  document.getElementById('submit').addEventListener('click', async () => {
+    const tags = [...document.querySelectorAll('#tags .pr-tag.on')].map(t => t.dataset.t);
+    const comment = document.getElementById('comment').value;
+    await fetch('/api/ratings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stars: rating, tags, comment })
+    });
+    alert('Obrigado pela avaliação!');
+  });
+</script>
