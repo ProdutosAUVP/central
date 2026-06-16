@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
-import { BrandToggle } from "@/components/design-system/BrandToggle";
 
 import { ComponentShowcase } from "@/components/design-system/ComponentShowcase";
 import { SectionThemeToggle } from "@/components/design-system/SectionThemeToggle";
@@ -284,7 +283,21 @@ export default function DesignSystemPage() {
   const [activeSection, setActiveSection] = useState("intro");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { brand } = useBrand();
+  const { brand, setBrand } = useBrand();
+
+  // Reseta para Capital ao sair do Design System
+  useEffect(() => {
+    return () => { setBrand("capital"); };
+  }, []);
+
+  const handleBrandPreview = (b: "capital" | "escola") => {
+    if (b === "escola") document.documentElement.classList.add("escola");
+    else document.documentElement.classList.remove("escola");
+  };
+  const handleBrandRevert = () => {
+    if (brand === "escola") document.documentElement.classList.add("escola");
+    else document.documentElement.classList.remove("escola");
+  };
 
   const normalize = (s: string) =>
     s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -468,25 +481,44 @@ export default function DesignSystemPage() {
               </SheetTrigger>
               <SheetContent side="left" className="w-72 p-0 overflow-y-auto">
                 <div className="p-4 border-b">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className={cn(
-                      "flex items-center justify-center h-8 w-8 rounded-lg",
-                      brand === "capital" ? "bg-brand-dark" : "bg-brand"
-                    )}>
-                      <img
-                        src={brand === "capital" ? olhoBranco.url : olhoPreto.url}
-                        alt="AUVP Logo"
-                        className="h-5 w-5"
-                      />
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-foreground/10">
+                      <Palette className="h-5 w-5" />
                     </div>
                     <div>
-                      <BrandToggle />
-                      <p className="text-xs text-muted-foreground">Design System</p>
+                      <p className="text-sm font-bold font-anek">Design System</p>
+                      <p className="text-xs text-muted-foreground">AUVP</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="px-3 pt-3">
+                  {/* Seletor de produto */}
+                  <div className="pb-3 mb-2 border-b">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1 mb-1.5">Produto</p>
+                    <div className="space-y-0.5">
+                      {[
+                        { id: "capital" as const, label: "AUVP Capital", color: "hsl(155,93%,11%)" },
+                        { id: "escola" as const, label: "AUVP Escola", color: "hsl(42,84%,63%)" },
+                      ].map((b) => (
+                        <button
+                          key={b.id}
+                          onMouseEnter={() => handleBrandPreview(b.id)}
+                          onMouseLeave={handleBrandRevert}
+                          onClick={() => setBrand(b.id)}
+                          className={cn(
+                            "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
+                            brand === b.id
+                              ? "bg-primary text-primary-foreground"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          )}
+                        >
+                          <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
+                          {b.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   <div className="relative">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -555,9 +587,6 @@ export default function DesignSystemPage() {
             </Sheet>
 
             <GlobalNav />
-            <div className="hidden sm:block ml-2">
-              <BrandToggle />
-            </div>
           </div>
           <ThemeToggle />
         </div>
@@ -566,6 +595,32 @@ export default function DesignSystemPage() {
       <div className="max-w-7xl mx-auto flex gap-0 relative px-4 md:px-8">
         {/* Sidebar Nav — Desktop only */}
         <nav className="sticky top-16 h-[calc(100vh-4rem)] w-56 shrink-0 border-r py-6 pr-4 overflow-y-auto hidden md:block">
+          {/* Seletor de produto */}
+          <div className="px-2 pb-3 mb-3 border-b">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1 mb-1.5">Produto</p>
+            <div className="space-y-0.5">
+              {[
+                { id: "capital" as const, label: "AUVP Capital", color: "hsl(155,93%,11%)" },
+                { id: "escola" as const, label: "AUVP Escola", color: "hsl(42,84%,63%)" },
+              ].map((b) => (
+                <button
+                  key={b.id}
+                  onMouseEnter={() => handleBrandPreview(b.id)}
+                  onMouseLeave={handleBrandRevert}
+                  onClick={() => setBrand(b.id)}
+                  className={cn(
+                    "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
+                    brand === b.id
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  )}
+                >
+                  <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
+                  {b.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="px-2 mb-4">
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
