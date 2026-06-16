@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { BrandToggle } from "@/components/design-system/BrandToggle";
 
 import { ComponentShowcase } from "@/components/design-system/ComponentShowcase";
@@ -58,8 +59,11 @@ import platRatingHtml from "@/components/widgets/html-snippets/plataforma-rating
 import platComunidadeHtml from "@/components/widgets/html-snippets/plataforma-comunidade.html?raw";
 import platCertificadosHtml from "@/components/widgets/html-snippets/plataforma-certificados.html?raw";
 import tabelaPrecosSrc from "@/components/widgets/TabelaPrecos?raw";
+import tabelaPrecosHtml from "@/components/widgets/html-snippets/tabela-precos.html?raw";
 import jornadaHeroiSrc from "@/components/widgets/JornadaHeroi?raw";
+import jornadaHeroiHtml from "@/components/widgets/html-snippets/jornada-heroi.html?raw";
 import marcaLogosSrc from "@/components/widgets/MarcaLogos?raw";
+import marcaLogosHtml from "@/components/widgets/html-snippets/marca-logos.html?raw";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -89,7 +93,8 @@ import {
   ArrowLeftRight, FolderTree, UploadCloud, Star as StarIcon, ListFilter, Search,
   ListChecks, ToggleLeft, Anchor as AnchorIcon, AtSign, Columns3,
   Activity, GitCommit, ListTree, ClipboardList, Inbox as InboxIcon, CheckCircle2, Compass, Stamp,
-  ChevronRight, CalendarIcon, SquareCheck, Table as TableIcon
+  ChevronRight, CalendarIcon, SquareCheck, Table as TableIcon,
+  Sun, Moon
 } from "lucide-react";
 import { Notifications } from "@/components/widgets/Notifications";
 import { PopconfirmWidget } from "@/components/widgets/Popconfirm";
@@ -259,6 +264,19 @@ function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fg
         {rgb && <p className="text-xs text-muted-foreground font-mono">rgb({rgb})</p>}
       </div>
     </div>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  return (
+    <button
+      onClick={toggle}
+      aria-label={theme === "dark" ? "Mudar para tema claro" : "Mudar para tema escuro"}
+      className="h-9 w-9 flex items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors"
+    >
+      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </button>
   );
 }
 
@@ -438,7 +456,7 @@ export default function DesignSystemPage() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
+        <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-3 md:gap-4">
             {/* Mobile hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -541,6 +559,7 @@ export default function DesignSystemPage() {
               <BrandToggle />
             </div>
           </div>
+          <ThemeToggle />
         </div>
       </header>
 
@@ -639,7 +658,7 @@ export default function DesignSystemPage() {
                 </Button>
               </a>
             </div>
-            <SectionThemeToggle bare code={marcaLogosSrc}><MarcaLogos /></SectionThemeToggle>
+            <SectionThemeToggle bare code={marcaLogosSrc} htmlCode={marcaLogosHtml}><MarcaLogos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1045,7 +1064,7 @@ function showTab(tabId) {
           <section id="pricing">
             <h2 className="text-2xl font-bold mb-2">Tabela de Preços</h2>
             <p className="text-muted-foreground mb-6">Toggle animado com cards translúcidos, badges de desconto e CTA.</p>
-            <SectionThemeToggle bare code={tabelaPrecosSrc}><TabelaPrecos /></SectionThemeToggle>
+            <SectionThemeToggle bare code={tabelaPrecosSrc} htmlCode={tabelaPrecosHtml}><TabelaPrecos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1054,7 +1073,7 @@ function showTab(tabId) {
           <section id="journey">
             <h2 className="text-2xl font-bold mb-2">Jornada do Herói</h2>
             <p className="text-muted-foreground mb-6">Timeline interativa com pontos clicáveis e barra de progresso animada.</p>
-            <SectionThemeToggle bare code={jornadaHeroiSrc}><JornadaHeroi /></SectionThemeToggle>
+            <SectionThemeToggle bare code={jornadaHeroiSrc} htmlCode={jornadaHeroiHtml}><JornadaHeroi /></SectionThemeToggle>
           </section>
           </>}
 

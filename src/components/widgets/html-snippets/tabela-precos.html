@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabela de Preços — AUVP Design System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;700;800;900&family=Roboto:wght@400;700&display=swap');
+    .font-anek { font-family: 'Anek Latin', sans-serif; }
+    .font-roboto { font-family: 'Roboto', sans-serif; }
+    .slider-track { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  </style>
+</head>
+<body class="bg-white text-neutral-900 font-roboto p-8">
+
+  <div class="max-w-4xl mx-auto">
+
+    <!-- Toggle Individual / Pacotes -->
+    <div class="flex justify-center mb-8">
+      <div class="relative inline-flex items-center rounded-xl bg-neutral-100 border border-neutral-100 p-1 w-full max-w-sm" id="toggleContainer">
+        <div id="sliderTrack"
+             class="absolute top-1 h-[calc(100%-8px)] w-[calc(50%-4px)] rounded-[10px] bg-neutral-900 shadow-md slider-track translate-x-0">
+        </div>
+        <button onclick="setView('individual')" id="btnIndividual"
+                class="relative z-10 flex-1 py-3 px-4 text-[13px] font-bold uppercase tracking-wider transition-colors duration-300 font-anek text-white">
+          Individual
+        </button>
+        <button onclick="setView('pacotes')" id="btnPacotes"
+                class="relative z-10 flex-1 py-3 px-4 text-[13px] font-bold uppercase tracking-wider transition-colors duration-300 font-anek text-neutral-400">
+          Pacotes
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div id="cardsGrid" class="grid gap-6 pt-6 grid-cols-1 md:grid-cols-3"></div>
+  </div>
+
+  <script>
+    const individual = [
+      {
+        name: "AUVP Sempre",
+        price: "R$ 797,00",
+        paymentInfo: "PIX, cartão em até 12x ou boleto à vista.",
+        features: [
+          "Acesso vitalício à plataforma",
+          "Comunidade exclusiva de investidores",
+          "Aulas atualizadas periodicamente",
+          "Certificado de conclusão",
+        ],
+      },
+      {
+        name: "AUVP Analítica",
+        price: "R$ 997,00",
+        paymentInfo: "PIX, cartão em até 12x ou boleto à vista.",
+        features: [
+          "Ferramenta de análise de ativos",
+          "Indicadores fundamentalistas",
+          "Rankings e comparativos",
+          "Relatórios exclusivos",
+        ],
+      },
+      {
+        name: "Carteira AUVP",
+        price: "R$ 997,00",
+        paymentInfo: "PIX, cartão em até 12x ou boleto à vista.",
+        features: [
+          "Gestão inteligente da carteira",
+          "Diagrama do Cerrado",
+          "Rebalanceamento automático",
+          "Acompanhamento de dividendos",
+        ],
+      },
+    ];
+
+    const pacotes = [
+      {
+        name: "Pacote Duplo",
+        price: "R$ 1.497,00",
+        paymentInfo: "Economia de R$ 297,00 em relação ao individual.",
+        discount: "15% OFF",
+        features: [
+          "AUVP Sempre incluso",
+          "AUVP Analítica inclusa",
+          "Comunidade exclusiva",
+          "Acesso vitalício",
+        ],
+      },
+      {
+        name: "Pacote Completo",
+        price: "R$ 2.199,00",
+        paymentInfo: "Economia de R$ 592,00. O melhor custo-benefício.",
+        discount: "21% OFF",
+        featured: true,
+        featuredLabel: "O Mais Completo",
+        features: [
+          "AUVP Sempre incluso",
+          "AUVP Analítica inclusa",
+          "Carteira AUVP inclusa",
+          "Acesso vitalício a tudo",
+        ],
+        highlightFeature: "21% de desconto no pacote completo",
+      },
+    ];
+
+    let currentView = 'individual';
+
+    function setView(view) {
+      currentView = view;
+      const track = document.getElementById('sliderTrack');
+      const btnInd = document.getElementById('btnIndividual');
+      const btnPac = document.getElementById('btnPacotes');
+      const grid = document.getElementById('cardsGrid');
+
+      if (view === 'pacotes') {
+        track.style.transform = 'translateX(calc(100% + 4px))';
+        btnInd.className = btnInd.className.replace('text-white', 'text-neutral-400');
+        btnPac.className = btnPac.className.replace('text-neutral-400', 'text-white');
+        grid.className = 'grid gap-6 pt-6 grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto';
+        renderCards(pacotes);
+      } else {
+        track.style.transform = 'translateX(0)';
+        btnPac.className = btnPac.className.replace('text-white', 'text-neutral-400');
+        btnInd.className = btnInd.className.replace('text-neutral-400', 'text-white');
+        grid.className = 'grid gap-6 pt-6 grid-cols-1 md:grid-cols-3';
+        renderCards(individual);
+      }
+    }
+
+    function renderCards(plans) {
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = plans.map(plan => `
+        <div class="relative border ${plan.featured ? 'border-yellow-400 shadow-md' : 'border-neutral-200'} rounded-xl p-6 md:p-8 flex flex-col hover:shadow-lg transition-all">
+          ${plan.featuredLabel ? `<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-neutral-900 text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap shadow-md">${plan.featuredLabel}</div>` : ''}
+          ${plan.discount ? `<span class="inline-block w-fit mb-3 bg-neutral-900 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">${plan.discount}</span>` : ''}
+          <h3 class="text-2xl font-extrabold mb-4 font-anek">${plan.name}</h3>
+          <span class="text-4xl font-black font-anek">${plan.price}</span>
+          <div class="bg-neutral-50 rounded-lg px-3 py-2 text-xs text-neutral-500 my-4 border-l-[3px] border-yellow-400">${plan.paymentInfo}</div>
+          <ul class="space-y-3 mb-8 flex-grow">
+            ${plan.features.map(f => `
+              <li class="flex gap-3 text-sm text-neutral-500 font-roboto">
+                <svg class="h-4 w-4 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                ${f}
+              </li>`).join('')}
+            ${plan.highlightFeature ? `
+              <li class="flex gap-3 text-sm font-bold text-yellow-600">
+                <svg class="h-4 w-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                ${plan.highlightFeature}
+              </li>` : ''}
+          </ul>
+          <button class="w-full mt-auto py-3 px-6 bg-neutral-900 text-white rounded-lg text-sm font-bold uppercase tracking-wider font-anek hover:bg-neutral-700 transition-colors">
+            Começar Agora
+          </button>
+        </div>
+      `).join('');
+    }
+
+    renderCards(individual);
+  </script>
+</body>
+</html>
