@@ -283,6 +283,7 @@ export default function DesignSystemPage() {
   const [activeSection, setActiveSection] = useState("intro");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [brandOpen, setBrandOpen] = useState(false);
   const { brand, setBrand } = useBrand();
 
   // Reseta para Capital ao sair do Design System
@@ -495,29 +496,38 @@ export default function DesignSystemPage() {
                 <div className="px-3 pt-3">
                   {/* Seletor de produto */}
                   <div className="pb-3 mb-2 border-b">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1 mb-1.5">Produto</p>
-                    <div className="space-y-0.5">
-                      {[
-                        { id: "capital" as const, label: "AUVP Capital", color: "hsl(155,93%,11%)" },
-                        { id: "escola" as const, label: "AUVP Escola", color: "hsl(42,84%,63%)" },
-                      ].map((b) => (
-                        <button
-                          key={b.id}
-                          onMouseEnter={() => handleBrandPreview(b.id)}
-                          onMouseLeave={handleBrandRevert}
-                          onClick={() => setBrand(b.id)}
-                          className={cn(
-                            "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
-                            brand === b.id
-                              ? "bg-primary text-primary-foreground"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                          )}
-                        >
-                          <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
-                          {b.label}
-                        </button>
-                      ))}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setBrandOpen((o) => !o)}
+                      className="w-full flex items-start justify-between gap-2 px-1 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                    >
+                      <span>Produto</span>
+                      <ChevronRight className={cn("mt-0.5 h-3.5 w-3.5 shrink-0 transition-transform", brandOpen && "rotate-90")} />
+                    </button>
+                    {brandOpen && (
+                      <div className="space-y-0.5 mt-1">
+                        {[
+                          { id: "capital" as const, label: "AUVP Capital", color: "hsl(155,93%,11%)" },
+                          { id: "escola" as const, label: "AUVP Escola", color: "hsl(42,84%,63%)" },
+                        ].map((b) => (
+                          <button
+                            key={b.id}
+                            onMouseEnter={() => handleBrandPreview(b.id)}
+                            onMouseLeave={handleBrandRevert}
+                            onClick={() => setBrand(b.id)}
+                            className={cn(
+                              "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
+                              brand === b.id
+                                ? "bg-primary text-primary-foreground"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                            )}
+                          >
+                            <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: brand === b.id ? "currentColor" : b.color }} />
+                            {b.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="relative">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -597,29 +607,38 @@ export default function DesignSystemPage() {
         <nav className="sticky top-16 h-[calc(100vh-4rem)] w-56 shrink-0 border-r py-6 pr-4 overflow-y-auto hidden md:block">
           {/* Seletor de produto */}
           <div className="px-2 pb-3 mb-3 border-b">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1 mb-1.5">Produto</p>
-            <div className="space-y-0.5">
-              {[
-                { id: "capital" as const, label: "AUVP Capital", color: "hsl(155,93%,11%)" },
-                { id: "escola" as const, label: "AUVP Escola", color: "hsl(42,84%,63%)" },
-              ].map((b) => (
-                <button
-                  key={b.id}
-                  onMouseEnter={() => handleBrandPreview(b.id)}
-                  onMouseLeave={handleBrandRevert}
-                  onClick={() => setBrand(b.id)}
-                  className={cn(
-                    "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
-                    brand === b.id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  )}
-                >
-                  <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
-                  {b.label}
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              onClick={() => setBrandOpen((o) => !o)}
+              className="w-full flex items-start justify-between gap-2 px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              <span>Produto</span>
+              <ChevronRight className={cn("mt-0.5 h-3.5 w-3.5 shrink-0 transition-transform", brandOpen && "rotate-90")} />
+            </button>
+            {brandOpen && (
+              <div className="space-y-0.5 mt-1">
+                {[
+                  { id: "capital" as const, label: "AUVP Capital", color: "hsl(155,93%,11%)" },
+                  { id: "escola" as const, label: "AUVP Escola", color: "hsl(42,84%,63%)" },
+                ].map((b) => (
+                  <button
+                    key={b.id}
+                    onMouseEnter={() => handleBrandPreview(b.id)}
+                    onMouseLeave={handleBrandRevert}
+                    onClick={() => setBrand(b.id)}
+                    className={cn(
+                      "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
+                      brand === b.id
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}
+                  >
+                    <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: brand === b.id ? "currentColor" : b.color }} />
+                    {b.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className="px-2 mb-4">
             <div className="relative">
