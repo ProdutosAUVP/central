@@ -16,7 +16,7 @@ import { Volume2, Palette, ChevronDown, X, Home, Users } from "lucide-react";
 const systems = [
   {
     id: "hub",
-    label: "Hub",
+    label: "Central",
     description: "Página inicial e visão geral dos sistemas",
     icon: Home,
     path: "/",
