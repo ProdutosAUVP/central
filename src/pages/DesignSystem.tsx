@@ -563,7 +563,7 @@ export default function DesignSystemPage() {
         </div>
       </header>
 
-      <div className="container flex gap-0 relative px-4 md:px-8">
+      <div className="max-w-7xl mx-auto flex gap-0 relative px-4 md:px-8">
         {/* Sidebar Nav — Desktop only */}
         <nav className="sticky top-16 h-[calc(100vh-4rem)] w-56 shrink-0 border-r py-6 pr-4 overflow-y-auto hidden md:block">
           <div className="px-2 mb-4">
