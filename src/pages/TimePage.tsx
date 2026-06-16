@@ -46,17 +46,17 @@ function useReveal(threshold = 0.1) {
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-type Tier = "brain" | "star" | "one";
+type Tier = "brain" | "specialist" | "star" | "one";
 
 const leadership: { name: string; role: string; tier: Tier; initials: string }[] = [
-  { name: "Raul Sena", role: "Sócio Responsável", tier: "brain", initials: "RS" },
-  { name: "Beatriz Henriques", role: "Sócia — Diretora de Produto", tier: "brain", initials: "BH" },
-  { name: "Daniel Machado", role: "Coordenador", tier: "brain", initials: "DM" },
+  { name: "Raul Sena", role: "Fundador e CEO", tier: "brain", initials: "RS" },
+  { name: "Beatriz Henriques", role: "Sócia e Diretora de Produto", tier: "brain", initials: "BH" },
+  { name: "Daniel Machado", role: "Coordenador de produto", tier: "brain", initials: "DM" },
+  { name: "Lilian Araújo", role: "Especialista em CX", tier: "specialist", initials: "LA" },
 ];
 
 const teamMembers: { name: string; role: string; tier: Tier; initials: string }[] = [
-  { name: "Debora Sanders", role: "Analista de Produto Sr. II", tier: "star", initials: "DS" },
-  { name: "Ariadne Carneiro", role: "Product Manager I", tier: "one", initials: "AC" },
+  { name: "Debora Sanders", role: "Analista de CX Sr. II", tier: "star", initials: "DS" },
   { name: "Armando Neto", role: "Designer de Produto Pl. I", tier: "one", initials: "AN" },
   { name: "Éria Alencar", role: "Designer de Produto Pl. I", tier: "one", initials: "EA" },
   { name: "Elane Rodrigues", role: "Analista de Produto Jr. I", tier: "one", initials: "ER" },
@@ -68,6 +68,7 @@ const teamMembers: { name: string; role: string; tier: Tier; initials: string }[
 
 const tierMeta: Record<Tier, { emoji: string; avatarClass: string; label: string }> = {
   brain: { emoji: "🧠", avatarClass: "bg-primary text-primary-foreground", label: "Liderança" },
+  specialist: { emoji: "💼", avatarClass: "bg-purple-600 text-white", label: "Especialista" },
   star: { emoji: "⭐", avatarClass: "bg-amber-500 text-white", label: "Sênior" },
   one: { emoji: "1️⃣", avatarClass: "bg-muted text-foreground", label: "Time" },
 };
@@ -101,7 +102,7 @@ const dayToDay = [
     title: "Pesquisa & Análise de dados",
     tagline: "Mestres em decifrar comportamentos.",
     desc: "Precisa de ajuda com o Typeform ou quer entender o que um dashboard está dizendo? Realizamos pesquisas quantitativas e qualitativas com leads, membros (e até piratas!) para mapear dores e gerar insights reais.",
-    quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"],
+    quemChamar: ["Ana Beatriz", "Hiago"],
   },
   {
     emoji: "💻",
@@ -136,7 +137,7 @@ const dayToDay = [
     title: "Produtividade & Gestão",
     tagline: "Fazemos projetos rodarem.",
     desc: "Planilhas, ClickUp, fluxos de trabalho e priorização. Se o desafio é gestão de tempo, de pessoas ou aumentar a eficiência do time, somos especialistas em transformar caos em projetos executados.",
-    quemChamar: ["Beatriz Henriques", "Daniel", "Ariadne"],
+    quemChamar: ["Beatriz Henriques", "Daniel"],
   },
   {
     emoji: "❤️",
@@ -300,6 +301,10 @@ export default function TimePage() {
               <div className="flex items-center gap-2">
                 <span className="text-base">🧠</span>
                 <span>Liderança</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-base">💼</span>
+                <span>Especialista</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-base">⭐</span>
