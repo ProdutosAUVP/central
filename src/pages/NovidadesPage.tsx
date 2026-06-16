@@ -58,7 +58,7 @@ const novidades: Novidade[] = [
     desc: "Proposta de valor, módulos, comunidade, ferramentas e PIAR agora documentados na Central.",
     date: "Jun 2025",
     autor: "Ariadne Carneiro",
-    detalhes: "A documentação da AUVP Escola já está disponível na Central e inclui: proposta de valor, formato de liberação dos módulos, tempo de acesso, regras de reembolso, comunidade, Taxa Private, Diagrama do Cerrado, ferramentas de apoio e o PIAR. Acesse pelo Hub.",
+    detalhes: "A documentação da AUVP Escola já está disponível na Central e inclui: proposta de valor, formato de liberação dos módulos, tempo de acesso, regras de reembolso, comunidade, Taxa Private, Diagrama do Cerrado, ferramentas de apoio e o PIAR. Acesse pela Central.",
   },
   {
     tag: "Central",

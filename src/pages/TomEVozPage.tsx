@@ -211,7 +211,7 @@ export default function TomEVozPage() {
             to="/"
             className="mt-6 inline-flex items-center justify-center text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Voltar para o Design System
+            ← Voltar para a Central
           </Link>
         </div>
       </div>

@@ -313,7 +313,7 @@ export default function Hub() {
             Central AUVP
           </h1>
           <p className="text-lg text-muted-foreground mb-6 max-w-2xl">
-            Hub interno do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
+            Central de Produto do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link to="/design-system" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary hover:bg-transparent hover:text-primary transition-all">
