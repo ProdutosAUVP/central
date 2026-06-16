@@ -16,14 +16,14 @@ import { Volume2, Palette, ChevronDown, X, Home, Users } from "lucide-react";
 const systems = [
   {
     id: "hub",
-    label: "Central",
+    label: "Central de Produto",
     description: "Página inicial e visão geral dos sistemas",
     icon: Home,
     path: "/",
   },
   {
     id: "time",
-    label: "Time de Produto",
+    label: "Nosso Time",
     description: "Missão, pilares e estrutura do time de produto",
     icon: Users,
     path: "/time",
