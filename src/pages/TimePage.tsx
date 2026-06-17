@@ -52,6 +52,8 @@ interface OrgPerson {
   initials: string;
   color: OrgColor;
   level: string;
+  /** Seniority rank — lower number = higher seniority. Same rank → same row in org chart. */
+  rank: number;
   description: string;
   responsibilities: string[];
 }
@@ -80,170 +82,239 @@ const levelColors: Record<OrgColor, string> = {
 const orgPeople: Record<string, OrgPerson> = {
   raul: {
     id: "raul", name: "Raul Sena", role: "Fundador e CEO",
-    initials: "RS", color: "ceo", level: "Liderança Executiva",
+    initials: "RS", color: "ceo", level: "CEO", rank: 0,
     description: "Placeholder: Visionário e fundador da AUVP, responsável pela direção estratégica e crescimento da empresa.",
     responsibilities: ["Visão e estratégia da empresa", "Cultura organizacional", "Parcerias estratégicas", "Decisões de alto impacto"],
   },
   beatriz: {
     id: "beatriz", name: "Beatriz Henriques", role: "Sócia e Diretora de Produto",
-    initials: "BH", color: "director", level: "Liderança e Especialistas",
+    initials: "BH", color: "director", level: "Diretora", rank: 1,
     description: "Placeholder: Dirige o time de produto e CX, conectando visão de negócio com execução e liderando os dois braços da área.",
     responsibilities: ["Direção estratégica de produto", "Gestão e desenvolvimento do time", "CX estratégico", "Alinhamento cross-funcional"],
   },
   lilian: {
     id: "lilian", name: "Lilian Machado", role: "Especialista em CX",
-    initials: "LM", color: "cx", level: "Liderança e Especialistas",
+    initials: "LM", color: "cx", level: "Especialista", rank: 2,
     description: "Placeholder: Especialista em experiência do cliente, responsável pelo relacionamento, satisfação e fidelização dos membros.",
     responsibilities: ["Estratégia de relacionamento com membros", "Mapeamento da jornada do cliente", "Monitoramento de NPS", "Projetos especiais de CX"],
   },
   debora: {
     id: "debora", name: "Debora Sanders", role: "Analista de CX Sr. II",
-    initials: "DS", color: "cx", level: "Sênior",
+    initials: "DS", color: "cx", level: "Sênior", rank: 3,
     description: "Placeholder: Analista sênior de CX, referência no time em pesquisa de usuário e análise de experiência.",
     responsibilities: ["Pesquisa de usuário (quali e quanti)", "Análise de jornada e touchpoints", "Benchmarking de CX", "Mentoria do time de CX"],
   },
   daniel: {
     id: "daniel", name: "Daniel Machado", role: "Coordenador de produto",
-    initials: "DM", color: "coordinator", level: "Liderança e Especialistas",
+    initials: "DM", color: "coordinator", level: "Coordenador", rank: 2,
     description: "Placeholder: Coordena as iniciativas de produto, liderando cinco verticais independentes de atuação no dia a dia.",
     responsibilities: ["Gestão de backlog e roadmap", "Coordenação de squads", "Acompanhamento de entregas", "Rituais de produto"],
   },
   ariadne: {
     id: "ariadne", name: "Ariadne Carneiro", role: "Gerente de produto",
-    initials: "AC", color: "product-senior", level: "Sênior",
+    initials: "AC", color: "product-senior", level: "Gerente", rank: 3,
     description: "Placeholder: Gerente de produto responsável por roadmap, priorização e entrega de valor para os membros.",
     responsibilities: ["Definição de roadmap", "Priorização de features", "Gestão de OKRs", "Alinhamento com stakeholders"],
   },
   armando: {
     id: "armando", name: "Armando Neto", role: "Designer de Produto Pl. I",
-    initials: "AN", color: "product-pleno", level: "Pleno",
+    initials: "AN", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Designer de produto pleno, responsável por interfaces digitais e protótipos de alta fidelidade.",
     responsibilities: ["UI/UX Design", "Prototipação e wireframes", "Design system", "Colaboração em pesquisas"],
   },
   eria: {
     id: "eria", name: "Éria Alencar", role: "Designer de Produto Pl. I",
-    initials: "EA", color: "product-pleno", level: "Pleno",
+    initials: "EA", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Designer de produto pleno com foco em design visual e experiência do usuário.",
     responsibilities: ["Visual design e identidade", "UX research", "Motion e micro-interações", "Assets para marketing"],
   },
   mateus: {
     id: "mateus", name: "Mateus Graff", role: "Redator Pl. I",
-    initials: "MG", color: "product-pleno", level: "Pleno",
+    initials: "MG", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting.",
     responsibilities: ["Copywriting de produto", "Apostilas e materiais educativos", "Roteiros audiovisuais", "Revisão editorial"],
   },
   jeniffer: {
     id: "jeniffer", name: "Jeniffer Nascimento", role: "Analista de Produto Pl. I",
-    initials: "JN", color: "product-pleno", level: "Pleno",
+    initials: "JN", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Analista de produto pleno, focada em análise de dados, requisitos e documentação.",
     responsibilities: ["Análise de dados e métricas", "Levantamento de requisitos", "Documentação de produto", "Suporte ao gerente"],
   },
   elane: {
     id: "elane", name: "Elane Rodrigues", role: "Analista de Produto Jr. I",
-    initials: "ER", color: "product-junior", level: "Júnior",
+    initials: "ER", color: "product-junior", level: "Júnior", rank: 5,
     description: "Placeholder: Analista de produto júnior, apoia nas análises e pesquisas do time.",
     responsibilities: ["Pesquisa e coleta de dados", "Análise de métricas básicas", "Apoio ao PM e analistas", "Documentação operacional"],
   },
   ana: {
     id: "ana", name: "Ana Beatriz Melo", role: "Assistente de Produto",
-    initials: "AB", color: "product-junior", level: "Júnior",
+    initials: "AB", color: "product-junior", level: "Júnior", rank: 5,
     description: "Placeholder: Assistente de produto, apoia diversas frentes do time com organização e execução.",
     responsibilities: ["Suporte operacional ao time", "Pesquisa assistida", "Organização de processos", "Comunicação interna"],
   },
   hiago: {
     id: "hiago", name: "Hiago Felipe Sousa", role: "Assistente de Produto",
-    initials: "HF", color: "product-junior", level: "Júnior",
+    initials: "HF", color: "product-junior", level: "Júnior", rank: 5,
     description: "Placeholder: Assistente de produto, contribui com as demandas do time e no desenvolvimento de entregas.",
     responsibilities: ["Suporte às demandas do time", "Análise básica de dados", "Criação de documentações", "Apoio em pesquisas"],
   },
 };
 
 // ─── Person Card ──────────────────────────────────────────────────────────────
-// Profile-card style: colored gradient header (placeholder for real photo) + text body
+// Clean org-node: white card, colored top accent, gradient avatar (photo placeholder)
+
+type CardSize = "lg" | "md" | "sm";
+
+const cardDims: Record<CardSize, { w: number; avatar: number }> = {
+  lg: { w: 188, avatar: 60 },
+  md: { w: 164, avatar: 52 },
+  sm: { w: 146, avatar: 44 },
+};
 
 function PersonCard({
   id,
   activeId,
   onToggle,
-  avatarSize = 56,
-  width = 148,
+  size = "md",
 }: {
   id: string;
   activeId: string | null;
   onToggle: (id: string) => void;
-  avatarSize?: number;
-  width?: number;
+  size?: CardSize;
 }) {
   const person = orgPeople[id];
   const isActive = activeId === id;
+  const { w, avatar } = cardDims[size];
 
   return (
     <button
       onClick={(e) => { e.stopPropagation(); onToggle(id); }}
-      style={{ width }}
+      style={{ width: w }}
       className={cn(
-        "group rounded-2xl overflow-hidden border-2 text-left cursor-pointer",
-        "transition-all duration-200 bg-card shadow-sm outline-none",
+        "relative shrink-0 rounded-xl border bg-card text-center cursor-pointer overflow-hidden",
+        "flex flex-col items-center px-3 pt-4 pb-3 transition-all duration-200 outline-none",
         "focus-visible:outline-2 focus-visible:outline-primary",
         isActive
-          ? "border-primary shadow-xl scale-[1.03]"
-          : "border-border/60 hover:border-primary/40 hover:shadow-md hover:scale-[1.02]"
+          ? "border-primary shadow-lg ring-2 ring-primary/30 -translate-y-0.5"
+          : "border-border hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5"
       )}
     >
-      {/* Gradient header — swap <img> src here when real photos are available */}
+      {/* Colored top accent — groups people by area at a glance */}
+      <div className={cn("absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r", gradients[person.color])} />
+
+      {/* Avatar (photo placeholder — swap for <img> when photos exist) */}
       <div
-        className={cn("relative flex justify-center items-end bg-gradient-to-br pb-3 pt-4", gradients[person.color])}
-        style={{ minHeight: avatarSize + 24 }}
+        className={cn("rounded-full bg-gradient-to-br flex items-center justify-center font-bold font-anek text-white shadow ring-2 ring-card", gradients[person.color])}
+        style={{ width: avatar, height: avatar, fontSize: Math.round(avatar * 0.38) }}
       >
-        {/* Placeholder photo circle */}
-        <div
-          className="rounded-full bg-white/20 ring-2 ring-white/40 flex items-center justify-center font-bold font-anek text-white shrink-0"
-          style={{ width: avatarSize, height: avatarSize, fontSize: Math.round(avatarSize * 0.36) }}
-        >
-          {person.initials}
-        </div>
-        {/* Active indicator */}
-        {isActive && (
-          <div className="absolute top-2 right-2 h-2 w-2 rounded-full bg-white/80" />
-        )}
+        {person.initials}
       </div>
 
-      {/* Text body */}
-      <div className="px-3 pt-2.5 pb-3">
-        <p className="font-bold font-anek text-foreground text-xs leading-tight">{person.name}</p>
-        <p className="text-[10px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
-        <span
-          className={cn(
-            "inline-block mt-2 rounded-full px-2 py-[3px] text-[9px] font-bold font-roboto uppercase tracking-wider",
-            levelColors[person.color]
-          )}
-        >
-          {person.level}
-        </span>
-      </div>
+      <p className="mt-2 font-bold font-anek text-foreground text-[13px] leading-tight">{person.name}</p>
+      <p className="text-[11px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
+      <span
+        className={cn(
+          "mt-2 inline-block rounded-full px-2 py-[3px] text-[9px] font-bold font-roboto uppercase tracking-wider",
+          levelColors[person.color]
+        )}
+      >
+        {person.level}
+      </span>
     </button>
   );
 }
 
 // ─── Connectors ───────────────────────────────────────────────────────────────
 
-function VLine({ h = 28, dashed = false }: { h?: number; dashed?: boolean }) {
+const LINE = "bg-border";
+
+// Vertical line linking a parent to the bus / a single child below it
+function VConnect({ h = 24 }: { h?: number }) {
+  return <div className={cn("mx-auto w-px", LINE)} style={{ height: h }} />;
+}
+
+/**
+ * Lays out a set of child subtrees in a row, each connected up to a shared
+ * horizontal "bus" that is centered under the parent above. Horizontal padding
+ * (not flex gap) is used so each column's bus segment meets its neighbour's.
+ */
+function TreeChildren({ children, pad = "px-3 sm:px-4" }: { children: React.ReactNode; pad?: string }) {
+  const items = React.Children.toArray(children);
+  const n = items.length;
   return (
-    <div
-      className={cn("mx-auto", dashed ? "border-l-2 border-dashed border-muted-foreground/30" : "bg-border/60 w-px")}
-      style={{ height: h, ...(dashed ? {} : {}) }}
-    />
+    <div className="flex justify-center items-start">
+      {items.map((child, i) => (
+        <div key={i} className={cn("relative flex flex-col items-center", pad)}>
+          {/* connector area: horizontal bus segment + vertical stub down to node */}
+          <div className="relative w-full h-5">
+            {n > 1 && (
+              <span
+                className={cn(
+                  "absolute top-0 h-px",
+                  LINE,
+                  i === 0 ? "left-1/2 right-0" : i === n - 1 ? "left-0 right-1/2" : "left-0 right-0"
+                )}
+              />
+            )}
+            <span className={cn("absolute top-0 left-1/2 -translate-x-1/2 w-px h-5", LINE)} />
+          </div>
+          {child}
+        </div>
+      ))}
+    </div>
   );
 }
 
-function LevelBand({ label, color }: { label: string; color: string }) {
+/**
+ * Team vertical: renders one row per seniority rank.
+ * Same-rank people appear side by side; lower-rank people appear below.
+ * `allRanks` defines the full rank range to render — columns with empty slots
+ * get invisible spacer rows so that the same rank stays at the same vertical
+ * height across all sibling verticals.
+ */
+function Vertical({
+  label,
+  ids,
+  allRanks,
+  activeId,
+  onToggle,
+}: {
+  label: string;
+  ids: string[];
+  allRanks: number[];
+  activeId: string | null;
+  onToggle: (id: string) => void;
+}) {
+  const byRank = new Map<number, string[]>();
+  for (const id of ids) {
+    const { rank } = orgPeople[id];
+    if (!byRank.has(rank)) byRank.set(rank, []);
+    byRank.get(rank)!.push(id);
+  }
+
   return (
-    <div className="relative flex items-center gap-3 my-2 pointer-events-none select-none">
-      <div className={cn("flex-1 border-t-2 border-dashed opacity-60", color)} />
-      <span className={cn("text-[9px] font-bold font-roboto tracking-[0.2em] uppercase shrink-0", color.replace("border-", "text-"))}>
+    <div className="flex flex-col items-center">
+      <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-muted-foreground whitespace-nowrap">
         {label}
       </span>
-      <div className={cn("flex-1 border-t-2 border-dashed opacity-60", color)} />
+      <div className="flex flex-col items-center gap-3">
+        {allRanks.map((rank) => {
+          const group = byRank.get(rank) ?? [];
+          return (
+            <div key={rank} className={cn("flex gap-2 justify-center", group.length === 0 && "invisible pointer-events-none")}>
+              {(group.length > 0 ? group : [ids[0]]).map((id, i) => (
+                <PersonCard
+                  key={group.length > 0 ? id : `spacer-${i}`}
+                  id={id}
+                  activeId={group.length > 0 ? activeId : null}
+                  onToggle={group.length > 0 ? onToggle : () => {}}
+                  size="sm"
+                />
+              ))}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -253,7 +324,9 @@ function LevelBand({ label, color }: { label: string; color: string }) {
 function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
   const person = orgPeople[id];
   return (
-    <div className="mt-10 rounded-2xl border bg-card shadow-sm overflow-hidden">
+    <div className="relative mt-4 rounded-2xl border bg-card shadow-md overflow-hidden animate-in fade-in duration-200">
+      {/* caret pointing up toward the chart it expanded from */}
+      <div className="absolute -top-2 left-8 h-4 w-4 rotate-45 bg-card border-l border-t border-border" />
       <div className="flex">
         <div className={cn("w-1.5 shrink-0 bg-gradient-to-b", gradients[person.color])} />
         <div className="flex-1 p-6 md:p-8">
@@ -296,9 +369,20 @@ function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
 
 // ─── Org Chart ─────────────────────────────────────────────────────────────────
 
+// Seniority bands by rank — drives where the detail panel opens
+const BANDS: string[][] = [
+  ["raul"],                                      // rank 0
+  ["beatriz"],                                   // rank 1
+  ["lilian", "daniel"],                          // rank 2
+  ["debora", "ariadne"],                         // rank 3
+  ["armando", "eria", "mateus", "jeniffer"],     // rank 4
+  ["elane", "ana", "hiago"],                     // rank 5
+];
+
 function OrgChart() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const toggle = (id: string) => setActiveId((prev) => (prev === id ? null : id));
+  const activeBand = activeId ? BANDS.findIndex((b) => b.includes(activeId)) : -1;
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -308,136 +392,81 @@ function OrgChart() {
     return () => document.removeEventListener("click", close);
   }, []);
 
+  // Detail panel for a given band — rendered inline right below that band
+  const Panel = ({ band }: { band: number }) =>
+    activeId && activeBand === band ? (
+      <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />
+    ) : null;
+
   return (
     <div data-org onClick={(e) => e.stopPropagation()} className="w-full">
+      {/* The tree may be wider than the viewport on small screens; scroll only there.
+          On md+ it fits, so no scrollbar/box appears and the page just expands. */}
+      <div className="-mx-4 px-4 overflow-x-auto md:mx-0 md:px-0 md:overflow-visible">
+        <div className="min-w-fit flex flex-col items-center pt-1 pb-2">
 
-      {/* ══════════════════════════════════════════════════════════════
-          TOP: CEO
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="flex justify-center mb-0">
-        <PersonCard id="raul" activeId={activeId} onToggle={toggle} avatarSize={72} width={168} />
-      </div>
-      <VLine h={28} />
+          {/* CEO */}
+          <PersonCard id="raul" activeId={activeId} onToggle={toggle} size="lg" />
+          <VConnect h={24} />
 
-      {/* ══════════════════════════════════════════════════════════════
-          LIDERANÇA — Beatriz (center) + Lilian/Debora (left)
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="flex items-start justify-center gap-0">
+          {/* Diretoria */}
+          <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} size="md" />
+          <VConnect h={24} />
 
-        {/* RELACIONAMENTO branch */}
-        <div className="flex items-center gap-0 mr-0 self-start">
-          <div className="flex flex-col items-center">
-            {/* Label */}
-            <span className="text-[8px] font-bold font-roboto tracking-[0.18em] uppercase text-purple-500 dark:text-purple-400 mb-3">
-              Relacionamento
-            </span>
+          {/* Beatriz's two arms: Relacionamento (left) + Produto (right) */}
+          <TreeChildren pad="px-4 sm:px-10">
 
-            {/* Lilian */}
-            <PersonCard id="lilian" activeId={activeId} onToggle={toggle} avatarSize={56} width={148} />
+            {/* ── Relacionamento arm ──────────────────────────────── */}
+            {/* Lilian (Especialista, rank 2) above — Debora (Sênior, rank 3) below.
+                Both report directly to Beatriz; vertical position reflects seniority. */}
+            <Vertical
+              label="Relacionamento"
+              ids={["lilian", "debora"]}
+              allRanks={[2, 3]}
+              activeId={activeId}
+              onToggle={toggle}
+            />
 
-            {/* Dashed separator — indicates different seniority band, not reporting to Lilian */}
-            <div className="my-3 w-full border-t border-dashed border-muted-foreground/25" />
+            {/* ── Produto arm ─────────────────────────────────────── */}
+            <div className="flex flex-col items-center">
+              <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-emerald-600 dark:text-emerald-400">
+                Produto
+              </span>
+              <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" />
+              <VConnect h={24} />
+              {/* Five verticais — allRanks=[3,4,5] aligns same-seniority people at
+                  the same height across all columns. Same-rank peers are side by side. */}
+              <TreeChildren pad="px-2 sm:px-3">
+                <Vertical label="Gerência"    ids={["ariadne"]}           allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Designers"   ids={["armando", "eria"]}   allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Analistas"   ids={["jeniffer", "elane"]} allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Conteúdo"    ids={["mateus"]}             allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Educacional" ids={["ana", "hiago"]}      allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+              </TreeChildren>
+            </div>
 
-            {/* Debora — reports to Beatriz, shown here by seniority band */}
-            <PersonCard id="debora" activeId={activeId} onToggle={toggle} avatarSize={52} width={148} />
-          </div>
-
-          {/* Horizontal dashed connector to Beatriz */}
-          <div className="flex flex-col items-center mx-3 self-start mt-16">
-            <div className="w-12 border-t-2 border-dashed border-muted-foreground/40" />
-          </div>
-        </div>
-
-        {/* Beatriz */}
-        <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} avatarSize={64} width={160} />
-      </div>
-
-      <VLine h={24} />
-      <div className="flex justify-center">
-        <span className="text-[8px] font-bold font-roboto tracking-[0.18em] text-muted-foreground uppercase">
-          produto
-        </span>
-      </div>
-      <VLine h={16} />
-
-      {/* Daniel */}
-      <div className="flex justify-center">
-        <PersonCard id="daniel" activeId={activeId} onToggle={toggle} avatarSize={60} width={160} />
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════
-          SÊNIOR band
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="mt-6">
-        <LevelBand label="Sênior" color="border-teal-400 dark:border-teal-600" />
-      </div>
-
-      <div className="flex justify-center mt-4">
-        <PersonCard id="ariadne" activeId={activeId} onToggle={toggle} avatarSize={56} width={152} />
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════
-          PLENO band — 4 verticais
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="mt-8">
-        <LevelBand label="Pleno" color="border-green-400 dark:border-green-600" />
-      </div>
-
-      {/* 4 pleno columns with vertical labels */}
-      <div className="grid grid-cols-4 gap-3 mt-4 max-w-2xl mx-auto">
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Designers</span>
-          <PersonCard id="armando" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-          <PersonCard id="eria" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Redatores</span>
-          <PersonCard id="mateus" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Analistas</span>
-          <PersonCard id="jeniffer" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Assistentes</span>
-          {/* Ana is junior but listed here for column alignment — badge shows Júnior */}
+          </TreeChildren>
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════
-          JÚNIOR band
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="mt-8">
-        <LevelBand label="Júnior" color="border-cyan-400 dark:border-cyan-600" />
-      </div>
+      {/* Detail panel opens right below the seniority band of the clicked card */}
+      <Panel band={0} />
+      <Panel band={1} />
+      <Panel band={2} />
+      <Panel band={3} />
+      <Panel band={4} />
+      <Panel band={5} />
 
-      <div className="grid grid-cols-3 gap-4 mt-4 max-w-lg mx-auto">
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Analistas</span>
-          <PersonCard id="elane" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Assistentes</span>
-          <PersonCard id="ana" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">&nbsp;</span>
-          <PersonCard id="hiago" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════
-          LEGEND
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="mt-10 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
+      {/* Legend + hint */}
+      <div className="mt-8 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
         <div className="flex flex-wrap gap-x-4 gap-y-2">
           {(
             [
               { color: "ceo" as OrgColor, label: "CEO" },
               { color: "director" as OrgColor, label: "Diretoria" },
               { color: "coordinator" as OrgColor, label: "Coordenação" },
-              { color: "cx" as OrgColor, label: "CX / Especialistas" },
-              { color: "product-senior" as OrgColor, label: "Sênior" },
+              { color: "cx" as OrgColor, label: "Relacionamento / CX" },
+              { color: "product-senior" as OrgColor, label: "Gerência" },
               { color: "product-pleno" as OrgColor, label: "Pleno" },
               { color: "product-junior" as OrgColor, label: "Júnior" },
             ] as { color: OrgColor; label: string }[]
@@ -452,11 +481,6 @@ function OrgChart() {
           Clique em qualquer pessoa para ver detalhes
         </span>
       </div>
-
-      {/* Detail panel — expands in document flow below chart */}
-      {activeId && (
-        <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />
-      )}
     </div>
   );
 }
