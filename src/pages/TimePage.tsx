@@ -228,35 +228,58 @@ function PersonCard({
 }
 
 // ─── Connectors ───────────────────────────────────────────────────────────────
-// Connectors are drawn as a single SVG overlay sitting behind the cards. Each
-// edge is a smooth cubic bezier from the bottom-center of a parent node to the
-// top-center of a child node, measured from the live DOM so every point stays
-// connected at any viewport width.
+// Connectors are drawn as a single SVG overlay sitting behind the cards. Lines
+// run straight and only bend (with a small rounded corner) at the turning
+// points, measured from the live DOM so every point stays connected at any
+// viewport width.
 
-/** Parent → child edges of the org tree. Ids match node refs registered below. */
-const ORG_EDGES: [string, string][] = [
-  ["raul", "beatriz"],
-  ["beatriz", "arm-rel"],
-  ["beatriz", "arm-prod"],
-  ["arm-rel", "lilian"],
-  ["lilian", "debora"],
-  ["arm-prod", "daniel"],
-  ["daniel", "ariadne"],
-  ["daniel", "cat-designers"],
-  ["daniel", "cat-analistas"],
-  ["daniel", "cat-conteudo"],
-  ["daniel", "cat-educacional"],
-  ["cat-designers", "armando"],
-  ["cat-designers", "eria"],
-  ["cat-analistas", "jeniffer"],
-  ["cat-analistas", "elane"],
-  ["cat-conteudo", "mateus"],
-  ["cat-educacional", "ana"],
-  ["cat-educacional", "hiago"],
+type EdgeKind = "v" | "hl" | "hr";
+
+/** Parent → child edges of the org tree. Ids match node refs registered below.
+ *  - "v"  : child sits below the parent (vertical elbow)
+ *  - "hl" : child sits to the LEFT of the parent, same row (horizontal)
+ *  - "hr" : child sits to the RIGHT of the parent, same row (horizontal) */
+const ORG_EDGES: { from: string; to: string; kind: EdgeKind }[] = [
+  { from: "raul", to: "beatriz", kind: "v" },
+  { from: "beatriz", to: "lilian", kind: "hl" },
+  { from: "beatriz", to: "debora", kind: "hr" },
+  { from: "beatriz", to: "daniel", kind: "v" },
+  { from: "daniel", to: "ariadne", kind: "v" },
+  { from: "ariadne", to: "cat-designers", kind: "v" },
+  { from: "ariadne", to: "cat-analistas", kind: "v" },
+  { from: "ariadne", to: "cat-conteudo", kind: "v" },
+  { from: "ariadne", to: "cat-educacional", kind: "v" },
+  { from: "cat-designers", to: "armando", kind: "v" },
+  { from: "cat-designers", to: "eria", kind: "v" },
+  { from: "cat-analistas", to: "jeniffer", kind: "v" },
+  { from: "cat-analistas", to: "elane", kind: "v" },
+  { from: "cat-conteudo", to: "mateus", kind: "v" },
+  { from: "cat-educacional", to: "ana", kind: "v" },
+  { from: "cat-educacional", to: "hiago", kind: "v" },
 ];
 
-// Vertical gap (px) between a node row and the next — gives the curves room to
-// bend smoothly and keeps same-level siblings aligned across the two arms.
+// Corner radius (px) for the rounded turning points of the connector lines.
+const CORNER = 9;
+
+/** Vertical elbow: straight down, straight across, straight down — rounded only
+ *  at the two turns. Collapses to a single straight line when perfectly aligned. */
+function elbowPath(x1: number, y1: number, x2: number, y2: number): string {
+  if (Math.abs(x1 - x2) < 0.5) return `M ${x1} ${y1} L ${x2} ${y2}`;
+  const ym = (y1 + y2) / 2;
+  const dir = x2 > x1 ? 1 : -1;
+  const r = Math.max(0, Math.min(CORNER, Math.abs(x2 - x1) / 2, Math.abs(ym - y1), Math.abs(y2 - ym)));
+  return [
+    `M ${x1} ${y1}`,
+    `L ${x1} ${ym - r}`,
+    `Q ${x1} ${ym} ${x1 + dir * r} ${ym}`,
+    `L ${x2 - dir * r} ${ym}`,
+    `Q ${x2} ${ym} ${x2} ${ym + r}`,
+    `L ${x2} ${y2}`,
+  ].join(" ");
+}
+
+// Vertical gap (px) between a node row and the next — gives the connectors room
+// to turn and keeps the tree legible.
 const ROW_GAP = 44;
 
 /** A category heading that anchors connector lines down to its members. */
@@ -385,20 +408,27 @@ function OrgChart() {
     if (!container) return;
     const c = container.getBoundingClientRect();
     const next: string[] = [];
-    for (const [pid, cid] of ORG_EDGES) {
-      const pe = nodeRefs.current.get(pid);
-      const ce = nodeRefs.current.get(cid);
+    for (const { from, to, kind } of ORG_EDGES) {
+      const pe = nodeRefs.current.get(from);
+      const ce = nodeRefs.current.get(to);
       if (!pe || !ce) continue;
       const pr = pe.getBoundingClientRect();
       const cr = ce.getBoundingClientRect();
-      // start: bottom-center of parent · end: top-center of child
-      const x1 = pr.left + pr.width / 2 - c.left;
-      const y1 = pr.bottom - c.top;
-      const x2 = cr.left + cr.width / 2 - c.left;
-      const y2 = cr.top - c.top;
-      // S-curve: vertical at both ends, bending across the midline → no 90° corners
-      const ym = (y1 + y2) / 2;
-      next.push(`M ${x1} ${y1} C ${x1} ${ym} ${x2} ${ym} ${x2} ${y2}`);
+      if (kind === "v") {
+        // parent bottom-center → child top-center
+        const x1 = pr.left + pr.width / 2 - c.left;
+        const y1 = pr.bottom - c.top;
+        const x2 = cr.left + cr.width / 2 - c.left;
+        const y2 = cr.top - c.top;
+        next.push(elbowPath(x1, y1, x2, y2));
+      } else {
+        // horizontal sibling: parent side-center → child opposite side-center
+        const y1 = pr.top + pr.height / 2 - c.top;
+        const y2 = cr.top + cr.height / 2 - c.top;
+        const x1 = (kind === "hl" ? pr.left : pr.right) - c.left;
+        const x2 = (kind === "hl" ? cr.right : cr.left) - c.left;
+        next.push(`M ${x1} ${y1} L ${x2} ${y2}`);
+      }
     }
     setPaths(next);
   }, []);
@@ -447,45 +477,31 @@ function OrgChart() {
             {/* CEO */}
             <PersonCard id="raul" activeId={activeId} onToggle={toggle} size="lg" cardRef={registerNode("raul")} />
 
-            {/* Diretoria */}
-            <div style={{ marginTop: ROW_GAP }}>
+            {/* Diretoria — Beatriz centered, flanked by the Relacionamento/CX
+                pair (Lilian + Debora), one on each side. */}
+            <div className="flex items-center gap-8 sm:gap-12" style={{ marginTop: ROW_GAP }}>
+              <PersonCard id="lilian" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("lilian")} />
               <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("beatriz")} />
+              <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("debora")} />
             </div>
 
-            {/* Beatriz's two arms: Relacionamento (left) + Produto (right) */}
-            <div className="flex items-start gap-10 sm:gap-16" style={{ marginTop: ROW_GAP }}>
+            {/* Coordenação — Daniel directly below Beatriz, centered, so the whole
+                Produto subtree stays centered on screen. */}
+            <div style={{ marginTop: ROW_GAP }}>
+              <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("daniel")} />
+            </div>
 
-              {/* ── Relacionamento arm ──────────────────────────────── */}
-              {/* Lilian (Especialista) above — Debora (Sênior) below, in the
-                  same row as the Produto categories so seniority lines up. */}
-              <div className="flex flex-col items-center">
-                <span ref={registerNode("arm-rel")} className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-purple-600 dark:text-purple-400">
-                  Relacionamento
-                </span>
-                <PersonCard id="lilian" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("lilian")} />
-                <div style={{ marginTop: ROW_GAP }}>
-                  <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("debora")} />
-                </div>
-              </div>
+            {/* Gerência — Ariadne (Sênior) sits one level above the Plenos. */}
+            <div style={{ marginTop: ROW_GAP }}>
+              <PersonCard id="ariadne" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("ariadne")} />
+            </div>
 
-              {/* ── Produto arm ─────────────────────────────────────── */}
-              <div className="flex flex-col items-center">
-                <span ref={registerNode("arm-prod")} className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-emerald-600 dark:text-emerald-400">
-                  Produto
-                </span>
-                <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("daniel")} />
-
-                {/* Senior peers + category groups, all on one row so Ariadne
-                    (Gerente, nível sênior) sits at the same height as Debora. */}
-                <div className="flex items-start gap-4 sm:gap-6" style={{ marginTop: ROW_GAP }}>
-                  <PersonCard id="ariadne" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("ariadne")} />
-                  <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}   activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-                  <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]} activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-                  <CategoryColumn catId="cat-conteudo"    label="Conteúdo"    ids={["mateus"]}             activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-                  <CategoryColumn catId="cat-educacional" label="Educacional" ids={["ana", "hiago"]}      activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-                </div>
-              </div>
-
+            {/* Squads de produto — categories fan out below Ariadne, centered. */}
+            <div className="flex items-start justify-center gap-5 sm:gap-8" style={{ marginTop: ROW_GAP }}>
+              <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}   activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]} activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-conteudo"    label="Conteúdo"    ids={["mateus"]}             activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-educacional" label="Educacional" ids={["ana", "hiago"]}      activeId={activeId} onToggle={toggle} registerNode={registerNode} />
             </div>
           </div>
         </div>
