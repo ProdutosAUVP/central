@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -166,9 +166,9 @@ const orgPeople: Record<string, OrgPerson> = {
 type CardSize = "lg" | "md" | "sm";
 
 const cardDims: Record<CardSize, { w: number; avatar: number }> = {
-  lg: { w: 188, avatar: 60 },
-  md: { w: 164, avatar: 52 },
-  sm: { w: 146, avatar: 44 },
+  lg: { w: 184, avatar: 58 },
+  md: { w: 160, avatar: 50 },
+  sm: { w: 140, avatar: 42 },
 };
 
 function PersonCard({
@@ -176,11 +176,13 @@ function PersonCard({
   activeId,
   onToggle,
   size = "md",
+  register,
 }: {
   id: string;
   activeId: string | null;
   onToggle: (id: string) => void;
   size?: CardSize;
+  register?: (id: string, el: HTMLElement | null) => void;
 }) {
   const person = orgPeople[id];
   const isActive = activeId === id;
@@ -188,10 +190,11 @@ function PersonCard({
 
   return (
     <button
+      ref={(el) => register?.(id, el)}
       onClick={(e) => { e.stopPropagation(); onToggle(id); }}
       style={{ width: w }}
       className={cn(
-        "relative shrink-0 rounded-xl border bg-card text-center cursor-pointer overflow-hidden",
+        "relative z-10 shrink-0 rounded-xl border bg-card text-center cursor-pointer overflow-hidden",
         "flex flex-col items-center px-3 pt-4 pb-3 transition-all duration-200 outline-none",
         "focus-visible:outline-2 focus-visible:outline-primary",
         isActive
@@ -224,98 +227,25 @@ function PersonCard({
   );
 }
 
-// ─── Connectors ───────────────────────────────────────────────────────────────
-
-const LINE = "bg-border";
-
-// Vertical line linking a parent to the bus / a single child below it
-function VConnect({ h = 24 }: { h?: number }) {
-  return <div className={cn("mx-auto w-px", LINE)} style={{ height: h }} />;
-}
-
-/**
- * Lays out a set of child subtrees in a row, each connected up to a shared
- * horizontal "bus" that is centered under the parent above. Horizontal padding
- * (not flex gap) is used so each column's bus segment meets its neighbour's.
- */
-function TreeChildren({ children, pad = "px-3 sm:px-4" }: { children: React.ReactNode; pad?: string }) {
-  const items = React.Children.toArray(children);
-  const n = items.length;
-  return (
-    <div className="flex justify-center items-start">
-      {items.map((child, i) => (
-        <div key={i} className={cn("relative flex flex-col items-center", pad)}>
-          {/* connector area: horizontal bus segment + vertical stub down to node */}
-          <div className="relative w-full h-5">
-            {n > 1 && (
-              <span
-                className={cn(
-                  "absolute top-0 h-px",
-                  LINE,
-                  i === 0 ? "left-1/2 right-0" : i === n - 1 ? "left-0 right-1/2" : "left-0 right-0"
-                )}
-              />
-            )}
-            <span className={cn("absolute top-0 left-1/2 -translate-x-1/2 w-px h-5", LINE)} />
-          </div>
-          {child}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/**
- * Team vertical: renders one row per seniority rank.
- * Same-rank people appear side by side; lower-rank people appear below.
- * `allRanks` defines the full rank range to render — columns with empty slots
- * get invisible spacer rows so that the same rank stays at the same vertical
- * height across all sibling verticals.
- */
-function Vertical({
+// Small caption that also acts as a connector anchor for its team's branch
+function CatLabel({
+  id,
   label,
-  ids,
-  allRanks,
-  activeId,
-  onToggle,
+  color = "text-muted-foreground",
+  register,
 }: {
+  id: string;
   label: string;
-  ids: string[];
-  allRanks: number[];
-  activeId: string | null;
-  onToggle: (id: string) => void;
+  color?: string;
+  register: (id: string, el: HTMLElement | null) => void;
 }) {
-  const byRank = new Map<number, string[]>();
-  for (const id of ids) {
-    const { rank } = orgPeople[id];
-    if (!byRank.has(rank)) byRank.set(rank, []);
-    byRank.get(rank)!.push(id);
-  }
-
   return (
-    <div className="flex flex-col items-center">
-      <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-muted-foreground whitespace-nowrap">
-        {label}
-      </span>
-      <div className="flex flex-col items-center gap-3">
-        {allRanks.map((rank) => {
-          const group = byRank.get(rank) ?? [];
-          return (
-            <div key={rank} className={cn("flex gap-2 justify-center", group.length === 0 && "invisible pointer-events-none")}>
-              {(group.length > 0 ? group : [ids[0]]).map((id, i) => (
-                <PersonCard
-                  key={group.length > 0 ? id : `spacer-${i}`}
-                  id={id}
-                  activeId={group.length > 0 ? activeId : null}
-                  onToggle={group.length > 0 ? onToggle : () => {}}
-                  size="sm"
-                />
-              ))}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+    <span
+      ref={(el) => register(id, el)}
+      className={cn("relative z-10 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase whitespace-nowrap", color)}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -324,9 +254,7 @@ function Vertical({
 function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
   const person = orgPeople[id];
   return (
-    <div className="relative mt-4 rounded-2xl border bg-card shadow-md overflow-hidden animate-in fade-in duration-200">
-      {/* caret pointing up toward the chart it expanded from */}
-      <div className="absolute -top-2 left-8 h-4 w-4 rotate-45 bg-card border-l border-t border-border" />
+    <div className="relative mt-6 rounded-2xl border bg-card shadow-md overflow-hidden animate-in fade-in duration-200">
       <div className="flex">
         <div className={cn("w-1.5 shrink-0 bg-gradient-to-b", gradients[person.color])} />
         <div className="flex-1 p-6 md:p-8">
@@ -369,20 +297,95 @@ function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
 
 // ─── Org Chart ─────────────────────────────────────────────────────────────────
 
-// Seniority bands by rank — drives where the detail panel opens
-const BANDS: string[][] = [
-  ["raul"],                                      // rank 0
-  ["beatriz"],                                   // rank 1
-  ["lilian", "daniel"],                          // rank 2
-  ["debora", "ariadne"],                         // rank 3
-  ["armando", "eria", "mateus", "jeniffer"],     // rank 4
-  ["elane", "ana", "hiago"],                     // rank 5
+// Parent → child edges. Curved connectors are drawn between the parent's bottom
+// edge and the child's top edge. Category labels are intermediate anchors so the
+// lines visibly "come out of" each team.
+const EDGES: [string, string][] = [
+  ["raul", "beatriz"],
+  ["beatriz", "lilian"],
+  ["beatriz", "debora"],
+  ["beatriz", "daniel"],
+  ["daniel", "cat-ger"],
+  ["daniel", "cat-des"],
+  ["daniel", "cat-ana"],
+  ["daniel", "cat-con"],
+  ["daniel", "cat-edu"],
+  ["cat-ger", "ariadne"],
+  ["cat-des", "armando"],
+  ["cat-des", "eria"],
+  ["cat-ana", "jeniffer"],
+  ["cat-ana", "elane"],
+  ["cat-con", "mateus"],
+  ["cat-edu", "ana"],
+  ["cat-edu", "hiago"],
 ];
+
+// Fixed column unit so people of the same rank line up across every team column
+const U = 150; // single-card column width
+const D = U * 2; // double-card column width (Designers, Educacional)
+
+// One horizontal rank row; cells keep a fixed width so columns stay aligned
+function RankRow({ children }: { children: React.ReactNode }) {
+  return <div className="flex justify-center items-start">{children}</div>;
+}
+
+function Cell({ w, children }: { w: number; children?: React.ReactNode }) {
+  return (
+    <div style={{ width: w }} className="flex justify-center items-start gap-2">
+      {children}
+    </div>
+  );
+}
 
 function OrgChart() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const toggle = (id: string) => setActiveId((prev) => (prev === id ? null : id));
-  const activeBand = activeId ? BANDS.findIndex((b) => b.includes(activeId)) : -1;
+
+  // Connector geometry — measured from the DOM so curves follow the real layout
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const nodes = useRef<Record<string, HTMLElement | null>>({});
+  const [paths, setPaths] = useState<string[]>([]);
+  const [size, setSize] = useState({ w: 0, h: 0 });
+
+  const register = useCallback((id: string, el: HTMLElement | null) => {
+    nodes.current[id] = el;
+  }, []);
+
+  const recompute = useCallback(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const c = wrap.getBoundingClientRect();
+    const next: string[] = [];
+    for (const [from, to] of EDGES) {
+      const a = nodes.current[from];
+      const b = nodes.current[to];
+      if (!a || !b) continue;
+      const ar = a.getBoundingClientRect();
+      const br = b.getBoundingClientRect();
+      const x1 = ar.left - c.left + ar.width / 2;
+      const y1 = ar.bottom - c.top;
+      const x2 = br.left - c.left + br.width / 2;
+      const y2 = br.top - c.top;
+      const my = (y1 + y2) / 2;
+      // Smooth cubic curve: vertical tangents at both ends, soft S in between
+      next.push(`M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`);
+    }
+    setPaths(next);
+    setSize({ w: wrap.scrollWidth, h: wrap.scrollHeight });
+  }, []);
+
+  useLayoutEffect(() => {
+    recompute();
+    const t = setTimeout(recompute, 120); // re-measure after fonts/layout settle
+    const ro = new ResizeObserver(recompute);
+    if (wrapRef.current) ro.observe(wrapRef.current);
+    window.addEventListener("resize", recompute);
+    return () => {
+      clearTimeout(t);
+      ro.disconnect();
+      window.removeEventListener("resize", recompute);
+    };
+  }, [recompute]);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -392,70 +395,108 @@ function OrgChart() {
     return () => document.removeEventListener("click", close);
   }, []);
 
-  // Detail panel for a given band — rendered inline right below that band
-  const Panel = ({ band }: { band: number }) =>
-    activeId && activeBand === band ? (
-      <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />
-    ) : null;
+  const P = (id: string, sz: CardSize = "sm") => (
+    <PersonCard id={id} activeId={activeId} onToggle={toggle} size={sz} register={register} />
+  );
 
   return (
     <div data-org onClick={(e) => e.stopPropagation()} className="w-full">
-      {/* The tree may be wider than the viewport on small screens; scroll only there.
-          On md+ it fits, so no scrollbar/box appears and the page just expands. */}
+      {/* Wide org chart: scroll only on small screens; on md+ it just expands the page */}
       <div className="-mx-4 px-4 overflow-x-auto md:mx-0 md:px-0 md:overflow-visible">
-        <div className="min-w-fit flex flex-col items-center pt-1 pb-2">
+        <div ref={wrapRef} className="relative mx-auto w-max pt-1 pb-2">
 
-          {/* CEO */}
-          <PersonCard id="raul" activeId={activeId} onToggle={toggle} size="lg" />
-          <VConnect h={24} />
+          {/* Curved connector layer — sits behind the cards */}
+          <svg
+            className="absolute left-0 top-0 z-0 pointer-events-none overflow-visible"
+            width={size.w}
+            height={size.h}
+            fill="none"
+          >
+            {paths.map((d, i) => (
+              <path
+                key={i}
+                d={d}
+                stroke="hsl(var(--muted-foreground))"
+                strokeOpacity={0.35}
+                strokeWidth={2}
+                strokeLinecap="round"
+              />
+            ))}
+          </svg>
 
-          {/* Diretoria */}
-          <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} size="md" />
-          <VConnect h={24} />
+          {/* Centred spine above the grid: CEO → Diretora */}
+          <div className="flex flex-col items-center">
+            {P("raul", "lg")}
+            <div style={{ height: 28 }} />
+            {P("beatriz", "md")}
+            <div style={{ height: 28 }} />
+          </div>
 
-          {/* Beatriz's two arms: Relacionamento (left) + Produto (right) */}
-          <TreeChildren pad="px-4 sm:px-10">
+          {/* Arm labels */}
+          <RankRow>
+            <Cell w={U}>
+              <CatLabel id="lbl-rel" label="Relacionamento" color="text-purple-500 dark:text-purple-400" register={register} />
+            </Cell>
+            <Cell w={U * 7}>
+              <CatLabel id="lbl-prod" label="Produto" color="text-emerald-600 dark:text-emerald-400" register={register} />
+            </Cell>
+          </RankRow>
 
-            {/* ── Relacionamento arm ──────────────────────────────── */}
-            {/* Lilian (Especialista, rank 2) above — Debora (Sênior, rank 3) below.
-                Both report directly to Beatriz; vertical position reflects seniority. */}
-            <Vertical
-              label="Relacionamento"
-              ids={["lilian", "debora"]}
-              allRanks={[2, 3]}
-              activeId={activeId}
-              onToggle={toggle}
-            />
+          {/* Rank 2 — Especialista / Coordenador */}
+          <div style={{ height: 14 }} />
+          <RankRow>
+            <Cell w={U}>{P("lilian")}</Cell>
+            <Cell w={U * 7}>{P("daniel", "md")}</Cell>
+          </RankRow>
 
-            {/* ── Produto arm ─────────────────────────────────────── */}
-            <div className="flex flex-col items-center">
-              <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-emerald-600 dark:text-emerald-400">
-                Produto
-              </span>
-              <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" />
-              <VConnect h={24} />
-              {/* Five verticais — allRanks=[3,4,5] aligns same-seniority people at
-                  the same height across all columns. Same-rank peers are side by side. */}
-              <TreeChildren pad="px-2 sm:px-3">
-                <Vertical label="Gerência"    ids={["ariadne"]}           allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Designers"   ids={["armando", "eria"]}   allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Analistas"   ids={["jeniffer", "elane"]} allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Conteúdo"    ids={["mateus"]}             allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Educacional" ids={["ana", "hiago"]}      allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-              </TreeChildren>
-            </div>
+          {/* Category labels (anchors for the "lines out of each team") */}
+          <div style={{ height: 30 }} />
+          <RankRow>
+            <Cell w={U} />
+            <Cell w={U}><CatLabel id="cat-ger" label="Gerência" register={register} /></Cell>
+            <Cell w={D}><CatLabel id="cat-des" label="Designers" register={register} /></Cell>
+            <Cell w={U}><CatLabel id="cat-ana" label="Analistas" register={register} /></Cell>
+            <Cell w={U}><CatLabel id="cat-con" label="Conteúdo" register={register} /></Cell>
+            <Cell w={D}><CatLabel id="cat-edu" label="Educacional" register={register} /></Cell>
+          </RankRow>
 
-          </TreeChildren>
+          {/* Rank 3 — Sênior (Debora & Ariadne at the same height) */}
+          <div style={{ height: 30 }} />
+          <RankRow>
+            <Cell w={U}>{P("debora")}</Cell>
+            <Cell w={U}>{P("ariadne")}</Cell>
+            <Cell w={D} />
+            <Cell w={U} />
+            <Cell w={U} />
+            <Cell w={D} />
+          </RankRow>
+
+          {/* Rank 4 — Pleno */}
+          <div style={{ height: 36 }} />
+          <RankRow>
+            <Cell w={U} />
+            <Cell w={U} />
+            <Cell w={D}>{P("armando")}{P("eria")}</Cell>
+            <Cell w={U}>{P("jeniffer")}</Cell>
+            <Cell w={U}>{P("mateus")}</Cell>
+            <Cell w={D} />
+          </RankRow>
+
+          {/* Rank 5 — Júnior */}
+          <div style={{ height: 36 }} />
+          <RankRow>
+            <Cell w={U} />
+            <Cell w={U} />
+            <Cell w={D} />
+            <Cell w={U}>{P("elane")}</Cell>
+            <Cell w={U} />
+            <Cell w={D}>{P("ana")}{P("hiago")}</Cell>
+          </RankRow>
         </div>
       </div>
 
-      {/* Detail panel opens right below the seniority band of the clicked card */}
-      <Panel band={0} />
-      <Panel band={1} />
-      <Panel band={2} />
-      <Panel band={3} />
-      <Panel band={4} />
-      <Panel band={5} />
+      {/* Detail panel — opens directly below the chart */}
+      {activeId && <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />}
 
       {/* Legend + hint */}
       <div className="mt-8 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
