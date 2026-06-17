@@ -3,17 +3,10 @@ import { GlobalNav } from "@/components/GlobalNav";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   Sun, Moon,
-  Crown, Briefcase, Star, User,
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
-  Search, Monitor, PenTool, BarChart2, Settings, Heart,
+  Search, Monitor, PenTool, BarChart2, Settings, Heart, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
@@ -49,35 +42,355 @@ function useReveal(threshold = 0.1) {
   return [ref, visible] as const;
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Org Chart Data ────────────────────────────────────────────────────────────
 
-type Tier = "brain" | "specialist" | "star" | "one";
+type OrgColor = "ceo" | "director" | "coordinator" | "cx" | "product";
 
-const leadership: { name: string; role: string; tier: Tier; initials: string }[] = [
-  { name: "Raul Sena", role: "Fundador e CEO", tier: "brain", initials: "RS" },
-  { name: "Beatriz Henriques", role: "Sócia e Diretora de Produto", tier: "brain", initials: "BH" },
-  { name: "Daniel Machado", role: "Coordenador de produto", tier: "brain", initials: "DM" },
-  { name: "Lilian Araújo", role: "Especialista em CX", tier: "specialist", initials: "LA" },
-];
+interface OrgPerson {
+  id: string;
+  name: string;
+  role: string;
+  initials: string;
+  color: OrgColor;
+  description: string;
+  responsibilities: string[];
+}
 
-const teamMembers: { name: string; role: string; tier: Tier; initials: string }[] = [
-  { name: "Debora Sanders", role: "Analista de CX Sr. II", tier: "star", initials: "DS" },
-  { name: "Ariadne Carneiro", role: "Product Manager I", tier: "one", initials: "AC" },
-  { name: "Armando Neto", role: "Designer de Produto Pl. I", tier: "one", initials: "AN" },
-  { name: "Éria Alencar", role: "Designer de Produto Pl. I", tier: "one", initials: "EA" },
-  { name: "Elane Rodrigues", role: "Analista de Produto Jr. I", tier: "one", initials: "ER" },
-  { name: "Jeniffer Nascimento", role: "Analista de Produto Pl. I", tier: "one", initials: "JN" },
-  { name: "Mateus Graff", role: "Redator Pl. I", tier: "one", initials: "MG" },
-  { name: "Ana Beatriz Melo", role: "Assistente de Produto", tier: "one", initials: "AB" },
-  { name: "Hiago Felipe Sousa", role: "Assistente de Produto", tier: "one", initials: "HF" },
-];
-
-const tierMeta: Record<Tier, { icon: React.ElementType; avatarClass: string; label: string }> = {
-  brain: { icon: Crown, avatarClass: "bg-primary text-primary-foreground", label: "Liderança" },
-  specialist: { icon: Briefcase, avatarClass: "bg-purple-600 text-white", label: "Especialista" },
-  star: { icon: Star, avatarClass: "bg-amber-500 text-white", label: "Sênior" },
-  one: { icon: User, avatarClass: "bg-muted text-foreground", label: "Time" },
+const orgPeople: Record<string, OrgPerson> = {
+  raul: {
+    id: "raul", name: "Raul Sena", role: "Fundador e CEO", initials: "RS", color: "ceo",
+    description: "Placeholder: Visionário e fundador da AUVP, responsável pela direção estratégica e crescimento da empresa.",
+    responsibilities: ["Visão e estratégia da empresa", "Cultura organizacional", "Parcerias estratégicas", "Decisões de alto impacto"],
+  },
+  beatriz: {
+    id: "beatriz", name: "Beatriz Henriques", role: "Sócia e Diretora de Produto", initials: "BH", color: "director",
+    description: "Placeholder: Dirige o time de produto e CX, conectando visão de negócio com execução de produto.",
+    responsibilities: ["Direção estratégica de produto", "Gestão e desenvolvimento do time", "CX estratégico", "Alinhamento cross-funcional"],
+  },
+  lilian: {
+    id: "lilian", name: "Lilian Machado", role: "Especialista em CX", initials: "LM", color: "cx",
+    description: "Placeholder: Especialista em experiência do cliente, responsável pelo relacionamento e satisfação dos membros.",
+    responsibilities: ["Estratégia de relacionamento com membros", "Mapeamento da jornada do cliente", "Monitoramento de satisfação (NPS)", "Projetos especiais de CX"],
+  },
+  daniel: {
+    id: "daniel", name: "Daniel Machado", role: "Coordenador de produto", initials: "DM", color: "coordinator",
+    description: "Placeholder: Coordena as iniciativas de produto, liderando designers, redatores e analistas no dia a dia.",
+    responsibilities: ["Gestão de backlog e roadmap", "Coordenação de squads", "Acompanhamento de entregas", "Rituais de produto"],
+  },
+  debora: {
+    id: "debora", name: "Debora Sanders", role: "Analista de CX Sr. II", initials: "DS", color: "cx",
+    description: "Placeholder: Analista sênior de CX, referência no time em pesquisa de usuário e análise de experiência.",
+    responsibilities: ["Pesquisa de usuário (quali e quanti)", "Análise de jornada e touchpoints", "Benchmarking de CX", "Mentoria do time de CX"],
+  },
+  ariadne: {
+    id: "ariadne", name: "Ariadne Carneiro", role: "Gerente de produto", initials: "AC", color: "product",
+    description: "Placeholder: Gerente de produto responsável por roadmap, priorização e entrega de valor para os membros.",
+    responsibilities: ["Definição de roadmap", "Priorização de features", "Gestão de OKRs", "Alinhamento com stakeholders"],
+  },
+  armando: {
+    id: "armando", name: "Armando Neto", role: "Designer de Produto Pl. I", initials: "AN", color: "product",
+    description: "Placeholder: Designer de produto pleno, responsável por interfaces digitais e protótipos de alta fidelidade.",
+    responsibilities: ["UI/UX Design", "Prototipação e wireframes", "Design system", "Colaboração em pesquisas"],
+  },
+  eria: {
+    id: "eria", name: "Éria Alencar", role: "Designer de Produto Pl. I", initials: "EA", color: "product",
+    description: "Placeholder: Designer de produto pleno com foco em design visual e experiência do usuário.",
+    responsibilities: ["Visual design e identidade", "UX research", "Motion e micro-interações", "Assets para marketing"],
+  },
+  mateus: {
+    id: "mateus", name: "Mateus Graff", role: "Redator Pl. I", initials: "MG", color: "product",
+    description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting dos produtos.",
+    responsibilities: ["Copywriting de produto", "Apostilas e materiais educativos", "Roteiros e conteúdo audiovisual", "Revisão editorial"],
+  },
+  jeniffer: {
+    id: "jeniffer", name: "Jeniffer Nascimento", role: "Analista de Produto Pl. I", initials: "JN", color: "product",
+    description: "Placeholder: Analista de produto pleno, focada em análise de dados, requisitos e documentação de produto.",
+    responsibilities: ["Análise de dados e métricas", "Levantamento de requisitos", "Documentação de produto", "Suporte ao gerente de produto"],
+  },
+  elane: {
+    id: "elane", name: "Elane Rodrigues", role: "Analista de Produto Jr. I", initials: "ER", color: "product",
+    description: "Placeholder: Analista de produto júnior, apoia nas análises e pesquisas do time de produto.",
+    responsibilities: ["Pesquisa e coleta de dados", "Análise de métricas básicas", "Suporte ao PM e analistas", "Documentação operacional"],
+  },
+  ana: {
+    id: "ana", name: "Ana Beatriz Melo", role: "Assistente de Produto", initials: "AB", color: "product",
+    description: "Placeholder: Assistente de produto, apoia diversas frentes do time com organização e execução.",
+    responsibilities: ["Suporte operacional ao time", "Pesquisa assistida", "Organização de processos", "Comunicação interna"],
+  },
+  hiago: {
+    id: "hiago", name: "Hiago Felipe Sousa", role: "Assistente de Produto", initials: "HF", color: "product",
+    description: "Placeholder: Assistente de produto, contribui com as demandas do time e desenvolvimento de entregas.",
+    responsibilities: ["Suporte às demandas do time", "Análise básica de dados", "Criação de documentações", "Apoio em pesquisas"],
+  },
 };
+
+const colorMap: Record<OrgColor, { card: string; initials: string }> = {
+  ceo:         { card: "bg-[#6B1F1F] border-[#6B1F1F] text-white",                                                               initials: "bg-[#8B2A2A] text-white" },
+  director:    { card: "bg-[#2A1F6B] border-[#2A1F6B] text-white",                                                               initials: "bg-[#3A2D8C] text-white" },
+  coordinator: { card: "bg-[#1A4D25] border-[#1A4D25] text-white",                                                               initials: "bg-[#226330] text-white" },
+  cx:          { card: "bg-purple-100 border-purple-300 text-purple-900 dark:bg-purple-950 dark:border-purple-700 dark:text-purple-100", initials: "bg-purple-200 text-purple-900 dark:bg-purple-800 dark:text-purple-100" },
+  product:     { card: "bg-[#1A4D25] border-[#1A4D25] text-white",                                                               initials: "bg-[#226330] text-white" },
+};
+
+// ─── Org Node ─────────────────────────────────────────────────────────────────
+
+function OrgNode({
+  id,
+  activeId,
+  onToggle,
+  compact = false,
+  panelSide = "bottom",
+}: {
+  id: string;
+  activeId: string | null;
+  onToggle: (id: string) => void;
+  compact?: boolean;
+  panelSide?: "bottom" | "left" | "right";
+}) {
+  const person = orgPeople[id];
+  const isActive = activeId === id;
+  const c = colorMap[person.color];
+
+  return (
+    <div className="relative flex flex-col items-center" data-org-node>
+      <button
+        onClick={(e) => { e.stopPropagation(); onToggle(id); }}
+        className={cn(
+          "rounded-lg border-2 text-center transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          compact ? "px-2.5 py-1.5 min-w-[120px] max-w-[140px]" : "px-3 py-2.5 min-w-[148px] max-w-[168px]",
+          c.card,
+          isActive ? "ring-2 ring-white/60 ring-offset-1 scale-[1.04] shadow-lg" : "hover:brightness-110 hover:shadow-md"
+        )}
+      >
+        <div className={cn("font-bold font-anek leading-tight", compact ? "text-[11px]" : "text-xs")}>
+          {person.name}
+        </div>
+        <div className={cn("font-roboto leading-tight mt-0.5 opacity-85", compact ? "text-[9px]" : "text-[10px]")}>
+          {person.role}
+        </div>
+      </button>
+
+      {/* Detail panel */}
+      {isActive && (
+        <div
+          className={cn(
+            "absolute z-50 w-64 rounded-xl border bg-card shadow-2xl p-4 text-left",
+            panelSide === "bottom" && "top-full left-1/2 -translate-x-1/2 mt-2",
+            panelSide === "left"   && "right-full top-0 mr-3",
+            panelSide === "right"  && "left-full top-0 ml-3",
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <p className="font-bold font-anek text-foreground text-sm leading-tight">{person.name}</p>
+              <p className="text-xs text-primary font-roboto font-semibold mt-0.5">{person.role}</p>
+            </div>
+            <button
+              onClick={(e) => { e.stopPropagation(); onToggle(id); }}
+              className="shrink-0 text-muted-foreground hover:text-foreground mt-0.5"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground font-roboto leading-relaxed mb-3">{person.description}</p>
+          <ul className="space-y-1.5">
+            {person.responsibilities.map((r) => (
+              <li key={r} className="text-xs text-foreground font-roboto flex gap-1.5 items-start">
+                <span className="mt-[5px] h-1 w-1 rounded-full bg-primary shrink-0" />
+                {r}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Connectors ───────────────────────────────────────────────────────────────
+
+function VLine({ h = 6 }: { h?: number }) {
+  return <div className="w-px bg-border mx-auto" style={{ height: `${h * 4}px` }} />;
+}
+
+
+// ─── Full Org Chart ────────────────────────────────────────────────────────────
+
+function OrgChart() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const toggle = (id: string) => setActiveId((prev) => (prev === id ? null : id));
+
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest("[data-org-node]")) setActiveId(null);
+    };
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, []);
+
+  return (
+    <div className="overflow-x-auto pb-6 -mx-4 px-4">
+      <div className="min-w-[820px] select-none">
+
+        {/* ── LIDERANÇA E ESPECIALISTAS ── */}
+        <div className="relative flex flex-col items-center">
+
+          {/* CEO */}
+          <OrgNode id="raul" activeId={activeId} onToggle={toggle} panelSide="bottom" />
+          <VLine h={7} />
+
+          {/* Beatriz row with Lilian side-branch */}
+          <div className="relative w-full flex justify-center items-start">
+            {/* Lilian – left side via dashed line */}
+            <div className="absolute right-[calc(50%+108px)] flex items-center gap-0">
+              <OrgNode id="lilian" activeId={activeId} onToggle={toggle} compact panelSide="left" />
+              <div className="flex flex-col items-center ml-2 mr-1">
+                <span className="text-[8px] font-roboto font-bold tracking-widest text-muted-foreground mb-0.5">
+                  RELACIONAMENTO
+                </span>
+                <div className="w-20 border-t-2 border-dashed border-muted-foreground/50" />
+              </div>
+            </div>
+            <OrgNode id="beatriz" activeId={activeId} onToggle={toggle} panelSide="bottom" />
+          </div>
+
+          {/* Beatriz → Daniel connector with PRODUTO label */}
+          <div className="flex flex-col items-center">
+            <VLine h={4} />
+            <span className="text-[8px] font-roboto font-bold tracking-[0.18em] text-muted-foreground">PRODUTO</span>
+            <VLine h={4} />
+          </div>
+
+          {/* Daniel */}
+          <OrgNode id="daniel" activeId={activeId} onToggle={toggle} panelSide="bottom" />
+        </div>
+
+        {/* ── Branch connectors from Daniel down ── */}
+        <div className="relative" style={{ height: "24px" }}>
+          {/* Vertical from Daniel */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 w-px h-full bg-border" />
+          {/* Horizontal bar spanning the 4 columns */}
+          <div className="absolute top-full -translate-y-px left-[12.5%] right-[12.5%] h-px bg-border" />
+        </div>
+
+        {/* ── SENIOR / PLENO / JUNIOR levels ── */}
+        <div className="grid grid-cols-4 gap-3 mt-0">
+
+          {/* ── Col 1: DESIGNERS ── */}
+          <div className="flex flex-col items-center gap-0">
+            <VLine h={6} />
+            <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground mb-2">DESIGNERS</span>
+
+            {/* SENIOR */}
+            <OrgNode id="debora" activeId={activeId} onToggle={toggle} compact panelSide="right" />
+
+            {/* SENIOR → PLENO connector */}
+            <VLine h={5} />
+            {/* Horizontal to two children */}
+            <div className="relative w-[calc(50%+32px)]">
+              <div className="absolute top-0 left-0 right-0 h-px bg-border" />
+            </div>
+
+            {/* PLENO row */}
+            <div className="flex gap-2 mt-0">
+              <div className="flex flex-col items-center">
+                <VLine h={5} />
+                <OrgNode id="armando" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+              </div>
+              <div className="flex flex-col items-center">
+                <VLine h={5} />
+                <OrgNode id="eria" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Col 2: REDATOR ── */}
+          <div className="flex flex-col items-center">
+            <VLine h={6} />
+            <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground mb-2">REDATOR</span>
+            {/* Spacer to align with SENIOR level row */}
+            <div style={{ height: "44px" }} />
+            <VLine h={5} />
+            {/* PLENO */}
+            <OrgNode id="mateus" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+          </div>
+
+          {/* ── Col 3: ANALISTAS ── */}
+          <div className="flex flex-col items-center">
+            <VLine h={6} />
+            <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground mb-2">ANALISTAS</span>
+
+            {/* SENIOR */}
+            <OrgNode id="ariadne" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+
+            {/* SENIOR → PLENO connector */}
+            <VLine h={5} />
+            <div className="relative w-[calc(50%+32px)]">
+              <div className="absolute top-0 left-0 right-0 h-px bg-border" />
+            </div>
+
+            {/* PLENO + JUNIOR */}
+            <div className="flex gap-2 mt-0">
+              <div className="flex flex-col items-center">
+                <VLine h={5} />
+                <OrgNode id="jeniffer" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+              </div>
+              <div className="flex flex-col items-center">
+                <VLine h={5} />
+                <OrgNode id="elane" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Col 4: ASSISTENTES ── */}
+          <div className="flex flex-col items-center">
+            <VLine h={6} />
+            <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground mb-2">ASSISTENTES</span>
+            {/* Spacer to align with SENIOR level row */}
+            <div style={{ height: "44px" }} />
+            <VLine h={5} />
+            <div className="relative w-[calc(50%+32px)]">
+              <div className="absolute top-0 left-0 right-0 h-px bg-border" />
+            </div>
+            {/* JUNIOR */}
+            <div className="flex gap-2 mt-0">
+              <div className="flex flex-col items-center">
+                <VLine h={5} />
+                <OrgNode id="ana" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+              </div>
+              <div className="flex flex-col items-center">
+                <VLine h={5} />
+                <OrgNode id="hiago" activeId={activeId} onToggle={toggle} compact panelSide="bottom" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Level legend ── */}
+        <div className="mt-10 pt-6 border-t flex flex-wrap gap-x-6 gap-y-2">
+          {[
+            { color: "bg-[#6B1F1F]", label: "CEO" },
+            { color: "bg-[#2A1F6B]", label: "Diretoria" },
+            { color: "bg-purple-200 dark:bg-purple-900", label: "CX / Especialista", textColor: "text-purple-900 dark:text-purple-100" },
+            { color: "bg-[#1A4D25]", label: "Time de Produto" },
+          ].map(({ color, label, textColor }) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <div className={cn("h-2.5 w-2.5 rounded-sm border border-white/20", color)} />
+              <span className={cn("text-[10px] font-roboto text-muted-foreground", textColor)}>{label}</span>
+            </div>
+          ))}
+          <div className="flex items-center gap-1.5 ml-auto">
+            <span className="text-[10px] font-roboto text-muted-foreground italic">Clique em qualquer pessoa para ver detalhes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Other data ────────────────────────────────────────────────────────────────
 
 const pillars = [
   { icon: Database, title: "Dados", desc: "Realizamos pesquisas com membros e leads, coletamos dados de desempenho e comportamento para tomar decisões que evoluam nossas entregas." },
@@ -154,79 +467,9 @@ const dayToDay = [
   },
 ];
 
-// ─── Person Card ──────────────────────────────────────────────────────────────
-
-function PersonCard({
-  person,
-  large = false,
-  onClick,
-  delay = 0,
-  visible = true,
-}: {
-  person: { name: string; role: string; tier: Tier; initials: string };
-  large?: boolean;
-  onClick?: () => void;
-  delay?: number;
-  visible?: boolean;
-}) {
-  const meta = tierMeta[person.tier];
-  const TierIcon = meta.icon;
-  return (
-    <button
-      onClick={onClick}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={cn(
-        "group w-full text-left rounded-2xl border bg-card transition-all duration-500",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-        large
-          ? "p-6 hover:shadow-lg hover:-translate-y-1 hover:border-primary/30"
-          : "p-4 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20",
-        onClick && "cursor-pointer"
-      )}
-    >
-      <div className={cn("flex gap-4", large ? "flex-col items-center text-center" : "items-center")}>
-        <div className="relative shrink-0">
-          <div
-            className={cn(
-              "rounded-full flex items-center justify-center font-bold font-anek",
-              meta.avatarClass,
-              large ? "h-16 w-16 text-xl" : "h-10 w-10 text-sm"
-            )}
-          >
-            {person.initials}
-          </div>
-          <span
-            className={cn(
-              "absolute -bottom-1 -right-1 flex items-center justify-center rounded-full bg-background border border-border",
-              large ? "h-6 w-6" : "h-4 w-4"
-            )}
-            aria-hidden
-          >
-            <TierIcon className={cn("text-foreground", large ? "h-3.5 w-3.5" : "h-2.5 w-2.5")} />
-          </span>
-        </div>
-        <div className="min-w-0">
-          <p className={cn("font-bold font-anek text-foreground leading-tight", large ? "text-base" : "text-sm")}>
-            {person.name}
-          </p>
-          <p className={cn("text-muted-foreground font-roboto leading-snug mt-0.5", large ? "text-sm" : "text-xs")}>
-            {person.role}
-          </p>
-        </div>
-      </div>
-    </button>
-  );
-}
-
 // ─── Section wrapper with reveal ─────────────────────────────────────────────
 
-function Section({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   const [ref, visible] = useReveal();
   return (
     <div
@@ -261,7 +504,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TimePage() {
-  const [selected, setSelected] = useState<(typeof teamMembers)[0] | null>(null);
   const [teamRef, teamVisible] = useReveal(0.05);
 
   return (
@@ -282,7 +524,6 @@ export default function TimePage() {
             "radial-gradient(circle at 20% 50%, hsl(155 93% 11% / 0.06) 0%, transparent 60%), radial-gradient(circle at 80% 20%, hsl(155 93% 11% / 0.04) 0%, transparent 50%)",
         }}
       >
-        {/* dot grid */}
         <div
           className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]"
           style={{
@@ -304,97 +545,27 @@ export default function TimePage() {
               <span className="font-semibold text-foreground">gestão de projetos</span> e,
               é claro, <span className="font-semibold text-foreground">dados</span>.
             </p>
-            <div className="flex flex-wrap items-center gap-5 mt-8 text-sm text-muted-foreground font-roboto">
-              {(Object.entries(tierMeta) as [Tier, typeof tierMeta[Tier]][]).map(([tier, meta]) => {
-                const Icon = meta.icon;
-                return (
-                  <div key={tier} className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span>{meta.label}</span>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
       </div>
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-16 space-y-24">
 
-        {/* Team */}
-        <div ref={teamRef}>
+        {/* Nossa estrutura – Org Chart */}
+        <div
+          ref={teamRef}
+          className={cn(
+            "transition-all duration-700",
+            teamVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+        >
           <SectionLabel>Quem somos</SectionLabel>
           <SectionTitle>Nossa estrutura</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">
-            {leadership.length + teamMembers.length} pessoas, uma direção — criar produtos que transformam a relação dos brasileiros com o dinheiro.
+            {Object.keys(orgPeople).length} pessoas, uma direção — criar produtos que transformam a relação dos brasileiros com o dinheiro.
           </p>
-
-          {/* Leadership */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {leadership.map((p, i) => (
-              <PersonCard
-                key={p.name}
-                person={p}
-                large
-                visible={teamVisible}
-                delay={i * 80}
-                onClick={() => setSelected(p as typeof teamMembers[0])}
-              />
-            ))}
-          </div>
-
-          {/* Connector */}
-          <div className="flex justify-center mb-6">
-            <div className="flex flex-col items-center gap-1">
-              <div className="h-6 w-px bg-border" />
-              <div className="h-2 w-2 rounded-full bg-border" />
-            </div>
-          </div>
-
-          {/* Rest of team */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {teamMembers.map((p, i) => (
-              <PersonCard
-                key={p.name}
-                person={p}
-                visible={teamVisible}
-                delay={300 + i * 60}
-                onClick={() => setSelected(p)}
-              />
-            ))}
-          </div>
+          <OrgChart />
         </div>
-
-        {/* Person detail dialog */}
-        <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
-          <DialogContent className="max-w-sm">
-            {selected && (() => {
-              const meta = tierMeta[selected.tier];
-              const TierIcon = meta.icon;
-              return (
-                <>
-                  <DialogHeader>
-                    <div className="flex items-center gap-4 mb-1">
-                      <div className="relative shrink-0">
-                        <div className={cn("h-14 w-14 rounded-full flex items-center justify-center font-bold font-anek text-lg", meta.avatarClass)}>
-                          {selected.initials}
-                        </div>
-                        <span className="absolute -bottom-1 -right-1 flex items-center justify-center h-5 w-5 rounded-full bg-background border border-border" aria-hidden>
-                          <TierIcon className="h-3 w-3 text-foreground" />
-                        </span>
-                      </div>
-                      <div>
-                        <DialogTitle className="font-anek text-foreground leading-tight">{selected.name}</DialogTitle>
-                        <p className="text-sm text-muted-foreground font-roboto mt-0.5">{selected.role}</p>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-roboto">{meta.label}</span>
-                      </div>
-                    </div>
-                  </DialogHeader>
-                </>
-              );
-            })()}
-          </DialogContent>
-        </Dialog>
 
         {/* Pillars */}
         <Section>
