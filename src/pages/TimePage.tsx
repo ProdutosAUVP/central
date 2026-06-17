@@ -29,10 +29,7 @@ function useReveal(threshold = 0.1) {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
+        if (entry.isIntersecting) { setVisible(true); obs.disconnect(); }
       },
       { threshold }
     );
@@ -45,13 +42,8 @@ function useReveal(threshold = 0.1) {
 // ─── Org Data ─────────────────────────────────────────────────────────────────
 
 type OrgColor =
-  | "ceo"
-  | "director"
-  | "coordinator"
-  | "cx"
-  | "product-senior"
-  | "product-pleno"
-  | "product-junior";
+  | "ceo" | "director" | "coordinator"
+  | "cx" | "product-senior" | "product-pleno" | "product-junior";
 
 interface OrgPerson {
   id: string;
@@ -64,37 +56,38 @@ interface OrgPerson {
   responsibilities: string[];
 }
 
+// Each value is a complete static string so Tailwind includes all classes
 const gradients: Record<OrgColor, string> = {
-  ceo:             "from-rose-700 to-red-950",
-  director:        "from-indigo-600 to-violet-900",
-  coordinator:     "from-emerald-600 to-green-900",
-  cx:              "from-purple-500 to-fuchsia-800",
-  "product-senior":"from-teal-500 to-emerald-800",
-  "product-pleno": "from-green-500 to-emerald-700",
-  "product-junior":"from-emerald-400 to-teal-700",
+  ceo:             "from-rose-700 via-red-800 to-red-950",
+  director:        "from-indigo-600 via-indigo-800 to-violet-900",
+  coordinator:     "from-emerald-600 via-emerald-700 to-green-900",
+  cx:              "from-purple-500 via-purple-700 to-fuchsia-800",
+  "product-senior":"from-teal-500 via-teal-700 to-emerald-800",
+  "product-pleno": "from-green-500 via-green-600 to-emerald-700",
+  "product-junior":"from-emerald-400 via-emerald-600 to-teal-700",
 };
 
 const levelColors: Record<OrgColor, string> = {
-  ceo:             "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-200",
-  director:        "bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200",
-  coordinator:     "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200",
-  cx:              "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-200",
-  "product-senior":"bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-200",
-  "product-pleno": "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200",
-  "product-junior":"bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300",
+  ceo:             "bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300",
+  director:        "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300",
+  coordinator:     "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+  cx:              "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
+  "product-senior":"bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300",
+  "product-pleno": "bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300",
+  "product-junior":"bg-cyan-100 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300",
 };
 
 const orgPeople: Record<string, OrgPerson> = {
   raul: {
     id: "raul", name: "Raul Sena", role: "Fundador e CEO",
     initials: "RS", color: "ceo", level: "Liderança Executiva",
-    description: "Placeholder: Visionário e fundador da AUVP, responsável pela direção estratégica e pelo crescimento de toda a empresa.",
+    description: "Placeholder: Visionário e fundador da AUVP, responsável pela direção estratégica e crescimento da empresa.",
     responsibilities: ["Visão e estratégia da empresa", "Cultura organizacional", "Parcerias estratégicas", "Decisões de alto impacto"],
   },
   beatriz: {
     id: "beatriz", name: "Beatriz Henriques", role: "Sócia e Diretora de Produto",
     initials: "BH", color: "director", level: "Liderança e Especialistas",
-    description: "Placeholder: Dirige o time de produto e CX, conectando visão de negócio com execução, e liderando os dois grandes braços da área.",
+    description: "Placeholder: Dirige o time de produto e CX, conectando visão de negócio com execução e liderando os dois braços da área.",
     responsibilities: ["Direção estratégica de produto", "Gestão e desenvolvimento do time", "CX estratégico", "Alinhamento cross-funcional"],
   },
   lilian: {
@@ -106,7 +99,7 @@ const orgPeople: Record<string, OrgPerson> = {
   debora: {
     id: "debora", name: "Debora Sanders", role: "Analista de CX Sr. II",
     initials: "DS", color: "cx", level: "Sênior",
-    description: "Placeholder: Analista sênior de CX, referência no time em pesquisa de usuário, análise de experiência e encantamento.",
+    description: "Placeholder: Analista sênior de CX, referência no time em pesquisa de usuário e análise de experiência.",
     responsibilities: ["Pesquisa de usuário (quali e quanti)", "Análise de jornada e touchpoints", "Benchmarking de CX", "Mentoria do time de CX"],
   },
   daniel: {
@@ -118,7 +111,7 @@ const orgPeople: Record<string, OrgPerson> = {
   ariadne: {
     id: "ariadne", name: "Ariadne Carneiro", role: "Gerente de produto",
     initials: "AC", color: "product-senior", level: "Sênior",
-    description: "Placeholder: Gerente de produto responsável por roadmap, priorização e entrega de valor contínuo para os membros.",
+    description: "Placeholder: Gerente de produto responsável por roadmap, priorização e entrega de valor para os membros.",
     responsibilities: ["Definição de roadmap", "Priorização de features", "Gestão de OKRs", "Alinhamento com stakeholders"],
   },
   armando: {
@@ -130,31 +123,31 @@ const orgPeople: Record<string, OrgPerson> = {
   eria: {
     id: "eria", name: "Éria Alencar", role: "Designer de Produto Pl. I",
     initials: "EA", color: "product-pleno", level: "Pleno",
-    description: "Placeholder: Designer de produto pleno com foco em design visual e na experiência do usuário.",
+    description: "Placeholder: Designer de produto pleno com foco em design visual e experiência do usuário.",
     responsibilities: ["Visual design e identidade", "UX research", "Motion e micro-interações", "Assets para marketing"],
   },
   mateus: {
     id: "mateus", name: "Mateus Graff", role: "Redator Pl. I",
     initials: "MG", color: "product-pleno", level: "Pleno",
-    description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting em todos os produtos.",
+    description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting.",
     responsibilities: ["Copywriting de produto", "Apostilas e materiais educativos", "Roteiros audiovisuais", "Revisão editorial"],
   },
   jeniffer: {
     id: "jeniffer", name: "Jeniffer Nascimento", role: "Analista de Produto Pl. I",
     initials: "JN", color: "product-pleno", level: "Pleno",
-    description: "Placeholder: Analista de produto pleno, focada em análise de dados, requisitos e documentação de produto.",
+    description: "Placeholder: Analista de produto pleno, focada em análise de dados, requisitos e documentação.",
     responsibilities: ["Análise de dados e métricas", "Levantamento de requisitos", "Documentação de produto", "Suporte ao gerente"],
   },
   elane: {
     id: "elane", name: "Elane Rodrigues", role: "Analista de Produto Jr. I",
     initials: "ER", color: "product-junior", level: "Júnior",
-    description: "Placeholder: Analista de produto júnior, apoia nas análises e pesquisas do time de produto.",
+    description: "Placeholder: Analista de produto júnior, apoia nas análises e pesquisas do time.",
     responsibilities: ["Pesquisa e coleta de dados", "Análise de métricas básicas", "Apoio ao PM e analistas", "Documentação operacional"],
   },
   ana: {
     id: "ana", name: "Ana Beatriz Melo", role: "Assistente de Produto",
     initials: "AB", color: "product-junior", level: "Júnior",
-    description: "Placeholder: Assistente de produto, apoia diversas frentes do time com organização e execução operacional.",
+    description: "Placeholder: Assistente de produto, apoia diversas frentes do time com organização e execução.",
     responsibilities: ["Suporte operacional ao time", "Pesquisa assistida", "Organização de processos", "Comunicação interna"],
   },
   hiago: {
@@ -165,56 +158,21 @@ const orgPeople: Record<string, OrgPerson> = {
   },
 };
 
-// ─── Avatar ───────────────────────────────────────────────────────────────────
+// ─── Person Card ──────────────────────────────────────────────────────────────
+// Profile-card style: colored gradient header (placeholder for real photo) + text body
 
-function Avatar({
-  person,
-  sizePx,
-  isActive,
-}: {
-  person: OrgPerson;
-  sizePx: number;
-  isActive: boolean;
-}) {
-  const fontSize = Math.round(sizePx * 0.32);
-  return (
-    <div
-      className={cn(
-        "relative rounded-full shrink-0 flex items-center justify-center font-bold font-anek text-white",
-        "bg-gradient-to-br shadow-md transition-all duration-200",
-        gradients[person.color],
-        isActive
-          ? "ring-4 ring-primary ring-offset-2 scale-110 shadow-lg"
-          : "ring-2 ring-white/10 dark:ring-black/20 hover:ring-primary/40 hover:scale-105"
-      )}
-      style={{ width: sizePx, height: sizePx, fontSize }}
-    >
-      {/* Placeholder image layer — replace src with real photo later */}
-      <img
-        src={`https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(person.name)}&backgroundColor=transparent&fontSize=38&fontWeight=600`}
-        alt={person.name}
-        className="absolute inset-0 w-full h-full rounded-full object-cover opacity-0"
-        aria-hidden
-      />
-      <span className="relative z-10 select-none">{person.initials}</span>
-    </div>
-  );
-}
-
-// ─── Person Node ──────────────────────────────────────────────────────────────
-
-function PersonNode({
+function PersonCard({
   id,
   activeId,
   onToggle,
-  avatarSize = 64,
-  maxLabelW = 120,
+  avatarSize = 56,
+  width = 148,
 }: {
   id: string;
   activeId: string | null;
   onToggle: (id: string) => void;
   avatarSize?: number;
-  maxLabelW?: number;
+  width?: number;
 }) {
   const person = orgPeople[id];
   const isActive = activeId === id;
@@ -222,23 +180,41 @@ function PersonNode({
   return (
     <button
       onClick={(e) => { e.stopPropagation(); onToggle(id); }}
-      className="group flex flex-col items-center gap-2 cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-primary rounded-xl p-1"
+      style={{ width }}
+      className={cn(
+        "group rounded-2xl overflow-hidden border-2 text-left cursor-pointer",
+        "transition-all duration-200 bg-card shadow-sm outline-none",
+        "focus-visible:outline-2 focus-visible:outline-primary",
+        isActive
+          ? "border-primary shadow-xl scale-[1.03]"
+          : "border-border/60 hover:border-primary/40 hover:shadow-md hover:scale-[1.02]"
+      )}
     >
-      <Avatar person={person} sizePx={avatarSize} isActive={isActive} />
+      {/* Gradient header — swap <img> src here when real photos are available */}
       <div
-        className={cn(
-          "rounded-xl border px-2.5 py-2 text-center transition-all duration-200",
-          isActive
-            ? "border-primary/60 bg-primary/5 shadow-sm"
-            : "border-border bg-card group-hover:border-primary/30 group-hover:shadow-sm"
-        )}
-        style={{ minWidth: maxLabelW, maxWidth: maxLabelW + 24 }}
+        className={cn("relative flex justify-center items-end bg-gradient-to-br pb-3 pt-4", gradients[person.color])}
+        style={{ minHeight: avatarSize + 24 }}
       >
+        {/* Placeholder photo circle */}
+        <div
+          className="rounded-full bg-white/20 ring-2 ring-white/40 flex items-center justify-center font-bold font-anek text-white shrink-0"
+          style={{ width: avatarSize, height: avatarSize, fontSize: Math.round(avatarSize * 0.36) }}
+        >
+          {person.initials}
+        </div>
+        {/* Active indicator */}
+        {isActive && (
+          <div className="absolute top-2 right-2 h-2 w-2 rounded-full bg-white/80" />
+        )}
+      </div>
+
+      {/* Text body */}
+      <div className="px-3 pt-2.5 pb-3">
         <p className="font-bold font-anek text-foreground text-xs leading-tight">{person.name}</p>
-        <p className="text-[10px] text-muted-foreground font-roboto leading-tight mt-0.5">{person.role}</p>
+        <p className="text-[10px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
         <span
           className={cn(
-            "inline-block mt-1.5 rounded-full px-2 py-0.5 text-[9px] font-bold font-roboto uppercase tracking-wider",
+            "inline-block mt-2 rounded-full px-2 py-[3px] text-[9px] font-bold font-roboto uppercase tracking-wider",
             levelColors[person.color]
           )}
         >
@@ -249,83 +225,62 @@ function PersonNode({
   );
 }
 
-// ─── Connector helpers ────────────────────────────────────────────────────────
+// ─── Connectors ───────────────────────────────────────────────────────────────
 
-function VLine({ h = 28 }: { h?: number }) {
-  return <div className="w-px bg-border/70 mx-auto" style={{ height: h }} />;
+function VLine({ h = 28, dashed = false }: { h?: number; dashed?: boolean }) {
+  return (
+    <div
+      className={cn("mx-auto", dashed ? "border-l-2 border-dashed border-muted-foreground/30" : "bg-border/60 w-px")}
+      style={{ height: h, ...(dashed ? {} : {}) }}
+    />
+  );
 }
 
-function DashedHLine({ w = 64, label }: { w?: number; label?: string }) {
+function LevelBand({ label, color }: { label: string; color: string }) {
   return (
-    <div className="flex flex-col items-center gap-0.5">
-      {label && (
-        <span className="text-[8px] font-bold font-roboto tracking-[0.16em] text-muted-foreground/80 uppercase">
-          {label}
-        </span>
-      )}
-      <div className="border-t-2 border-dashed border-muted-foreground/40" style={{ width: w }} />
+    <div className="relative flex items-center gap-3 my-2 pointer-events-none select-none">
+      <div className={cn("flex-1 border-t-2 border-dashed opacity-60", color)} />
+      <span className={cn("text-[9px] font-bold font-roboto tracking-[0.2em] uppercase shrink-0", color.replace("border-", "text-"))}>
+        {label}
+      </span>
+      <div className={cn("flex-1 border-t-2 border-dashed opacity-60", color)} />
     </div>
   );
 }
 
-// ─── Selected Person Detail Panel ─────────────────────────────────────────────
+// ─── Detail Panel ─────────────────────────────────────────────────────────────
 
 function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
   const person = orgPeople[id];
   return (
     <div className="mt-10 rounded-2xl border bg-card shadow-sm overflow-hidden">
-      <div className="flex items-stretch">
-        {/* Color stripe */}
+      <div className="flex">
         <div className={cn("w-1.5 shrink-0 bg-gradient-to-b", gradients[person.color])} />
-
         <div className="flex-1 p-6 md:p-8">
           <div className="flex flex-col sm:flex-row gap-6 items-start">
-            {/* Avatar */}
-            <div className="shrink-0">
-              <div
-                className={cn(
-                  "rounded-full flex items-center justify-center font-bold font-anek text-white shadow-lg bg-gradient-to-br",
-                  gradients[person.color]
-                )}
-                style={{ width: 88, height: 88, fontSize: 28 }}
-              >
-                {person.initials}
-              </div>
+            {/* Large avatar */}
+            <div
+              className={cn("rounded-2xl flex items-center justify-center font-bold font-anek text-white shadow-md bg-gradient-to-br shrink-0", gradients[person.color])}
+              style={{ width: 80, height: 80, fontSize: 26 }}
+            >
+              {person.initials}
             </div>
 
-            {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-xl font-bold font-anek text-foreground leading-tight">
-                    {person.name}
-                  </h3>
+                  <h3 className="text-xl font-bold font-anek text-foreground leading-tight">{person.name}</h3>
                   <p className="text-sm text-primary font-roboto font-semibold mt-0.5">{person.role}</p>
-                  <span
-                    className={cn(
-                      "inline-block mt-2 rounded-full px-3 py-1 text-[10px] font-bold font-roboto uppercase tracking-wider",
-                      levelColors[person.color]
-                    )}
-                  >
+                  <span className={cn("inline-block mt-2 rounded-full px-3 py-1 text-[10px] font-bold font-roboto uppercase tracking-wider", levelColors[person.color])}>
                     {person.level}
                   </span>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="shrink-0 text-muted-foreground hover:text-foreground transition-colors mt-1"
-                  aria-label="Fechar"
-                >
-                  ✕
-                </button>
+                <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors mt-0.5 text-lg leading-none shrink-0" aria-label="Fechar">✕</button>
               </div>
-
-              <p className="mt-4 text-sm text-muted-foreground font-roboto leading-relaxed">
-                {person.description}
-              </p>
-
+              <p className="mt-4 text-sm text-muted-foreground font-roboto leading-relaxed">{person.description}</p>
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {person.responsibilities.map((r) => (
-                  <div key={r} className="flex items-start gap-2.5">
+                  <div key={r} className="flex items-start gap-2">
                     <ChevronRight className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                     <span className="text-xs font-roboto text-foreground">{r}</span>
                   </div>
@@ -354,127 +309,126 @@ function OrgChart() {
   }, []);
 
   return (
-    <div data-org onClick={(e) => e.stopPropagation()}>
+    <div data-org onClick={(e) => e.stopPropagation()} className="w-full">
 
-      {/* ════════════════════════════════════════════════════
-          LIDERANÇA EXECUTIVA
-          CEO → Diretora → (RELACIONAMENTO | PRODUTO)
-      ════════════════════════════════════════════════════ */}
-      <div className="flex flex-col items-center">
+      {/* ══════════════════════════════════════════════════════════════
+          TOP: CEO
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="flex justify-center mb-0">
+        <PersonCard id="raul" activeId={activeId} onToggle={toggle} avatarSize={72} width={168} />
+      </div>
+      <VLine h={28} />
 
-        {/* Raul */}
-        <PersonNode id="raul" activeId={activeId} onToggle={toggle} avatarSize={88} maxLabelW={148} />
-        <VLine h={32} />
+      {/* ══════════════════════════════════════════════════════════════
+          LIDERANÇA — Beatriz (center) + Lilian/Debora (left)
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="flex items-start justify-center gap-0">
 
-        {/* Beatriz row — RELACIONAMENTO branch sits to the left */}
-        <div className="relative w-full flex justify-center items-start">
+        {/* RELACIONAMENTO branch */}
+        <div className="flex items-center gap-0 mr-0 self-start">
+          <div className="flex flex-col items-center">
+            {/* Label */}
+            <span className="text-[8px] font-bold font-roboto tracking-[0.18em] uppercase text-purple-500 dark:text-purple-400 mb-3">
+              Relacionamento
+            </span>
 
-          {/* ── RELACIONAMENTO branch (left side) ── */}
-          {/* Lilian e Debora reportam diretamente à Beatriz — stacking visual indica faixas de senioridade, não hierarquia entre elas */}
-          <div className="absolute right-[calc(50%+156px)] flex items-center gap-0 top-4">
-            <div className="flex flex-col items-center gap-4">
-              <PersonNode id="lilian" activeId={activeId} onToggle={toggle} avatarSize={68} maxLabelW={132} />
-              {/* Separador de nível — sem linha de reporte */}
-              <div className="w-full border-t border-dashed border-muted-foreground/30" />
-              <PersonNode id="debora" activeId={activeId} onToggle={toggle} avatarSize={60} maxLabelW={132} />
-            </div>
+            {/* Lilian */}
+            <PersonCard id="lilian" activeId={activeId} onToggle={toggle} avatarSize={56} width={148} />
 
-            {/* Dashed connector → Beatriz */}
-            <div className="flex flex-col items-center ml-3 self-start mt-10">
-              <DashedHLine w={72} label="relacionamento" />
-            </div>
+            {/* Dashed separator — indicates different seniority band, not reporting to Lilian */}
+            <div className="my-3 w-full border-t border-dashed border-muted-foreground/25" />
+
+            {/* Debora — reports to Beatriz, shown here by seniority band */}
+            <PersonCard id="debora" activeId={activeId} onToggle={toggle} avatarSize={52} width={148} />
           </div>
 
-          {/* ── Beatriz (center) ── */}
-          <PersonNode id="beatriz" activeId={activeId} onToggle={toggle} avatarSize={80} maxLabelW={148} />
+          {/* Horizontal dashed connector to Beatriz */}
+          <div className="flex flex-col items-center mx-3 self-start mt-16">
+            <div className="w-12 border-t-2 border-dashed border-muted-foreground/40" />
+          </div>
         </div>
 
-        <VLine h={28} />
+        {/* Beatriz */}
+        <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} avatarSize={64} width={160} />
+      </div>
 
-        {/* PRODUTO label */}
-        <span className="text-[8px] font-bold font-roboto tracking-[0.18em] text-muted-foreground uppercase mb-1">
+      <VLine h={24} />
+      <div className="flex justify-center">
+        <span className="text-[8px] font-bold font-roboto tracking-[0.18em] text-muted-foreground uppercase">
           produto
         </span>
-        <VLine h={16} />
+      </div>
+      <VLine h={16} />
 
-        {/* Daniel */}
-        <PersonNode id="daniel" activeId={activeId} onToggle={toggle} avatarSize={76} maxLabelW={148} />
+      {/* Daniel */}
+      <div className="flex justify-center">
+        <PersonCard id="daniel" activeId={activeId} onToggle={toggle} avatarSize={60} width={160} />
       </div>
 
-      {/* ════════════════════════════════════════════════════
-          5 VERTICAIS — Daniel → Gerência, Designers,
-          Redatores, Analistas, Assistentes
-      ════════════════════════════════════════════════════ */}
-      <div className="mt-0 flex flex-col items-center">
-        <VLine h={24} />
+      {/* ══════════════════════════════════════════════════════════════
+          SÊNIOR band
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="mt-6">
+        <LevelBand label="Sênior" color="border-teal-400 dark:border-teal-600" />
+      </div>
 
-        {/* Horizontal spanning bar */}
-        <div className="w-full max-w-4xl mx-auto relative flex justify-center">
-          <div className="absolute top-0 left-[10%] right-[10%] h-px bg-border/70" />
+      <div className="flex justify-center mt-4">
+        <PersonCard id="ariadne" activeId={activeId} onToggle={toggle} avatarSize={56} width={152} />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════
+          PLENO band — 4 verticais
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="mt-8">
+        <LevelBand label="Pleno" color="border-green-400 dark:border-green-600" />
+      </div>
+
+      {/* 4 pleno columns with vertical labels */}
+      <div className="grid grid-cols-4 gap-3 mt-4 max-w-2xl mx-auto">
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Designers</span>
+          <PersonCard id="armando" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
+          <PersonCard id="eria" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
         </div>
-
-        {/* 5 columns */}
-        <div className="grid grid-cols-5 w-full max-w-4xl gap-2 mt-0">
-
-          {/* ── A: Gerência ── */}
-          <div className="flex flex-col items-center">
-            <VLine h={20} />
-            <span className="text-[8px] font-bold font-roboto tracking-[0.14em] text-muted-foreground uppercase mb-3">
-              Gerência
-            </span>
-            <PersonNode id="ariadne" activeId={activeId} onToggle={toggle} avatarSize={60} maxLabelW={110} />
-          </div>
-
-          {/* ── B: Designers ── */}
-          <div className="flex flex-col items-center">
-            <VLine h={20} />
-            <span className="text-[8px] font-bold font-roboto tracking-[0.14em] text-muted-foreground uppercase mb-3">
-              Designers
-            </span>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <PersonNode id="armando" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={100} />
-              <PersonNode id="eria" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={100} />
-            </div>
-          </div>
-
-          {/* ── C: Redatores ── */}
-          <div className="flex flex-col items-center">
-            <VLine h={20} />
-            <span className="text-[8px] font-bold font-roboto tracking-[0.14em] text-muted-foreground uppercase mb-3">
-              Redatores
-            </span>
-            <PersonNode id="mateus" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={110} />
-          </div>
-
-          {/* ── D: Analistas ── */}
-          <div className="flex flex-col items-center">
-            <VLine h={20} />
-            <span className="text-[8px] font-bold font-roboto tracking-[0.14em] text-muted-foreground uppercase mb-3">
-              Analistas
-            </span>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <PersonNode id="jeniffer" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={100} />
-              <PersonNode id="elane" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={100} />
-            </div>
-          </div>
-
-          {/* ── E: Assistentes ── */}
-          <div className="flex flex-col items-center">
-            <VLine h={20} />
-            <span className="text-[8px] font-bold font-roboto tracking-[0.14em] text-muted-foreground uppercase mb-3">
-              Assistentes
-            </span>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <PersonNode id="ana" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={100} />
-              <PersonNode id="hiago" activeId={activeId} onToggle={toggle} avatarSize={56} maxLabelW={100} />
-            </div>
-          </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Redatores</span>
+          <PersonCard id="mateus" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Analistas</span>
+          <PersonCard id="jeniffer" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Assistentes</span>
+          {/* Ana is junior but listed here for column alignment — badge shows Júnior */}
         </div>
       </div>
 
-      {/* ════════════════════════════════════════════════════
-          SENIORIDADE LEGEND
-      ════════════════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════
+          JÚNIOR band
+      ══════════════════════════════════════════════════════════════ */}
+      <div className="mt-8">
+        <LevelBand label="Júnior" color="border-cyan-400 dark:border-cyan-600" />
+      </div>
+
+      <div className="grid grid-cols-3 gap-4 mt-4 max-w-lg mx-auto">
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Analistas</span>
+          <PersonCard id="elane" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">Assistentes</span>
+          <PersonCard id="ana" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[8px] font-bold font-roboto tracking-widest text-muted-foreground uppercase">&nbsp;</span>
+          <PersonCard id="hiago" activeId={activeId} onToggle={toggle} avatarSize={48} width={130} />
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════
+          LEGEND
+      ══════════════════════════════════════════════════════════════ */}
       <div className="mt-10 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
         <div className="flex flex-wrap gap-x-4 gap-y-2">
           {(
@@ -489,7 +443,7 @@ function OrgChart() {
             ] as { color: OrgColor; label: string }[]
           ).map(({ color, label }) => (
             <div key={label} className="flex items-center gap-1.5">
-              <div className={cn("h-2.5 w-2.5 rounded-full bg-gradient-to-br", gradients[color])} />
+              <div className={cn("h-3 w-3 rounded-sm bg-gradient-to-br shadow-sm", gradients[color])} />
               <span className="text-[10px] font-roboto text-muted-foreground">{label}</span>
             </div>
           ))}
@@ -499,9 +453,7 @@ function OrgChart() {
         </span>
       </div>
 
-      {/* ════════════════════════════════════════════════════
-          DETAIL PANEL — expands below in document flow
-      ════════════════════════════════════════════════════ */}
+      {/* Detail panel — expands in document flow below chart */}
       {activeId && (
         <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />
       )}
@@ -535,41 +487,13 @@ const network = [
 ];
 
 const dayToDay = [
-  {
-    icon: Search, title: "Pesquisa & Análise de dados", tagline: "Mestres em decifrar comportamentos.",
-    desc: "Precisa de ajuda com o Typeform ou quer entender o que um dashboard está dizendo? Realizamos pesquisas quantitativas e qualitativas com leads, membros (e até piratas!) para mapear dores e gerar insights reais.",
-    quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"],
-  },
-  {
-    icon: Monitor, title: "Plataformas & Tecnologia", tagline: "Sua ideia funcionando sem bugs.",
-    desc: "Encontrou um erro na plataforma de aulas ou em algum de nossos sites? Nós sabemos como construir e ajustar cada detalhe técnico.",
-    quemChamar: ["Elane", "Hiago", "Armando", "Éria", "Mateus", "Ana Beatriz"],
-  },
-  {
-    icon: Palette, title: "Design (Físico & Digital)", tagline: "Identidade visual e experiência tangível.",
-    desc: "Da estética impecável da AUVP em mídias digitais e OOH, aos produtos que nossos membros amam usar. Se você precisa de cores, logos da AUVP, fotos do Raul, elementos visuais ou quer criar brindes, como meias e bonés a kits exclusivos, este é o lugar.",
-    quemChamar: ["Armando", "Éria"],
-  },
-  {
-    icon: PenTool, title: "Copy & Redação", tagline: "Estratégia em cada palavra.",
-    desc: "De apostilas, roteiros de vídeo e mapas mentais a este texto que você lê agora. Quer revisar uma copy, um playbook ou criar materiais institucionais com narrativa estratégica? Nossa redação está pronta para ajudar.",
-    quemChamar: ["Jeniffer", "Mateus", "Ana"],
-  },
-  {
-    icon: BarChart2, title: "Monitoramento de mercado & CX", tagline: "Encantamento levado a sério.",
-    desc: "Quem é nosso público e o que ele busca? Analisamos o mercado para sugerir melhorias e garantir que o CX seja mais do que uma sigla, criando conexões que encantam de verdade.",
-    quemChamar: ["Beatriz Henriques", "Debora"],
-  },
-  {
-    icon: Settings, title: "Produtividade & Gestão", tagline: "Fazemos projetos rodarem.",
-    desc: "Planilhas, ClickUp, fluxos de trabalho e priorização. Se o desafio é gestão de tempo, de pessoas ou aumentar a eficiência do time, somos especialistas em transformar caos em projetos executados.",
-    quemChamar: ["Beatriz Henriques", "Daniel", "Ariadne"],
-  },
-  {
-    icon: Heart, title: "Relacionamento com membros", tagline: "Cuidando da nossa comunidade de ponta a ponta.",
-    desc: "Seja mediando grupos de WhatsApp ou encontrando a resposta ideal para aquele membro que quer crescer conosco. Atuamos diretamente na linha de frente para garantir a melhor convivência.",
-    quemChamar: ["Beatriz Henriques", "Debora"],
-  },
+  { icon: Search, title: "Pesquisa & Análise de dados", tagline: "Mestres em decifrar comportamentos.", desc: "Precisa de ajuda com o Typeform ou quer entender o que um dashboard está dizendo? Realizamos pesquisas quantitativas e qualitativas com leads, membros (e até piratas!) para mapear dores e gerar insights reais.", quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"] },
+  { icon: Monitor, title: "Plataformas & Tecnologia", tagline: "Sua ideia funcionando sem bugs.", desc: "Encontrou um erro na plataforma de aulas ou em algum de nossos sites? Nós sabemos como construir e ajustar cada detalhe técnico.", quemChamar: ["Elane", "Hiago", "Armando", "Éria", "Mateus", "Ana Beatriz"] },
+  { icon: Palette, title: "Design (Físico & Digital)", tagline: "Identidade visual e experiência tangível.", desc: "Da estética impecável da AUVP em mídias digitais e OOH, aos produtos que nossos membros amam usar. Se você precisa de cores, logos da AUVP, fotos do Raul, elementos visuais ou quer criar brindes, como meias e bonés a kits exclusivos, este é o lugar.", quemChamar: ["Armando", "Éria"] },
+  { icon: PenTool, title: "Copy & Redação", tagline: "Estratégia em cada palavra.", desc: "De apostilas, roteiros de vídeo e mapas mentais a este texto que você lê agora. Quer revisar uma copy, um playbook ou criar materiais institucionais com narrativa estratégica? Nossa redação está pronta para ajudar.", quemChamar: ["Jeniffer", "Mateus", "Ana"] },
+  { icon: BarChart2, title: "Monitoramento de mercado & CX", tagline: "Encantamento levado a sério.", desc: "Quem é nosso público e o que ele busca? Analisamos o mercado para sugerir melhorias e garantir que o CX seja mais do que uma sigla, criando conexões que encantam de verdade.", quemChamar: ["Beatriz Henriques", "Debora"] },
+  { icon: Settings, title: "Produtividade & Gestão", tagline: "Fazemos projetos rodarem.", desc: "Planilhas, ClickUp, fluxos de trabalho e priorização. Se o desafio é gestão de tempo, de pessoas ou aumentar a eficiência do time, somos especialistas em transformar caos em projetos executados.", quemChamar: ["Beatriz Henriques", "Daniel", "Ariadne"] },
+  { icon: Heart, title: "Relacionamento com membros", tagline: "Cuidando da nossa comunidade de ponta a ponta.", desc: "Seja mediando grupos de WhatsApp ou encontrando a resposta ideal para aquele membro que quer crescer conosco. Atuamos diretamente na linha de frente para garantir a melhor convivência.", quemChamar: ["Beatriz Henriques", "Debora"] },
 ];
 
 // ─── Section helpers ──────────────────────────────────────────────────────────
@@ -577,33 +501,18 @@ const dayToDay = [
 function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   const [ref, visible] = useReveal();
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "transition-all duration-700",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-        className
-      )}
-    >
+    <div ref={ref} className={cn("transition-all duration-700", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8", className)}>
       {children}
     </div>
   );
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-xs font-bold font-roboto uppercase tracking-[0.15em] text-primary mb-3">
-      {children}
-    </p>
-  );
+  return <p className="text-xs font-bold font-roboto uppercase tracking-[0.15em] text-primary mb-3">{children}</p>;
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">
-      {children}
-    </h2>
-  );
+  return <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">{children}</h2>;
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -613,7 +522,6 @@ export default function TimePage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
           <GlobalNav />
@@ -621,27 +529,16 @@ export default function TimePage() {
         </div>
       </header>
 
-      {/* Hero */}
       <div
         className="relative border-b overflow-hidden"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 50%, hsl(155 93% 11% / 0.06) 0%, transparent 60%), radial-gradient(circle at 80% 20%, hsl(155 93% 11% / 0.04) 0%, transparent 50%)",
-        }}
+        style={{ backgroundImage: "radial-gradient(circle at 20% 50%, hsl(155 93% 11% / 0.06) 0%, transparent 60%), radial-gradient(circle at 80% 20%, hsl(155 93% 11% / 0.04) 0%, transparent 50%)" }}
       >
-        <div
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]"
-          style={{
-            backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28">
           <div className="max-w-3xl">
             <SectionLabel>Time de Produto e CX</SectionLabel>
             <h1 className="text-5xl md:text-7xl font-bold font-anek text-foreground leading-[1.05] mb-6">
-              Conheça o{" "}
-              <span className="text-primary">time</span>
+              Conheça o <span className="text-primary">time</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground font-roboto leading-relaxed max-w-2xl">
               Formamos um time multidisciplinar, que navega entre{" "}
@@ -656,42 +553,26 @@ export default function TimePage() {
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-16 space-y-24">
 
-        {/* Nossa estrutura */}
-        <div
-          ref={teamRef}
-          className={cn(
-            "transition-all duration-700",
-            teamVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          )}
-        >
+        <div ref={teamRef} className={cn("transition-all duration-700", teamVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8")}>
           <SectionLabel>Quem somos</SectionLabel>
           <SectionTitle>Nossa estrutura</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">
             {Object.keys(orgPeople).length} pessoas, uma direção — criar produtos que transformam a relação dos brasileiros com o dinheiro.
           </p>
-
           <OrgChart />
         </div>
 
-        {/* Pillars */}
         <Section>
           <SectionLabel>Pilares</SectionLabel>
           <SectionTitle>O que sustenta nossas entregas</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">
-            Nove princípios que orientam como trabalhamos, priorizamos e entregamos valor.
-          </p>
+          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Nove princípios que orientam como trabalhamos, priorizamos e entregamos valor.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {pillars.map((pilar, i) => {
               const Icon = pilar.icon;
               return (
-                <div
-                  key={i}
-                  className="group rounded-2xl border bg-card p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300"
-                >
+                <div key={i} className="group rounded-2xl border bg-card p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300">
                   <div className="flex items-start gap-4">
-                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="h-6 w-6 text-primary" />
-                    </div>
+                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300"><Icon className="h-6 w-6 text-primary" /></div>
                     <div>
                       <h3 className="font-bold font-anek text-foreground mb-2 leading-tight">{pilar.title}</h3>
                       <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{pilar.desc}</p>
@@ -703,19 +584,13 @@ export default function TimePage() {
           </div>
         </Section>
 
-        {/* Network */}
         <Section>
           <SectionLabel>Rede interna</SectionLabel>
           <SectionTitle>A rede que nos conecta</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">
-            Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.
-          </p>
+          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {network.map((item, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border bg-card p-5 hover:shadow-sm hover:border-primary/20 transition-all duration-300"
-              >
+              <div key={i} className="rounded-2xl border bg-card p-5 hover:shadow-sm hover:border-primary/20 transition-all duration-300">
                 <div className="flex items-center gap-2.5 mb-3">
                   <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
                   <h3 className="font-bold font-anek text-foreground text-sm">{item.area}</h3>
@@ -726,25 +601,17 @@ export default function TimePage() {
           </div>
         </Section>
 
-        {/* Day-to-day */}
         <Section>
           <SectionLabel>Dia a dia</SectionLabel>
           <SectionTitle>O que fazemos no dia a dia</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">
-            Conheça a atuação de cada especialista e saiba exatamente a quem recorrer para resolver seus desafios.
-          </p>
+          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Conheça a atuação de cada especialista e saiba exatamente a quem recorrer para resolver seus desafios.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {dayToDay.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div
-                  key={i}
-                  className="rounded-2xl border bg-card p-6 hover:shadow-md hover:border-primary/20 transition-all duration-300 flex flex-col gap-4"
-                >
+                <div key={i} className="rounded-2xl border bg-card p-6 hover:shadow-md hover:border-primary/20 transition-all duration-300 flex flex-col gap-4">
                   <div className="flex items-start gap-4">
-                    <div className="shrink-0 mt-0.5">
-                      <Icon className="h-6 w-6 text-primary" />
-                    </div>
+                    <div className="shrink-0 mt-0.5"><Icon className="h-6 w-6 text-primary" /></div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-bold font-anek text-foreground leading-tight mb-0.5">{item.title}</h3>
                       <p className="text-sm font-semibold text-primary font-roboto leading-tight">{item.tagline}</p>
@@ -752,16 +619,9 @@ export default function TimePage() {
                   </div>
                   <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
                   <div className="pt-3 border-t flex items-start gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto shrink-0 mt-1.5">
-                      Quem chamar:
-                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto shrink-0 mt-1.5">Quem chamar:</span>
                     {item.quemChamar.map((name) => (
-                      <span
-                        key={name}
-                        className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto"
-                      >
-                        {name}
-                      </span>
+                      <span key={name} className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto">{name}</span>
                     ))}
                   </div>
                 </div>
@@ -774,9 +634,7 @@ export default function TimePage() {
 
       <footer className="border-t py-6 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
-          <p className="text-xs text-muted-foreground font-roboto">
-            Time de Produto e CX — AUVP &copy; {new Date().getFullYear()}
-          </p>
+          <p className="text-xs text-muted-foreground font-roboto">Time de Produto e CX — AUVP &copy; {new Date().getFullYear()}</p>
         </div>
       </footer>
     </div>
