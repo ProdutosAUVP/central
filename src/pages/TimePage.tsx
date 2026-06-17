@@ -52,6 +52,8 @@ interface OrgPerson {
   initials: string;
   color: OrgColor;
   level: string;
+  /** Seniority rank — lower number = higher seniority. Same rank → same row in org chart. */
+  rank: number;
   description: string;
   responsibilities: string[];
 }
@@ -80,79 +82,79 @@ const levelColors: Record<OrgColor, string> = {
 const orgPeople: Record<string, OrgPerson> = {
   raul: {
     id: "raul", name: "Raul Sena", role: "Fundador e CEO",
-    initials: "RS", color: "ceo", level: "CEO",
+    initials: "RS", color: "ceo", level: "CEO", rank: 0,
     description: "Placeholder: Visionário e fundador da AUVP, responsável pela direção estratégica e crescimento da empresa.",
     responsibilities: ["Visão e estratégia da empresa", "Cultura organizacional", "Parcerias estratégicas", "Decisões de alto impacto"],
   },
   beatriz: {
     id: "beatriz", name: "Beatriz Henriques", role: "Sócia e Diretora de Produto",
-    initials: "BH", color: "director", level: "Diretora",
+    initials: "BH", color: "director", level: "Diretora", rank: 1,
     description: "Placeholder: Dirige o time de produto e CX, conectando visão de negócio com execução e liderando os dois braços da área.",
     responsibilities: ["Direção estratégica de produto", "Gestão e desenvolvimento do time", "CX estratégico", "Alinhamento cross-funcional"],
   },
   lilian: {
     id: "lilian", name: "Lilian Machado", role: "Especialista em CX",
-    initials: "LM", color: "cx", level: "Especialista",
+    initials: "LM", color: "cx", level: "Especialista", rank: 2,
     description: "Placeholder: Especialista em experiência do cliente, responsável pelo relacionamento, satisfação e fidelização dos membros.",
     responsibilities: ["Estratégia de relacionamento com membros", "Mapeamento da jornada do cliente", "Monitoramento de NPS", "Projetos especiais de CX"],
   },
   debora: {
     id: "debora", name: "Debora Sanders", role: "Analista de CX Sr. II",
-    initials: "DS", color: "cx", level: "Sênior",
+    initials: "DS", color: "cx", level: "Sênior", rank: 3,
     description: "Placeholder: Analista sênior de CX, referência no time em pesquisa de usuário e análise de experiência.",
     responsibilities: ["Pesquisa de usuário (quali e quanti)", "Análise de jornada e touchpoints", "Benchmarking de CX", "Mentoria do time de CX"],
   },
   daniel: {
     id: "daniel", name: "Daniel Machado", role: "Coordenador de produto",
-    initials: "DM", color: "coordinator", level: "Coordenador",
+    initials: "DM", color: "coordinator", level: "Coordenador", rank: 2,
     description: "Placeholder: Coordena as iniciativas de produto, liderando cinco verticais independentes de atuação no dia a dia.",
     responsibilities: ["Gestão de backlog e roadmap", "Coordenação de squads", "Acompanhamento de entregas", "Rituais de produto"],
   },
   ariadne: {
     id: "ariadne", name: "Ariadne Carneiro", role: "Gerente de produto",
-    initials: "AC", color: "product-senior", level: "Gerente",
+    initials: "AC", color: "product-senior", level: "Gerente", rank: 3,
     description: "Placeholder: Gerente de produto responsável por roadmap, priorização e entrega de valor para os membros.",
     responsibilities: ["Definição de roadmap", "Priorização de features", "Gestão de OKRs", "Alinhamento com stakeholders"],
   },
   armando: {
     id: "armando", name: "Armando Neto", role: "Designer de Produto Pl. I",
-    initials: "AN", color: "product-pleno", level: "Pleno",
+    initials: "AN", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Designer de produto pleno, responsável por interfaces digitais e protótipos de alta fidelidade.",
     responsibilities: ["UI/UX Design", "Prototipação e wireframes", "Design system", "Colaboração em pesquisas"],
   },
   eria: {
     id: "eria", name: "Éria Alencar", role: "Designer de Produto Pl. I",
-    initials: "EA", color: "product-pleno", level: "Pleno",
+    initials: "EA", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Designer de produto pleno com foco em design visual e experiência do usuário.",
     responsibilities: ["Visual design e identidade", "UX research", "Motion e micro-interações", "Assets para marketing"],
   },
   mateus: {
     id: "mateus", name: "Mateus Graff", role: "Redator Pl. I",
-    initials: "MG", color: "product-pleno", level: "Pleno",
+    initials: "MG", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting.",
     responsibilities: ["Copywriting de produto", "Apostilas e materiais educativos", "Roteiros audiovisuais", "Revisão editorial"],
   },
   jeniffer: {
     id: "jeniffer", name: "Jeniffer Nascimento", role: "Analista de Produto Pl. I",
-    initials: "JN", color: "product-pleno", level: "Pleno",
+    initials: "JN", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Analista de produto pleno, focada em análise de dados, requisitos e documentação.",
     responsibilities: ["Análise de dados e métricas", "Levantamento de requisitos", "Documentação de produto", "Suporte ao gerente"],
   },
   elane: {
     id: "elane", name: "Elane Rodrigues", role: "Analista de Produto Jr. I",
-    initials: "ER", color: "product-junior", level: "Júnior",
+    initials: "ER", color: "product-junior", level: "Júnior", rank: 5,
     description: "Placeholder: Analista de produto júnior, apoia nas análises e pesquisas do time.",
     responsibilities: ["Pesquisa e coleta de dados", "Análise de métricas básicas", "Apoio ao PM e analistas", "Documentação operacional"],
   },
   ana: {
     id: "ana", name: "Ana Beatriz Melo", role: "Assistente de Produto",
-    initials: "AB", color: "product-junior", level: "Júnior",
+    initials: "AB", color: "product-junior", level: "Júnior", rank: 5,
     description: "Placeholder: Assistente de produto, apoia diversas frentes do time com organização e execução.",
     responsibilities: ["Suporte operacional ao time", "Pesquisa assistida", "Organização de processos", "Comunicação interna"],
   },
   hiago: {
     id: "hiago", name: "Hiago Felipe Sousa", role: "Assistente de Produto",
-    initials: "HF", color: "product-junior", level: "Júnior",
+    initials: "HF", color: "product-junior", level: "Júnior", rank: 5,
     description: "Placeholder: Assistente de produto, contribui com as demandas do time e no desenvolvimento de entregas.",
     responsibilities: ["Suporte às demandas do time", "Análise básica de dados", "Criação de documentações", "Apoio em pesquisas"],
   },
@@ -263,27 +265,55 @@ function TreeChildren({ children, pad = "px-3 sm:px-4" }: { children: React.Reac
   );
 }
 
-// A team vertical: a label + its peers stacked together (kept as one unit)
+/**
+ * Team vertical: renders one row per seniority rank.
+ * Same-rank people appear side by side; lower-rank people appear below.
+ * `allRanks` defines the full rank range to render — columns with empty slots
+ * get invisible spacer rows so that the same rank stays at the same vertical
+ * height across all sibling verticals.
+ */
 function Vertical({
   label,
   ids,
+  allRanks,
   activeId,
   onToggle,
 }: {
   label: string;
   ids: string[];
+  allRanks: number[];
   activeId: string | null;
   onToggle: (id: string) => void;
 }) {
+  const byRank = new Map<number, string[]>();
+  for (const id of ids) {
+    const { rank } = orgPeople[id];
+    if (!byRank.has(rank)) byRank.set(rank, []);
+    byRank.get(rank)!.push(id);
+  }
+
   return (
     <div className="flex flex-col items-center">
       <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-muted-foreground whitespace-nowrap">
         {label}
       </span>
       <div className="flex flex-col items-center gap-3">
-        {ids.map((id) => (
-          <PersonCard key={id} id={id} activeId={activeId} onToggle={onToggle} size="sm" />
-        ))}
+        {allRanks.map((rank) => {
+          const group = byRank.get(rank) ?? [];
+          return (
+            <div key={rank} className={cn("flex gap-2 justify-center", group.length === 0 && "invisible pointer-events-none")}>
+              {(group.length > 0 ? group : [ids[0]]).map((id, i) => (
+                <PersonCard
+                  key={group.length > 0 ? id : `spacer-${i}`}
+                  id={id}
+                  activeId={group.length > 0 ? activeId : null}
+                  onToggle={group.length > 0 ? onToggle : () => {}}
+                  size="sm"
+                />
+              ))}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -339,12 +369,14 @@ function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
 
 // ─── Org Chart ─────────────────────────────────────────────────────────────────
 
-// Which horizontal band each person sits in — drives where the detail panel opens
+// Seniority bands by rank — drives where the detail panel opens
 const BANDS: string[][] = [
-  ["raul"],
-  ["beatriz"],
-  ["lilian", "debora", "daniel"],
-  ["ariadne", "armando", "eria", "jeniffer", "elane", "mateus", "ana", "hiago"],
+  ["raul"],                                      // rank 0
+  ["beatriz"],                                   // rank 1
+  ["lilian", "daniel"],                          // rank 2
+  ["debora", "ariadne"],                         // rank 3
+  ["armando", "eria", "mateus", "jeniffer"],     // rank 4
+  ["elane", "ana", "hiago"],                     // rank 5
 ];
 
 function OrgChart() {
@@ -385,16 +417,15 @@ function OrgChart() {
           <TreeChildren pad="px-4 sm:px-10">
 
             {/* ── Relacionamento arm ──────────────────────────────── */}
-            <div className="flex flex-col items-center">
-              <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-purple-500 dark:text-purple-400">
-                Relacionamento
-              </span>
-              {/* Lilian & Debora — both report to Beatriz (siblings), shown at different seniority */}
-              <TreeChildren pad="px-2">
-                <PersonCard id="lilian" activeId={activeId} onToggle={toggle} size="sm" />
-                <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" />
-              </TreeChildren>
-            </div>
+            {/* Lilian (Especialista, rank 2) above — Debora (Sênior, rank 3) below.
+                Both report directly to Beatriz; vertical position reflects seniority. */}
+            <Vertical
+              label="Relacionamento"
+              ids={["lilian", "debora"]}
+              allRanks={[2, 3]}
+              activeId={activeId}
+              onToggle={toggle}
+            />
 
             {/* ── Produto arm ─────────────────────────────────────── */}
             <div className="flex flex-col items-center">
@@ -403,13 +434,14 @@ function OrgChart() {
               </span>
               <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" />
               <VConnect h={24} />
-              {/* Five verticais — each team kept together as one column */}
+              {/* Five verticais — allRanks=[3,4,5] aligns same-seniority people at
+                  the same height across all columns. Same-rank peers are side by side. */}
               <TreeChildren pad="px-2 sm:px-3">
-                <Vertical label="Gerência" ids={["ariadne"]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Designers" ids={["armando", "eria"]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Analistas" ids={["jeniffer", "elane"]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Conteúdo" ids={["mateus"]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Educacional" ids={["ana", "hiago"]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Gerência"    ids={["ariadne"]}           allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Designers"   ids={["armando", "eria"]}   allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Analistas"   ids={["jeniffer", "elane"]} allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Conteúdo"    ids={["mateus"]}             allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
+                <Vertical label="Educacional" ids={["ana", "hiago"]}      allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
               </TreeChildren>
             </div>
 
@@ -417,11 +449,13 @@ function OrgChart() {
         </div>
       </div>
 
-      {/* Detail panel opens right below the band of the clicked card (full width) */}
+      {/* Detail panel opens right below the seniority band of the clicked card */}
       <Panel band={0} />
       <Panel band={1} />
       <Panel band={2} />
       <Panel band={3} />
+      <Panel band={4} />
+      <Panel band={5} />
 
       {/* Legend + hint */}
       <div className="mt-8 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
