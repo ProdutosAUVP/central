@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -176,11 +176,13 @@ function PersonCard({
   activeId,
   onToggle,
   size = "md",
+  cardRef,
 }: {
   id: string;
   activeId: string | null;
   onToggle: (id: string) => void;
   size?: CardSize;
+  cardRef?: (el: HTMLButtonElement | null) => void;
 }) {
   const person = orgPeople[id];
   const isActive = activeId === id;
@@ -188,6 +190,7 @@ function PersonCard({
 
   return (
     <button
+      ref={cardRef}
       onClick={(e) => { e.stopPropagation(); onToggle(id); }}
       style={{ width: w }}
       className={cn(
@@ -225,95 +228,85 @@ function PersonCard({
 }
 
 // ─── Connectors ───────────────────────────────────────────────────────────────
+// Connectors are drawn as a single SVG overlay sitting behind the cards. Each
+// edge is a smooth cubic bezier from the bottom-center of a parent node to the
+// top-center of a child node, measured from the live DOM so every point stays
+// connected at any viewport width.
 
-const LINE = "bg-border";
+/** Parent → child edges of the org tree. Ids match node refs registered below. */
+const ORG_EDGES: [string, string][] = [
+  ["raul", "beatriz"],
+  ["beatriz", "arm-rel"],
+  ["beatriz", "arm-prod"],
+  ["arm-rel", "lilian"],
+  ["lilian", "debora"],
+  ["arm-prod", "daniel"],
+  ["daniel", "ariadne"],
+  ["daniel", "cat-designers"],
+  ["daniel", "cat-analistas"],
+  ["daniel", "cat-conteudo"],
+  ["daniel", "cat-educacional"],
+  ["cat-designers", "armando"],
+  ["cat-designers", "eria"],
+  ["cat-analistas", "jeniffer"],
+  ["cat-analistas", "elane"],
+  ["cat-conteudo", "mateus"],
+  ["cat-educacional", "ana"],
+  ["cat-educacional", "hiago"],
+];
 
-// Vertical line linking a parent to the bus / a single child below it
-function VConnect({ h = 24 }: { h?: number }) {
-  return <div className={cn("mx-auto w-px", LINE)} style={{ height: h }} />;
-}
+// Vertical gap (px) between a node row and the next — gives the curves room to
+// bend smoothly and keeps same-level siblings aligned across the two arms.
+const ROW_GAP = 44;
 
-/**
- * Lays out a set of child subtrees in a row, each connected up to a shared
- * horizontal "bus" that is centered under the parent above. Horizontal padding
- * (not flex gap) is used so each column's bus segment meets its neighbour's.
- */
-function TreeChildren({ children, pad = "px-3 sm:px-4" }: { children: React.ReactNode; pad?: string }) {
-  const items = React.Children.toArray(children);
-  const n = items.length;
+/** A category heading that anchors connector lines down to its members. */
+function CategoryLabel({
+  label,
+  nodeRef,
+}: {
+  label: string;
+  nodeRef: (el: HTMLElement | null) => void;
+}) {
   return (
-    <div className="flex justify-center items-start">
-      {items.map((child, i) => (
-        <div key={i} className={cn("relative flex flex-col items-center", pad)}>
-          {/* connector area: horizontal bus segment + vertical stub down to node */}
-          <div className="relative w-full h-5">
-            {n > 1 && (
-              <span
-                className={cn(
-                  "absolute top-0 h-px",
-                  LINE,
-                  i === 0 ? "left-1/2 right-0" : i === n - 1 ? "left-0 right-1/2" : "left-0 right-0"
-                )}
-              />
-            )}
-            <span className={cn("absolute top-0 left-1/2 -translate-x-1/2 w-px h-5", LINE)} />
-          </div>
-          {child}
-        </div>
-      ))}
-    </div>
+    <span
+      ref={nodeRef}
+      className="text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-muted-foreground whitespace-nowrap"
+    >
+      {label}
+    </span>
   );
 }
 
-/**
- * Team vertical: renders one row per seniority rank.
- * Same-rank people appear side by side; lower-rank people appear below.
- * `allRanks` defines the full rank range to render — columns with empty slots
- * get invisible spacer rows so that the same rank stays at the same vertical
- * height across all sibling verticals.
- */
-function Vertical({
+/** One category column: a heading on top, its members in a row below. */
+function CategoryColumn({
+  catId,
   label,
   ids,
-  allRanks,
   activeId,
   onToggle,
+  registerNode,
 }: {
+  catId: string;
   label: string;
   ids: string[];
-  allRanks: number[];
   activeId: string | null;
   onToggle: (id: string) => void;
+  registerNode: (id: string) => (el: HTMLElement | null) => void;
 }) {
-  const byRank = new Map<number, string[]>();
-  for (const id of ids) {
-    const { rank } = orgPeople[id];
-    if (!byRank.has(rank)) byRank.set(rank, []);
-    byRank.get(rank)!.push(id);
-  }
-
   return (
     <div className="flex flex-col items-center">
-      <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-muted-foreground whitespace-nowrap">
-        {label}
-      </span>
-      <div className="flex flex-col items-center gap-3">
-        {allRanks.map((rank) => {
-          const group = byRank.get(rank) ?? [];
-          return (
-            <div key={rank} className={cn("flex gap-2 justify-center", group.length === 0 && "invisible pointer-events-none")}>
-              {(group.length > 0 ? group : [ids[0]]).map((id, i) => (
-                <PersonCard
-                  key={group.length > 0 ? id : `spacer-${i}`}
-                  id={id}
-                  activeId={group.length > 0 ? activeId : null}
-                  onToggle={group.length > 0 ? onToggle : () => {}}
-                  size="sm"
-                />
-              ))}
-            </div>
-          );
-        })}
+      <CategoryLabel label={label} nodeRef={registerNode(catId)} />
+      <div className="flex items-start gap-2" style={{ marginTop: ROW_GAP }}>
+        {ids.map((id) => (
+          <PersonCard
+            key={id}
+            id={id}
+            activeId={activeId}
+            onToggle={onToggle}
+            size="sm"
+            cardRef={registerNode(id)}
+          />
+        ))}
       </div>
     </div>
   );
@@ -369,20 +362,62 @@ function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
 
 // ─── Org Chart ─────────────────────────────────────────────────────────────────
 
-// Seniority bands by rank — drives where the detail panel opens
-const BANDS: string[][] = [
-  ["raul"],                                      // rank 0
-  ["beatriz"],                                   // rank 1
-  ["lilian", "daniel"],                          // rank 2
-  ["debora", "ariadne"],                         // rank 3
-  ["armando", "eria", "mateus", "jeniffer"],     // rank 4
-  ["elane", "ana", "hiago"],                     // rank 5
-];
-
 function OrgChart() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const toggle = (id: string) => setActiveId((prev) => (prev === id ? null : id));
-  const activeBand = activeId ? BANDS.findIndex((b) => b.includes(activeId)) : -1;
+
+  // ── Connector measurement ──────────────────────────────────────────────────
+  const containerRef = useRef<HTMLDivElement>(null);
+  const nodeRefs = useRef<Map<string, HTMLElement>>(new Map());
+  const [paths, setPaths] = useState<string[]>([]);
+
+  // Stable per-id ref callback so React doesn't re-register on every render
+  const registerNode = useCallback(
+    (id: string) => (el: HTMLElement | null) => {
+      if (el) nodeRefs.current.set(id, el);
+      else nodeRefs.current.delete(id);
+    },
+    []
+  );
+
+  const measure = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const c = container.getBoundingClientRect();
+    const next: string[] = [];
+    for (const [pid, cid] of ORG_EDGES) {
+      const pe = nodeRefs.current.get(pid);
+      const ce = nodeRefs.current.get(cid);
+      if (!pe || !ce) continue;
+      const pr = pe.getBoundingClientRect();
+      const cr = ce.getBoundingClientRect();
+      // start: bottom-center of parent · end: top-center of child
+      const x1 = pr.left + pr.width / 2 - c.left;
+      const y1 = pr.bottom - c.top;
+      const x2 = cr.left + cr.width / 2 - c.left;
+      const y2 = cr.top - c.top;
+      // S-curve: vertical at both ends, bending across the midline → no 90° corners
+      const ym = (y1 + y2) / 2;
+      next.push(`M ${x1} ${y1} C ${x1} ${ym} ${x2} ${ym} ${x2} ${y2}`);
+    }
+    setPaths(next);
+  }, []);
+
+  useLayoutEffect(() => {
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (containerRef.current) ro.observe(containerRef.current);
+    window.addEventListener("resize", measure);
+    // Re-measure once webfonts settle, since they can shift card sizes
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    fonts?.ready.then(measure).catch(() => {});
+    const t = setTimeout(measure, 120);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      clearTimeout(t);
+    };
+  }, [measure]);
 
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -392,70 +427,72 @@ function OrgChart() {
     return () => document.removeEventListener("click", close);
   }, []);
 
-  // Detail panel for a given band — rendered inline right below that band
-  const Panel = ({ band }: { band: number }) =>
-    activeId && activeBand === band ? (
-      <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />
-    ) : null;
-
   return (
     <div data-org onClick={(e) => e.stopPropagation()} className="w-full">
       {/* The tree may be wider than the viewport on small screens; scroll only there.
           On md+ it fits, so no scrollbar/box appears and the page just expands. */}
       <div className="-mx-4 px-4 overflow-x-auto md:mx-0 md:px-0 md:overflow-visible">
-        <div className="min-w-fit flex flex-col items-center pt-1 pb-2">
+        <div ref={containerRef} className="relative w-fit min-w-full mx-auto pt-1 pb-2">
 
-          {/* CEO */}
-          <PersonCard id="raul" activeId={activeId} onToggle={toggle} size="lg" />
-          <VConnect h={24} />
+          {/* Connector overlay — sits behind the opaque cards so curves appear to
+              meet each card's edge. */}
+          <svg className="absolute inset-0 h-full w-full pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
+            {paths.map((d, i) => (
+              <path key={i} d={d} fill="none" style={{ stroke: "hsl(var(--border))" }} strokeWidth={1.5} strokeLinecap="round" />
+            ))}
+          </svg>
 
-          {/* Diretoria */}
-          <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} size="md" />
-          <VConnect h={24} />
+          <div className="relative flex flex-col items-center" style={{ zIndex: 1 }}>
 
-          {/* Beatriz's two arms: Relacionamento (left) + Produto (right) */}
-          <TreeChildren pad="px-4 sm:px-10">
+            {/* CEO */}
+            <PersonCard id="raul" activeId={activeId} onToggle={toggle} size="lg" cardRef={registerNode("raul")} />
 
-            {/* ── Relacionamento arm ──────────────────────────────── */}
-            {/* Lilian (Especialista, rank 2) above — Debora (Sênior, rank 3) below.
-                Both report directly to Beatriz; vertical position reflects seniority. */}
-            <Vertical
-              label="Relacionamento"
-              ids={["lilian", "debora"]}
-              allRanks={[2, 3]}
-              activeId={activeId}
-              onToggle={toggle}
-            />
-
-            {/* ── Produto arm ─────────────────────────────────────── */}
-            <div className="flex flex-col items-center">
-              <span className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-emerald-600 dark:text-emerald-400">
-                Produto
-              </span>
-              <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" />
-              <VConnect h={24} />
-              {/* Five verticais — allRanks=[3,4,5] aligns same-seniority people at
-                  the same height across all columns. Same-rank peers are side by side. */}
-              <TreeChildren pad="px-2 sm:px-3">
-                <Vertical label="Gerência"    ids={["ariadne"]}           allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Designers"   ids={["armando", "eria"]}   allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Analistas"   ids={["jeniffer", "elane"]} allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Conteúdo"    ids={["mateus"]}             allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-                <Vertical label="Educacional" ids={["ana", "hiago"]}      allRanks={[3, 4, 5]} activeId={activeId} onToggle={toggle} />
-              </TreeChildren>
+            {/* Diretoria */}
+            <div style={{ marginTop: ROW_GAP }}>
+              <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("beatriz")} />
             </div>
 
-          </TreeChildren>
+            {/* Beatriz's two arms: Relacionamento (left) + Produto (right) */}
+            <div className="flex items-start gap-10 sm:gap-16" style={{ marginTop: ROW_GAP }}>
+
+              {/* ── Relacionamento arm ──────────────────────────────── */}
+              {/* Lilian (Especialista) above — Debora (Sênior) below, in the
+                  same row as the Produto categories so seniority lines up. */}
+              <div className="flex flex-col items-center">
+                <span ref={registerNode("arm-rel")} className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-purple-600 dark:text-purple-400">
+                  Relacionamento
+                </span>
+                <PersonCard id="lilian" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("lilian")} />
+                <div style={{ marginTop: ROW_GAP }}>
+                  <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("debora")} />
+                </div>
+              </div>
+
+              {/* ── Produto arm ─────────────────────────────────────── */}
+              <div className="flex flex-col items-center">
+                <span ref={registerNode("arm-prod")} className="mb-2 text-[9px] font-bold font-roboto tracking-[0.15em] uppercase text-emerald-600 dark:text-emerald-400">
+                  Produto
+                </span>
+                <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("daniel")} />
+
+                {/* Senior peers + category groups, all on one row so Ariadne
+                    (Gerente, nível sênior) sits at the same height as Debora. */}
+                <div className="flex items-start gap-4 sm:gap-6" style={{ marginTop: ROW_GAP }}>
+                  <PersonCard id="ariadne" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("ariadne")} />
+                  <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}   activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+                  <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]} activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+                  <CategoryColumn catId="cat-conteudo"    label="Conteúdo"    ids={["mateus"]}             activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+                  <CategoryColumn catId="cat-educacional" label="Educacional" ids={["ana", "hiago"]}      activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Detail panel opens right below the seniority band of the clicked card */}
-      <Panel band={0} />
-      <Panel band={1} />
-      <Panel band={2} />
-      <Panel band={3} />
-      <Panel band={4} />
-      <Panel band={5} />
+      {/* Detail panel opens right below the chart */}
+      {activeId && <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />}
 
       {/* Legend + hint */}
       <div className="mt-8 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
