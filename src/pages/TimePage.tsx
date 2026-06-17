@@ -370,16 +370,17 @@ function OrgChart() {
         <div className="relative w-full flex justify-center items-start">
 
           {/* ── RELACIONAMENTO branch (left side) ── */}
+          {/* Lilian e Debora reportam diretamente à Beatriz — stacking visual indica faixas de senioridade, não hierarquia entre elas */}
           <div className="absolute right-[calc(50%+156px)] flex items-center gap-0 top-4">
-            {/* Lilian + Debora stacked */}
-            <div className="flex flex-col items-center gap-0">
+            <div className="flex flex-col items-center gap-4">
               <PersonNode id="lilian" activeId={activeId} onToggle={toggle} avatarSize={68} maxLabelW={132} />
-              <VLine h={20} />
+              {/* Separador de nível — sem linha de reporte */}
+              <div className="w-full border-t border-dashed border-muted-foreground/30" />
               <PersonNode id="debora" activeId={activeId} onToggle={toggle} avatarSize={60} maxLabelW={132} />
             </div>
 
             {/* Dashed connector → Beatriz */}
-            <div className="flex flex-col items-end ml-3">
+            <div className="flex flex-col items-center ml-3 self-start mt-10">
               <DashedHLine w={72} label="relacionamento" />
             </div>
           </div>
