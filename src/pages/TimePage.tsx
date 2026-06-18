@@ -4,7 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import {
   Sun, Moon,
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
-  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight,
+  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -335,6 +335,36 @@ function CategoryColumn({
   );
 }
 
+// ─── Team Grid ────────────────────────────────────────────────────────────────
+
+const TEAM_ORDER = [
+  "raul", "beatriz",
+  "lilian", "daniel",
+  "debora", "ariadne",
+  "armando", "eria", "mateus", "jeniffer",
+  "elane", "ana", "hiago",
+];
+
+function MemberCard({ id }: { id: string }) {
+  const person = orgPeople[id];
+  return (
+    <div className="relative flex flex-col items-center rounded-2xl border bg-card px-4 pt-5 pb-4 text-center overflow-hidden hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-200">
+      <div className={cn("absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r", gradients[person.color])} />
+      <div
+        className={cn("rounded-full bg-gradient-to-br flex items-center justify-center font-bold font-anek text-white shadow ring-2 ring-card", gradients[person.color])}
+        style={{ width: 52, height: 52, fontSize: 18 }}
+      >
+        {person.initials}
+      </div>
+      <p className="mt-3 font-bold font-anek text-foreground text-[13px] leading-tight">{person.name}</p>
+      <p className="text-[11px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
+      <span className={cn("mt-2 inline-block rounded-full px-2 py-[3px] text-[9px] font-bold font-roboto uppercase tracking-wider", levelColors[person.color])}>
+        {person.level}
+      </span>
+    </div>
+  );
+}
+
 // ─── Detail Panel ─────────────────────────────────────────────────────────────
 
 function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
@@ -596,6 +626,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 export default function TimePage() {
   const [teamRef, teamVisible] = useReveal(0.05);
+  const [orgOpen, setOrgOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -633,10 +664,34 @@ export default function TimePage() {
         <div ref={teamRef} className={cn("transition-all duration-700", teamVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8")}>
           <SectionLabel>Quem somos</SectionLabel>
           <SectionTitle>Nossa estrutura</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">
+          <p className="text-muted-foreground font-roboto mb-8 max-w-xl">
             {Object.keys(orgPeople).length} pessoas, uma direção — criar produtos que transformam a relação dos brasileiros com o dinheiro.
           </p>
-          <OrgChart />
+
+          {/* Team member cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-8">
+            {TEAM_ORDER.map((id) => (
+              <MemberCard key={id} id={id} />
+            ))}
+          </div>
+
+          {/* Org chart toggle */}
+          <div className="flex justify-center mb-2">
+            <button
+              onClick={() => setOrgOpen((v) => !v)}
+              className="flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold font-roboto text-foreground hover:border-primary/40 hover:bg-muted/50 transition-colors"
+            >
+              <ChevronDown className={cn("h-4 w-4 text-primary transition-transform duration-300", orgOpen && "rotate-180")} />
+              {orgOpen ? "Esconder organograma" : "Ver organograma"}
+            </button>
+          </div>
+
+          {/* Collapsible org chart */}
+          {orgOpen && (
+            <div className="mt-8">
+              <OrgChart />
+            </div>
+          )}
         </div>
 
         <Section>
