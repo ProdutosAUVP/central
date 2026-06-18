@@ -6,6 +6,7 @@ import {
   Sun, Moon,
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
   Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown, User, X,
+  Headphones, Video, TrendingUp, Cpu, Wallet, Megaphone, Scale,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -438,36 +439,48 @@ const POPOVER_W = 340;
 /**
  * Floating detail popover positioned beside an anchor element. Rendered through
  * a portal (so no parent overflow clips it), it prefers the anchor's right side
- * and flips left when there isn't room. Follows the anchor on scroll/resize and
- * dismisses on outside-click or Escape.
+ * and flips left when there isn't room. Enters with a soft Apple-style spring,
+ * and dismisses on scroll, outside-click or Escape.
  */
 function PersonPopover({ id, anchorEl, onClose }: { id: string; anchorEl: HTMLElement; onClose: () => void }) {
   const popRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ left: 0, top: 0, caret: 24, side: "right" as "right" | "left", ready: false });
+  const [show, setShow] = useState(false);
 
-  useLayoutEffect(() => {
-    const place = () => {
-      const a = anchorEl.getBoundingClientRect();
-      const popH = popRef.current?.offsetHeight ?? 280;
-      const gap = 12;
-      const margin = 8;
-      const side = window.innerWidth - a.right >= POPOVER_W + gap || a.left < POPOVER_W + gap ? "right" : "left";
-      let left = side === "right" ? a.right + gap : a.left - gap - POPOVER_W;
-      left = Math.max(margin, Math.min(left, window.innerWidth - POPOVER_W - margin));
-      const anchorMidY = a.top + a.height / 2;
-      let top = anchorMidY - popH / 2;
-      top = Math.max(margin, Math.min(top, window.innerHeight - popH - margin));
-      const caret = Math.max(16, Math.min(anchorMidY - top, popH - 16));
-      setPos({ left, top, caret, side, ready: true });
-    };
-    place();
-    window.addEventListener("scroll", place, true);
-    window.addEventListener("resize", place);
+  const place = useCallback(() => {
+    const a = anchorEl.getBoundingClientRect();
+    const popH = popRef.current?.offsetHeight ?? 280;
+    const gap = 12;
+    const margin = 8;
+    const side = window.innerWidth - a.right >= POPOVER_W + gap || a.left < POPOVER_W + gap ? "right" : "left";
+    let left = side === "right" ? a.right + gap : a.left - gap - POPOVER_W;
+    left = Math.max(margin, Math.min(left, window.innerWidth - POPOVER_W - margin));
+    const anchorMidY = a.top + a.height / 2;
+    let top = anchorMidY - popH / 2;
+    top = Math.max(margin, Math.min(top, window.innerHeight - popH - margin));
+    const caret = Math.max(16, Math.min(anchorMidY - top, popH - 16));
+    setPos({ left, top, caret, side, ready: true });
+  }, [anchorEl]);
+
+  useLayoutEffect(() => { place(); }, [place]);
+
+  // Gentle enter on the next frame, once positioned
+  useEffect(() => {
+    const r = requestAnimationFrame(() => setShow(true));
+    return () => cancelAnimationFrame(r);
+  }, []);
+
+  // Close on scroll; reflow on resize
+  useEffect(() => {
+    const onScroll = () => onClose();
+    const onResize = () => place();
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", onResize);
     return () => {
-      window.removeEventListener("scroll", place, true);
-      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onResize);
     };
-  }, [anchorEl, id]);
+  }, [place, onClose]);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -484,11 +497,22 @@ function PersonPopover({ id, anchorEl, onClose }: { id: string; anchorEl: HTMLEl
     };
   }, [anchorEl, onClose]);
 
+  const visible = show && pos.ready;
   return createPortal(
     <div
       ref={popRef}
-      style={{ position: "fixed", left: pos.left, top: pos.top, width: POPOVER_W, opacity: pos.ready ? 1 : 0 }}
-      className="z-[60] animate-in fade-in zoom-in-95 duration-150"
+      style={{
+        position: "fixed",
+        left: pos.left,
+        top: pos.top,
+        width: POPOVER_W,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0) scale(1)" : "translateY(6px) scale(0.97)",
+        transformOrigin: pos.side === "right" ? "left center" : "right center",
+        transition: "opacity 280ms cubic-bezier(0.22, 1, 0.36, 1), transform 280ms cubic-bezier(0.22, 1, 0.36, 1)",
+        willChange: "opacity, transform",
+      }}
+      className="z-[60]"
     >
       {/* caret pointing toward the anchor */}
       <div
@@ -677,14 +701,14 @@ const pillars = [
 ];
 
 const network = [
-  { area: "Atendimento", desc: "Escutamos as dores dos membros para aprimorar constantemente os produtos do ecossistema." },
-  { area: "Consultoria", desc: "Executamos estratégias de relacionamento para aumentar a proximidade do investidor com a marca." },
-  { area: "Audiovisual", desc: "Acompanhamos a criação e captação de perto para entregar o melhor conteúdo de finanças do país." },
-  { area: "Vendas", desc: "Analisamos métricas de conversão para garantir o crescimento sustentável da base e a retenção." },
-  { area: "Tecnologia", desc: "Atuamos no desenvolvimento de plataformas focadas na experiência e usabilidade do usuário." },
-  { area: "Financeiro", desc: "Fazemos a gestão de custos focada na eficiência operacional e na solidez do negócio." },
-  { area: "Marketing", desc: "Criamos estratégias de aquisição baseadas em autoridade, educação e transparência." },
-  { area: "Jurídico", desc: "Asseguramos a conformidade com as normas do mercado financeiro e a segurança institucional." },
+  { area: "Atendimento", icon: Headphones, desc: "Escutamos as dores dos membros para aprimorar constantemente os produtos do ecossistema." },
+  { area: "Consultoria", icon: Users, desc: "Executamos estratégias de relacionamento para aumentar a proximidade do investidor com a marca." },
+  { area: "Audiovisual", icon: Video, desc: "Acompanhamos a criação e captação de perto para entregar o melhor conteúdo de finanças do país." },
+  { area: "Vendas", icon: TrendingUp, desc: "Analisamos métricas de conversão para garantir o crescimento sustentável da base e a retenção." },
+  { area: "Tecnologia", icon: Cpu, desc: "Atuamos no desenvolvimento de plataformas focadas na experiência e usabilidade do usuário." },
+  { area: "Financeiro", icon: Wallet, desc: "Fazemos a gestão de custos focada na eficiência operacional e na solidez do negócio." },
+  { area: "Marketing", icon: Megaphone, desc: "Criamos estratégias de aquisição baseadas em autoridade, educação e transparência." },
+  { area: "Jurídico", icon: Scale, desc: "Asseguramos a conformidade com as normas do mercado financeiro e a segurança institucional." },
 ];
 
 // ─── Orbit Network ──────────────────────────────────────────────────────────
@@ -692,21 +716,24 @@ const network = [
 // orbit around it. The whole ring rotates slowly; each card counter-rotates so
 // its text stays upright. Pauses on hover and respects reduced-motion.
 
-const ORBIT_SIZE = 640; // px — desktop canvas
-const ORBIT_R = 232; // px — orbit radius
+const ORBIT_SIZE = 520; // px — desktop canvas
+const ORBIT_R = 192; // px — orbit radius
 
 function OrbitNetwork() {
   const center = ORBIT_SIZE / 2;
   const n = network.length;
   const angleAt = (i: number) => (i / n) * 360 - 90; // start at top, clockwise
+  const [active, setActive] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const paused = active !== null || hovered !== null;
 
   return (
     <>
       {/* Desktop: orbital visualization */}
-      <div className="hidden lg:flex justify-center">
+      <div className="hidden lg:block shrink-0">
         <div className="group relative select-none" style={{ width: ORBIT_SIZE, height: ORBIT_SIZE }}>
           {/* Rotating system: connector lines + orbiting cards */}
-          <div className="absolute inset-0 animate-orbit motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform">
+          <div className={cn("absolute inset-0 animate-orbit motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform", paused && "[animation-play-state:paused]")}>
             <svg viewBox={`0 0 ${ORBIT_SIZE} ${ORBIT_SIZE}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
               <circle cx={center} cy={center} r={ORBIT_R} fill="none" stroke="hsl(var(--border))" strokeWidth={1} strokeDasharray="2 7" opacity={0.7} />
               {network.map((_, i) => {
@@ -728,22 +755,37 @@ function OrbitNetwork() {
 
             {network.map((item, i) => {
               const deg = angleAt(i);
+              const Icon = item.icon;
+              const open = active === i || hovered === i;
               return (
                 <div
                   key={i}
                   className="absolute left-1/2 top-1/2"
-                  style={{ transform: `rotate(${deg}deg) translateX(${ORBIT_R}px) rotate(${-deg}deg)` }}
+                  style={{ transform: `rotate(${deg}deg) translateX(${ORBIT_R}px) rotate(${-deg}deg)`, zIndex: open ? 30 : 10 }}
                 >
                   {/* zero-size anchor; reverse-spin pivots exactly on the orbit point
                       to cancel the ring rotation → text stays upright */}
-                  <div className="relative h-0 w-0 animate-orbit-reverse motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform">
-                    <div className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 h-[112px] w-[164px] rounded-2xl border bg-card shadow-lg p-3.5 flex flex-col justify-center transition-transform duration-300 ease-apple hover:scale-[1.06]">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                  <div className={cn("relative h-0 w-0 animate-orbit-reverse motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform", paused && "[animation-play-state:paused]")}>
+                    <button
+                      type="button"
+                      onMouseEnter={() => setHovered(i)}
+                      onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+                      onClick={() => setActive((a) => (a === i ? null : i))}
+                      className={cn(
+                        "absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-2xl border bg-card text-left overflow-hidden outline-none transition-[width,height,box-shadow,border-color] duration-300 ease-apple",
+                        open ? "w-[236px] h-[154px] p-4 shadow-2xl border-primary/40" : "w-[158px] h-[68px] p-3 shadow-lg border-border"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+                          <Icon className="h-4 w-4" />
+                        </span>
                         <h3 className="font-bold font-anek text-foreground text-sm leading-tight">{item.area}</h3>
                       </div>
-                      <p className="text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-3">{item.desc}</p>
-                    </div>
+                      <p className={cn("text-[11px] text-muted-foreground font-roboto leading-snug overflow-hidden transition-all duration-300 ease-apple", open ? "opacity-100 max-h-24 mt-2.5" : "opacity-0 max-h-0 mt-0")}>
+                        {item.desc}
+                      </p>
+                    </button>
                   </div>
                 </div>
               );
@@ -751,10 +793,10 @@ function OrbitNetwork() {
           </div>
 
           {/* Center — Produto ball (static) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             <div className="absolute inset-0 -z-10 rounded-full bg-primary/30 blur-2xl animate-soft-pulse motion-reduce:animate-none" />
-            <div className="relative h-32 w-32 rounded-full bg-gradient-to-br from-primary to-emerald-700 shadow-xl ring-4 ring-background flex items-center justify-center">
-              <span className="font-bold font-anek text-primary-foreground text-lg">Produto</span>
+            <div className="relative h-28 w-28 rounded-full bg-gradient-to-br from-primary to-emerald-700 shadow-xl ring-4 ring-background flex items-center justify-center">
+              <span className="font-bold font-anek text-primary-foreground text-base">Produto</span>
             </div>
           </div>
         </div>
@@ -768,15 +810,20 @@ function OrbitNetwork() {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {network.map((item, i) => (
-            <div key={i} className="rounded-2xl border bg-card p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20">
-              <div className="flex items-center gap-2.5 mb-3">
-                <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                <h3 className="font-bold font-anek text-foreground text-sm">{item.area}</h3>
+          {network.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <div key={i} className="rounded-2xl border bg-card p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <h3 className="font-bold font-anek text-foreground text-sm">{item.area}</h3>
+                </div>
+                <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
               </div>
-              <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </>
@@ -926,10 +973,17 @@ export default function TimePage() {
         </Section>
 
         <Section>
-          <SectionLabel>Rede interna</SectionLabel>
-          <SectionTitle>A rede que nos conecta</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.</p>
-          <OrbitNetwork />
+          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
+            <div className="lg:flex-1">
+              <SectionLabel>Rede interna</SectionLabel>
+              <SectionTitle>A rede que nos conecta</SectionTitle>
+              <p className="text-muted-foreground font-roboto max-w-md mb-10 lg:mb-0">
+                Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.
+                Passe o mouse ou clique em cada área para saber mais.
+              </p>
+            </div>
+            <OrbitNetwork />
+          </div>
         </Section>
 
         <Section>
