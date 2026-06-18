@@ -240,9 +240,9 @@ type EdgeKind = "v" | "hl" | "hr";
  *  - "v"  : child sits below the parent (vertical elbow)
  *  - "hl" : child sits to the LEFT of the parent, same row (horizontal)
  *  - "hr" : child sits to the RIGHT of the parent, same row (horizontal) */
-const ORG_EDGES: { from: string; to: string; kind: EdgeKind }[] = [
+const ORG_EDGES: { from: string; to: string; kind: EdgeKind; dashed?: boolean }[] = [
   { from: "raul", to: "beatriz", kind: "v" },
-  { from: "beatriz", to: "lilian", kind: "hl" },
+  { from: "beatriz", to: "lilian", kind: "hl", dashed: true },
   { from: "beatriz", to: "debora", kind: "hr" },
   { from: "beatriz", to: "daniel", kind: "v" },
   { from: "daniel", to: "ariadne", kind: "v" },
@@ -338,11 +338,12 @@ function CategoryColumn({
 
 // ─── Team Grid ────────────────────────────────────────────────────────────────
 
+// Lilian aparece apenas no organograma — fora do grid de cards.
 const TEAM_ORDER = [
   "raul", "beatriz",
-  "lilian", "daniel",
-  "debora", "ariadne",
-  "armando", "eria", "mateus", "jeniffer",
+  "daniel", "debora",
+  "ariadne", "armando",
+  "eria", "mateus", "jeniffer",
   "elane", "ana", "hiago",
 ];
 
@@ -509,7 +510,7 @@ function OrgChart() {
   // ── Connector measurement ──────────────────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<string, HTMLElement>>(new Map());
-  const [paths, setPaths] = useState<string[]>([]);
+  const [paths, setPaths] = useState<{ d: string; dashed?: boolean }[]>([]);
 
   const closePopover = useCallback(() => setSelected(null), []);
   const toggle = (id: string) => {
@@ -530,8 +531,8 @@ function OrgChart() {
     const container = containerRef.current;
     if (!container) return;
     const c = container.getBoundingClientRect();
-    const next: string[] = [];
-    for (const { from, to, kind } of ORG_EDGES) {
+    const next: { d: string; dashed?: boolean }[] = [];
+    for (const { from, to, kind, dashed } of ORG_EDGES) {
       const pe = nodeRefs.current.get(from);
       const ce = nodeRefs.current.get(to);
       if (!pe || !ce) continue;
@@ -543,14 +544,14 @@ function OrgChart() {
         const y1 = pr.bottom - c.top;
         const x2 = cr.left + cr.width / 2 - c.left;
         const y2 = cr.top - c.top;
-        next.push(elbowPath(x1, y1, x2, y2));
+        next.push({ d: elbowPath(x1, y1, x2, y2), dashed });
       } else {
         // horizontal sibling: parent side-center → child opposite side-center
         const y1 = pr.top + pr.height / 2 - c.top;
         const y2 = cr.top + cr.height / 2 - c.top;
         const x1 = (kind === "hl" ? pr.left : pr.right) - c.left;
         const x2 = (kind === "hl" ? cr.right : cr.left) - c.left;
-        next.push(`M ${x1} ${y1} L ${x2} ${y2}`);
+        next.push({ d: `M ${x1} ${y1} L ${x2} ${y2}`, dashed });
       }
     }
     setPaths(next);
@@ -582,8 +583,16 @@ function OrgChart() {
           {/* Connector overlay — sits behind the opaque cards so curves appear to
               meet each card's edge. */}
           <svg className="absolute inset-0 h-full w-full pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
-            {paths.map((d, i) => (
-              <path key={i} d={d} fill="none" style={{ stroke: "hsl(var(--border))" }} strokeWidth={1.5} strokeLinecap="round" />
+            {paths.map((p, i) => (
+              <path
+                key={i}
+                d={p.d}
+                fill="none"
+                style={{ stroke: "hsl(var(--border))" }}
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeDasharray={p.dashed ? "5 4" : undefined}
+              />
             ))}
           </svg>
 
