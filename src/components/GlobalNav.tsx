@@ -162,10 +162,10 @@ export function GlobalNav() {
                 Dica de navegação
               </p>
               <p className="text-sm font-anek font-bold text-foreground leading-tight mb-1">
-                Conheça o Manual de Tom e Voz
+                Navegue entre as áreas da Central
               </p>
               <p className="text-xs text-muted-foreground leading-relaxed font-roboto">
-                Use este menu para alternar entre o Design System e o Manual de Tom e Voz da AUVP.
+                Por aqui você acessa a visão geral da Central, o Nosso Time, o Design System e o Manual de Tom e Voz — tudo em um só lugar.
               </p>
             </div>
           </div>
