@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { GlobalNav } from "@/components/GlobalNav";
+import { olhoBranco } from "@/assets/olhos";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   Sun, Moon,
@@ -792,11 +793,11 @@ function OrbitNetwork() {
             })}
           </div>
 
-          {/* Center — Produto ball (static) */}
+          {/* Center — Produto ball (static), with the AUVP eye */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             <div className="absolute inset-0 -z-10 rounded-full bg-primary/30 blur-2xl animate-soft-pulse motion-reduce:animate-none" />
-            <div className="relative h-28 w-28 rounded-full bg-gradient-to-br from-primary to-emerald-700 shadow-xl ring-4 ring-background flex items-center justify-center">
-              <span className="font-bold font-anek text-primary-foreground text-base">Produto</span>
+            <div className="relative h-28 w-28 rounded-full bg-gradient-to-br from-primary to-emerald-700 dark:from-emerald-500 dark:to-emerald-800 shadow-xl ring-4 ring-background flex items-center justify-center">
+              <img src={olhoBranco.url} alt="Produto AUVP" className="h-12 w-12" />
             </div>
           </div>
         </div>
@@ -805,8 +806,8 @@ function OrbitNetwork() {
       {/* Mobile / tablet fallback: Produto on top, areas in a grid */}
       <div className="lg:hidden">
         <div className="flex justify-center mb-6">
-          <div className="h-24 w-24 rounded-full bg-gradient-to-br from-primary to-emerald-700 shadow-lg ring-4 ring-background flex items-center justify-center">
-            <span className="font-bold font-anek text-primary-foreground">Produto</span>
+          <div className="h-24 w-24 rounded-full bg-gradient-to-br from-primary to-emerald-700 dark:from-emerald-500 dark:to-emerald-800 shadow-lg ring-4 ring-background flex items-center justify-center">
+            <img src={olhoBranco.url} alt="Produto AUVP" className="h-10 w-10" />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -950,29 +951,8 @@ export default function TimePage() {
           )}
         </div>
 
-        <Section>
-          <SectionLabel>Pilares</SectionLabel>
-          <SectionTitle>O que sustenta nossas entregas</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Nove princípios que orientam como trabalhamos, priorizamos e entregamos valor.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pillars.map((pilar, i) => {
-              const Icon = pilar.icon;
-              return (
-                <div key={i} className="group rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform">
-                  <div className="flex items-start gap-4">
-                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300 ease-apple"><Icon className="h-6 w-6 text-primary" /></div>
-                    <div>
-                      <h3 className="font-bold font-anek text-foreground mb-2 leading-tight">{pilar.title}</h3>
-                      <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{pilar.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Section>
-
-        <Section>
+        {/* Rede interna — banded background to set it apart from the rest */}
+        <Section className="relative rounded-3xl border bg-muted/40 dark:bg-muted/20 px-6 py-10 md:px-10 md:py-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
             <div className="lg:flex-1">
               <SectionLabel>Rede interna</SectionLabel>
@@ -993,8 +973,9 @@ export default function TimePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {dayToDay.map((item, i) => {
               const Icon = item.icon;
+              const orphan = i === dayToDay.length - 1 && dayToDay.length % 2 === 1;
               return (
-                <div key={i} className="rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform flex flex-col gap-4">
+                <div key={i} className={cn("rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform flex flex-col gap-4", orphan && "md:col-span-2")}>
                   <div className="flex items-start gap-4">
                     <div className="shrink-0 mt-0.5"><Icon className="h-6 w-6 text-primary" /></div>
                     <div className="flex-1 min-w-0">
@@ -1008,6 +989,28 @@ export default function TimePage() {
                     {item.quemChamar.map((name) => (
                       <span key={name} className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto">{name}</span>
                     ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Section>
+
+        <Section>
+          <SectionLabel>Pilares</SectionLabel>
+          <SectionTitle>O que sustenta nossas entregas</SectionTitle>
+          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Nove princípios que orientam como trabalhamos, priorizamos e entregamos valor.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {pillars.map((pilar, i) => {
+              const Icon = pilar.icon;
+              return (
+                <div key={i} className="group rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform">
+                  <div className="flex items-start gap-4">
+                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300 ease-apple"><Icon className="h-6 w-6 text-primary" /></div>
+                    <div>
+                      <h3 className="font-bold font-anek text-foreground mb-2 leading-tight">{pilar.title}</h3>
+                      <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{pilar.desc}</p>
+                    </div>
                   </div>
                 </div>
               );
