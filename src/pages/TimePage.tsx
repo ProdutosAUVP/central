@@ -4,7 +4,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import {
   Sun, Moon,
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
-  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown,
+  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown, User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -348,19 +348,19 @@ const TEAM_ORDER = [
 function MemberCard({ id }: { id: string }) {
   const person = orgPeople[id];
   return (
-    <div className="relative flex flex-col items-center rounded-2xl border bg-card px-4 pt-5 pb-4 text-center overflow-hidden hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-200">
-      <div className={cn("absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r", gradients[person.color])} />
-      <div
-        className={cn("rounded-full bg-gradient-to-br flex items-center justify-center font-bold font-anek text-white shadow ring-2 ring-card", gradients[person.color])}
-        style={{ width: 52, height: 52, fontSize: 18 }}
-      >
-        {person.initials}
+    <div className="relative flex flex-col rounded-2xl border bg-card text-center overflow-hidden hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-200">
+      {/* Photo placeholder — fills the entire top of the card.
+          Swap the inner icon for an <img> once real photos exist. */}
+      <div className={cn("relative w-full aspect-[4/3] bg-gradient-to-br flex items-center justify-center", gradients[person.color])}>
+        <User className="h-10 w-10 text-white/70" strokeWidth={1.5} />
       </div>
-      <p className="mt-3 font-bold font-anek text-foreground text-[13px] leading-tight">{person.name}</p>
-      <p className="text-[11px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
-      <span className={cn("mt-2 inline-block rounded-full px-2 py-[3px] text-[9px] font-bold font-roboto uppercase tracking-wider", levelColors[person.color])}>
-        {person.level}
-      </span>
+      <div className="px-4 pt-3 pb-4 flex flex-col items-center">
+        <p className="font-bold font-anek text-foreground text-[13px] leading-tight">{person.name}</p>
+        <p className="text-[11px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
+        <span className={cn("mt-2 inline-block rounded-full px-2 py-[3px] text-[9px] font-bold font-roboto uppercase tracking-wider", levelColors[person.color])}>
+          {person.level}
+        </span>
+      </div>
     </div>
   );
 }
@@ -669,22 +669,25 @@ export default function TimePage() {
           </p>
 
           {/* Team member cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-5">
             {TEAM_ORDER.map((id) => (
               <MemberCard key={id} id={id} />
             ))}
           </div>
 
-          {/* Org chart toggle */}
-          <div className="flex justify-center mb-2">
-            <button
-              onClick={() => setOrgOpen((v) => !v)}
-              className="flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold font-roboto text-foreground hover:border-primary/40 hover:bg-muted/50 transition-colors"
-            >
-              <ChevronDown className={cn("h-4 w-4 text-primary transition-transform duration-300", orgOpen && "rotate-180")} />
+          {/* Org chart toggle — a divider line spanning the cards' width with a
+              discreet "ver organograma" label hugging its right end. */}
+          <button
+            onClick={() => setOrgOpen((v) => !v)}
+            className="group w-full flex items-center gap-3 mt-1 mb-2"
+            aria-expanded={orgOpen}
+          >
+            <span className="h-px flex-1 bg-border" />
+            <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors">
               {orgOpen ? "Esconder organograma" : "Ver organograma"}
-            </button>
-          </div>
+              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-300", orgOpen && "rotate-180")} />
+            </span>
+          </button>
 
           {/* Collapsible org chart */}
           {orgOpen && (
