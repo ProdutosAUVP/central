@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   Sun, Moon,
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
-  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown, User,
+  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown, User, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -345,10 +346,26 @@ const TEAM_ORDER = [
   "elane", "ana", "hiago",
 ];
 
-function MemberCard({ id }: { id: string }) {
+function MemberCard({
+  id,
+  active,
+  onSelect,
+}: {
+  id: string;
+  active: boolean;
+  onSelect: (id: string, el: HTMLElement) => void;
+}) {
   const person = orgPeople[id];
   return (
-    <div className="relative flex flex-col rounded-2xl border bg-card text-center overflow-hidden hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-200">
+    <button
+      onClick={(e) => onSelect(id, e.currentTarget)}
+      className={cn(
+        "relative flex flex-col rounded-2xl border bg-card text-center overflow-hidden outline-none transition-all duration-200",
+        active
+          ? "border-primary shadow-lg ring-2 ring-primary/30 -translate-y-0.5"
+          : "hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20"
+      )}
+    >
       {/* Photo placeholder — fills the entire top of the card.
           Swap the inner icon for an <img> once real photos exist. */}
       <div className={cn("relative w-full aspect-[4/3] bg-gradient-to-br flex items-center justify-center", gradients[person.color])}>
@@ -361,51 +378,53 @@ function MemberCard({ id }: { id: string }) {
           {person.level}
         </span>
       </div>
-    </div>
+    </button>
   );
 }
 
-// ─── Detail Panel ─────────────────────────────────────────────────────────────
+// ─── Detail Popover ───────────────────────────────────────────────────────────
+// Shared detail card content, shown in a floating popover anchored right next to
+// the selected card/node (in the member grid and in the org chart alike).
 
-function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
+function PersonDetails({ id, onClose }: { id: string; onClose: () => void }) {
   const person = orgPeople[id];
   return (
-    <div className="relative mt-4 rounded-2xl border bg-card shadow-md overflow-hidden animate-in fade-in duration-200">
-      {/* caret pointing up toward the chart it expanded from */}
-      <div className="absolute -top-2 left-8 h-4 w-4 rotate-45 bg-card border-l border-t border-border" />
+    <div className="relative rounded-2xl border bg-card shadow-xl overflow-hidden">
       <div className="flex">
         <div className={cn("w-1.5 shrink-0 bg-gradient-to-b", gradients[person.color])} />
-        <div className="flex-1 p-6 md:p-8">
-          <div className="flex flex-col sm:flex-row gap-6 items-start">
-            {/* Large avatar */}
-            <div
-              className={cn("rounded-2xl flex items-center justify-center font-bold font-anek text-white shadow-md bg-gradient-to-br shrink-0", gradients[person.color])}
-              style={{ width: 80, height: 80, fontSize: 26 }}
-            >
-              {person.initials}
+        <div className="flex-1 p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              {/* Photo placeholder */}
+              <div
+                className={cn("rounded-xl flex items-center justify-center text-white shadow bg-gradient-to-br shrink-0", gradients[person.color])}
+                style={{ width: 48, height: 48 }}
+              >
+                <User className="h-6 w-6 text-white/80" strokeWidth={1.5} />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-bold font-anek text-foreground leading-tight truncate">{person.name}</h3>
+                <p className="text-xs text-primary font-roboto font-semibold mt-0.5 leading-snug">{person.role}</p>
+              </div>
             </div>
+            <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors shrink-0" aria-label="Fechar">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-bold font-anek text-foreground leading-tight">{person.name}</h3>
-                  <p className="text-sm text-primary font-roboto font-semibold mt-0.5">{person.role}</p>
-                  <span className={cn("inline-block mt-2 rounded-full px-3 py-1 text-[10px] font-bold font-roboto uppercase tracking-wider", levelColors[person.color])}>
-                    {person.level}
-                  </span>
-                </div>
-                <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors mt-0.5 text-lg leading-none shrink-0" aria-label="Fechar">✕</button>
+          <span className={cn("inline-block mt-3 rounded-full px-2.5 py-1 text-[9px] font-bold font-roboto uppercase tracking-wider", levelColors[person.color])}>
+            {person.level}
+          </span>
+
+          <p className="mt-3 text-xs text-muted-foreground font-roboto leading-relaxed">{person.description}</p>
+
+          <div className="mt-4 flex flex-col gap-1.5">
+            {person.responsibilities.map((r) => (
+              <div key={r} className="flex items-start gap-2">
+                <ChevronRight className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                <span className="text-xs font-roboto text-foreground">{r}</span>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground font-roboto leading-relaxed">{person.description}</p>
-              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {person.responsibilities.map((r) => (
-                  <div key={r} className="flex items-start gap-2">
-                    <ChevronRight className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-xs font-roboto text-foreground">{r}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -413,16 +432,90 @@ function DetailPanel({ id, onClose }: { id: string; onClose: () => void }) {
   );
 }
 
+const POPOVER_W = 340;
+
+/**
+ * Floating detail popover positioned beside an anchor element. Rendered through
+ * a portal (so no parent overflow clips it), it prefers the anchor's right side
+ * and flips left when there isn't room. Follows the anchor on scroll/resize and
+ * dismisses on outside-click or Escape.
+ */
+function PersonPopover({ id, anchorEl, onClose }: { id: string; anchorEl: HTMLElement; onClose: () => void }) {
+  const popRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ left: 0, top: 0, caret: 24, side: "right" as "right" | "left", ready: false });
+
+  useLayoutEffect(() => {
+    const place = () => {
+      const a = anchorEl.getBoundingClientRect();
+      const popH = popRef.current?.offsetHeight ?? 280;
+      const gap = 12;
+      const margin = 8;
+      const side = window.innerWidth - a.right >= POPOVER_W + gap || a.left < POPOVER_W + gap ? "right" : "left";
+      let left = side === "right" ? a.right + gap : a.left - gap - POPOVER_W;
+      left = Math.max(margin, Math.min(left, window.innerWidth - POPOVER_W - margin));
+      const anchorMidY = a.top + a.height / 2;
+      let top = anchorMidY - popH / 2;
+      top = Math.max(margin, Math.min(top, window.innerHeight - popH - margin));
+      const caret = Math.max(16, Math.min(anchorMidY - top, popH - 16));
+      setPos({ left, top, caret, side, ready: true });
+    };
+    place();
+    window.addEventListener("scroll", place, true);
+    window.addEventListener("resize", place);
+    return () => {
+      window.removeEventListener("scroll", place, true);
+      window.removeEventListener("resize", place);
+    };
+  }, [anchorEl, id]);
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (popRef.current?.contains(t) || anchorEl.contains(t)) return;
+      onClose();
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [anchorEl, onClose]);
+
+  return createPortal(
+    <div
+      ref={popRef}
+      style={{ position: "fixed", left: pos.left, top: pos.top, width: POPOVER_W, opacity: pos.ready ? 1 : 0 }}
+      className="z-[60] animate-in fade-in zoom-in-95 duration-150"
+    >
+      {/* caret pointing toward the anchor */}
+      <div
+        className={cn("absolute h-3 w-3 rotate-45 bg-card border-border", pos.side === "right" ? "-left-1.5 border-l border-b" : "-right-1.5 border-r border-t")}
+        style={{ top: pos.caret - 6 }}
+      />
+      <PersonDetails id={id} onClose={onClose} />
+    </div>,
+    document.body
+  );
+}
+
 // ─── Org Chart ─────────────────────────────────────────────────────────────────
 
 function OrgChart() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const toggle = (id: string) => setActiveId((prev) => (prev === id ? null : id));
+  const [selected, setSelected] = useState<{ id: string; el: HTMLElement } | null>(null);
+  const activeId = selected?.id ?? null;
 
   // ── Connector measurement ──────────────────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<string, HTMLElement>>(new Map());
   const [paths, setPaths] = useState<string[]>([]);
+
+  const closePopover = useCallback(() => setSelected(null), []);
+  const toggle = (id: string) => {
+    const el = nodeRefs.current.get(id) ?? null;
+    setSelected((prev) => (prev?.id === id || !el ? null : { id, el }));
+  };
 
   // Stable per-id ref callback so React doesn't re-register on every render
   const registerNode = useCallback(
@@ -479,16 +572,8 @@ function OrgChart() {
     };
   }, [measure]);
 
-  useEffect(() => {
-    const close = (e: MouseEvent) => {
-      if (!(e.target as Element).closest("[data-org]")) setActiveId(null);
-    };
-    document.addEventListener("click", close);
-    return () => document.removeEventListener("click", close);
-  }, []);
-
   return (
-    <div data-org onClick={(e) => e.stopPropagation()} className="w-full">
+    <div data-org className="w-full">
       {/* The tree may be wider than the viewport on small screens; scroll only there.
           On md+ it fits, so no scrollbar/box appears and the page just expands. */}
       <div className="-mx-4 px-4 overflow-x-auto md:mx-0 md:px-0 md:overflow-visible">
@@ -537,8 +622,8 @@ function OrgChart() {
         </div>
       </div>
 
-      {/* Detail panel opens right below the chart */}
-      {activeId && <DetailPanel key={activeId} id={activeId} onClose={() => setActiveId(null)} />}
+      {/* Detail popover opens right beside the selected person */}
+      {selected && <PersonPopover key={selected.id} id={selected.id} anchorEl={selected.el} onClose={closePopover} />}
 
       {/* Legend + hint */}
       <div className="mt-8 pt-6 border-t flex flex-wrap gap-x-5 gap-y-2 items-center justify-between">
@@ -627,6 +712,12 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 export default function TimePage() {
   const [teamRef, teamVisible] = useReveal(0.05);
   const [orgOpen, setOrgOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<{ id: string; el: HTMLElement } | null>(null);
+
+  const selectMember = useCallback((id: string, el: HTMLElement) => {
+    setSelectedMember((prev) => (prev?.id === id ? null : { id, el }));
+  }, []);
+  const closeMember = useCallback(() => setSelectedMember(null), []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -671,9 +762,12 @@ export default function TimePage() {
           {/* Team member cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-5">
             {TEAM_ORDER.map((id) => (
-              <MemberCard key={id} id={id} />
+              <MemberCard key={id} id={id} active={selectedMember?.id === id} onSelect={selectMember} />
             ))}
           </div>
+          {selectedMember && (
+            <PersonPopover key={selectedMember.id} id={selectedMember.id} anchorEl={selectedMember.el} onClose={closeMember} />
+          )}
 
           {/* Org chart toggle — a divider line spanning the cards' width with a
               discreet "ver organograma" label hugging its right end. */}
