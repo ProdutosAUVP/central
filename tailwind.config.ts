@@ -122,10 +122,28 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.012)" },
         },
+        orbit: {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        orbitReverse: {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(-360deg)" },
+        },
+        softPulse: {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.55" },
+          "50%": { transform: "scale(1.12)", opacity: "0.9" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        orbit: "orbit 64s linear infinite",
+        "orbit-reverse": "orbitReverse 64s linear infinite",
+        "soft-pulse": "softPulse 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite",
+      },
+      transitionTimingFunction: {
+        apple: "cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },

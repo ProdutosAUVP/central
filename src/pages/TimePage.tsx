@@ -361,10 +361,10 @@ function MemberCard({
     <button
       onClick={(e) => onSelect(id, e.currentTarget)}
       className={cn(
-        "relative flex flex-col rounded-2xl border bg-card text-center overflow-hidden outline-none transition-all duration-200",
+        "relative flex flex-col rounded-2xl border bg-card text-center overflow-hidden outline-none shadow-md transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform",
         active
-          ? "border-primary shadow-lg ring-2 ring-primary/30 -translate-y-0.5"
-          : "hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20"
+          ? "border-primary shadow-xl ring-2 ring-primary/30 -translate-y-1"
+          : "hover:shadow-xl hover:-translate-y-1 hover:border-primary/20"
       )}
     >
       {/* Photo placeholder — fills the entire top of the card.
@@ -687,6 +687,102 @@ const network = [
   { area: "Jurídico", desc: "Asseguramos a conformidade com as normas do mercado financeiro e a segurança institucional." },
 ];
 
+// ─── Orbit Network ──────────────────────────────────────────────────────────
+// "A rede que nos conecta": Produto sits at the center while the partner areas
+// orbit around it. The whole ring rotates slowly; each card counter-rotates so
+// its text stays upright. Pauses on hover and respects reduced-motion.
+
+const ORBIT_SIZE = 640; // px — desktop canvas
+const ORBIT_R = 232; // px — orbit radius
+
+function OrbitNetwork() {
+  const center = ORBIT_SIZE / 2;
+  const n = network.length;
+  const angleAt = (i: number) => (i / n) * 360 - 90; // start at top, clockwise
+
+  return (
+    <>
+      {/* Desktop: orbital visualization */}
+      <div className="hidden lg:flex justify-center">
+        <div className="group relative select-none" style={{ width: ORBIT_SIZE, height: ORBIT_SIZE }}>
+          {/* Rotating system: connector lines + orbiting cards */}
+          <div className="absolute inset-0 animate-orbit motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform">
+            <svg viewBox={`0 0 ${ORBIT_SIZE} ${ORBIT_SIZE}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
+              <circle cx={center} cy={center} r={ORBIT_R} fill="none" stroke="hsl(var(--border))" strokeWidth={1} strokeDasharray="2 7" opacity={0.7} />
+              {network.map((_, i) => {
+                const rad = (angleAt(i) * Math.PI) / 180;
+                return (
+                  <line
+                    key={i}
+                    x1={center}
+                    y1={center}
+                    x2={center + ORBIT_R * Math.cos(rad)}
+                    y2={center + ORBIT_R * Math.sin(rad)}
+                    stroke="hsl(var(--border))"
+                    strokeWidth={1}
+                    opacity={0.45}
+                  />
+                );
+              })}
+            </svg>
+
+            {network.map((item, i) => {
+              const deg = angleAt(i);
+              return (
+                <div
+                  key={i}
+                  className="absolute left-1/2 top-1/2"
+                  style={{ transform: `rotate(${deg}deg) translateX(${ORBIT_R}px) rotate(${-deg}deg)` }}
+                >
+                  {/* zero-size anchor; reverse-spin pivots exactly on the orbit point
+                      to cancel the ring rotation → text stays upright */}
+                  <div className="relative h-0 w-0 animate-orbit-reverse motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform">
+                    <div className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 h-[112px] w-[164px] rounded-2xl border bg-card shadow-lg p-3.5 flex flex-col justify-center transition-transform duration-300 ease-apple hover:scale-[1.06]">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                        <h3 className="font-bold font-anek text-foreground text-sm leading-tight">{item.area}</h3>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-3">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Center — Produto ball (static) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute inset-0 -z-10 rounded-full bg-primary/30 blur-2xl animate-soft-pulse motion-reduce:animate-none" />
+            <div className="relative h-32 w-32 rounded-full bg-gradient-to-br from-primary to-emerald-700 shadow-xl ring-4 ring-background flex items-center justify-center">
+              <span className="font-bold font-anek text-primary-foreground text-lg">Produto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile / tablet fallback: Produto on top, areas in a grid */}
+      <div className="lg:hidden">
+        <div className="flex justify-center mb-6">
+          <div className="h-24 w-24 rounded-full bg-gradient-to-br from-primary to-emerald-700 shadow-lg ring-4 ring-background flex items-center justify-center">
+            <span className="font-bold font-anek text-primary-foreground">Produto</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {network.map((item, i) => (
+            <div key={i} className="rounded-2xl border bg-card p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                <h3 className="font-bold font-anek text-foreground text-sm">{item.area}</h3>
+              </div>
+              <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 const dayToDay = [
   { icon: Search, title: "Pesquisa & Análise de dados", tagline: "Mestres em decifrar comportamentos.", desc: "Precisa de ajuda com o Typeform ou quer entender o que um dashboard está dizendo? Realizamos pesquisas quantitativas e qualitativas com leads, membros (e até piratas!) para mapear dores e gerar insights reais.", quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"] },
   { icon: Monitor, title: "Plataformas & Tecnologia", tagline: "Sua ideia funcionando sem bugs.", desc: "Encontrou um erro na plataforma de aulas ou em algum de nossos sites? Nós sabemos como construir e ajustar cada detalhe técnico.", quemChamar: ["Elane", "Hiago", "Armando", "Éria", "Mateus", "Ana Beatriz"] },
@@ -702,7 +798,14 @@ const dayToDay = [
 function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   const [ref, visible] = useReveal();
   return (
-    <div ref={ref} className={cn("transition-all duration-700", visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8", className)}>
+    <div
+      ref={ref}
+      className={cn(
+        "transition-[opacity,transform] duration-[800ms] ease-apple will-change-transform",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -761,15 +864,15 @@ export default function TimePage() {
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-16 space-y-24">
 
-        <div ref={teamRef} className={cn("transition-all duration-700", teamVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8")}>
-          <SectionLabel>Quem somos</SectionLabel>
-          <SectionTitle>Nossa estrutura</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-8 max-w-xl">
-            {Object.keys(orgPeople).length} pessoas, uma direção — criar produtos que transformam a relação dos brasileiros com o dinheiro.
-          </p>
-
-          {/* Team member cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-5">
+        <div
+          ref={teamRef}
+          className={cn(
+            "relative z-10 -mt-20 md:-mt-28 transition-[opacity,transform] duration-[800ms] ease-apple will-change-transform",
+            teamVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+        >
+          {/* Team member cards — lifted to overlap the hero seam for a 3D feel */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-5 drop-shadow-2xl">
             {TEAM_ORDER.map((id) => (
               <MemberCard key={id} id={id} active={selectedMember?.id === id} onSelect={selectMember} />
             ))}
@@ -786,15 +889,15 @@ export default function TimePage() {
             aria-expanded={orgOpen}
           >
             <span className="h-px flex-1 bg-border" />
-            <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors">
+            <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors duration-300 ease-apple">
               {orgOpen ? "Esconder organograma" : "Ver organograma"}
-              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-300", orgOpen && "rotate-180")} />
+              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500 ease-apple", orgOpen && "rotate-180")} />
             </span>
           </button>
 
           {/* Collapsible org chart */}
           {orgOpen && (
-            <div className="mt-8">
+            <div className="mt-8 animate-in fade-in slide-in-from-top-2 duration-500 ease-apple">
               <OrgChart />
             </div>
           )}
@@ -808,9 +911,9 @@ export default function TimePage() {
             {pillars.map((pilar, i) => {
               const Icon = pilar.icon;
               return (
-                <div key={i} className="group rounded-2xl border bg-card p-6 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20 transition-all duration-300">
+                <div key={i} className="group rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform">
                   <div className="flex items-start gap-4">
-                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300"><Icon className="h-6 w-6 text-primary" /></div>
+                    <div className="shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300 ease-apple"><Icon className="h-6 w-6 text-primary" /></div>
                     <div>
                       <h3 className="font-bold font-anek text-foreground mb-2 leading-tight">{pilar.title}</h3>
                       <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{pilar.desc}</p>
@@ -826,17 +929,7 @@ export default function TimePage() {
           <SectionLabel>Rede interna</SectionLabel>
           <SectionTitle>A rede que nos conecta</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {network.map((item, i) => (
-              <div key={i} className="rounded-2xl border bg-card p-5 hover:shadow-sm hover:border-primary/20 transition-all duration-300">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                  <h3 className="font-bold font-anek text-foreground text-sm">{item.area}</h3>
-                </div>
-                <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+          <OrbitNetwork />
         </Section>
 
         <Section>
@@ -847,7 +940,7 @@ export default function TimePage() {
             {dayToDay.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="rounded-2xl border bg-card p-6 hover:shadow-md hover:border-primary/20 transition-all duration-300 flex flex-col gap-4">
+                <div key={i} className="rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform flex flex-col gap-4">
                   <div className="flex items-start gap-4">
                     <div className="shrink-0 mt-0.5"><Icon className="h-6 w-6 text-primary" /></div>
                     <div className="flex-1 min-w-0">
