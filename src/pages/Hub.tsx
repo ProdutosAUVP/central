@@ -4,11 +4,12 @@ import { GlobalNav } from "@/components/GlobalNav";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  BookOpen, Palette, Volume2, Users, ExternalLink,
+  BookOpen, Palette, Volume2, Users, User, ExternalLink,
   Sun, Moon, ChevronRight, ChevronLeft, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, CalendarDays
 } from "lucide-react";
+import { teamPhotos } from "@/assets/team";
 import { cn } from "@/lib/utils";
 import {
   Accordion,
@@ -289,6 +290,71 @@ const faqs = [
   { q: "Com que frequência o Design System é atualizado?", a: "O Design System é atualizado continuamente. Novidades são comunicadas na seção 'Novidades do Mês' desta Central." },
 ];
 
+// ─── Team Carousel ────────────────────────────────────────────────────────────
+
+const TEAM_CAROUSEL = [
+  { id: "raul",     name: "Raul Sena",           role: "Fundador e CEO"         },
+  { id: "beatriz",  name: "Beatriz Henriques",    role: "Diretora de Produto"    },
+  { id: "daniel",   name: "Daniel Machado",       role: "Coordenador de Produto" },
+  { id: "debora",   name: "Debora Sanders",       role: "Analista de CX"         },
+  { id: "ariadne",  name: "Ariadne Carneiro",     role: "Gerente de Produto"     },
+  { id: "armando",  name: "Armando Neto",         role: "Designer de Produto"    },
+  { id: "eria",     name: "Éria Alencar",         role: "Designer de Produto"    },
+  { id: "mateus",   name: "Mateus Graff",         role: "Redator"                },
+  { id: "jeniffer", name: "Jeniffer Nascimento",  role: "Analista de Produto"    },
+  { id: "elane",    name: "Elane Rodrigues",      role: "Analista de Produto"    },
+  { id: "ana",      name: "Ana Beatriz Melo",     role: "Assistente de Produto"  },
+  { id: "hiago",    name: "Hiago Felipe Sousa",   role: "Assistente de Produto"  },
+];
+
+function TeamCarousel() {
+  const items = [...TEAM_CAROUSEL, ...TEAM_CAROUSEL];
+  return (
+    <Link
+      to="/time"
+      className="group relative block overflow-hidden rounded-2xl cursor-pointer"
+      aria-label="Conheça nosso time"
+    >
+      {/* Hover overlay */}
+      <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-background/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <span className="flex items-center gap-2 font-bold font-anek text-foreground text-lg drop-shadow">
+          Conheça nosso time
+          <ChevronRight className="h-5 w-5 text-primary" />
+        </span>
+      </div>
+
+      {/* Scrolling strip */}
+      <div
+        className="flex gap-3 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none"
+        style={{ width: "max-content" }}
+      >
+        {items.map((member, i) => (
+          <div
+            key={i}
+            className="shrink-0 w-36 rounded-2xl border bg-card text-center overflow-hidden shadow-md"
+          >
+            <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
+              {teamPhotos[member.id] ? (
+                <img
+                  src={teamPhotos[member.id]}
+                  alt={member.name}
+                  className="absolute inset-0 h-full w-full object-cover object-top"
+                />
+              ) : (
+                <User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />
+              )}
+            </div>
+            <div className="px-2 pt-2 pb-3">
+              <p className="font-bold font-anek text-foreground text-[11px] leading-tight">{member.name}</p>
+              <p className="text-[9px] text-muted-foreground font-roboto mt-0.5 leading-snug">{member.role}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Link>
+  );
+}
+
 // ─── Scroll reveal + section helpers ────────────────────────────────────────
 
 function useReveal(threshold = 0.12) {
@@ -355,32 +421,39 @@ export default function Hub() {
       </header>
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10 space-y-16">
-        {/* Hero */}
-        <Reveal>
-          <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-card p-8 md:p-12">
-            <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
-            <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-            <div className="relative">
-              <p className="text-sm text-muted-foreground font-roboto mb-2">{todayCapitalized}</p>
-              <h1 className="text-3xl md:text-5xl font-bold font-anek text-foreground mb-3 leading-[1.05]">
-                Central <span className="text-primary">AUVP</span>
-              </h1>
-              <p className="text-lg text-muted-foreground mb-7 max-w-2xl font-roboto leading-relaxed">
-                Central de Produto do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link to="/design-system" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary hover:bg-transparent hover:text-primary transition-all duration-300 ease-apple hover:-translate-y-0.5">
-                  <Palette className="h-4 w-4" />
-                  Design System
-                </Link>
-                <Link to="/time" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 ease-apple hover:-translate-y-0.5">
-                  <Users className="h-4 w-4" />
-                  Conhecer o Time
-                </Link>
+        {/* Hero + Carousel */}
+        <div>
+          <Reveal>
+            <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-card pt-8 px-8 pb-28 md:pt-12 md:px-12 md:pb-36">
+              <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+              <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+              <div className="relative">
+                <p className="text-sm text-muted-foreground font-roboto mb-2">{todayCapitalized}</p>
+                <h1 className="text-3xl md:text-5xl font-bold font-anek text-foreground mb-3 leading-[1.05]">
+                  Central <span className="text-primary">AUVP</span>
+                </h1>
+                <p className="text-lg text-muted-foreground mb-7 max-w-2xl font-roboto leading-relaxed">
+                  Central de Produto do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link to="/design-system" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary hover:bg-transparent hover:text-primary transition-all duration-300 ease-apple hover:-translate-y-0.5">
+                    <Palette className="h-4 w-4" />
+                    Design System
+                  </Link>
+                  <Link to="/tom-e-voz" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 ease-apple hover:-translate-y-0.5">
+                    <Volume2 className="h-4 w-4" />
+                    Manual de Tom e Voz
+                  </Link>
+                </div>
               </div>
-            </div>
-          </section>
-        </Reveal>
+            </section>
+          </Reveal>
+
+          {/* Carousel overlapping the hero bottom — the drop-shadow creates the 3D lift effect */}
+          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl">
+            <TeamCarousel />
+          </div>
+        </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
         <Reveal>

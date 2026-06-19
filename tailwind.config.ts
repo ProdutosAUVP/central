@@ -134,6 +134,10 @@ export default {
           "0%, 100%": { transform: "scale(1)", opacity: "0.55" },
           "50%": { transform: "scale(1.12)", opacity: "0.9" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -141,6 +145,7 @@ export default {
         orbit: "orbit 64s linear infinite",
         "orbit-reverse": "orbitReverse 64s linear infinite",
         "soft-pulse": "softPulse 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite",
+        marquee: "marquee 28s linear infinite",
       },
       transitionTimingFunction: {
         apple: "cubic-bezier(0.22, 1, 0.36, 1)",
