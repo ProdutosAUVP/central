@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { GlobalNav } from "@/components/GlobalNav";
 import { olhoBranco } from "@/assets/olhos";
 import { teamPhotos } from "@/assets/team";
@@ -953,17 +954,24 @@ export default function TimePage() {
 
           {/* Org chart toggle — a divider line spanning the cards' width with a
               discreet "ver organograma" label hugging its right end. */}
-          <button
-            onClick={() => setOrgOpen((v) => !v)}
-            className="group w-full flex items-center gap-3 mt-1 mb-2"
-            aria-expanded={orgOpen}
-          >
-            <span className="h-px flex-1 bg-border" />
-            <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors duration-300 ease-apple">
-              {orgOpen ? "Esconder organograma" : "Ver organograma"}
-              <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500 ease-apple", orgOpen && "rotate-180")} />
-            </span>
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setOrgOpen((v) => !v)}
+                className="group w-full flex items-center gap-3 mt-1 mb-2"
+                aria-expanded={orgOpen}
+              >
+                <span className="h-px flex-1 bg-border" />
+                <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors duration-300 ease-apple">
+                  {orgOpen ? "Esconder organograma" : "Ver organograma"}
+                  <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500 ease-apple", orgOpen && "rotate-180")} />
+                </span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-[220px] text-center text-xs">
+              Veja a estrutura hierárquica completa do time de Produto e CX
+            </TooltipContent>
+          </Tooltip>
 
           {/* Collapsible org chart */}
           {orgOpen && (

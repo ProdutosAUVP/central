@@ -103,25 +103,29 @@ interface Evento {
   titulo: string;
   tag: string;
   tagColor: string;
+  hora?: string;
+  responsavel?: string;
+  descricao?: string;
 }
 
 const eventos: Evento[] = [
-  { date: "2025-06-02", titulo: "Sprint Planning — Q2 Sprint 6", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
-  { date: "2025-06-09", titulo: "Design Review semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800" },
-  { date: "2025-06-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
-  { date: "2025-06-16", titulo: "Sprint Planning — Q2 Sprint 7", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
-  { date: "2025-06-23", titulo: "Retrospectiva do mês", tag: "Processo", tagColor: "bg-amber-100 text-amber-800" },
-  { date: "2025-06-30", titulo: "Product Roadmap Review Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800" },
-  { date: "2025-07-07", titulo: "Sprint Planning — Q3 Sprint 1", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
-  { date: "2025-07-14", titulo: "Design Review semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800" },
-  { date: "2025-07-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
-  { date: "2025-07-21", titulo: "Workshop de UX Research", tag: "Time", tagColor: "bg-cyan-100 text-cyan-800" },
-  { date: "2025-07-28", titulo: "Retrospectiva Q3 Sprint 1", tag: "Processo", tagColor: "bg-amber-100 text-amber-800" },
-  { date: "2025-08-04", titulo: "Sprint Planning — Q3 Sprint 2", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800" },
-  { date: "2025-08-18", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
-  { date: "2025-08-25", titulo: "Review de OKRs Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800" },
-  { date: "2025-09-01", titulo: "Kick-off Q4", tag: "Processo", tagColor: "bg-amber-100 text-amber-800" },
-  { date: "2025-09-15", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800" },
+  { date: "2026-06-23", titulo: "Sprint Planning — Q2 Sprint 12", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado", descricao: "Alinhamento e planejamento das entregas do sprint." },
+  { date: "2026-06-24", titulo: "Design Review Semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800", hora: "14:00", responsavel: "Armando & Éria" },
+  { date: "2026-06-30", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques", descricao: "Nova turma com novidades no produto educacional." },
+  { date: "2026-06-30", titulo: "Product Roadmap Review Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800", hora: "16:00", responsavel: "Beatriz Henriques", descricao: "Revisão do roadmap e prioridades para o Q3." },
+  { date: "2026-07-07", titulo: "Sprint Planning — Q3 Sprint 1", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado" },
+  { date: "2026-07-10", titulo: "Workshop de UX Research", tag: "Time", tagColor: "bg-cyan-100 text-cyan-800", hora: "09:00", responsavel: "Ariadne Carneiro", descricao: "Metodologias de pesquisa qualitativa com usuários reais." },
+  { date: "2026-07-14", titulo: "Design Review Semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800", hora: "14:00", responsavel: "Armando & Éria" },
+  { date: "2026-07-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques" },
+  { date: "2026-07-21", titulo: "Retrospectiva Q3 Sprint 1", tag: "Processo", tagColor: "bg-amber-100 text-amber-800", hora: "15:00", responsavel: "Daniel Machado", descricao: "Pontos de melhoria e lições aprendidas no sprint." },
+  { date: "2026-08-03", titulo: "Sprint Planning — Q3 Sprint 2", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado" },
+  { date: "2026-08-11", titulo: "Review de OKRs Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800", hora: "14:00", responsavel: "Beatriz Henriques", descricao: "Análise de progresso dos OKRs trimestrais." },
+  { date: "2026-08-17", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques" },
+  { date: "2026-09-01", titulo: "Kick-off Q4", tag: "Processo", tagColor: "bg-amber-100 text-amber-800", hora: "10:00", responsavel: "Beatriz Henriques", descricao: "Alinhamento estratégico para o último trimestre do ano." },
+  { date: "2026-09-08", titulo: "Sprint Planning — Q4 Sprint 1", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado" },
+  { date: "2026-09-15", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques" },
+  { date: "2026-09-22", titulo: "Design Review Semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800", hora: "14:00", responsavel: "Armando & Éria" },
+  { date: "2026-09-28", titulo: "Retrospectiva Q4 Sprint 1", tag: "Processo", tagColor: "bg-amber-100 text-amber-800", hora: "15:00", responsavel: "Daniel Machado" },
 ];
 
 const MESES_PT = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -130,13 +134,16 @@ const DIAS_PT  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 function CalendarioWidget() {
   const hoje = new Date();
   const [viewYear,  setViewYear]  = useState(hoje.getFullYear());
-  const [viewMonth, setViewMonth] = useState(hoje.getMonth()); // 0-based
+  const [viewMonth, setViewMonth] = useState(hoje.getMonth());
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   const prevMonth = () => {
+    setSelectedDay(null);
     if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
     else setViewMonth(m => m - 1);
   };
   const nextMonth = () => {
+    setSelectedDay(null);
     if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
     else setViewMonth(m => m + 1);
   };
@@ -144,141 +151,187 @@ function CalendarioWidget() {
   const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
-  const eventDates = new Set(
-    eventos
-      .filter(e => {
-        const d = new Date(e.date);
-        return d.getFullYear() === viewYear && d.getMonth() === viewMonth;
-      })
-      .map(e => new Date(e.date).getDate())
-  );
+  const isToday = (d: number) =>
+    d === hoje.getDate() && viewMonth === hoje.getMonth() && viewYear === hoje.getFullYear();
+
+  const thisMonthEvents = eventos
+    .filter(e => {
+      const [y, m] = e.date.split("-").map(Number);
+      return y === viewYear && m - 1 === viewMonth;
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const eventsByDay = new Map<number, Evento[]>();
+  thisMonthEvents.forEach(e => {
+    const day = Number(e.date.split("-")[2]);
+    if (!eventsByDay.has(day)) eventsByDay.set(day, []);
+    eventsByDay.get(day)!.push(e);
+  });
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
 
-  const isToday = (d: number) =>
-    d === hoje.getDate() && viewMonth === hoje.getMonth() && viewYear === hoje.getFullYear();
+  const displayedEvents = selectedDay ? (eventsByDay.get(selectedDay) ?? []) : thisMonthEvents;
 
-  // Upcoming events: months strictly after the viewed month
-  const nextMonthStart = new Date(viewYear, viewMonth + 1, 1);
-  const upcoming = eventos
-    .filter(e => new Date(e.date) >= nextMonthStart)
-    .sort((a, b) => a.date.localeCompare(b.date));
-
-  // Group upcoming by month label
-  const upcomingByMonth: { label: string; items: Evento[] }[] = [];
-  for (const e of upcoming) {
-    const d = new Date(e.date);
-    const label = `${MESES_PT[d.getMonth()]} ${d.getFullYear()}`;
-    const last = upcomingByMonth[upcomingByMonth.length - 1];
-    if (last && last.label === label) last.items.push(e);
-    else upcomingByMonth.push({ label, items: [e] });
-  }
+  const nextMonthEvents = eventos
+    .filter(e => {
+      const [y, m] = e.date.split("-").map(Number);
+      const after = y > viewYear || (y === viewYear && m - 1 > viewMonth);
+      return after;
+    })
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 6);
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 items-start">
-      {/* Calendário */}
-      <div className="rounded-xl border bg-card p-5 shrink-0 w-full md:w-auto">
-        {/* Navegação */}
+    <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 items-start">
+
+      {/* ── Mini calendário ────────────────────────────────── */}
+      <div className="rounded-2xl border bg-card p-5 w-full">
         <div className="flex items-center justify-between mb-4">
           <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="font-bold font-anek text-foreground text-sm">
-            {MESES_PT[viewMonth]} {viewYear}
-          </span>
+          <span className="font-bold font-anek text-foreground text-sm">{MESES_PT[viewMonth]} {viewYear}</span>
           <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Cabeçalho dias */}
         <div className="grid grid-cols-7 mb-1">
           {DIAS_PT.map(d => (
             <div key={d} className="text-center text-[10px] font-bold text-muted-foreground font-roboto py-1">{d}</div>
           ))}
         </div>
 
-        {/* Grid de dias */}
         <div className="grid grid-cols-7 gap-y-1">
-          {cells.map((day, i) => (
-            <div key={i} className="flex flex-col items-center py-0.5">
-              {day ? (
-                <div className={cn(
-                  "h-8 w-8 flex flex-col items-center justify-center rounded-full text-xs font-roboto font-medium relative",
-                  isToday(day) && "bg-primary text-primary-foreground",
-                  !isToday(day) && eventDates.has(day) && "bg-primary/10 text-primary font-bold",
-                  !isToday(day) && !eventDates.has(day) && "text-foreground"
-                )}>
-                  {day}
-                  {eventDates.has(day) && !isToday(day) && (
-                    <span className="absolute bottom-0.5 h-1 w-1 rounded-full bg-primary" />
-                  )}
-                </div>
-              ) : null}
-            </div>
-          ))}
+          {cells.map((day, i) => {
+            const hasEvents = day ? eventsByDay.has(day) : false;
+            const isSelected = day !== null && selectedDay === day;
+            return (
+              <div key={i} className="flex flex-col items-center py-0.5">
+                {day ? (
+                  <button
+                    onClick={() => setSelectedDay(isSelected ? null : day)}
+                    className={cn(
+                      "h-8 w-8 flex flex-col items-center justify-center rounded-full text-xs font-roboto font-medium relative transition-colors",
+                      isToday(day)   && "bg-primary text-primary-foreground",
+                      isSelected && !isToday(day) && "bg-primary/20 text-primary ring-1 ring-primary",
+                      !isToday(day) && !isSelected && hasEvents && "hover:bg-primary/10 text-foreground",
+                      !isToday(day) && !isSelected && !hasEvents && "text-foreground hover:bg-muted"
+                    )}
+                  >
+                    {day}
+                    {hasEvents && !isToday(day) && (
+                      <span className="absolute bottom-0.5 h-1 w-1 rounded-full bg-primary" />
+                    )}
+                  </button>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
 
-        {/* Eventos do mês visualizado */}
-        {(() => {
-          const thisMonthEvents = eventos.filter(e => {
-            const d = new Date(e.date);
-            return d.getFullYear() === viewYear && d.getMonth() === viewMonth;
-          });
-          if (thisMonthEvents.length === 0) return null;
-          return (
-            <div className="mt-4 pt-4 border-t space-y-2">
-              {thisMonthEvents.map((e, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground font-roboto w-6 shrink-0 text-right">
-                    {new Date(e.date).getDate()}
-                  </span>
-                  <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", e.tagColor)}>
-                    {e.tag}
-                  </span>
-                  <span className="text-xs font-roboto text-foreground truncate">{e.titulo}</span>
-                </div>
-              ))}
-            </div>
-          );
-        })()}
-      </div>
-
-      {/* Próximas datas marcadas — coluna direita */}
-      {upcomingByMonth.length > 0 && (
-        <div className="flex-1 min-w-0">
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto mb-3">
-            Próximas datas marcadas
-          </p>
-          <div className="space-y-4">
-            {upcomingByMonth.map((group, gi) => (
-              <div key={gi}>
-                <p className="text-[11px] font-bold text-primary uppercase tracking-widest font-roboto mb-2">{group.label}</p>
-                <div className="space-y-2">
-                  {group.items.map((e, i) => {
-                    const d = new Date(e.date);
-                    return (
-                      <div key={i} className="flex items-center gap-3 p-3 rounded-lg border bg-card">
-                        <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 shrink-0">
-                          <span className="text-[10px] font-bold text-primary font-roboto uppercase">{MESES_PT[d.getMonth()].slice(0,3)}</span>
-                          <span className="text-sm font-bold text-primary font-anek leading-none">{d.getDate()}</span>
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold font-anek text-foreground truncate">{e.titulo}</p>
-                          <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto", e.tagColor)}>{e.tag}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+        <div className="mt-4 pt-3 border-t flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-primary" />
+            <span className="text-[10px] font-roboto text-muted-foreground">Com evento</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-primary/80 ring-1 ring-primary" />
+            <span className="text-[10px] font-roboto text-muted-foreground">Hoje</span>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* ── Lista de eventos ────────────────────────────────── */}
+      <div className="min-w-0">
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto">
+            {selectedDay
+              ? `Eventos — ${selectedDay} de ${MESES_PT[viewMonth]}`
+              : `Eventos de ${MESES_PT[viewMonth]}`}
+          </p>
+          {selectedDay && (
+            <button
+              onClick={() => setSelectedDay(null)}
+              className="text-[10px] font-semibold font-roboto text-primary hover:underline"
+            >
+              Ver todos
+            </button>
+          )}
+        </div>
+
+        {displayedEvents.length === 0 ? (
+          <div className="rounded-2xl border bg-card p-8 text-center text-sm text-muted-foreground font-roboto">
+            Nenhum evento neste período.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {displayedEvents.map((e, i) => {
+              const day = Number(e.date.split("-")[2]);
+              const monthIdx = Number(e.date.split("-")[1]) - 1;
+              return (
+                <div key={i} className="group flex items-start gap-4 p-4 rounded-2xl border bg-card hover:border-primary/30 hover:shadow-md transition-[box-shadow,border-color] duration-300 ease-apple">
+                  <div className="flex flex-col items-center justify-center h-12 w-12 rounded-xl bg-primary/10 shrink-0">
+                    <span className="text-[9px] font-bold text-primary font-roboto uppercase leading-none">{MESES_PT[monthIdx].slice(0, 3)}</span>
+                    <span className="text-xl font-bold text-primary font-anek leading-none mt-0.5">{day}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 flex-wrap">
+                      <p className="font-semibold font-anek text-foreground text-sm leading-snug">{e.titulo}</p>
+                      <span className={cn("text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full font-roboto shrink-0", e.tagColor)}>{e.tag}</span>
+                    </div>
+                    <div className="mt-1.5 flex items-center gap-3 flex-wrap">
+                      {e.hora && (
+                        <span className="text-[11px] font-roboto text-muted-foreground">{e.hora}</span>
+                      )}
+                      {e.responsavel && (
+                        <span className="text-[11px] font-roboto text-muted-foreground flex items-center gap-1.5">
+                          <span className="h-1 w-1 rounded-full bg-muted-foreground inline-block shrink-0" />
+                          {e.responsavel}
+                        </span>
+                      )}
+                    </div>
+                    {e.descricao && (
+                      <p className="mt-1.5 text-[11px] text-muted-foreground font-roboto leading-snug">{e.descricao}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Próximas datas — aparece abaixo da lista do mês atual */}
+        {!selectedDay && nextMonthEvents.length > 0 && (
+          <div className="mt-6">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto mb-3">Próximas datas</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {nextMonthEvents.map((e, i) => {
+                const day = Number(e.date.split("-")[2]);
+                const monthIdx = Number(e.date.split("-")[1]) - 1;
+                return (
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl border bg-card/70 hover:border-primary/20 transition-colors duration-200">
+                    <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 shrink-0">
+                      <span className="text-[8px] font-bold text-primary font-roboto uppercase leading-none">{MESES_PT[monthIdx].slice(0, 3)}</span>
+                      <span className="text-sm font-bold text-primary font-anek leading-none mt-0.5">{day}</span>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold font-anek text-foreground truncate">{e.titulo}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className={cn("text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto", e.tagColor)}>{e.tag}</span>
+                        {e.hora && <span className="text-[9px] text-muted-foreground font-roboto">{e.hora}</span>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -333,7 +386,7 @@ function TeamCarousel() {
             key={i}
             className="shrink-0 w-36 rounded-2xl border bg-card text-center overflow-hidden shadow-md"
           >
-            <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
+            <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
               {teamPhotos[member.id] ? (
                 <img
                   src={teamPhotos[member.id]}
@@ -450,7 +503,7 @@ export default function Hub() {
           </Reveal>
 
           {/* Carousel overlapping the hero bottom — the drop-shadow creates the 3D lift effect */}
-          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl">
+          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl px-8 md:px-12">
             <TeamCarousel />
           </div>
         </div>
