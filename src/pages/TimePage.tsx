@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from
 import { createPortal } from "react-dom";
 import { GlobalNav } from "@/components/GlobalNav";
 import { olhoBranco } from "@/assets/olhos";
+import { teamPhotos } from "@/assets/team";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   Sun, Moon,
@@ -208,13 +209,22 @@ function PersonCard({
       {/* Colored top accent — groups people by area at a glance */}
       <div className={cn("absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r", gradients[person.color])} />
 
-      {/* Avatar (photo placeholder — swap for <img> when photos exist) */}
-      <div
-        className={cn("rounded-full bg-gradient-to-br flex items-center justify-center font-bold font-anek text-white shadow ring-2 ring-card", gradients[person.color])}
-        style={{ width: avatar, height: avatar, fontSize: Math.round(avatar * 0.38) }}
-      >
-        {person.initials}
-      </div>
+      {/* Avatar — real photo when available, gradient initials as fallback */}
+      {teamPhotos[id] ? (
+        <img
+          src={teamPhotos[id]}
+          alt={person.name}
+          className="rounded-full object-cover shadow ring-2 ring-card"
+          style={{ width: avatar, height: avatar }}
+        />
+      ) : (
+        <div
+          className={cn("rounded-full bg-gradient-to-br flex items-center justify-center font-bold font-anek text-white shadow ring-2 ring-card", gradients[person.color])}
+          style={{ width: avatar, height: avatar, fontSize: Math.round(avatar * 0.38) }}
+        >
+          {person.initials}
+        </div>
+      )}
 
       <p className="mt-2 font-bold font-anek text-foreground text-[13px] leading-tight">{person.name}</p>
       <p className="text-[11px] text-muted-foreground font-roboto mt-0.5 leading-snug">{person.role}</p>
@@ -369,10 +379,13 @@ function MemberCard({
           : "hover:shadow-xl hover:-translate-y-1 hover:border-primary/20"
       )}
     >
-      {/* Photo placeholder — fills the entire top of the card.
-          Swap the inner icon for an <img> once real photos exist. */}
-      <div className={cn("relative w-full aspect-[4/3] bg-gradient-to-br flex items-center justify-center", gradients[person.color])}>
-        <User className="h-10 w-10 text-white/70" strokeWidth={1.5} />
+      {/* Photo fills the entire top of the card; gradient + icon as fallback */}
+      <div className={cn("relative w-full aspect-[4/3] bg-gradient-to-br flex items-center justify-center overflow-hidden", gradients[person.color])}>
+        {teamPhotos[id] ? (
+          <img src={teamPhotos[id]} alt={person.name} className="absolute inset-0 h-full w-full object-cover" />
+        ) : (
+          <User className="h-10 w-10 text-white/70" strokeWidth={1.5} />
+        )}
       </div>
       <div className="px-4 pt-3 pb-4 flex flex-col items-center">
         <p className="font-bold font-anek text-foreground text-[13px] leading-tight">{person.name}</p>
@@ -398,13 +411,22 @@ function PersonDetails({ id, onClose }: { id: string; onClose: () => void }) {
         <div className="flex-1 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              {/* Photo placeholder */}
-              <div
-                className={cn("rounded-xl flex items-center justify-center text-white shadow bg-gradient-to-br shrink-0", gradients[person.color])}
-                style={{ width: 48, height: 48 }}
-              >
-                <User className="h-6 w-6 text-white/80" strokeWidth={1.5} />
-              </div>
+              {/* Photo — real when available, gradient icon fallback */}
+              {teamPhotos[id] ? (
+                <img
+                  src={teamPhotos[id]}
+                  alt={person.name}
+                  className="rounded-xl object-cover shadow shrink-0"
+                  style={{ width: 48, height: 48 }}
+                />
+              ) : (
+                <div
+                  className={cn("rounded-xl flex items-center justify-center text-white shadow bg-gradient-to-br shrink-0", gradients[person.color])}
+                  style={{ width: 48, height: 48 }}
+                >
+                  <User className="h-6 w-6 text-white/80" strokeWidth={1.5} />
+                </div>
+              )}
               <div className="min-w-0">
                 <h3 className="text-base font-bold font-anek text-foreground leading-tight truncate">{person.name}</h3>
                 <p className="text-xs text-primary font-roboto font-semibold mt-0.5 leading-snug">{person.role}</p>
