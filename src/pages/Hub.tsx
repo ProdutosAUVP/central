@@ -154,184 +154,136 @@ function CalendarioWidget() {
   const isToday = (d: number) =>
     d === hoje.getDate() && viewMonth === hoje.getMonth() && viewYear === hoje.getFullYear();
 
-  const thisMonthEvents = eventos
-    .filter(e => {
-      const [y, m] = e.date.split("-").map(Number);
-      return y === viewYear && m - 1 === viewMonth;
-    })
-    .sort((a, b) => a.date.localeCompare(b.date));
-
   const eventsByDay = new Map<number, Evento[]>();
-  thisMonthEvents.forEach(e => {
-    const day = Number(e.date.split("-")[2]);
-    if (!eventsByDay.has(day)) eventsByDay.set(day, []);
-    eventsByDay.get(day)!.push(e);
+  eventos.forEach(e => {
+    const [y, m] = e.date.split("-").map(Number);
+    if (y === viewYear && m - 1 === viewMonth) {
+      const day = Number(e.date.split("-")[2]);
+      if (!eventsByDay.has(day)) eventsByDay.set(day, []);
+      eventsByDay.get(day)!.push(e);
+    }
   });
 
   const cells: (number | null)[] = [
     ...Array(firstDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
+  while (cells.length % 7 !== 0) cells.push(null);
 
-  const displayedEvents = selectedDay ? (eventsByDay.get(selectedDay) ?? []) : thisMonthEvents;
-
-  const nextMonthEvents = eventos
-    .filter(e => {
-      const [y, m] = e.date.split("-").map(Number);
-      const after = y > viewYear || (y === viewYear && m - 1 > viewMonth);
-      return after;
-    })
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(0, 6);
+  const selectedEvents = selectedDay ? (eventsByDay.get(selectedDay) ?? []) : [];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 items-start">
-
-      {/* ── Mini calendário ────────────────────────────────── */}
-      <div className="rounded-2xl border bg-card p-5 w-full">
-        <div className="flex items-center justify-between mb-4">
-          <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <span className="font-bold font-anek text-foreground text-sm">{MESES_PT[viewMonth]} {viewYear}</span>
-          <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-7 mb-1">
-          {DIAS_PT.map(d => (
-            <div key={d} className="text-center text-[10px] font-bold text-muted-foreground font-roboto py-1">{d}</div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-7 gap-y-1">
-          {cells.map((day, i) => {
-            const hasEvents = day ? eventsByDay.has(day) : false;
-            const isSelected = day !== null && selectedDay === day;
-            return (
-              <div key={i} className="flex flex-col items-center py-0.5">
-                {day ? (
-                  <button
-                    onClick={() => setSelectedDay(isSelected ? null : day)}
-                    className={cn(
-                      "h-8 w-8 flex flex-col items-center justify-center rounded-full text-xs font-roboto font-medium relative transition-colors",
-                      isToday(day)   && "bg-primary text-primary-foreground",
-                      isSelected && !isToday(day) && "bg-primary/20 text-primary ring-1 ring-primary",
-                      !isToday(day) && !isSelected && hasEvents && "hover:bg-primary/10 text-foreground",
-                      !isToday(day) && !isSelected && !hasEvents && "text-foreground hover:bg-muted"
-                    )}
-                  >
-                    {day}
-                    {hasEvents && !isToday(day) && (
-                      <span className="absolute bottom-0.5 h-1 w-1 rounded-full bg-primary" />
-                    )}
-                  </button>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-4 pt-3 border-t flex items-center gap-4 flex-wrap">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            <span className="text-[10px] font-roboto text-muted-foreground">Com evento</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-primary/80 ring-1 ring-primary" />
-            <span className="text-[10px] font-roboto text-muted-foreground">Hoje</span>
-          </div>
-        </div>
+    <div className="rounded-2xl border bg-card overflow-hidden">
+      {/* Month navigation */}
+      <div className="flex items-center justify-between px-6 py-4 border-b">
+        <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        <span className="font-bold font-anek text-foreground">{MESES_PT[viewMonth]} {viewYear}</span>
+        <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
+          <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
 
-      {/* ── Lista de eventos ────────────────────────────────── */}
-      <div className="min-w-0">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto">
-            {selectedDay
-              ? `Eventos — ${selectedDay} de ${MESES_PT[viewMonth]}`
-              : `Eventos de ${MESES_PT[viewMonth]}`}
-          </p>
-          {selectedDay && (
+      {/* Day-of-week headers */}
+      <div className="grid grid-cols-7 border-b">
+        {DIAS_PT.map((d, i) => (
+          <div key={d} className={cn("py-2 text-center text-[10px] font-bold text-muted-foreground font-roboto uppercase tracking-wider", i < 6 && "border-r border-border")}>
+            {d}
+          </div>
+        ))}
+      </div>
+
+      {/* Day cells */}
+      <div className="grid grid-cols-7">
+        {cells.map((day, i) => {
+          const dayEvents = day ? (eventsByDay.get(day) ?? []) : [];
+          const isSelected = day !== null && selectedDay === day;
+          const hasEvents = dayEvents.length > 0;
+          return (
+            <div
+              key={i}
+              className={cn(
+                "min-h-[88px] border-b flex flex-col p-1.5 transition-colors duration-150",
+                i % 7 !== 6 && "border-r border-border",
+                day && hasEvents && "cursor-pointer",
+                isSelected && "bg-primary/5",
+                day && hasEvents && !isSelected && "hover:bg-muted/40",
+                !day && "bg-muted/20"
+              )}
+              onClick={() => {
+                if (day && hasEvents) setSelectedDay(isSelected ? null : day);
+              }}
+            >
+              {day !== null && (
+                <>
+                  <div className="flex justify-end">
+                    <span className={cn(
+                      "h-6 w-6 flex items-center justify-center rounded-full text-xs font-medium font-roboto",
+                      isToday(day) && "bg-primary text-primary-foreground font-bold",
+                      isSelected && !isToday(day) && "ring-1 ring-primary text-primary",
+                      !isToday(day) && !isSelected && "text-foreground/80"
+                    )}>
+                      {day}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-0.5 mt-0.5">
+                    {dayEvents.slice(0, 2).map((e, ei) => (
+                      <span
+                        key={ei}
+                        className={cn("text-[9px] font-bold font-roboto px-1.5 py-0.5 rounded truncate leading-tight", e.tagColor)}
+                        title={e.titulo}
+                      >
+                        {e.titulo}
+                      </span>
+                    ))}
+                    {dayEvents.length > 2 && (
+                      <span className="text-[9px] text-muted-foreground font-roboto px-1">+{dayEvents.length - 2}</span>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Detail panel — expands below grid when a day with events is selected */}
+      {selectedDay !== null && selectedEvents.length > 0 && (
+        <div className="border-t px-5 py-4 space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto">
+              {selectedDay} de {MESES_PT[viewMonth]} — {selectedEvents.length} evento{selectedEvents.length !== 1 ? "s" : ""}
+            </p>
             <button
               onClick={() => setSelectedDay(null)}
               className="text-[10px] font-semibold font-roboto text-primary hover:underline"
             >
-              Ver todos
+              Fechar
             </button>
-          )}
-        </div>
-
-        {displayedEvents.length === 0 ? (
-          <div className="rounded-2xl border bg-card p-8 text-center text-sm text-muted-foreground font-roboto">
-            Nenhum evento neste período.
           </div>
-        ) : (
-          <div className="space-y-3">
-            {displayedEvents.map((e, i) => {
-              const day = Number(e.date.split("-")[2]);
-              const monthIdx = Number(e.date.split("-")[1]) - 1;
-              return (
-                <div key={i} className="group flex items-start gap-4 p-4 rounded-2xl border bg-card hover:border-primary/30 hover:shadow-md transition-[box-shadow,border-color] duration-300 ease-apple">
-                  <div className="flex flex-col items-center justify-center h-12 w-12 rounded-xl bg-primary/10 shrink-0">
-                    <span className="text-[9px] font-bold text-primary font-roboto uppercase leading-none">{MESES_PT[monthIdx].slice(0, 3)}</span>
-                    <span className="text-xl font-bold text-primary font-anek leading-none mt-0.5">{day}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 flex-wrap">
-                      <p className="font-semibold font-anek text-foreground text-sm leading-snug">{e.titulo}</p>
-                      <span className={cn("text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full font-roboto shrink-0", e.tagColor)}>{e.tag}</span>
-                    </div>
-                    <div className="mt-1.5 flex items-center gap-3 flex-wrap">
-                      {e.hora && (
-                        <span className="text-[11px] font-roboto text-muted-foreground">{e.hora}</span>
-                      )}
-                      {e.responsavel && (
-                        <span className="text-[11px] font-roboto text-muted-foreground flex items-center gap-1.5">
-                          <span className="h-1 w-1 rounded-full bg-muted-foreground inline-block shrink-0" />
-                          {e.responsavel}
-                        </span>
-                      )}
-                    </div>
-                    {e.descricao && (
-                      <p className="mt-1.5 text-[11px] text-muted-foreground font-roboto leading-snug">{e.descricao}</p>
-                    )}
-                  </div>
+          {selectedEvents.map((e, i) => (
+            <div key={i} className="flex items-start gap-3 p-4 rounded-xl border bg-background">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2 flex-wrap">
+                  <p className="font-semibold font-anek text-foreground text-sm leading-snug">{e.titulo}</p>
+                  <span className={cn("text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full font-roboto shrink-0", e.tagColor)}>{e.tag}</span>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Próximas datas — aparece abaixo da lista do mês atual */}
-        {!selectedDay && nextMonthEvents.length > 0 && (
-          <div className="mt-6">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto mb-3">Próximas datas</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {nextMonthEvents.map((e, i) => {
-                const day = Number(e.date.split("-")[2]);
-                const monthIdx = Number(e.date.split("-")[1]) - 1;
-                return (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl border bg-card/70 hover:border-primary/20 transition-colors duration-200">
-                    <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 shrink-0">
-                      <span className="text-[8px] font-bold text-primary font-roboto uppercase leading-none">{MESES_PT[monthIdx].slice(0, 3)}</span>
-                      <span className="text-sm font-bold text-primary font-anek leading-none mt-0.5">{day}</span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold font-anek text-foreground truncate">{e.titulo}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className={cn("text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto", e.tagColor)}>{e.tag}</span>
-                        {e.hora && <span className="text-[9px] text-muted-foreground font-roboto">{e.hora}</span>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                <div className="mt-1.5 flex items-center gap-3 flex-wrap">
+                  {e.hora && <span className="text-[11px] font-roboto text-muted-foreground">{e.hora}</span>}
+                  {e.responsavel && (
+                    <span className="text-[11px] font-roboto text-muted-foreground flex items-center gap-1.5">
+                      <span className="h-1 w-1 rounded-full bg-muted-foreground inline-block shrink-0" />
+                      {e.responsavel}
+                    </span>
+                  )}
+                </div>
+                {e.descricao && <p className="mt-1.5 text-[11px] text-muted-foreground font-roboto leading-snug">{e.descricao}</p>}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -362,11 +314,56 @@ const TEAM_CAROUSEL = [
 
 function TeamCarousel() {
   const items = [...TEAM_CAROUSEL, ...TEAM_CAROUSEL];
+  const CARD_W = 144;  // w-36
+  const GAP    = 12;   // gap-3
+  const STRIDE = CARD_W + GAP;
+  const LOOP_W = TEAM_CAROUSEL.length * STRIDE;
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef     = useRef<HTMLDivElement>(null);
+  const offsetRef    = useRef(0);
+  const pausedRef    = useRef(false);
+  const rafRef       = useRef<number>(0);
+
+  useEffect(() => {
+    const SIGMA = 220;
+    const BASE  = 0.80;
+    const PEAK  = 1.06;
+
+    const tick = () => {
+      if (!pausedRef.current) {
+        offsetRef.current = (offsetRef.current + 0.55) % LOOP_W;
+      }
+      const container = containerRef.current;
+      const track     = trackRef.current;
+      if (container && track) {
+        track.style.transform = `translateX(-${offsetRef.current}px)`;
+        const cx = container.offsetWidth / 2;
+        const children = track.children;
+        for (let i = 0; i < children.length; i++) {
+          const el = children[i] as HTMLElement;
+          const cardCenter = i * STRIDE - offsetRef.current + CARD_W / 2;
+          const dist = Math.abs(cardCenter - cx);
+          const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
+          el.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
+          el.style.opacity   = `${(0.45 + 0.55 * t).toFixed(3)}`;
+          el.style.zIndex    = String(Math.round(t * 10));
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [LOOP_W]);
+
   return (
     <Link
       to="/time"
-      className="group relative block overflow-hidden rounded-2xl cursor-pointer"
+      className="group relative block cursor-pointer"
       aria-label="Conheça nosso time"
+      onMouseEnter={() => { pausedRef.current = true; }}
+      onMouseLeave={() => { pausedRef.current = false; }}
     >
       {/* Hover overlay */}
       <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-background/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
@@ -376,33 +373,41 @@ function TeamCarousel() {
         </span>
       </div>
 
-      {/* Scrolling strip */}
-      <div
-        className="flex gap-3 animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none"
-        style={{ width: "max-content" }}
-      >
-        {items.map((member, i) => (
-          <div
-            key={i}
-            className="shrink-0 w-36 rounded-2xl border bg-card text-center overflow-hidden shadow-md"
-          >
-            <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
-              {teamPhotos[member.id] ? (
-                <img
-                  src={teamPhotos[member.id]}
-                  alt={member.name}
-                  className="absolute inset-0 h-full w-full object-cover object-top"
-                />
-              ) : (
-                <User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />
-              )}
+      {/* Edge fades */}
+      <div className="absolute inset-y-0 left-0  w-24 z-10 bg-gradient-to-r from-card to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-card to-transparent pointer-events-none" />
+
+      {/* Track */}
+      <div ref={containerRef} className="overflow-hidden rounded-2xl">
+        <div
+          ref={trackRef}
+          className="flex gap-3 py-4"
+          style={{ width: `${items.length * STRIDE}px` }}
+        >
+          {items.map((member, i) => (
+            <div
+              key={i}
+              style={{ transformOrigin: "center bottom" }}
+              className="shrink-0 w-36 rounded-2xl border bg-card text-center overflow-hidden shadow-md"
+            >
+              <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
+                {teamPhotos[member.id] ? (
+                  <img
+                    src={teamPhotos[member.id]}
+                    alt={member.name}
+                    className="absolute inset-0 h-full w-full object-cover object-top"
+                  />
+                ) : (
+                  <User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />
+                )}
+              </div>
+              <div className="px-2 pt-2 pb-3">
+                <p className="font-bold font-anek text-foreground text-[11px] leading-tight">{member.name}</p>
+                <p className="text-[9px] text-muted-foreground font-roboto mt-0.5 leading-snug">{member.role}</p>
+              </div>
             </div>
-            <div className="px-2 pt-2 pb-3">
-              <p className="font-bold font-anek text-foreground text-[11px] leading-tight">{member.name}</p>
-              <p className="text-[9px] text-muted-foreground font-roboto mt-0.5 leading-snug">{member.role}</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </Link>
   );
@@ -665,16 +670,18 @@ export default function Hub() {
 
         {/* FAQ */}
         <Reveal>
-          <section>
-            <SectionHeader icon={MessageSquare} title="Perguntas Frequentes" />
-            <Accordion type="single" collapsible className="w-full max-w-2xl">
-              {faqs.map((faq, i) => (
-                <AccordionItem key={i} value={`faq-${i}`}>
-                  <AccordionTrigger className="text-sm font-medium font-roboto text-left">{faq.q}</AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground font-roboto">{faq.a}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+          <section className="flex flex-col items-center">
+            <div className="w-full max-w-2xl">
+              <SectionHeader icon={MessageSquare} title="Perguntas Frequentes" />
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, i) => (
+                  <AccordionItem key={i} value={`faq-${i}`}>
+                    <AccordionTrigger className="text-sm font-medium font-roboto text-left">{faq.q}</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground font-roboto">{faq.a}</AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </section>
         </Reveal>
       </main>

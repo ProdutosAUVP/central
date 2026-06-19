@@ -48,17 +48,15 @@ export function GlobalNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const { brand } = useBrand();
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
 
   const currentSystem = systems.find((s) => s.path === location.pathname) || systems[0];
 
-  // Show welcome tooltip on first visit
   useEffect(() => {
     const hasSeenWelcome = sessionStorage.getItem("auvp-nav-welcome");
     if (!hasSeenWelcome) {
-      const timer = setTimeout(() => {
-        setShowWelcome(true);
-      }, 800);
+      const timer = setTimeout(() => setShowWelcome(true), 800);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -73,7 +71,7 @@ export function GlobalNav() {
       {/* Logo */}
       <div
         className={cn(
-          "flex items-center justify-center h-8 w-8 md:h-10 md:w-10 rounded-lg",
+          "flex items-center justify-center h-8 w-8 md:h-10 md:w-10 rounded-lg shrink-0",
           brand === "capital" ? "bg-brand-dark" : "bg-brand"
         )}
       >
@@ -84,71 +82,128 @@ export function GlobalNav() {
         />
       </div>
 
-      {/* Dropdown */}
-      <DropdownMenu onOpenChange={(open) => { if (open) dismissWelcome(); }}>
-        <DropdownMenuTrigger className="flex items-center gap-2 outline-none group rounded-xl px-2 py-1.5 -mx-2 hover:bg-muted transition-colors">
-          <div className="text-left">
-            <p className="text-sm font-bold font-anek leading-tight text-foreground">
-              {currentSystem.label}
-            </p>
-            <p className="text-[10px] text-muted-foreground leading-tight font-roboto uppercase tracking-wider">AUVP</p>
-          </div>
-          <ChevronDown className="h-4 w-4 text-muted-foreground group-data-[state=open]:rotate-180 transition-transform" />
-        </DropdownMenuTrigger>
+      {/* Mobile: dropdown */}
+      <div className="md:hidden">
+        <DropdownMenu onOpenChange={(open) => { if (open) dismissWelcome(); }}>
+          <DropdownMenuTrigger className="flex items-center gap-2 outline-none group rounded-xl px-2 py-1.5 -mx-2 hover:bg-muted transition-colors">
+            <div className="text-left">
+              <p className="text-sm font-bold font-anek leading-tight text-foreground">
+                {currentSystem.label}
+              </p>
+              <p className="text-[10px] text-muted-foreground leading-tight font-roboto uppercase tracking-wider">AUVP</p>
+            </div>
+            <ChevronDown className="h-4 w-4 text-muted-foreground group-data-[state=open]:rotate-180 transition-transform" />
+          </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="start" className="w-80 p-2 space-y-1 bg-popover border border-border shadow-lg">
-          <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider font-roboto font-bold px-2 py-1.5">
-            Navegar entre sistemas
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
+          <DropdownMenuContent align="start" className="w-80 p-2 space-y-1 bg-popover border border-border shadow-lg">
+            <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider font-roboto font-bold px-2 py-1.5">
+              Navegar entre sistemas
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
 
-          {systems.map((system) => {
-            const Icon = system.icon;
-            const isActive = location.pathname === system.path;
-            return (
-              <DropdownMenuItem
-                key={system.id}
-                onClick={() => navigate(system.path)}
-                className={cn(
-                  "flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-colors",
-                  "focus:bg-muted hover:bg-muted data-[highlighted]:bg-muted",
-                  isActive && "bg-muted/60 ring-1 ring-border"
-                )}
-              >
-                <div
+            {systems.map((system) => {
+              const Icon = system.icon;
+              const isActive = location.pathname === system.path;
+              return (
+                <DropdownMenuItem
+                  key={system.id}
+                  onClick={() => navigate(system.path)}
                   className={cn(
-                    "flex items-center justify-center h-9 w-9 rounded-lg shrink-0 mt-0.5 border transition-colors",
-                    isActive
-                      ? "bg-foreground text-background border-foreground"
-                      : "bg-card text-foreground border-border"
+                    "flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-colors",
+                    "focus:bg-muted hover:bg-muted data-[highlighted]:bg-muted",
+                    isActive && "bg-muted/60 ring-1 ring-border"
                   )}
                 >
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold font-anek text-foreground leading-tight">
-                    {system.label}
-                  </p>
-                  <p className="text-xs text-muted-foreground leading-snug mt-1 font-roboto">
-                    {system.description}
-                  </p>
-                </div>
-                {isActive && (
-                  <span className="text-[9px] font-bold text-foreground uppercase tracking-wider mt-1 px-1.5 py-0.5 rounded-md bg-background border border-border font-roboto shrink-0">
-                    Atual
-                  </span>
-                )}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+                  <div
+                    className={cn(
+                      "flex items-center justify-center h-9 w-9 rounded-lg shrink-0 mt-0.5 border transition-colors",
+                      isActive
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-card text-foreground border-border"
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold font-anek text-foreground leading-tight">
+                      {system.label}
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-snug mt-1 font-roboto">
+                      {system.description}
+                    </p>
+                  </div>
+                  {isActive && (
+                    <span className="text-[9px] font-bold text-foreground uppercase tracking-wider mt-1 px-1.5 py-0.5 rounded-md bg-background border border-border font-roboto shrink-0">
+                      Atual
+                    </span>
+                  )}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
-      {/* Welcome tooltip */}
+      {/* Desktop: horizontal nav */}
+      <nav className="hidden md:flex items-center gap-0.5">
+        {systems.map((system) => {
+          const Icon = system.icon;
+          const isActive = location.pathname === system.path;
+          const isHovered = hoveredId === system.id;
+          return (
+            <div
+              key={system.id}
+              className="relative"
+              onMouseEnter={() => setHoveredId(system.id)}
+              onMouseLeave={() => setHoveredId(null)}
+            >
+              <button
+                onClick={() => navigate(system.path)}
+                className={cn(
+                  "relative px-3 py-2 text-sm font-bold font-anek rounded-lg transition-colors duration-200",
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                {system.label}
+                {isActive && (
+                  <span className="absolute bottom-1 left-3 right-3 h-0.5 bg-primary rounded-full" />
+                )}
+              </button>
+
+              {isHovered && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="relative bg-popover border border-border rounded-xl p-3 shadow-xl w-[220px]">
+                    <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-popover border-l border-t border-border rotate-45 rounded-sm" />
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={cn(
+                          "flex items-center justify-center h-8 w-8 rounded-lg shrink-0 border mt-0.5",
+                          isActive
+                            ? "bg-foreground text-background border-foreground"
+                            : "bg-card text-foreground border-border"
+                        )}
+                      >
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold font-anek text-foreground leading-tight">{system.label}</p>
+                        <p className="text-xs text-muted-foreground font-roboto mt-0.5 leading-snug">{system.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </nav>
+
+      {/* Welcome tooltip — mobile only */}
       {showWelcome && (
-        <div className="absolute top-full left-12 mt-3 z-[60] animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="md:hidden absolute top-full left-12 mt-3 z-[60] animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="relative bg-popover border border-border rounded-xl p-4 shadow-xl w-[380px] max-w-[calc(100vw-2rem)] backdrop-blur-xl">
-            {/* Arrow */}
             <div className="absolute -top-1.5 left-6 w-3 h-3 bg-popover border-l border-t border-border rotate-45 rounded-sm" />
             <button
               onClick={dismissWelcome}
