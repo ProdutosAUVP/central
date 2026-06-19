@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { ChevronDown, Sun, Moon } from "lucide-react";
@@ -20,13 +20,6 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
   const [showCode, setShowCode] = useState(false);
   const [codeTab, setCodeTab] = useState<"react" | "html">("react");
   const [isDark, setIsDark] = useState(false);
-
-  // Garante que qualquer .dark global anterior seja removida (legado)
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
 
   return (
     <div className={cn("border rounded-lg overflow-hidden bg-card", className)}>
