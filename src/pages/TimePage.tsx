@@ -381,7 +381,7 @@ function MemberCard({
       )}
     >
       {/* Photo fills the entire top of the card; gradient + icon as fallback */}
-      <div className={cn("relative w-full aspect-[4/3] bg-gradient-to-br flex items-center justify-center overflow-hidden", gradients[person.color])}>
+      <div className={cn("relative w-full aspect-square bg-gradient-to-br flex items-center justify-center overflow-hidden", gradients[person.color])}>
         {teamPhotos[id] ? (
           <img src={teamPhotos[id]} alt={person.name} className="absolute inset-0 h-full w-full object-cover object-top" />
         ) : (
