@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GlobalNav } from "@/components/GlobalNav";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -349,6 +349,7 @@ function TeamCarousel() {
   const STRIDE = CARD_W + GAP;
   const LOOP_W = TEAM_CAROUSEL.length * STRIDE;
 
+  const navigate     = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef     = useRef<HTMLDivElement>(null);
   const offsetRef    = useRef(0);
@@ -391,7 +392,7 @@ function TeamCarousel() {
   }, [LOOP_W]);
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} onClick={() => navigate('/time')} className="cursor-pointer">
       {/* Cards — overflow-hidden para clipar o scroll horizontal */}
       <div className="overflow-hidden rounded-2xl">
         <div
@@ -433,17 +434,9 @@ function TeamCarousel() {
         </div>
       </div>
 
-      {/* CTA — surge abaixo dos cards quando qualquer card está em hover */}
-      <div
-        style={{
-          maxHeight: isHovered ? "76px" : "0px",
-          overflow: "hidden",
-          transition: isHovered
-            ? `max-height 500ms ${EASE_APPLE}`
-            : `max-height 260ms ${EASE_APPLE} 60ms`,
-        }}
-      >
-        <Link to="/time" className="flex flex-col items-center gap-1 pt-3 pb-1 w-full">
+      {/* CTA — altura fixa, sempre no fluxo, conteúdo anima com opacity/transform */}
+      <div style={{ height: "76px", overflow: "hidden" }}>
+        <div className="flex flex-col items-center gap-1 pt-3 pb-1 w-full">
           {/* Linha que cresce do centro para as extremidades */}
           <div
             className="w-full h-px bg-border"
@@ -475,11 +468,11 @@ function TeamCarousel() {
                 ? `opacity 200ms ${EASE_APPLE} 420ms`
                 : `opacity 60ms ${EASE_APPLE}`,
             }}
-            className="text-[10px] font-bold font-sora uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors duration-150"
+            className="text-[10px] font-bold font-sora uppercase tracking-[0.14em] text-muted-foreground"
           >
             Conheça o Time
           </span>
-        </Link>
+        </div>
       </div>
     </div>
   );
@@ -580,7 +573,7 @@ export default function Hub() {
           </Reveal>
 
           {/* Carousel overlapping the hero bottom — the drop-shadow creates the 3D lift effect */}
-          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl px-8 md:px-12 pb-[76px]">
+          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl px-8 md:px-12">
             <TeamCarousel />
           </div>
         </div>
