@@ -345,8 +345,11 @@ function TeamCarousel() {
           const cardCenter = i * STRIDE - offsetRef.current + CARD_W / 2;
           const dist = Math.abs(cardCenter - cx);
           const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
-          el.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
-          el.style.zIndex    = String(Math.round(t * 10));
+          el.style.zIndex = String(Math.round(t * 10));
+          const photoEl = el.firstElementChild as HTMLElement;
+          if (photoEl) {
+            photoEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
+          }
         }
       }
       rafRef.current = requestAnimationFrame(tick);
@@ -359,21 +362,21 @@ function TeamCarousel() {
   return (
     <Link
       to="/time"
-      className="group relative block cursor-pointer"
+      className="group block cursor-pointer"
       aria-label="Conheça nosso time"
       onMouseEnter={() => { pausedRef.current = true; }}
       onMouseLeave={() => { pausedRef.current = false; }}
     >
-      {/* Hover overlay */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-background/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        <span className="flex items-center gap-2 font-bold font-anek text-foreground text-lg drop-shadow">
-          Conheça nosso time
-          <ChevronRight className="h-5 w-5 text-primary" />
-        </span>
-      </div>
+      <div ref={containerRef} className="relative overflow-hidden rounded-2xl">
+        {/* Hover overlay — dentro do overflow-hidden para clipar corretamente */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <span className="flex items-center gap-2 font-bold font-anek text-foreground text-lg drop-shadow">
+            Conheça nosso time
+            <ChevronRight className="h-5 w-5 text-primary" />
+          </span>
+        </div>
 
-      {/* Track */}
-      <div ref={containerRef} className="overflow-hidden rounded-2xl">
+        {/* Track */}
         <div
           ref={trackRef}
           className="flex gap-3 py-4"
@@ -382,21 +385,27 @@ function TeamCarousel() {
           {items.map((member, i) => (
             <div
               key={i}
-              style={{ transformOrigin: "center bottom" }}
-              className="shrink-0 w-36 rounded-2xl border bg-card text-center overflow-hidden shadow-md"
+              className="relative shrink-0 w-36 text-center"
             >
-              <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
-                {teamPhotos[member.id] ? (
-                  <img
-                    src={teamPhotos[member.id]}
-                    alt={member.name}
-                    className="absolute inset-0 h-full w-full object-cover object-top"
-                  />
-                ) : (
-                  <User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />
-                )}
+              {/* Foto — recebe o scale do JS */}
+              <div
+                style={{ transformOrigin: "50% 100%" }}
+                className="rounded-2xl border bg-card overflow-hidden shadow-md"
+              >
+                <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
+                  {teamPhotos[member.id] ? (
+                    <img
+                      src={teamPhotos[member.id]}
+                      alt={member.name}
+                      className="absolute inset-0 h-full w-full object-cover object-top"
+                    />
+                  ) : (
+                    <User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />
+                  )}
+                </div>
               </div>
-              <div className="px-2 pt-2 pb-3">
+              {/* Texto — fora do elemento escalado, sempre estático */}
+              <div className="px-2 pt-2 pb-1">
                 <p className="font-bold font-anek text-foreground text-[11px] leading-tight">{member.name}</p>
                 <p className="text-[9px] text-muted-foreground font-roboto mt-0.5 leading-snug">{member.role}</p>
               </div>
