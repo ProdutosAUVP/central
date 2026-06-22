@@ -15,6 +15,7 @@ import NovidadesPage from "./pages/NovidadesPage";
 import DesignSystem from "./pages/DesignSystem";
 import TomEVozPage from "./pages/TomEVozPage";
 import NotFound from "./pages/NotFound";
+import { FeedbackButton } from "./components/FeedbackButton";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <FeedbackButton />
             <BrowserRouter basename={import.meta.env.BASE_URL}>
               <Routes>
                 <Route path="/" element={<Hub />} />
