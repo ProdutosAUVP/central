@@ -35,7 +35,7 @@ function ThemeToggle() {
 const novidades = [
   {
     tag: "Design System",
-    tagColor: "bg-emerald-100 text-emerald-800",
+    tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]",
     title: "Novos componentes de data viz",
     desc: "Paleta de 8 cores otimizada para gráficos de pizza, barras e linhas com suporte a dark mode.",
     date: "Mai 2025",
@@ -56,20 +56,48 @@ const novidades = [
   },
 ];
 
+function FigmaIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 38 57" fill="currentColor" aria-hidden="true">
+      <path d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z" />
+      <path d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 0 1-19 0z" />
+      <path d="M19 0v19h9.5a9.5 9.5 0 0 0 0-19H19z" />
+      <path d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z" />
+      <path d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z" />
+    </svg>
+  );
+}
+
+function GitHubIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+    </svg>
+  );
+}
+
+function NotionIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.934zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z" />
+    </svg>
+  );
+}
+
 const accessLinks = [
   { label: "Design System", desc: "Componentes e tokens", icon: Palette, to: "/design-system", internal: true, gradient: "from-violet-500 to-purple-600" },
   { label: "Tom e Voz", desc: "Guia de comunicação", icon: Volume2, to: "/tom-e-voz", internal: true, gradient: "from-sky-500 to-blue-600" },
   { label: "Time de Produto", desc: "Organograma e pilares", icon: Users, to: "/time", internal: true, gradient: "from-fuchsia-500 to-pink-600" },
-  { label: "Figma", desc: "Arquivos de design", icon: ExternalLink, href: "https://figma.com", internal: false, gradient: "from-orange-500 to-red-500" },
-  { label: "GitHub", desc: "Repositórios", icon: ExternalLink, href: "https://github.com/produtosauvp", internal: false, gradient: "from-slate-600 to-slate-800" },
-  { label: "Notion", desc: "Documentações", icon: FileText, href: "#", internal: false, gradient: "from-neutral-600 to-neutral-800" },
-  { label: "Analytics", desc: "Métricas de produto", icon: BarChart3, href: "#", internal: false, gradient: "from-emerald-500 to-teal-600" },
+  { label: "Figma", desc: "Arquivos de design", icon: FigmaIcon, href: "https://figma.com", internal: false, gradient: "from-orange-500 to-red-500" },
+  { label: "GitHub", desc: "Repositórios", icon: GitHubIcon, href: "https://github.com/produtosauvp", internal: false, gradient: "from-slate-600 to-slate-800" },
+  { label: "Notion", desc: "Documentações", icon: NotionIcon, href: "#", internal: false, gradient: "from-neutral-600 to-neutral-800" },
+  { label: "Analytics", desc: "Métricas de produto", icon: BarChart3, href: "#", internal: false, gradient: "from-emerald-500 to-teal-600 dark:from-[#5A8770] dark:to-[#3d6b57]" },
   { label: "AUVP Escola", desc: "Plataforma de cursos", icon: GraduationCap, to: "/escola", internal: true, newTab: true, gradient: "from-amber-500 to-orange-600" },
 ];
 
 const produtos = [
-  { name: "AUVP Capital", desc: "Plataforma de investimentos", status: "Ativo", statusColor: "bg-green-100 text-green-700" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700", to: "/escola" },
+  { name: "AUVP Capital", desc: "Plataforma de investimentos", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", to: "/escola" },
   { name: "AUVP Analítica", desc: "Análise de investimentos", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700" },
@@ -88,14 +116,14 @@ const docs = [
 ];
 
 const portfolio = [
-  { nome: "Kit de Onboarding", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Caderno, caneta e carta de boas-vindas entregues no primeiro dia.", img: "" },
+  { nome: "Kit de Onboarding", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Caderno, caneta e carta de boas-vindas entregues no primeiro dia.", img: "" },
   { nome: "Camiseta AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Camiseta preta com bordado do olho dourado da AUVP.", img: "" },
   { nome: "Caneca Sardinha", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Caneca de porcelana com design exclusivo para o time.", img: "" },
-  { nome: "Cartão de Visitas", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Cartão premium com verniz localizado e dados de contato.", img: "" },
+  { nome: "Cartão de Visitas", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Cartão premium com verniz localizado e dados de contato.", img: "" },
   { nome: "Banner de Evento", tag: "Evento", tagColor: "bg-purple-100 text-purple-800", desc: "Banner retrátil 100×200 cm usado nos eventos e workshops.", img: "" },
-  { nome: "Pasta Corporativa", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Pasta A4 com impressão da marca e bolso interno.", img: "" },
+  { nome: "Pasta Corporativa", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Pasta A4 com impressão da marca e bolso interno.", img: "" },
   { nome: "Ecobag AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Sacola de algodão cru com silk do olho AUVP.", img: "" },
-  { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
+  { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
 ];
 
 interface Evento {
@@ -111,19 +139,19 @@ interface Evento {
 const eventos: Evento[] = [
   { date: "2026-06-23", titulo: "Sprint Planning — Q2 Sprint 12", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado", descricao: "Alinhamento e planejamento das entregas do sprint." },
   { date: "2026-06-24", titulo: "Design Review Semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800", hora: "14:00", responsavel: "Armando & Éria" },
-  { date: "2026-06-30", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques", descricao: "Nova turma com novidades no produto educacional." },
+  { date: "2026-06-30", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", hora: "09:00", responsavel: "Beatriz Henriques", descricao: "Nova turma com novidades no produto educacional." },
   { date: "2026-06-30", titulo: "Product Roadmap Review Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800", hora: "16:00", responsavel: "Beatriz Henriques", descricao: "Revisão do roadmap e prioridades para o Q3." },
   { date: "2026-07-07", titulo: "Sprint Planning — Q3 Sprint 1", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado" },
   { date: "2026-07-10", titulo: "Workshop de UX Research", tag: "Time", tagColor: "bg-cyan-100 text-cyan-800", hora: "09:00", responsavel: "Ariadne Carneiro", descricao: "Metodologias de pesquisa qualitativa com usuários reais." },
   { date: "2026-07-14", titulo: "Design Review Semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800", hora: "14:00", responsavel: "Armando & Éria" },
-  { date: "2026-07-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques" },
+  { date: "2026-07-16", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", hora: "09:00", responsavel: "Beatriz Henriques" },
   { date: "2026-07-21", titulo: "Retrospectiva Q3 Sprint 1", tag: "Processo", tagColor: "bg-amber-100 text-amber-800", hora: "15:00", responsavel: "Daniel Machado", descricao: "Pontos de melhoria e lições aprendidas no sprint." },
   { date: "2026-08-03", titulo: "Sprint Planning — Q3 Sprint 2", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado" },
   { date: "2026-08-11", titulo: "Review de OKRs Q3", tag: "Roadmap", tagColor: "bg-rose-100 text-rose-800", hora: "14:00", responsavel: "Beatriz Henriques", descricao: "Análise de progresso dos OKRs trimestrais." },
-  { date: "2026-08-17", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques" },
+  { date: "2026-08-17", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", hora: "09:00", responsavel: "Beatriz Henriques" },
   { date: "2026-09-01", titulo: "Kick-off Q4", tag: "Processo", tagColor: "bg-amber-100 text-amber-800", hora: "10:00", responsavel: "Beatriz Henriques", descricao: "Alinhamento estratégico para o último trimestre do ano." },
   { date: "2026-09-08", titulo: "Sprint Planning — Q4 Sprint 1", tag: "Sprint", tagColor: "bg-blue-100 text-blue-800", hora: "10:00", responsavel: "Daniel Machado" },
-  { date: "2026-09-15", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800", hora: "09:00", responsavel: "Beatriz Henriques" },
+  { date: "2026-09-15", titulo: "Lançamento turma AUVP Escola", tag: "Produto", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", hora: "09:00", responsavel: "Beatriz Henriques" },
   { date: "2026-09-22", titulo: "Design Review Semanal", tag: "Design", tagColor: "bg-purple-100 text-purple-800", hora: "14:00", responsavel: "Armando & Éria" },
   { date: "2026-09-28", titulo: "Retrospectiva Q4 Sprint 1", tag: "Processo", tagColor: "bg-amber-100 text-amber-800", hora: "15:00", responsavel: "Daniel Machado" },
 ];
@@ -415,7 +443,7 @@ function TeamCarousel() {
             : `max-height 260ms ${EASE_APPLE} 60ms`,
         }}
       >
-        <div className="flex flex-col items-center gap-1 pt-3 pb-1">
+        <Link to="/time" className="flex flex-col items-center gap-1 pt-3 pb-1 w-full">
           {/* Linha que cresce do centro para as extremidades */}
           <div
             className="w-full h-px bg-border"
@@ -439,9 +467,8 @@ function TeamCarousel() {
           >
             <ChevronDown className="h-3.5 w-3.5 text-muted-foreground/50" />
           </div>
-          {/* Botão de texto */}
-          <Link
-            to="/time"
+          {/* Texto */}
+          <span
             style={{
               opacity: isHovered ? 1 : 0,
               transition: isHovered
@@ -451,8 +478,8 @@ function TeamCarousel() {
             className="text-[10px] font-bold font-sora uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors duration-150"
           >
             Conheça o Time
-          </Link>
-        </div>
+          </span>
+        </Link>
       </div>
     </div>
   );
@@ -553,7 +580,7 @@ export default function Hub() {
           </Reveal>
 
           {/* Carousel overlapping the hero bottom — the drop-shadow creates the 3D lift effect */}
-          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl px-8 md:px-12">
+          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl px-8 md:px-12 pb-[76px]">
             <TeamCarousel />
           </div>
         </div>
@@ -606,7 +633,7 @@ export default function Hub() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {novidades.map((n, i) => (
                 <div key={i} className="group relative overflow-hidden rounded-2xl border bg-card p-5 flex flex-col gap-3 transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-emerald-500 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-apple" />
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-emerald-500 dark:to-[#5A8770] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-apple" />
                   <span className={cn("text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full w-fit font-roboto", n.tagColor)}>{n.tag}</span>
                   <h3 className="font-semibold font-anek text-foreground leading-snug">{n.title}</h3>
                   <p className="text-sm text-muted-foreground font-roboto leading-relaxed flex-1">{n.desc}</p>
