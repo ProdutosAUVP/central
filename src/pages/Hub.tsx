@@ -576,6 +576,32 @@ function Reveal({ children, className, delay = 0 }: { children: React.ReactNode;
   );
 }
 
+function RotatingPreview({ items }: { items: string[] }) {
+  const [idx, setIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    if (items.length <= 1) return;
+    const timer = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % items.length);
+        setFading(false);
+      }, 250);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, [items.length]);
+
+  return (
+    <p
+      className="text-[10px] font-roboto text-muted-foreground truncate"
+      style={{ opacity: fading ? 0 : 1, transition: "opacity 250ms" }}
+    >
+      {items[idx]}
+    </p>
+  );
+}
+
 function SectionHeader({ icon: Icon, title, action }: { icon: React.ElementType; title: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
@@ -658,7 +684,7 @@ export default function Hub() {
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="sm:-mt-12 md:-mt-20">
+        <Reveal className="sm:-mt-16 md:-mt-28">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
@@ -702,21 +728,27 @@ export default function Hub() {
                 </Link>
               }
             />
-            <Accordion type="single" collapsible defaultValue="mes-0" className="space-y-2">
+            <Accordion type="single" collapsible className="space-y-2">
               {novidadesMensais.map((n, i) => (
                 <AccordionItem
                   key={i}
                   value={`mes-${i}`}
-                  className="rounded-2xl border bg-card overflow-hidden"
+                  className="rounded-2xl border bg-card overflow-hidden group"
                 >
                   <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
                     <div className="flex items-center gap-3 text-left flex-1 min-w-0">
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
                         <CalendarDays className="h-4 w-4" />
                       </div>
-                      <div className="min-w-0">
-                        <p className="font-bold font-anek text-foreground text-sm leading-tight">{n.mes} {n.ano}</p>
-                        <p className="text-[10px] font-roboto text-muted-foreground">{n.items.length} atualizações</p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold font-anek text-foreground text-sm leading-tight">{n.mes} {n.ano}</p>
+                          <span className="text-[10px] font-roboto text-muted-foreground">{n.items.length} atualizações</span>
+                        </div>
+                        {/* Preview rotativo — visível apenas quando colapsado */}
+                        <div className="group-data-[state=open]:hidden mt-0.5">
+                          <RotatingPreview items={n.items.map(item => `${item.emoji} ${item.titulo}`)} />
+                        </div>
                       </div>
                     </div>
                   </AccordionTrigger>
@@ -783,23 +815,20 @@ export default function Hub() {
                 const productInitial = p.name.split(" ")[1]?.[0] ?? p.name[0];
                 const card = (
                   <div className={cn(
-                    "group relative overflow-hidden rounded-2xl border bg-card flex items-stretch h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
+                    "group relative overflow-hidden rounded-2xl border bg-card flex items-stretch min-h-[88px] sm:min-h-[100px] transition-[transform,box-shadow,border-color] duration-300 ease-apple",
                     p.to ? "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer" : "sm:hover:border-primary/20 sm:hover:shadow-md"
                   )}>
                     {/* Image / placeholder */}
-                    <div className="w-16 sm:w-20 shrink-0 border-r bg-muted/40 flex items-center justify-center overflow-hidden">
+                    <div className="w-24 sm:w-32 shrink-0 border-r bg-muted/40 flex items-center justify-center overflow-hidden">
                       {p.img ? (
                         <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-2xl font-bold font-anek text-muted-foreground/25 select-none">{productInitial}</span>
+                        <span className="text-3xl font-bold font-anek text-muted-foreground/25 select-none">{productInitial}</span>
                       )}
                     </div>
                     {/* Content */}
                     <div className="flex flex-col justify-center gap-1.5 p-3 flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
-                        <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", p.statusColor)}>{p.status}</span>
-                      </div>
+                      <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
                       <p className="text-xs text-muted-foreground font-roboto leading-snug">{p.desc}</p>
                     </div>
                   </div>
