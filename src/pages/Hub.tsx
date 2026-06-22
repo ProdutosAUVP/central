@@ -392,7 +392,13 @@ function TeamCarousel() {
   }, [LOOP_W]);
 
   return (
-    <div ref={containerRef} onClick={() => navigate('/time')} className="cursor-pointer">
+    <div
+      ref={containerRef}
+      onClick={() => navigate('/time')}
+      onMouseEnter={() => { setIsHovered(true);  pausedRef.current = true;  }}
+      onMouseLeave={() => { setIsHovered(false); pausedRef.current = false; }}
+      className="cursor-pointer"
+    >
       {/* Cards — overflow-hidden para clipar o scroll horizontal */}
       <div className="overflow-hidden rounded-2xl">
         <div
@@ -404,8 +410,6 @@ function TeamCarousel() {
             <div
               key={i}
               className="relative shrink-0 w-36 text-center"
-              onMouseEnter={() => { setIsHovered(true);  pausedRef.current = true;  }}
-              onMouseLeave={() => { setIsHovered(false); pausedRef.current = false; }}
             >
               {/* Foto — recebe o scale do JS */}
               <div
@@ -435,7 +439,7 @@ function TeamCarousel() {
       </div>
 
       {/* CTA — altura fixa, sempre no fluxo, conteúdo anima com opacity/transform */}
-      <div style={{ height: "76px", overflow: "hidden" }}>
+      <div style={{ height: "52px", overflow: "hidden" }}>
         <div className="flex flex-col items-center gap-1 pt-3 pb-1 w-full">
           {/* Linha que cresce do centro para as extremidades */}
           <div
@@ -579,7 +583,7 @@ export default function Hub() {
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal>
+        <Reveal className="-mt-8">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
