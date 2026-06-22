@@ -69,7 +69,7 @@ const gradients: Record<OrgColor, string> = {
   director:        "from-purple-500 via-purple-700 to-fuchsia-800",
   coordinator:     "from-emerald-600 via-emerald-700 to-green-900",
   cx:              "from-indigo-600 via-indigo-800 to-violet-900",
-  "product-senior":"from-sky-500 via-sky-700 to-blue-800",
+  "product-senior":"from-amber-500 via-amber-600 to-orange-700",
   "product-pleno": "from-cyan-500 via-cyan-600 to-teal-700",
   "product-junior":"from-slate-400 via-slate-500 to-gray-600",
 };
@@ -79,7 +79,7 @@ const levelColors: Record<OrgColor, string> = {
   director:        "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
   coordinator:     "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
   cx:              "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300",
-  "product-senior":"bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300",
+  "product-senior":"bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
   "product-pleno": "bg-cyan-100 text-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-300",
   "product-junior":"bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300",
 };
