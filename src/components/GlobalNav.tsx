@@ -160,7 +160,7 @@ export function GlobalNav() {
               <button
                 onClick={() => navigate(system.path)}
                 className={cn(
-                  "relative px-3 py-2 text-sm font-bold font-anek rounded-lg transition-colors duration-200",
+                  "relative px-3 py-2 text-sm font-normal font-anek rounded-lg transition-colors duration-200",
                   isActive
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -168,33 +168,42 @@ export function GlobalNav() {
               >
                 {system.label}
                 {isActive && (
-                  <span className="absolute bottom-1 left-3 right-3 h-0.5 bg-primary rounded-full" />
+                  <span className="absolute bottom-1 left-3 right-3 h-px bg-foreground/30 rounded-full" />
                 )}
               </button>
 
-              {isHovered && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                  <div className="relative bg-popover border border-border rounded-xl p-3 shadow-xl w-[220px]">
-                    <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-popover border-l border-t border-border rotate-45 rounded-sm" />
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={cn(
-                          "flex items-center justify-center h-8 w-8 rounded-lg shrink-0 border mt-0.5",
-                          isActive
-                            ? "bg-foreground text-background border-foreground"
-                            : "bg-card text-foreground border-border"
-                        )}
-                      >
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold font-anek text-foreground leading-tight">{system.label}</p>
-                        <p className="text-xs text-muted-foreground font-roboto mt-0.5 leading-snug">{system.description}</p>
-                      </div>
+              {/* Popup — sempre no DOM, entra e sai com CSS transition */}
+              <div
+                className="absolute top-full left-1/2 z-50 mt-1.5 w-[220px]"
+                style={{
+                  transform: isHovered
+                    ? "translateX(-50%) translateY(0px)"
+                    : "translateX(-50%) translateY(-5px)",
+                  opacity: isHovered ? 1 : 0,
+                  pointerEvents: isHovered ? "auto" : "none",
+                  transition: "opacity 200ms cubic-bezier(0.22,1,0.36,1), transform 200ms cubic-bezier(0.22,1,0.36,1)",
+                }}
+              >
+                <div className="relative bg-popover border border-border rounded-xl p-3 shadow-lg">
+                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-popover border-l border-t border-border rotate-45 rounded-sm" />
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={cn(
+                        "flex items-center justify-center h-8 w-8 rounded-lg shrink-0 border mt-0.5",
+                        isActive
+                          ? "bg-foreground text-background border-foreground"
+                          : "bg-card text-foreground border-border"
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium font-anek text-foreground leading-tight">{system.label}</p>
+                      <p className="text-xs text-muted-foreground font-roboto mt-0.5 leading-snug">{system.description}</p>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
