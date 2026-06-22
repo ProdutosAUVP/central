@@ -255,8 +255,8 @@ type EdgeKind = "v" | "hl" | "hr";
  *  - "hr" : child sits to the RIGHT of the parent, same row (horizontal) */
 const ORG_EDGES: { from: string; to: string; kind: EdgeKind; dashed?: boolean }[] = [
   { from: "raul", to: "beatriz", kind: "v" },
-  { from: "beatriz", to: "lilian", kind: "hl", dashed: true },
-  { from: "beatriz", to: "debora", kind: "hr" },
+  { from: "beatriz", to: "lilian", kind: "v", dashed: true },
+  { from: "beatriz", to: "debora", kind: "v" },
   { from: "beatriz", to: "daniel", kind: "v" },
   { from: "daniel", to: "cat-gerencia",    kind: "v" },
   { from: "daniel", to: "cat-designers",   kind: "v" },
@@ -650,18 +650,17 @@ function OrgChart() {
             {/* CEO */}
             <PersonCard id="raul" activeId={activeId} onToggle={toggle} size="lg" cardRef={registerNode("raul")} />
 
-            {/* Diretoria — Beatriz centered, flanked by the Relacionamento/CX
-                pair (Lilian + Debora), one on each side. */}
-            <div className="flex items-center gap-8 sm:gap-12" style={{ marginTop: ROW_GAP }}>
-              <PersonCard id="lilian" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("lilian")} />
+            {/* Diretoria — Beatriz alone, centered. */}
+            <div style={{ marginTop: ROW_GAP }}>
               <PersonCard id="beatriz" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("beatriz")} />
-              <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("debora")} />
             </div>
 
-            {/* Coordenação — Daniel directly below Beatriz, centered, so the whole
-                Produto subtree stays centered on screen. */}
-            <div style={{ marginTop: ROW_GAP }}>
+            {/* Coordenação + CX — Lilian, Daniel, Debora on the same row below Beatriz.
+                Lines curve downward from Beatriz to each of them. */}
+            <div className="flex items-start gap-8 sm:gap-12" style={{ marginTop: ROW_GAP }}>
+              <PersonCard id="lilian" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("lilian")} />
               <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("daniel")} />
+              <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("debora")} />
             </div>
 
             {/* Squads de produto — Gerência na mesma altura das demais categorias. */}
@@ -893,11 +892,39 @@ export default function TimePage() {
   const [teamRef, teamVisible] = useReveal(0.05);
   const [orgOpen, setOrgOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<{ id: string; el: HTMLElement } | null>(null);
+  const orgToggleRef = useRef<HTMLButtonElement>(null);
+  const [showOrgHint, setShowOrgHint] = useState(false);
 
   const selectMember = useCallback((id: string, el: HTMLElement) => {
     setSelectedMember((prev) => (prev?.id === id ? null : { id, el }));
   }, []);
   const closeMember = useCallback(() => setSelectedMember(null), []);
+
+  const dismissOrgHint = useCallback(() => {
+    setShowOrgHint(false);
+    sessionStorage.setItem("auvp-org-hint", "true");
+  }, []);
+
+  useEffect(() => {
+    const el = orgToggleRef.current;
+    if (!el || sessionStorage.getItem("auvp-org-hint")) return;
+    let dismissTimer: ReturnType<typeof setTimeout>;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowOrgHint(true);
+          obs.disconnect();
+          dismissTimer = setTimeout(dismissOrgHint, 5000);
+        }
+      },
+      { threshold: 0.8 }
+    );
+    obs.observe(el);
+    return () => {
+      obs.disconnect();
+      clearTimeout(dismissTimer);
+    };
+  }, [dismissOrgHint]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -951,24 +978,38 @@ export default function TimePage() {
 
           {/* Org chart toggle — a divider line spanning the cards' width with a
               discreet "ver organograma" label hugging its right end. */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => setOrgOpen((v) => !v)}
-                className="group w-full flex items-center gap-3 mt-1 mb-2"
-                aria-expanded={orgOpen}
-              >
-                <span className="h-px flex-1 bg-border" />
-                <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors duration-300 ease-apple">
-                  {orgOpen ? "Esconder organograma" : "Ver organograma"}
-                  <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500 ease-apple", orgOpen && "rotate-180")} />
-                </span>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="top" className="max-w-[220px] text-center text-xs">
-              Veja a estrutura hierárquica completa do time de Produto e CX
-            </TooltipContent>
-          </Tooltip>
+          <div className="relative">
+            {showOrgHint && (
+              <div className="absolute -top-14 right-0 z-50 animate-in fade-in slide-in-from-bottom-2 duration-300 pointer-events-none">
+                <div className="relative bg-primary text-primary-foreground text-xs font-roboto font-semibold px-4 py-2.5 rounded-xl shadow-lg whitespace-nowrap">
+                  <span className="flex items-center gap-1.5">
+                    <Users className="h-3.5 w-3.5 shrink-0" />
+                    Veja como funciona o organograma de nosso time
+                  </span>
+                  <div className="absolute -bottom-1.5 right-6 w-3 h-3 bg-primary rotate-45 rounded-sm" />
+                </div>
+              </div>
+            )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  ref={orgToggleRef}
+                  onClick={() => { setOrgOpen((v) => !v); dismissOrgHint(); }}
+                  className="group w-full flex items-center gap-3 mt-1 mb-2"
+                  aria-expanded={orgOpen}
+                >
+                  <span className="h-px flex-1 bg-border" />
+                  <span className="flex items-center gap-1.5 text-xs font-semibold font-roboto text-muted-foreground group-hover:text-foreground transition-colors duration-300 ease-apple">
+                    {orgOpen ? "Esconder organograma" : "Ver organograma"}
+                    <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-500 ease-apple", orgOpen && "rotate-180")} />
+                  </span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-[220px] text-center text-xs">
+                Veja a estrutura hierárquica completa do time de Produto e CX
+              </TooltipContent>
+            </Tooltip>
+          </div>
 
           {/* Collapsible org chart */}
           {orgOpen && (
