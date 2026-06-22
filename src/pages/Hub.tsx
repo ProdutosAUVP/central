@@ -346,7 +346,6 @@ function TeamCarousel() {
           const dist = Math.abs(cardCenter - cx);
           const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
           el.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
-          el.style.opacity   = `${(0.45 + 0.55 * t).toFixed(3)}`;
           el.style.zIndex    = String(Math.round(t * 10));
         }
       }
@@ -372,10 +371,6 @@ function TeamCarousel() {
           <ChevronRight className="h-5 w-5 text-primary" />
         </span>
       </div>
-
-      {/* Edge fades */}
-      <div className="absolute inset-y-0 left-0  w-24 z-10 bg-gradient-to-r from-card to-transparent pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-card to-transparent pointer-events-none" />
 
       {/* Track */}
       <div ref={containerRef} className="overflow-hidden rounded-2xl">
