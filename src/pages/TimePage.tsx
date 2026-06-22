@@ -66,9 +66,9 @@ interface OrgPerson {
 // Each value is a complete static string so Tailwind includes all classes
 const gradients: Record<OrgColor, string> = {
   ceo:             "from-rose-700 via-red-800 to-red-950",
-  director:        "from-indigo-600 via-indigo-800 to-violet-900",
-  coordinator:     "from-amber-500 via-amber-600 to-orange-700",
-  cx:              "from-purple-500 via-purple-700 to-fuchsia-800",
+  director:        "from-purple-500 via-purple-700 to-fuchsia-800",
+  coordinator:     "from-emerald-600 via-emerald-700 to-green-900",
+  cx:              "from-indigo-600 via-indigo-800 to-violet-900",
   "product-senior":"from-sky-500 via-sky-700 to-blue-800",
   "product-pleno": "from-cyan-500 via-cyan-600 to-teal-700",
   "product-junior":"from-slate-400 via-slate-500 to-gray-600",
@@ -76,9 +76,9 @@ const gradients: Record<OrgColor, string> = {
 
 const levelColors: Record<OrgColor, string> = {
   ceo:             "bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300",
-  director:        "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300",
-  coordinator:     "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
-  cx:              "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
+  director:        "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
+  coordinator:     "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+  cx:              "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300",
   "product-senior":"bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300",
   "product-pleno": "bg-cyan-100 text-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-300",
   "product-junior":"bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300",
@@ -258,18 +258,19 @@ const ORG_EDGES: { from: string; to: string; kind: EdgeKind; dashed?: boolean }[
   { from: "beatriz", to: "lilian", kind: "hl", dashed: true },
   { from: "beatriz", to: "debora", kind: "hr" },
   { from: "beatriz", to: "daniel", kind: "v" },
-  { from: "daniel", to: "ariadne", kind: "v" },
-  { from: "ariadne", to: "cat-designers", kind: "v" },
-  { from: "ariadne", to: "cat-analistas", kind: "v" },
-  { from: "ariadne", to: "cat-conteudo", kind: "v" },
-  { from: "ariadne", to: "cat-educacional", kind: "v" },
-  { from: "cat-designers", to: "armando", kind: "v" },
-  { from: "cat-designers", to: "eria", kind: "v" },
-  { from: "cat-analistas", to: "jeniffer", kind: "v" },
-  { from: "cat-analistas", to: "elane", kind: "v" },
-  { from: "cat-conteudo", to: "mateus", kind: "v" },
-  { from: "cat-educacional", to: "ana", kind: "v" },
-  { from: "cat-educacional", to: "hiago", kind: "v" },
+  { from: "daniel", to: "cat-gerencia",    kind: "v" },
+  { from: "daniel", to: "cat-designers",   kind: "v" },
+  { from: "daniel", to: "cat-analistas",   kind: "v" },
+  { from: "daniel", to: "cat-conteudo",    kind: "v" },
+  { from: "daniel", to: "cat-assistencia", kind: "v" },
+  { from: "cat-gerencia",    to: "ariadne",  kind: "v" },
+  { from: "cat-designers",   to: "armando",  kind: "v" },
+  { from: "cat-designers",   to: "eria",     kind: "v" },
+  { from: "cat-analistas",   to: "jeniffer", kind: "v" },
+  { from: "cat-analistas",   to: "elane",    kind: "v" },
+  { from: "cat-conteudo",    to: "mateus",   kind: "v" },
+  { from: "cat-assistencia", to: "ana",      kind: "v" },
+  { from: "cat-assistencia", to: "hiago",    kind: "v" },
 ];
 
 // Corner radius (px) for the rounded turning points of the connector lines.
@@ -663,17 +664,13 @@ function OrgChart() {
               <PersonCard id="daniel" activeId={activeId} onToggle={toggle} size="md" cardRef={registerNode("daniel")} />
             </div>
 
-            {/* Gerência — Ariadne (Sênior) sits one level above the Plenos. */}
-            <div style={{ marginTop: ROW_GAP }}>
-              <PersonCard id="ariadne" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("ariadne")} />
-            </div>
-
-            {/* Squads de produto — categories fan out below Ariadne, centered. */}
+            {/* Squads de produto — Gerência na mesma altura das demais categorias. */}
             <div className="flex items-start justify-center gap-5 sm:gap-8" style={{ marginTop: ROW_GAP }}>
-              <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}   activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]} activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-conteudo"    label="Conteúdo"    ids={["mateus"]}             activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-educacional" label="Educacional" ids={["ana", "hiago"]}      activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-gerencia"    label="Gerência"    ids={["ariadne"]}            activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}    activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]}  activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-conteudo"    label="Conteúdo"    ids={["mateus"]}              activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-assistencia" label="Assistência" ids={["ana", "hiago"]}       activeId={activeId} onToggle={toggle} registerNode={registerNode} />
             </div>
           </div>
         </div>
