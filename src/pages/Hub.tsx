@@ -596,9 +596,29 @@ export default function Hub() {
             </section>
           </Reveal>
 
-          {/* Carousel overlapping the hero bottom — the drop-shadow creates the 3D lift effect */}
+          {/* Mobile: CTA card para o time (carrossel oculto) */}
           <div className="relative z-10 -mt-12 sm:-mt-20 md:-mt-24 drop-shadow-2xl px-2 sm:px-6 md:px-12">
-            <TeamCarousel />
+            <div className="sm:hidden">
+              <Link
+                to="/time"
+                className="flex items-center justify-between gap-4 rounded-2xl border bg-card px-5 py-4 transition-[border-color,box-shadow] duration-300 ease-apple hover:border-primary/30 hover:shadow-xl active:scale-[0.98]"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold font-anek text-foreground text-sm">Nosso Time</p>
+                    <p className="text-xs text-muted-foreground font-roboto mt-0.5 truncate">Conheça quem está por trás dos produtos AUVP</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-primary shrink-0" />
+              </Link>
+            </div>
+            {/* sm+: carrossel completo */}
+            <div className="hidden sm:block">
+              <TeamCarousel />
+            </div>
           </div>
         </div>
 
