@@ -32,27 +32,77 @@ function ThemeToggle() {
   );
 }
 
-const novidades = [
+const novidadesMensais = [
   {
-    tag: "Design System",
-    tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]",
-    title: "Novos componentes de data viz",
-    desc: "Paleta de 8 cores otimizada para gráficos de pizza, barras e linhas com suporte a dark mode.",
-    date: "Mai 2025",
+    mes: "Maio", ano: 2025,
+    intro: "Fala galerinha, como estamos? Maio acabou de terminar e, como de costume, a Equipe AUVP trabalhou firme pra atualizar nossos produtos e lançar novidades muuito requisitadas e especiais para vocês. Então, sem mais enrolação, bora conferir o que rolou por aqui durante o mês?",
+    items: [
+      { emoji: "🏛️", titulo: "Lançamento do treinamento completo para CPA da AUVP Pro", corpo: "A AUVP Pro entrou oficialmente em uma nova fase. Reformulamos completamente a nossa experiência de aprendizado para entregar materiais mais completos e ajudar você a estudar com foco e confiança.", subitems: ["Aulas repaginadas com explicações diretas e objetivas", "Simulados comentados para você treinar na prática", "Estrutura otimizada para se encaixar na sua rotina de estudos"], link: "#" },
+      { emoji: "🚜", titulo: "Novos materiais na Escola Agro", corpo: "Adicionamos novos e-books e materiais didáticos no treinamento de Hedge que facilitam seu aprendizado. Tudo isso já está disponível na plataforma Agro.", subitems: ["Cotações em tempo real de commodities (soja, milho, boi, etc.)", "Previsões climáticas detalhadas da sua região", "Cartas de recomendações semanais com análises de mercado", "Análises ao vivo com especialistas do agro"], link: "#" },
+      { emoji: "📊", titulo: "Ranking de ETFs Americanos e análises em vídeo na Analítica (exclusivo para assinantes)", corpo: "Nova funcionalidade para facilitar a vida de quem investe em ETFs Americanos. Os assinantes têm acesso a rankeamentos dos principais ativos com base em diferentes indicadores. Também liberamos novos vídeos de análise de empresas com nosso time de analistas.", link: "#" },
+      { emoji: "🛠️", titulo: "Por trás das câmeras: melhorias na AUVP Escola", corpo: "Continuamos implementando melhorias técnicas, visuais e de conteúdo no ambiente de aulas. Essas correções só acontecem porque vocês compartilham feedbacks com a gente — obrigado!" },
+      { emoji: "📌", titulo: "ETFs Irlandeses disponíveis na nossa plataforma", corpo: "Os tão pedidos ETFs Irlandeses (UCITS) já estão liberados para todos que possuem conta internacional da AUVP. Basta garantir que o aplicativo BTG Investimentos esteja atualizado para a versão mais recente.", link: "#" },
+      { emoji: "🪩", titulo: "Private Day 2026 confirmado: dias 7 e 8 de novembro, Goiânia", corpo: "O Private Day está de volta, dessa vez MAIOR. Serão 2 dias completos de imersão com palestras sobre mercado, cenário econômico e negócios. No último dia: nossa tradicional festa com tema Disco Fever. Os ingressos do 1º lote já estão à venda!", link: "#" },
+    ],
+    spoiler: ["🧑‍🏫 Novas aulas de Stocks no módulo 6 da Escola (em fase de edição)", "🗣️ Nova plataforma para sistema de indicações da AUVP (em fase de reformulação)", "💳 Cartão AUVP com benefícios exclusivos", "📈 Módulo de Análise de indicadores AUVP Sempre (exclusivo para assinantes)", "🎥 Nova edição do Giro da Bolsa Itinerante sem censura VEM AÍ…"],
+    rodape: "E com isso, bora para junho! Caso tenham mais sugestões ou ideias, podem mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
   },
   {
-    tag: "Tom e Voz",
-    tagColor: "bg-blue-100 text-blue-800",
-    title: "Manual atualizado com novos produtos",
-    desc: "Agro, Analítica, Câmbio e Seguros ganham sessões de tom e voz específicas.",
-    date: "Abr 2025",
+    mes: "Abril", ano: 2025,
+    intro: "E aí pessoal, tudo joia? No mês de abril todo mundo que trabalha na AUVP se reuniu para o evento interno mais especial do ano, com mais de 200 piratas indo até o Rio de Janeiro. Rolou até presente pra quem encontrasse a gente nos aeroportos 😂 Depois de 3 dias de muita união, boas festas e o mar carioca, voltamos com ainda mais gás para entregar novidades exclusivas para vocês.",
+    items: [
+      { emoji: "🦁", titulo: "Atualizações no Módulo de Imposto de Renda", corpo: "O radar da Receita mudou alguns pontos em 2026. O módulo bônus de IR da AUVP Escola já está com todas as novas obrigatoriedades detalhadas, tudo para você não cair nas garras do Leão!", link: "#" },
+      { emoji: "🪙", titulo: "Novo Módulo Bônus: Criptomoedas", corpo: "Liberamos um novo módulo com um dos conteúdos mais solicitados por vocês: criptomoedas. São 15 aulas explicando do zero sobre essa modalidade, de forma didática e alinhada com a filosofia buy and hold.", link: "#" },
+      { emoji: "🚜", titulo: "60 novas aulas na Escola Agro", corpo: "Só nesse mês subimos 60 novas aulas para os treinamentos de Hedge, Sucessão e Crédito Rural. Além disso, temos uma área exclusiva na comunidade para a galera do Agro!", subitems: ["Cotações em tempo real de commodities (soja, milho, boi, etc.)", "Previsões climáticas detalhadas da sua região", "Cartas de recomendações semanais com análises de mercado", "Análises ao vivo com especialistas do agro"], link: "#" },
+      { emoji: "🔧", titulo: "Melhorias técnicas no Hub de Produtos", corpo: "Realizamos melhorias técnicas e corrigimos bugs que atrapalhavam sua experiência no Hub AUVP, para garantir que sua navegação seja cada vez mais fluida e intuitiva.", link: "#" },
+      { emoji: "📊", titulo: "Visualização em tabela para análise de ativos na Analítica (exclusivo para assinantes)", corpo: "Nova funcionalidade para comparar ativos de forma prática. Agora você visualiza tudo de uma vez e ordena pelas colunas que mais importam para sua estratégia. Menos cliques, mais clareza.", link: "#" },
+      { emoji: "🟢", titulo: "Convocação AUVP — Camisa BR x AUVP", corpo: "Lançamos a campanha para quem quer vestir o orgulho da nossa comunidade. Para ganhar sua camiseta vintage exclusiva: débito automático ativo, streaming mensal ativo, Open Finance com 80% do patrimônio e inscrição na campanha.", link: "#" },
+    ],
+    spoiler: ["🪩 Vendas do Private Day 2026 mais próximas do que nunca…", "👝 Consolidador de carteira segue em fase de testes", "🗣️ Nova plataforma para sistema de indicações da AUVP (em fase de prototipação)", "🧑‍🏫 Projeto da nova plataforma de aulas em colaboração com a comunidade de devs", "📚 Treinamento da AUVP Pro atualizado para novas certificações", "💳 Cartão AUVP com novos benefícios exclusivos (em breve)", "📊 Módulo de análise de Indicadores (exclusivo Sempre)", "📒 Módulo ensinando a usar a Analítica (finalizamos as gravações — logo liberamos)"],
+    rodape: "Como sempre, feedbacks são muito bem-vindos. Tudo isso é pra deixar a AUVP cada vez melhor, mais clara pra vocês e mais forte como escola. Bora para maio!!",
   },
   {
-    tag: "Time",
-    tagColor: "bg-purple-100 text-purple-800",
-    title: "Organograma atualizado",
-    desc: "Novos membros no time de Produto. Veja quem é quem e como nos conectamos.",
-    date: "Mar 2025",
+    mes: "Março", ano: 2025,
+    intro: "Fala pessoal, tudo bem? Março acabou de terminar e, nesse mês que pareceu não ter fim, tivemos várias atualizações e novidades especiais para vocês. Bora conferir tudo o que a Equipe AUVP trabalhou nesse mês?",
+    items: [
+      { emoji: "📌", titulo: "Atualização de módulo 6: nova aula 6.5 sobre REITs", corpo: "O módulo 6 já possui 6 aulas atualizadas, da 6.1 a 6.4 (dividida em três partes). A nova 6.5 explica todas as pormenoridades dos REITs para te dar um panorama completo sobre o investimento internacional.", link: "#" },
+      { emoji: "📝", titulo: "Novas aulas no Módulo de Análise de Setores (exclusivo AUVP Sempre)", corpo: "Liberamos 12 aulas novas no Módulo de Análise de Setores. Para além do setor Bancário, você vai dominar: Mineração, Energia Elétrica, Petróleo, Saneamento, Proteína Animal e muito mais.", link: "#" },
+      { emoji: "🚜", titulo: "Escola Agro de cara nova", corpo: "Demos uma repaginada e implementamos melhorias nos treinamentos de Hedge, Sucessão e Crédito Rural na plataforma Agro.", subitems: ["Cotações em tempo real de commodities (soja, milho, boi, etc.)", "Previsões climáticas detalhadas da sua região", "Cartas de recomendações semanais com análises de mercado", "Análises ao vivo com especialistas do agro"], link: "#" },
+      { emoji: "📊", titulo: "Análise dos Resultados mensais de FIIs com IA na AUVP Analítica (exclusivo para assinantes)", corpo: "Nova funcionalidade para facilitar o acompanhamento do desempenho mensal de Fundos Imobiliários. Os assinantes têm acesso a análises especialmente desenvolvidas com IA.", link: "#" },
+      { emoji: "🔧", titulo: "Melhorias técnicas nas ferramentas", corpo: "Realizamos melhorias técnicas e visuais pontuais nas ferramentas AUVP para garantir navegação fluida e intuitiva.", subitems: ["Minhas Finanças", "Ferramentas AUVP"] },
+      { emoji: "🧠", titulo: "Convocação aberta para construirmos o SUPER APP da AUVP", corpo: "Abrimos a primeira chamada para selecionar Designers UX/UI e Desenvolvedores para nos ajudarem a construir de forma colaborativa o Super APP da AUVP.", link: "#" },
+      { emoji: "🎥", titulo: "Estreia do Giro da Bolsa Itinerante (sem censura) em BH", corpo: "A primeira edição em Belo Horizonte foi INCRÍVEL. Tivemos gravação ao vivo do Giro + um momento de troca e Baguncinha presencial com os membros. 📢 Próximo destino em breve — os ingressos esgotam RÁPIDO!", link: "#" },
+    ],
+    spoiler: ["🪙 Módulo extra sobre criptomoedas (muuuuito em breve)", "👝 Consolidador de carteira segue em fase de testes", "🗣️ Nova plataforma para sistema de indicações da AUVP (em fase de prototipação)", "🧑‍🏫 Projeto da nova plataforma de aulas em colaboração com a comunidade de devs", "📚 Treinamento da AUVP Pro atualizado para novas certificações", "💳 Cartão AUVP com novos benefícios exclusivos (em breve)", "🪩 Preparativos para o Private Day 2026 já começaram por aqui"],
+    rodape: "E com isso, bora para abril! Caso tenham mais sugestões ou ideias, podem mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
+  },
+  {
+    mes: "Fevereiro", ano: 2025,
+    intro: "O mês de fevereiro foi mais curto, mas continuamos trabalhando em novidades exclusivas para vocês. Vem ver tudo o que temos de novidade!",
+    items: [
+      { emoji: "💷", titulo: "Atualização no módulo 6: 3 novas aulas sobre ETFs internacionais", corpo: "Dividimos a aula em 3 partes para te dar um panorama completo. Exploramos como esses fundos podem ser uma das formas mais simples de acessar o mercado internacional, incluindo ações, renda fixa, REITs e commodities.", link: "#" },
+      { emoji: "📝", titulo: "Módulo de Valuation liberado (exclusivo AUVP Sempre)", corpo: "Aprenda a analisar empresas de verdade na prática. Domine leitura de Balanço, DRE e Fluxo de Caixa, aprenda a calcular retorno exigido (Ke / CAPM) e custo de capital (WACC), e descubra o valor real de uma empresa para definir o preço justo com margem de segurança.", link: "#" },
+      { emoji: "🔴", titulo: "Aula extra no módulo 4: armadilhas do mercado — produtos financeiros ruins", corpo: "COE, opções… Raul mostra como identificar produtos que parecem bons mas travam seus rendimentos por trás de conflitos de interesse. Investir com autonomia também é saber dizer não ao que brilha mas não gera valor.", link: "#" },
+      { emoji: "📉", titulo: "Aula extra no módulo 5: os ciclos estranhos do Bitcoin", corpo: "Raul explica o que realmente sustenta o preço do Bitcoin: a combinação entre escassez e utilidade da descentralização. Entenda por que uma posição pequena (1% a 5%) pode equilibrar risco e oportunidade no longo prazo.", link: "#" },
+      { emoji: "🗺️", titulo: "Módulo de geopolítica: Índia (exclusivo AUVP Sempre)", corpo: "3 aulas completas sobre como a Índia está se posicionando no cenário global, seu crescimento como potência emergente e as relações estratégicas que moldam sua influência internacional.", link: "#" },
+      { emoji: "🖥️", titulo: "Novo menu da AUVP em fase de testes", corpo: "Estamos testando um menu que unifica o acesso para diferentes links da AUVP — Hub, comunidade, analítica… Vamos subir o novo menu gradualmente em todas as nossas plataformas.", link: "#" },
+    ],
+    spoiler: ["👝 Consolidador de carteira está em fase de testes", "📈 Novo módulo de Indicadores e de análise de setores", "🗣️ Nova plataforma para sistema de indicações da AUVP", "🪙 Módulo extra sobre criptomoedas", "🧑‍🏫 Projeto da nova plataforma de aulas em colaboração com a comunidade de devs da AUVP"],
+    rodape: "Bora pra março! E se tiverem mais sugestões ou ideias, é só mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
+  },
+  {
+    mes: "Janeiro", ano: 2025,
+    intro: "Oi, pessoas! Tudo bem? Janeiro passou voando, e por aqui atuamos em algumas novidades bem interessantes para vocês. Bora lá? Listei tudo o que foi atualizado na plataforma e também dar um spoiler do que vem por aí.",
+    items: [
+      { emoji: "📌", titulo: "Atualização de módulo: nova aula 6.3 já está disponível", corpo: "O módulo 6 já possui 3 aulas atualizadas, da 6.1 a 6.3! A 6.3 conta com um panorama geral sobre a diferença do mercado americano em comparação com o brasileiro. Em fevereiro, mais atualizações.", link: "#" },
+      { emoji: "📈", titulo: "ETFs: dúvidas que vocês sempre pediram", corpo: "O Raul gravou duas aulas novas e bem completas, explicando em cada detalhe o AUPO11 e o AREA11. Essas aulas já estão no ar, no Módulo 3, logo depois das explicações sobre Tesouro Direto e Juros Semestrais.", link: "#" },
+      { emoji: "🎓", titulo: "Aulas complementares com o recurso de lousa", corpo: "Estamos usando o recurso da lousa para ensinar novos conceitos ou reforçar aqueles que vocês possuem mais dúvidas. Essas aulas extras ficam dentro dos módulos referentes aos temas.", subitems: ["Aula extra: Small caps", "Aula extra: Por que brasileiros gostam de investir para receber dividendos?"] },
+      { emoji: "🔧", titulo: "Melhorias técnicas (pedido atendido!)", corpo: "Ajustamos o áudio de todas as aulas que estavam com som baixo. Revimos aula por aula e atualizamos tudo na plataforma. Se perceberem qualquer outro problema de áudio, podem comentar que a gente resolve." },
+      { emoji: "📝", titulo: "Provas da AUVP Escola atualizadas", corpo: "Revisamos todas as provas, checando conteúdo, conceitos e enunciados. Agora as questões estão atualizadas, pensadas para checar de fato seu conhecimento." },
+      { emoji: "🌍", titulo: "Módulos de Geopolítica (exclusivo AUVP Sempre)", corpo: "Panoramas completos das maiores potências mundiais, explicados por especialistas.", subitems: ["Módulo EUA: todas as aulas no ar, por Carlos Stuart (Mestre em Direito Econômico) ✅", "Módulo China: aulas atualizadas com slides novos ✅", "Módulo Índia: novas aulas em edição — em breve"], link: "#" },
+      { emoji: "🚜", titulo: "Plataforma Agro", corpo: "Para a galera do Agro, agora temos uma plataforma completa! Ideal para quem quer informação e ferramentas para tomar decisões com mais segurança.", subitems: ["Cotações em tempo real de commodities (soja, milho, boi, etc.)", "Previsões climáticas detalhadas da sua região", "Cartas de recomendações semanais com análises de mercado", "Análises ao vivo com especialistas do agro"], link: "#" },
+    ],
+    spoiler: ["👝 Consolidador de carteira está em fase de testes", "👾 Correção de bugs no Hub de produtos para liberarmos novidades", "📈 Novo módulo de Indicadores", "📊 Módulo de Valuation e Módulo de análise de setores (exclusivo AUVP Sempre)"],
   },
 ];
 
@@ -640,29 +690,87 @@ export default function Hub() {
           </section>
         </Reveal>
 
-        {/* Novidades */}
+        {/* Mural de Novidades */}
         <Reveal>
           <section>
             <SectionHeader
               icon={Newspaper}
               title="Mural de Novidades"
               action={
-                <Link to="/novidades" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
+                <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
                   Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
                 </Link>
               }
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-              {novidades.map((n, i) => (
-                <div key={i} className="group relative overflow-hidden rounded-2xl border bg-card p-5 flex flex-col gap-3 transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-emerald-500 dark:to-[#5A8770] origin-left scale-x-0 sm:group-hover:scale-x-100 transition-transform duration-300 ease-apple" />
-                  <span className={cn("text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full w-fit font-roboto", n.tagColor)}>{n.tag}</span>
-                  <h3 className="font-semibold font-anek text-foreground leading-snug">{n.title}</h3>
-                  <p className="text-sm text-muted-foreground font-roboto leading-relaxed flex-1">{n.desc}</p>
-                  <p className="text-xs text-muted-foreground font-roboto">{n.date}</p>
-                </div>
+            <Accordion type="single" collapsible defaultValue="mes-0" className="space-y-2">
+              {novidadesMensais.map((n, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`mes-${i}`}
+                  className="rounded-2xl border bg-card overflow-hidden"
+                >
+                  <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
+                    <div className="flex items-center gap-3 text-left flex-1 min-w-0">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+                        <CalendarDays className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-bold font-anek text-foreground text-sm leading-tight">{n.mes} {n.ano}</p>
+                        <p className="text-[10px] font-roboto text-muted-foreground">{n.items.length} atualizações</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="px-5 pb-6 pt-4 space-y-5">
+                      {n.intro && (
+                        <p className="text-sm font-roboto text-muted-foreground leading-relaxed">{n.intro}</p>
+                      )}
+                      <div className="space-y-5">
+                        {n.items.map((item, j) => (
+                          <div key={j} className="flex gap-3">
+                            <span className="text-base leading-none shrink-0 mt-0.5">{item.emoji}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold font-anek text-foreground text-sm mb-1 leading-snug">{item.titulo}</p>
+                              <p className="text-xs font-roboto text-muted-foreground leading-relaxed">{item.corpo}</p>
+                              {item.subitems && (
+                                <ul className="mt-2 space-y-1">
+                                  {item.subitems.map((sub, k) => (
+                                    <li key={k} className="flex gap-2 text-xs font-roboto text-muted-foreground">
+                                      <span className="text-primary shrink-0 mt-0.5">•</span>
+                                      <span>{sub}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                              {item.link && (
+                                <a href={item.link} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold font-roboto text-primary hover:underline">
+                                  Ver <ChevronRight className="h-3 w-3" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {n.spoiler.length > 0 && (
+                        <div className="pt-4 border-t">
+                          <p className="text-[10px] font-bold font-roboto uppercase tracking-wider text-muted-foreground mb-3">
+                            🚀 O que vem por aí
+                          </p>
+                          <ul className="space-y-1.5">
+                            {n.spoiler.map((s, k) => (
+                              <li key={k} className="text-xs font-roboto text-muted-foreground">{s}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {n.rodape && (
+                        <p className="text-xs font-roboto text-muted-foreground italic border-t pt-4">{n.rodape}</p>
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
+            </Accordion>
           </section>
         </Reveal>
 
