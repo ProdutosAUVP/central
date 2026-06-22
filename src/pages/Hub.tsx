@@ -204,11 +204,11 @@ function CalendarioWidget() {
     <div className="rounded-2xl border bg-card overflow-hidden">
       {/* Month navigation */}
       <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b">
-        <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
+        <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg sm:hover:bg-muted transition-colors">
           <ChevronLeft className="h-4 w-4" />
         </button>
         <span className="font-bold font-anek text-foreground">{MESES_PT[viewMonth]} {viewYear}</span>
-        <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
+        <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg sm:hover:bg-muted transition-colors">
           <ChevronRight className="h-4 w-4" />
         </button>
       </div>
@@ -236,7 +236,7 @@ function CalendarioWidget() {
                 i % 7 !== 6 && "border-r border-border",
                 day && hasEvents && "cursor-pointer",
                 isSelected && "bg-primary/5",
-                day && hasEvents && !isSelected && "hover:bg-muted/40",
+                day && hasEvents && !isSelected && "sm:hover:bg-muted/40",
                 !day && "bg-muted/20"
               )}
               onClick={() => {
@@ -294,7 +294,7 @@ function CalendarioWidget() {
             </p>
             <button
               onClick={() => setSelectedDay(null)}
-              className="text-[10px] font-semibold font-roboto text-primary hover:underline"
+              className="text-[10px] font-semibold font-roboto text-primary sm:hover:underline"
             >
               Fechar
             </button>
@@ -571,7 +571,7 @@ export default function Hub() {
         {/* Hero + Carousel */}
         <div>
           <Reveal>
-            <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-card pt-6 px-5 pb-20 sm:pt-8 sm:px-8 sm:pb-28 md:pt-12 md:px-12 md:pb-36">
+            <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-card pt-6 px-5 pb-8 sm:pt-8 sm:px-8 sm:pb-28 md:pt-12 md:px-12 md:pb-36">
               <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
               <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
               <div className="relative">
@@ -583,11 +583,16 @@ export default function Hub() {
                   Central de Produto do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
                 </p>
                 <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
-                  <Link to="/design-system" className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary hover:bg-transparent hover:text-primary transition-all duration-300 ease-apple hover:-translate-y-0.5">
+                  {/* Mobile only: Nosso Time (sm+ tem o carrossel) */}
+                  <Link to="/time" className="sm:hidden inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase">
+                    <Users className="h-4 w-4" />
+                    Nosso Time
+                  </Link>
+                  <Link to="/design-system" className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary sm:hover:bg-transparent sm:hover:text-primary transition-all duration-300 ease-apple sm:hover:-translate-y-0.5">
                     <Palette className="h-4 w-4" />
                     Design System
                   </Link>
-                  <Link to="/tom-e-voz" className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 ease-apple hover:-translate-y-0.5">
+                  <Link to="/tom-e-voz" className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase sm:hover:bg-accent sm:hover:text-accent-foreground transition-all duration-300 ease-apple sm:hover:-translate-y-0.5">
                     <Volume2 className="h-4 w-4" />
                     Manual de Tom e Voz
                   </Link>
@@ -596,49 +601,29 @@ export default function Hub() {
             </section>
           </Reveal>
 
-          {/* Mobile: CTA card para o time (carrossel oculto) */}
-          <div className="relative z-10 -mt-12 sm:-mt-20 md:-mt-24 drop-shadow-2xl px-2 sm:px-6 md:px-12">
-            <div className="sm:hidden">
-              <Link
-                to="/time"
-                className="flex items-center justify-between gap-4 rounded-2xl border bg-card px-5 py-4 transition-[border-color,box-shadow] duration-300 ease-apple hover:border-primary/30 hover:shadow-xl active:scale-[0.98]"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
-                    <Users className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold font-anek text-foreground text-sm">Nosso Time</p>
-                    <p className="text-xs text-muted-foreground font-roboto mt-0.5 truncate">Conheça quem está por trás dos produtos AUVP</p>
-                  </div>
-                </div>
-                <ChevronRight className="h-5 w-5 text-primary shrink-0" />
-              </Link>
-            </div>
-            {/* sm+: carrossel completo */}
-            <div className="hidden sm:block">
-              <TeamCarousel />
-            </div>
+          {/* Carrossel — apenas sm+ */}
+          <div className="hidden sm:block relative z-10 sm:-mt-20 md:-mt-24 drop-shadow-2xl sm:px-6 md:px-12">
+            <TeamCarousel />
           </div>
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="-mt-4 sm:-mt-8 md:-mt-14">
+        <Reveal className="sm:-mt-8 md:-mt-14">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               {accessLinks.map((link, i) => {
                 const Icon = link.icon;
                 const content = (
-                  <div className="group relative overflow-hidden rounded-2xl border bg-card p-3 sm:p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
+                  <div className="group relative overflow-hidden rounded-2xl border bg-card p-3 sm:p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
                     <div className="flex items-center justify-between mb-1">
-                      <div className={cn("flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 ease-apple group-hover:scale-110", link.gradient)}>
+                      <div className={cn("flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 ease-apple sm:group-hover:scale-110", link.gradient)}>
                         <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
                       {!link.internal ? (
                         <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
                       ) : (
-                        <ChevronRight className="h-4 w-4 text-primary -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-apple" />
+                        <ChevronRight className="h-4 w-4 text-primary -translate-x-1 opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100 transition-all duration-300 ease-apple" />
                       )}
                     </div>
                     <p className="font-bold font-anek text-sm text-foreground">{link.label}</p>
@@ -662,15 +647,15 @@ export default function Hub() {
               icon={Newspaper}
               title="Novidades do Mês"
               action={
-                <Link to="/novidades" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary hover:underline">
-                  Ver mais <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+                <Link to="/novidades" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
+                  Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
                 </Link>
               }
             />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
               {novidades.map((n, i) => (
-                <div key={i} className="group relative overflow-hidden rounded-2xl border bg-card p-5 flex flex-col gap-3 transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-emerald-500 dark:to-[#5A8770] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-apple" />
+                <div key={i} className="group relative overflow-hidden rounded-2xl border bg-card p-5 flex flex-col gap-3 transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-emerald-500 dark:to-[#5A8770] origin-left scale-x-0 sm:group-hover:scale-x-100 transition-transform duration-300 ease-apple" />
                   <span className={cn("text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full w-fit font-roboto", n.tagColor)}>{n.tag}</span>
                   <h3 className="font-semibold font-anek text-foreground leading-snug">{n.title}</h3>
                   <p className="text-sm text-muted-foreground font-roboto leading-relaxed flex-1">{n.desc}</p>
@@ -690,7 +675,7 @@ export default function Hub() {
                 const card = (
                   <div className={cn(
                     "group relative overflow-hidden rounded-2xl border bg-card p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
-                    p.to ? "hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 cursor-pointer" : "hover:border-primary/20 hover:shadow-md"
+                    p.to ? "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer" : "sm:hover:border-primary/20 sm:hover:shadow-md"
                   )}>
                     <div className="flex items-start justify-between gap-2">
                       <p className="font-semibold font-anek text-foreground text-sm">{p.name}</p>
@@ -718,7 +703,7 @@ export default function Hub() {
               action={portfolio.length > 4 && (
                 <button
                   onClick={() => setPortfolioExpanded(e => !e)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
                 >
                   {portfolioExpanded ? "Ver menos" : "Ver mais"} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300 ease-apple", portfolioExpanded && "rotate-90")} />
                 </button>
@@ -726,13 +711,13 @@ export default function Hub() {
             />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {portfolioVisible.map((item, i) => (
-                <div key={i} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
+                <div key={i} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
                   <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
                     {item.img ? (
-                      <img src={item.img} alt={item.nome} className="w-full h-full object-cover transition-transform duration-500 ease-apple group-hover:scale-105" />
+                      <img src={item.img} alt={item.nome} className="w-full h-full object-cover transition-transform duration-500 ease-apple sm:group-hover:scale-105" />
                     ) : (
                       <>
-                        <ImageIcon className="h-8 w-8 text-muted-foreground/40 transition-transform duration-300 ease-apple group-hover:scale-110 group-hover:text-primary/40" />
+                        <ImageIcon className="h-8 w-8 text-muted-foreground/40 transition-transform duration-300 ease-apple sm:group-hover:scale-110 sm:group-hover:text-primary/40" />
                         <span className="text-[10px] text-muted-foreground font-roboto">Adicionar foto</span>
                       </>
                     )}
@@ -756,12 +741,12 @@ export default function Hub() {
               {docs.map((d, i) => {
                 const Icon = d.icon;
                 return (
-                  <a key={i} href={d.href} className="group flex items-center gap-3 p-3.5 rounded-xl border bg-card hover:bg-muted/50 hover:border-primary/30 transition-[background-color,border-color] duration-300 ease-apple">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 transition-transform duration-300 ease-apple group-hover:scale-110">
+                  <a key={i} href={d.href} className="group flex items-center gap-3 p-3.5 rounded-xl border bg-card sm:hover:bg-muted/50 sm:hover:border-primary/30 transition-[background-color,border-color] duration-300 ease-apple">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 transition-transform duration-300 ease-apple sm:group-hover:scale-110">
                       <Icon className="h-4 w-4" />
                     </div>
                     <span className="text-sm font-medium text-foreground">{d.label}</span>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground ml-auto group-hover:translate-x-0.5 group-hover:text-primary transition-all duration-300 ease-apple" />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground ml-auto sm:group-hover:translate-x-0.5 sm:group-hover:text-primary transition-all duration-300 ease-apple" />
                   </a>
                 );
               })}
