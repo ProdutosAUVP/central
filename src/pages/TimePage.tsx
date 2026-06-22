@@ -67,21 +67,21 @@ interface OrgPerson {
 const gradients: Record<OrgColor, string> = {
   ceo:             "from-rose-700 via-red-800 to-red-950",
   director:        "from-indigo-600 via-indigo-800 to-violet-900",
-  coordinator:     "from-emerald-600 via-emerald-700 to-green-900",
+  coordinator:     "from-amber-500 via-amber-600 to-orange-700",
   cx:              "from-purple-500 via-purple-700 to-fuchsia-800",
-  "product-senior":"from-teal-500 via-teal-700 to-emerald-800",
-  "product-pleno": "from-green-500 via-green-600 to-emerald-700",
-  "product-junior":"from-emerald-400 via-emerald-600 to-teal-700",
+  "product-senior":"from-sky-500 via-sky-700 to-blue-800",
+  "product-pleno": "from-cyan-500 via-cyan-600 to-teal-700",
+  "product-junior":"from-slate-400 via-slate-500 to-gray-600",
 };
 
 const levelColors: Record<OrgColor, string> = {
   ceo:             "bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300",
   director:        "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300",
-  coordinator:     "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300",
+  coordinator:     "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300",
   cx:              "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
-  "product-senior":"bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300",
-  "product-pleno": "bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300",
-  "product-junior":"bg-cyan-100 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300",
+  "product-senior":"bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300",
+  "product-pleno": "bg-cyan-100 text-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-300",
+  "product-junior":"bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300",
 };
 
 const orgPeople: Record<string, OrgPerson> = {
