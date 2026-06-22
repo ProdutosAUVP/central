@@ -298,19 +298,21 @@ const faqs = [
 // ─── Team Carousel ────────────────────────────────────────────────────────────
 
 const TEAM_CAROUSEL = [
-  { id: "raul",     name: "Raul Sena",           role: "Fundador e CEO"         },
-  { id: "beatriz",  name: "Beatriz Henriques",    role: "Diretora de Produto"    },
-  { id: "daniel",   name: "Daniel Machado",       role: "Coordenador de Produto" },
-  { id: "debora",   name: "Debora Sanders",       role: "Analista de CX"         },
-  { id: "ariadne",  name: "Ariadne Carneiro",     role: "Gerente de Produto"     },
-  { id: "armando",  name: "Armando Neto",         role: "Designer de Produto"    },
-  { id: "eria",     name: "Éria Alencar",         role: "Designer de Produto"    },
-  { id: "mateus",   name: "Mateus Graff",         role: "Redator"                },
-  { id: "jeniffer", name: "Jeniffer Nascimento",  role: "Analista de Produto"    },
-  { id: "elane",    name: "Elane Rodrigues",      role: "Analista de Produto"    },
-  { id: "ana",      name: "Ana Beatriz Melo",     role: "Assistente de Produto"  },
-  { id: "hiago",    name: "Hiago Felipe Sousa",   role: "Assistente de Produto"  },
+  { id: "raul",     name: "Raul Sena",           role: "Fundador e CEO",         bio: "Fundou a AUVP com a missão de democratizar os investimentos no Brasil." },
+  { id: "beatriz",  name: "Beatriz Henriques",    role: "Diretora de Produto",    bio: "Lidera a estratégia de produto e a visão de longo prazo da plataforma." },
+  { id: "daniel",   name: "Daniel Machado",       role: "Coordenador de Produto", bio: "Coordena sprints e a entrega contínua de valor ao usuário final." },
+  { id: "debora",   name: "Debora Sanders",       role: "Analista de CX",         bio: "Garante a melhor experiência possível para cada cliente AUVP." },
+  { id: "ariadne",  name: "Ariadne Carneiro",     role: "Gerente de Produto",     bio: "Conduz discovery, roadmap e priorização das iniciativas do produto." },
+  { id: "armando",  name: "Armando Neto",         role: "Designer de Produto",    bio: "Cria interfaces funcionais e refinadas para a plataforma." },
+  { id: "eria",     name: "Éria Alencar",         role: "Designer de Produto",    bio: "Cuida de identidade visual, marca e componentes do design system." },
+  { id: "mateus",   name: "Mateus Graff",         role: "Redator",                bio: "Define o tom e a voz da AUVP em todos os canais e produtos." },
+  { id: "jeniffer", name: "Jeniffer Nascimento",  role: "Analista de Produto",    bio: "Analisa dados e métricas para embasar decisões de produto." },
+  { id: "elane",    name: "Elane Rodrigues",      role: "Analista de Produto",    bio: "Conduz pesquisas com usuários e validação de hipóteses." },
+  { id: "ana",      name: "Ana Beatriz Melo",     role: "Assistente de Produto",  bio: "Apoia as iniciativas de produto e os processos internos do time." },
+  { id: "hiago",    name: "Hiago Felipe Sousa",   role: "Assistente de Produto",  bio: "Contribui com análises, documentação e execução de projetos." },
 ];
+
+const EASE_APPLE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 function TeamCarousel() {
   const items = [...TEAM_CAROUSEL, ...TEAM_CAROUSEL];
@@ -319,11 +321,13 @@ function TeamCarousel() {
   const STRIDE = CARD_W + GAP;
   const LOOP_W = TEAM_CAROUSEL.length * STRIDE;
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef     = useRef<HTMLDivElement>(null);
-  const offsetRef    = useRef(0);
-  const pausedRef    = useRef(false);
-  const rafRef       = useRef<number>(0);
+  const containerRef    = useRef<HTMLDivElement>(null);
+  const trackRef        = useRef<HTMLDivElement>(null);
+  const offsetRef       = useRef(0);
+  const pausedRef       = useRef(false);
+  const rafRef          = useRef<number>(0);
+  const hoveredIdxRef   = useRef<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const SIGMA = 220;
@@ -345,7 +349,8 @@ function TeamCarousel() {
           const cardCenter = i * STRIDE - offsetRef.current + CARD_W / 2;
           const dist = Math.abs(cardCenter - cx);
           const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
-          el.style.zIndex = String(Math.round(t * 10));
+          // Hovered card always on top
+          el.style.zIndex = hoveredIdxRef.current === i ? "30" : String(Math.round(t * 10));
           const photoEl = el.firstElementChild as HTMLElement;
           if (photoEl) {
             photoEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
@@ -360,32 +365,28 @@ function TeamCarousel() {
   }, [LOOP_W]);
 
   return (
-    <Link
-      to="/time"
-      className="group block cursor-pointer"
-      aria-label="Conheça nosso time"
-      onMouseEnter={() => { pausedRef.current = true; }}
-      onMouseLeave={() => { pausedRef.current = false; }}
-    >
-      <div ref={containerRef} className="relative overflow-hidden rounded-2xl">
-        {/* Hover overlay — dentro do overflow-hidden para clipar corretamente */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/70 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <span className="flex items-center gap-2 font-bold font-anek text-foreground text-lg drop-shadow">
-            Conheça nosso time
-            <ChevronRight className="h-5 w-5 text-primary" />
-          </span>
-        </div>
-
-        {/* Track */}
-        <div
-          ref={trackRef}
-          className="flex gap-3 py-4"
-          style={{ width: `${items.length * STRIDE}px` }}
-        >
-          {items.map((member, i) => (
+    <div ref={containerRef} className="overflow-hidden rounded-2xl">
+      <div
+        ref={trackRef}
+        className="flex gap-3 py-4"
+        style={{ width: `${items.length * STRIDE}px` }}
+      >
+        {items.map((member, i) => {
+          const isHovered = hoveredIndex === i;
+          return (
             <div
               key={i}
               className="relative shrink-0 w-36 text-center"
+              onMouseEnter={() => {
+                setHoveredIndex(i);
+                hoveredIdxRef.current = i;
+                pausedRef.current = true;
+              }}
+              onMouseLeave={() => {
+                setHoveredIndex(null);
+                hoveredIdxRef.current = null;
+                pausedRef.current = false;
+              }}
             >
               {/* Foto — recebe o scale do JS */}
               <div
@@ -404,16 +405,42 @@ function TeamCarousel() {
                   )}
                 </div>
               </div>
+
+              {/* Popup de hover — sobrepõe a foto, animado em/out via CSS */}
+              <div
+                className="absolute inset-x-0 top-0 aspect-square rounded-2xl overflow-hidden"
+                style={{
+                  opacity: isHovered ? 1 : 0,
+                  transform: isHovered ? "scale(1)" : "scale(0.96)",
+                  pointerEvents: isHovered ? "auto" : "none",
+                  transition: `opacity 220ms ${EASE_APPLE}, transform 220ms ${EASE_APPLE}`,
+                }}
+              >
+                <div className="absolute inset-0 bg-black/58" />
+                <div className="relative z-10 flex flex-col justify-end h-full px-3 pb-3 pt-6">
+                  <p className="font-bold font-anek text-white text-[11px] leading-tight">{member.name}</p>
+                  <p className="text-[9px] text-white/65 font-roboto mt-0.5">{member.role}</p>
+                  <p className="text-[9px] text-white/50 font-roboto mt-1.5 leading-snug line-clamp-2">{member.bio}</p>
+                  <Link
+                    to="/time"
+                    className="mt-2.5 inline-flex items-center gap-0.5 text-[9px] font-bold font-sora uppercase tracking-wider text-white/80 hover:text-white transition-colors duration-150 w-fit"
+                  >
+                    Ver o time
+                    <ChevronRight className="h-2.5 w-2.5" />
+                  </Link>
+                </div>
+              </div>
+
               {/* Texto — fora do elemento escalado, sempre estático */}
               <div className="px-2 pt-2 pb-1">
                 <p className="font-bold font-anek text-foreground text-[11px] leading-tight">{member.name}</p>
                 <p className="text-[9px] text-muted-foreground font-roboto mt-0.5 leading-snug">{member.role}</p>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
-    </Link>
+    </div>
   );
 }
 
