@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   BookOpen, Palette, Volume2, Users, User, ExternalLink,
-  Sun, Moon, ChevronRight, ChevronLeft, Newspaper, Zap,
+  Sun, Moon, ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, CalendarDays
 } from "lucide-react";
@@ -321,13 +321,12 @@ function TeamCarousel() {
   const STRIDE = CARD_W + GAP;
   const LOOP_W = TEAM_CAROUSEL.length * STRIDE;
 
-  const containerRef    = useRef<HTMLDivElement>(null);
-  const trackRef        = useRef<HTMLDivElement>(null);
-  const offsetRef       = useRef(0);
-  const pausedRef       = useRef(false);
-  const rafRef          = useRef<number>(0);
-  const hoveredIdxRef   = useRef<number | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef     = useRef<HTMLDivElement>(null);
+  const offsetRef    = useRef(0);
+  const pausedRef    = useRef(false);
+  const rafRef       = useRef<number>(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const SIGMA = 220;
@@ -349,8 +348,7 @@ function TeamCarousel() {
           const cardCenter = i * STRIDE - offsetRef.current + CARD_W / 2;
           const dist = Math.abs(cardCenter - cx);
           const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
-          // Hovered card always on top
-          el.style.zIndex = hoveredIdxRef.current === i ? "30" : String(Math.round(t * 10));
+          el.style.zIndex = String(Math.round(t * 10));
           const photoEl = el.firstElementChild as HTMLElement;
           if (photoEl) {
             photoEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
@@ -365,28 +363,20 @@ function TeamCarousel() {
   }, [LOOP_W]);
 
   return (
-    <div ref={containerRef} className="overflow-hidden rounded-2xl">
-      <div
-        ref={trackRef}
-        className="flex gap-3 py-4"
-        style={{ width: `${items.length * STRIDE}px` }}
-      >
-        {items.map((member, i) => {
-          const isHovered = hoveredIndex === i;
-          return (
+    <div ref={containerRef}>
+      {/* Cards — overflow-hidden para clipar o scroll horizontal */}
+      <div className="overflow-hidden rounded-2xl">
+        <div
+          ref={trackRef}
+          className="flex gap-3 py-4"
+          style={{ width: `${items.length * STRIDE}px` }}
+        >
+          {items.map((member, i) => (
             <div
               key={i}
               className="relative shrink-0 w-36 text-center"
-              onMouseEnter={() => {
-                setHoveredIndex(i);
-                hoveredIdxRef.current = i;
-                pausedRef.current = true;
-              }}
-              onMouseLeave={() => {
-                setHoveredIndex(null);
-                hoveredIdxRef.current = null;
-                pausedRef.current = false;
-              }}
+              onMouseEnter={() => { setIsHovered(true);  pausedRef.current = true;  }}
+              onMouseLeave={() => { setIsHovered(false); pausedRef.current = false; }}
             >
               {/* Foto — recebe o scale do JS */}
               <div
@@ -405,40 +395,64 @@ function TeamCarousel() {
                   )}
                 </div>
               </div>
-
-              {/* Popup de hover — sobrepõe a foto, animado em/out via CSS */}
-              <div
-                className="absolute inset-x-0 top-0 aspect-square rounded-2xl overflow-hidden"
-                style={{
-                  opacity: isHovered ? 1 : 0,
-                  transform: isHovered ? "scale(1)" : "scale(0.96)",
-                  pointerEvents: isHovered ? "auto" : "none",
-                  transition: `opacity 220ms ${EASE_APPLE}, transform 220ms ${EASE_APPLE}`,
-                }}
-              >
-                <div className="absolute inset-0 bg-black/58" />
-                <div className="relative z-10 flex flex-col justify-end h-full px-3 pb-3 pt-6">
-                  <p className="font-bold font-anek text-white text-[11px] leading-tight">{member.name}</p>
-                  <p className="text-[9px] text-white/65 font-roboto mt-0.5">{member.role}</p>
-                  <p className="text-[9px] text-white/50 font-roboto mt-1.5 leading-snug line-clamp-2">{member.bio}</p>
-                  <Link
-                    to="/time"
-                    className="mt-2.5 inline-flex items-center gap-0.5 text-[9px] font-bold font-sora uppercase tracking-wider text-white/80 hover:text-white transition-colors duration-150 w-fit"
-                  >
-                    Ver o time
-                    <ChevronRight className="h-2.5 w-2.5" />
-                  </Link>
-                </div>
-              </div>
-
               {/* Texto — fora do elemento escalado, sempre estático */}
               <div className="px-2 pt-2 pb-1">
                 <p className="font-bold font-anek text-foreground text-[11px] leading-tight">{member.name}</p>
                 <p className="text-[9px] text-muted-foreground font-roboto mt-0.5 leading-snug">{member.role}</p>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
+      </div>
+
+      {/* CTA — surge abaixo dos cards quando qualquer card está em hover */}
+      <div
+        style={{
+          maxHeight: isHovered ? "76px" : "0px",
+          overflow: "hidden",
+          transition: isHovered
+            ? `max-height 500ms ${EASE_APPLE}`
+            : `max-height 260ms ${EASE_APPLE} 60ms`,
+        }}
+      >
+        <div className="flex flex-col items-center gap-1 pt-3 pb-1">
+          {/* Linha que cresce do centro para as extremidades */}
+          <div
+            className="w-full h-px bg-border"
+            style={{
+              transform: isHovered ? "scaleX(1)" : "scaleX(0)",
+              transformOrigin: "center",
+              transition: isHovered
+                ? `transform 400ms ${EASE_APPLE}`
+                : `transform 0ms`,
+            }}
+          />
+          {/* Seta — surge do centro da linha */}
+          <div
+            style={{
+              opacity: isHovered ? 1 : 0,
+              transform: isHovered ? "translateY(0)" : "translateY(-4px)",
+              transition: isHovered
+                ? `opacity 200ms ${EASE_APPLE} 310ms, transform 200ms ${EASE_APPLE} 310ms`
+                : `opacity 80ms ${EASE_APPLE}, transform 80ms ${EASE_APPLE}`,
+            }}
+          >
+            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground/50" />
+          </div>
+          {/* Botão de texto */}
+          <Link
+            to="/time"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              transition: isHovered
+                ? `opacity 200ms ${EASE_APPLE} 420ms`
+                : `opacity 60ms ${EASE_APPLE}`,
+            }}
+            className="text-[10px] font-bold font-sora uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors duration-150"
+          >
+            Conheça o Time
+          </Link>
+        </div>
       </div>
     </div>
   );
