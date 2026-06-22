@@ -96,14 +96,14 @@ const accessLinks = [
 ];
 
 const produtos = [
-  { name: "AUVP Capital", desc: "Plataforma de investimentos", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", to: "/escola" },
-  { name: "AUVP Analítica", desc: "Análise de investimentos", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700" },
-  { name: "AUVP Agro", desc: "Produtos do agronegócio", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700" },
-  { name: "AUVP Câmbio", desc: "Operações de câmbio", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700" },
-  { name: "AUVP Crédito", desc: "Soluções de crédito", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700" },
-  { name: "AUVP Seguros", desc: "Produtos de seguro", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700" },
-  { name: "AUVP Experience", desc: "Experiências premium", status: "Planejado", statusColor: "bg-gray-100 text-gray-600" },
+  { name: "AUVP Capital", desc: "Plataforma de investimentos", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", img: "" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", to: "/escola", img: "" },
+  { name: "AUVP Analítica", desc: "Análise de investimentos", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700", img: "" },
+  { name: "AUVP Agro", desc: "Produtos do agronegócio", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700", img: "" },
+  { name: "AUVP Câmbio", desc: "Operações de câmbio", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700", img: "" },
+  { name: "AUVP Crédito", desc: "Soluções de crédito", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700", img: "" },
+  { name: "AUVP Seguros", desc: "Produtos de seguro", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700", img: "" },
+  { name: "AUVP Experience", desc: "Experiências premium", status: "Planejado", statusColor: "bg-gray-100 text-gray-600", img: "" },
 ];
 
 const docs = [
@@ -329,7 +329,7 @@ const faqs = [
   { q: "Como acesso o Design System?", a: "Clique em 'Design System' nos Acessos Rápidos ou use o menu de navegação global no canto superior esquerdo." },
   { q: "O que é o Manual de Tom e Voz?", a: "É o guia de comunicação verbal da AUVP, com diretrizes de linguagem para cada área e produto da empresa." },
   { q: "Como sugiro um novo componente?", a: "Abra uma issue no repositório do Design System no GitHub ou entre em contato com o time de Produto." },
-  { q: "Com que frequência o Design System é atualizado?", a: "O Design System é atualizado continuamente. Novidades são comunicadas na seção 'Novidades do Mês' desta Central." },
+  { q: "Com que frequência o Design System é atualizado?", a: "O Design System é atualizado continuamente. Novidades são comunicadas no Mural de Novidades desta Central." },
 ];
 
 // ─── Team Carousel ────────────────────────────────────────────────────────────
@@ -608,26 +608,26 @@ export default function Hub() {
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="sm:-mt-8 md:-mt-14">
+        <Reveal className="sm:-mt-12 md:-mt-20">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
               {accessLinks.map((link, i) => {
                 const Icon = link.icon;
                 const content = (
-                  <div className="group relative overflow-hidden rounded-2xl border bg-card p-3 sm:p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className={cn("flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 ease-apple sm:group-hover:scale-110", link.gradient)}>
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
-                      </div>
-                      {!link.internal ? (
-                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4 text-primary -translate-x-1 opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100 transition-all duration-300 ease-apple" />
-                      )}
+                  <div className="group relative overflow-hidden rounded-2xl border bg-card p-3 sm:p-4 flex items-center gap-3 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
+                    <div className={cn("flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm shrink-0 transition-transform duration-300 ease-apple sm:group-hover:scale-110", link.gradient)}>
+                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                     </div>
-                    <p className="font-bold font-anek text-sm text-foreground">{link.label}</p>
-                    <p className="text-xs text-muted-foreground font-roboto">{link.desc}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold font-anek text-sm text-foreground leading-snug">{link.label}</p>
+                      <p className="text-xs text-muted-foreground font-roboto mt-0.5">{link.desc}</p>
+                    </div>
+                    {!link.internal ? (
+                      <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 text-primary -translate-x-1 opacity-0 sm:group-hover:translate-x-0 sm:group-hover:opacity-100 transition-all duration-300 ease-apple shrink-0" />
+                    )}
                   </div>
                 );
                 return link.internal ? (
@@ -645,7 +645,7 @@ export default function Hub() {
           <section>
             <SectionHeader
               icon={Newspaper}
-              title="Novidades do Mês"
+              title="Mural de Novidades"
               action={
                 <Link to="/novidades" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
                   Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
@@ -669,19 +669,31 @@ export default function Hub() {
         {/* Produtos */}
         <Reveal>
           <section>
-            <SectionHeader icon={BarChart3} title="Produtos Internos" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+            <SectionHeader icon={BarChart3} title="Produtos Digitais" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {produtos.map((p, i) => {
+                const productInitial = p.name.split(" ")[1]?.[0] ?? p.name[0];
                 const card = (
                   <div className={cn(
-                    "group relative overflow-hidden rounded-2xl border bg-card p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
+                    "group relative overflow-hidden rounded-2xl border bg-card flex items-stretch h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
                     p.to ? "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer" : "sm:hover:border-primary/20 sm:hover:shadow-md"
                   )}>
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="font-semibold font-anek text-foreground text-sm">{p.name}</p>
-                      <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", p.statusColor)}>{p.status}</span>
+                    {/* Image / placeholder */}
+                    <div className="w-16 sm:w-20 shrink-0 border-r bg-muted/40 flex items-center justify-center overflow-hidden">
+                      {p.img ? (
+                        <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-2xl font-bold font-anek text-muted-foreground/25 select-none">{productInitial}</span>
+                      )}
                     </div>
-                    <p className="text-xs text-muted-foreground font-roboto">{p.desc}</p>
+                    {/* Content */}
+                    <div className="flex flex-col justify-center gap-1.5 p-3 flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
+                        <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded font-roboto shrink-0", p.statusColor)}>{p.status}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground font-roboto leading-snug">{p.desc}</p>
+                    </div>
                   </div>
                 );
                 return p.to ? (
