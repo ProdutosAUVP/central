@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GlobalNav } from "@/components/GlobalNav";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -378,9 +378,10 @@ function TeamCarousel() {
           const dist = Math.abs(cardCenter - cx);
           const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
           el.style.zIndex = String(Math.round(t * 10));
-          const photoEl = el.firstElementChild as HTMLElement;
-          if (photoEl) {
-            photoEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
+          const imgEl = (el.firstElementChild?.firstElementChild?.firstElementChild) as HTMLElement | null;
+          if (imgEl) {
+            imgEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
+            imgEl.style.transition = "transform 60ms linear";
           }
         }
       }
@@ -411,9 +412,8 @@ function TeamCarousel() {
               key={i}
               className="relative shrink-0 w-36 text-center"
             >
-              {/* Foto — recebe o scale do JS */}
+              {/* Foto — overflow-hidden clipa o zoom da imagem */}
               <div
-                style={{ transformOrigin: "50% 100%" }}
                 className="rounded-2xl border bg-card overflow-hidden shadow-md"
               >
                 <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
@@ -537,8 +537,19 @@ export default function Hub() {
   const [portfolioExpanded, setPortfolioExpanded] = useState(false);
   const portfolioVisible = portfolioExpanded ? portfolio : portfolio.slice(0, 4);
 
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (spotlightRef.current) {
+      spotlightRef.current.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, hsl(var(--primary) / 0.06), transparent 80%)`;
+    }
+  }, []);
+  const handleMouseLeave = useCallback(() => {
+    if (spotlightRef.current) spotlightRef.current.style.background = "none";
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+      <div ref={spotlightRef} className="pointer-events-none fixed inset-0 z-[30]" aria-hidden="true" />
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
@@ -583,7 +594,7 @@ export default function Hub() {
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="-mt-8">
+        <Reveal className="-mt-14">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
