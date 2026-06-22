@@ -19,7 +19,7 @@ export function FeedbackButton() {
   const handleClick = useCallback(() => {
     const audio = new Audio(publicUrl("/meow.mp3"));
     audio.play().catch(() => {});
-    window.Userback?.open();
+    window.Userback?.open?.();
   }, []);
 
   return (
