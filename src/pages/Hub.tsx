@@ -378,10 +378,9 @@ function TeamCarousel() {
           const dist = Math.abs(cardCenter - cx);
           const t = Math.exp(-(dist * dist) / (2 * SIGMA * SIGMA));
           el.style.zIndex = String(Math.round(t * 10));
-          const imgEl = (el.firstElementChild?.firstElementChild?.firstElementChild) as HTMLElement | null;
-          if (imgEl) {
-            imgEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
-            imgEl.style.transition = "transform 60ms linear";
+          const photoEl = el.firstElementChild as HTMLElement;
+          if (photoEl) {
+            photoEl.style.transform = `scale(${(BASE + (PEAK - BASE) * t).toFixed(3)})`;
           }
         }
       }
@@ -412,8 +411,9 @@ function TeamCarousel() {
               key={i}
               className="relative shrink-0 w-36 text-center"
             >
-              {/* Foto — overflow-hidden clipa o zoom da imagem */}
+              {/* Foto — recebe o scale do JS */}
               <div
+                style={{ transformOrigin: "50% 100%" }}
                 className="rounded-2xl border bg-card overflow-hidden shadow-md"
               >
                 <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
@@ -540,7 +540,7 @@ export default function Hub() {
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (spotlightRef.current) {
-      spotlightRef.current.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, hsl(var(--primary) / 0.06), transparent 80%)`;
+      spotlightRef.current.style.background = `radial-gradient(320px circle at ${e.clientX}px ${e.clientY}px, var(--spotlight), transparent 80%)`;
     }
   }, []);
   const handleMouseLeave = useCallback(() => {
