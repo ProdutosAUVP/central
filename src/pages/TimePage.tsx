@@ -902,12 +902,11 @@ export default function TimePage() {
 
   const dismissOrgHint = useCallback(() => {
     setShowOrgHint(false);
-    sessionStorage.setItem("auvp-org-hint", "true");
   }, []);
 
   useEffect(() => {
     const el = orgToggleRef.current;
-    if (!el || sessionStorage.getItem("auvp-org-hint")) return;
+    if (!el) return;
     let dismissTimer: ReturnType<typeof setTimeout>;
     const obs = new IntersectionObserver(
       ([entry]) => {
@@ -980,13 +979,13 @@ export default function TimePage() {
               discreet "ver organograma" label hugging its right end. */}
           <div className="relative">
             {showOrgHint && (
-              <div className="absolute -top-14 right-0 z-50 animate-in fade-in slide-in-from-bottom-2 duration-300 pointer-events-none">
+              <div className="absolute top-full mt-2 right-0 z-50 animate-in fade-in slide-in-from-top-2 duration-300 pointer-events-none">
                 <div className="relative bg-primary text-primary-foreground text-xs font-roboto font-semibold px-4 py-2.5 rounded-xl shadow-lg whitespace-nowrap">
+                  <div className="absolute -top-1.5 right-6 w-3 h-3 bg-primary rotate-45 rounded-sm" />
                   <span className="flex items-center gap-1.5">
                     <Users className="h-3.5 w-3.5 shrink-0" />
                     Veja como funciona o organograma de nosso time
                   </span>
-                  <div className="absolute -bottom-1.5 right-6 w-3 h-3 bg-primary rotate-45 rounded-sm" />
                 </div>
               </div>
             )}
