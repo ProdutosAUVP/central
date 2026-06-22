@@ -203,7 +203,7 @@ function CalendarioWidget() {
   return (
     <div className="rounded-2xl border bg-card overflow-hidden">
       {/* Month navigation */}
-      <div className="flex items-center justify-between px-6 py-4 border-b">
+      <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b">
         <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors">
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -232,7 +232,7 @@ function CalendarioWidget() {
             <div
               key={i}
               className={cn(
-                "min-h-[88px] border-b flex flex-col p-1.5 transition-colors duration-150",
+                "min-h-[52px] sm:min-h-[88px] border-b flex flex-col p-1 sm:p-1.5 transition-colors duration-150",
                 i % 7 !== 6 && "border-r border-border",
                 day && hasEvents && "cursor-pointer",
                 isSelected && "bg-primary/5",
@@ -247,7 +247,7 @@ function CalendarioWidget() {
                 <>
                   <div className="flex justify-end">
                     <span className={cn(
-                      "h-6 w-6 flex items-center justify-center rounded-full text-xs font-medium font-roboto",
+                      "h-5 w-5 sm:h-6 sm:w-6 flex items-center justify-center rounded-full text-[10px] sm:text-xs font-medium font-roboto",
                       isToday(day) && "bg-primary text-primary-foreground font-bold",
                       isSelected && !isToday(day) && "ring-1 ring-primary text-primary",
                       !isToday(day) && !isSelected && "text-foreground/80"
@@ -255,7 +255,16 @@ function CalendarioWidget() {
                       {day}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5">
+                  {/* Mobile: dots indicating events (tap to see detail) */}
+                  {hasEvents && (
+                    <div className="flex sm:hidden flex-wrap gap-0.5 mt-0.5 px-0.5">
+                      {dayEvents.slice(0, 3).map((_, ei) => (
+                        <span key={ei} className="w-1.5 h-1.5 rounded-full shrink-0 bg-primary/60" />
+                      ))}
+                    </div>
+                  )}
+                  {/* sm+: text chips */}
+                  <div className="hidden sm:flex flex-col gap-0.5 mt-0.5">
                     {dayEvents.slice(0, 2).map((e, ei) => (
                       <span
                         key={ei}
@@ -278,7 +287,7 @@ function CalendarioWidget() {
 
       {/* Detail panel — expands below grid when a day with events is selected */}
       {selectedDay !== null && selectedEvents.length > 0 && (
-        <div className="border-t px-5 py-4 space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
+        <div className="border-t px-3 sm:px-5 py-4 space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto">
               {selectedDay} de {MESES_PT[viewMonth]} — {selectedEvents.length} evento{selectedEvents.length !== 1 ? "s" : ""}
@@ -359,7 +368,7 @@ function TeamCarousel() {
 
   useEffect(() => {
     const SIGMA = 220;
-    const BASE  = 0.80;
+    const BASE  = 0.88;
     const PEAK  = 1.06;
 
     const tick = () => {
@@ -519,14 +528,14 @@ function Reveal({ children, className, delay = 0 }: { children: React.ReactNode;
 
 function SectionHeader({ icon: Icon, title, action }: { icon: React.ElementType; title: string; action?: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 mb-6">
-      <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+    <div className="flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
           <Icon className="h-5 w-5" />
         </div>
-        <h2 className="text-xl font-bold font-anek text-foreground">{title}</h2>
+        <h2 className="text-base sm:text-xl font-bold font-anek text-foreground">{title}</h2>
       </div>
-      {action}
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }
@@ -558,27 +567,27 @@ export default function Hub() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10 space-y-16">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-6 md:py-10 space-y-10 md:space-y-16">
         {/* Hero + Carousel */}
         <div>
           <Reveal>
-            <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-card pt-8 px-8 pb-28 md:pt-12 md:px-12 md:pb-36">
+            <section className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/10 via-card to-card pt-6 px-5 pb-20 sm:pt-8 sm:px-8 sm:pb-28 md:pt-12 md:px-12 md:pb-36">
               <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
               <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
               <div className="relative">
                 <p className="text-sm text-muted-foreground font-roboto mb-2">{todayCapitalized}</p>
-                <h1 className="text-3xl md:text-5xl font-bold font-anek text-foreground mb-3 leading-[1.05]">
+                <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold font-anek text-foreground mb-3 leading-[1.05]">
                   Central <span className="text-primary">AUVP</span>
                 </h1>
-                <p className="text-lg text-muted-foreground mb-7 max-w-2xl font-roboto leading-relaxed">
+                <p className="text-sm sm:text-lg text-muted-foreground mb-5 md:mb-7 max-w-2xl font-roboto leading-relaxed">
                   Central de Produto do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link to="/design-system" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary hover:bg-transparent hover:text-primary transition-all duration-300 ease-apple hover:-translate-y-0.5">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
+                  <Link to="/design-system" className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] bg-primary text-primary-foreground text-sm font-semibold font-sora uppercase border border-primary hover:bg-transparent hover:text-primary transition-all duration-300 ease-apple hover:-translate-y-0.5">
                     <Palette className="h-4 w-4" />
                     Design System
                   </Link>
-                  <Link to="/tom-e-voz" className="inline-flex items-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 ease-apple hover:-translate-y-0.5">
+                  <Link to="/tom-e-voz" className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-[5px] border border-input bg-background text-foreground text-sm font-semibold font-sora uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 ease-apple hover:-translate-y-0.5">
                     <Volume2 className="h-4 w-4" />
                     Manual de Tom e Voz
                   </Link>
@@ -588,23 +597,23 @@ export default function Hub() {
           </Reveal>
 
           {/* Carousel overlapping the hero bottom — the drop-shadow creates the 3D lift effect */}
-          <div className="relative z-10 -mt-20 md:-mt-24 drop-shadow-2xl px-8 md:px-12">
+          <div className="relative z-10 -mt-12 sm:-mt-20 md:-mt-24 drop-shadow-2xl px-2 sm:px-6 md:px-12">
             <TeamCarousel />
           </div>
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="-mt-14">
+        <Reveal className="-mt-4 sm:-mt-8 md:-mt-14">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               {accessLinks.map((link, i) => {
                 const Icon = link.icon;
                 const content = (
-                  <div className="group relative overflow-hidden rounded-2xl border bg-card p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
+                  <div className="group relative overflow-hidden rounded-2xl border bg-card p-3 sm:p-4 flex flex-col gap-2 h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
                     <div className="flex items-center justify-between mb-1">
-                      <div className={cn("flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 ease-apple group-hover:scale-110", link.gradient)}>
-                        <Icon className="h-5 w-5" />
+                      <div className={cn("flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-sm transition-transform duration-300 ease-apple group-hover:scale-110", link.gradient)}>
+                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                       </div>
                       {!link.internal ? (
                         <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
@@ -638,7 +647,7 @@ export default function Hub() {
                 </Link>
               }
             />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
               {novidades.map((n, i) => (
                 <div key={i} className="group relative overflow-hidden rounded-2xl border bg-card p-5 flex flex-col gap-3 transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
                   <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-emerald-500 dark:to-[#5A8770] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-apple" />
@@ -656,7 +665,7 @@ export default function Hub() {
         <Reveal>
           <section>
             <SectionHeader icon={BarChart3} title="Produtos Internos" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
               {produtos.map((p, i) => {
                 const card = (
                   <div className={cn(
@@ -695,7 +704,7 @@ export default function Hub() {
                 </button>
               )}
             />
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {portfolioVisible.map((item, i) => (
                 <div key={i} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:-translate-y-1 hover:shadow-xl hover:border-primary/30">
                   <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
