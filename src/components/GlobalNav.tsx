@@ -11,7 +11,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Volume2, Palette, ChevronDown, X, Home, Users } from "lucide-react";
+import { Volume2, Palette, ChevronDown, X, Home, Users, ExternalLink } from "lucide-react";
+
+const externalLinks = [
+  {
+    id: "guia-vendas",
+    label: "Guia de Vendas",
+    href: "https://produtosauvp.github.io/projetodelta/",
+  },
+  {
+    id: "codigo-etica",
+    label: "Código de Ética",
+    href: "https://produtosauvp.github.io/etica/",
+  },
+];
 
 const systems = [
   {
@@ -140,6 +153,27 @@ export function GlobalNav() {
                 </DropdownMenuItem>
               );
             })}
+
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider font-roboto font-bold px-2 py-1.5">
+              Links externos
+            </DropdownMenuLabel>
+            {externalLinks.map((link) => (
+              <DropdownMenuItem
+                key={link.id}
+                asChild
+              >
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between gap-3 p-3 rounded-xl cursor-pointer transition-colors focus:bg-muted hover:bg-muted data-[highlighted]:bg-muted"
+                >
+                  <span className="text-sm font-anek text-foreground">{link.label}</span>
+                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                </a>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -207,6 +241,23 @@ export function GlobalNav() {
             </div>
           );
         })}
+
+        {/* Divisor vertical */}
+        <div className="w-px h-4 bg-border mx-1.5 shrink-0" />
+
+        {/* Links externos */}
+        {externalLinks.map((link) => (
+          <a
+            key={link.id}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 px-3 py-2 text-sm font-normal font-anek rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+          >
+            {link.label}
+            <ExternalLink className="h-3 w-3 shrink-0" />
+          </a>
+        ))}
       </nav>
 
       {/* Welcome tooltip — mobile only */}
