@@ -17,9 +17,12 @@ export function FeedbackButton() {
   const [active, setActive] = useState(false);
 
   const handleClick = useCallback(() => {
-    const audio = new Audio(publicUrl("/meow.mp3"));
-    audio.play().catch(() => {});
-    window.Userback?.open?.();
+    new Audio(publicUrl("/meow.mp3")).play().catch(() => {});
+    const btn = (
+      document.getElementById("userback-button") ??
+      document.querySelector<HTMLElement>("[class*='userback-button']")
+    );
+    btn?.click();
   }, []);
 
   return (
