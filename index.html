@@ -44,52 +44,23 @@
       }(window.location));
     </script>
     <style>
-      /* Esconde visuais padrão do Userback; o on_load injeta o gato */
-      #userback-button > *:not(.ub-cat-img),
-      .userback-button-e > *:not(.ub-cat-img) { visibility: hidden !important; }
+      /*
+       * Posiciona o botão nativo do Userback no mesmo canto que o gatinho
+       * mas um nível abaixo (z-index 54 < z-[55] do React).
+       * O gatinho fica visível; ao clicar, o elementFromPoint encontra
+       * o botão do Userback abaixo e dispara seu handler nativo.
+       */
+      .userback-button-e,
+      #userback-button-e,
+      [id*="userback-button-e"] {
+        bottom: 1.5rem !important;
+        right: 1.5rem !important;
+        z-index: 54 !important;
+      }
     </style>
     <script>
       window.Userback = window.Userback || {};
       Userback.access_token = "A-F3dpS5OyrysALHYgAKS1QdXBt";
-      Userback.on_load = function() {
-        /* %BASE_URL% é substituído pelo Vite em build; em dev é "/" */
-        var BASE = ('%BASE_URL%').replace(/\/$/, '');
-        setTimeout(function() {
-          var btn = document.getElementById('userback-button')
-                 || document.querySelector('.userback-button-e')
-                 || document.querySelector('[class*="userback-button"]')
-                 || document.querySelector('[id*="userback-button"]');
-          if (!btn) return;
-
-          /* Estiliza como botão circular nativo */
-          Object.assign(btn.style, {
-            width: '52px', height: '52px', minWidth: '0', minHeight: '0',
-            borderRadius: '50%', overflow: 'hidden', padding: '0',
-            boxShadow: '0 10px 25px rgba(0,0,0,.2),0 0 0 2px rgba(128,128,128,.3)',
-            transition: 'transform .2s,box-shadow .2s', cursor: 'pointer',
-            position: 'fixed', bottom: '1.5rem', right: '1.5rem'
-          });
-
-          /* Injeta imagem do gato */
-          var img = document.createElement('img');
-          img.className = 'ub-cat-img';
-          img.src = BASE + '/gatin1.webp';
-          img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;';
-          btn.appendChild(img);
-
-          btn.addEventListener('mouseenter', function() {
-            img.src = BASE + '/gatin2.webp';
-            btn.style.transform = 'scale(1.1)';
-          });
-          btn.addEventListener('mouseleave', function() {
-            img.src = BASE + '/gatin1.webp';
-            btn.style.transform = '';
-          });
-          btn.addEventListener('click', function() {
-            new Audio(BASE + '/meow.mp3').play().catch(function(){});
-          }, true); /* capture=true: roda antes do handler do Userback */
-        }, 0);
-      };
       (function(d) {
         var s = d.createElement('script');s.async = true;s.src = 'https://static.userback.io/widget/v1.js';(d.head || d.body).appendChild(s);
       })(document);
