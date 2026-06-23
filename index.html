@@ -43,10 +43,15 @@
         }
       }(window.location));
     </script>
-    <style>#userback-button { position: fixed !important; left: -9999px !important; pointer-events: none !important; }</style>
+    <style>#userback-button { opacity: 0 !important; pointer-events: none !important; }</style>
     <script>
       window.Userback = window.Userback || {};
       Userback.access_token = "A-F3dpS5OyrysALHYgAKS1QdXBt";
+      Userback.on_load = function() {
+        if (typeof Userback.open === 'function') {
+          window.__openUserback = Userback.open.bind(Userback);
+        }
+      };
       (function(d) {
         var s = d.createElement('script');s.async = true;s.src = 'https://static.userback.io/widget/v1.js';(d.head || d.body).appendChild(s);
       })(document);
