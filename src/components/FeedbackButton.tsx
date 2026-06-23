@@ -18,11 +18,7 @@ export function FeedbackButton() {
 
   const handleClick = useCallback(() => {
     new Audio(publicUrl("/meow.mp3")).play().catch(() => {});
-    const btn = (
-      document.getElementById("userback-button") ??
-      document.querySelector<HTMLElement>("[class*='userback-button']")
-    );
-    btn?.click();
+    (window as any).__openUserback?.();
   }, []);
 
   return (
