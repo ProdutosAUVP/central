@@ -145,16 +145,20 @@ const push = useCallback((type: NotifType) => {
 
 const remove = (id: number) => setItems((prev) => prev.filter((i) => i.id !== id));
 
-<>
-  <Button onClick={() => push("success")} className="bg-success hover:bg-success/90 text-success-foreground">Success</Button>
-  <Button onClick={() => push("info")}    className="bg-info hover:bg-info/90 text-info-foreground">Info</Button>
-  <Button onClick={() => push("warning")} className="bg-warning hover:bg-warning/90 text-warning-foreground">Warning</Button>
-  <Button onClick={() => push("error")}   className="bg-error hover:bg-error/90 text-error-foreground">Error</Button>
+{/* Sentinela invisível para detectar a classe .dark do toggle do ComponentShowcase */}
+<span ref={anchorRef} aria-hidden="true" className="sr-only" />
+<Button onClick={() => push("success")} className="bg-success hover:bg-success/90 text-success-foreground">Success</Button>
+<Button onClick={() => push("info")}    className="bg-info hover:bg-info/90 text-info-foreground">Info</Button>
+<Button onClick={() => push("warning")} className="bg-warning hover:bg-warning/90 text-warning-foreground">Warning</Button>
+<Button onClick={() => push("error")}   className="bg-error hover:bg-error/90 text-error-foreground">Error</Button>
 
+{/* A pilha de notificações é renderizada FORA do ComponentShowcase como
+    irmã dele — recebe a classe .dark via o estado isDark que o anchorRef detecta */}
+{/* <div className={cn(isDark && "dark")}>
   <div className="fixed top-20 right-6 z-[100] flex flex-col gap-3 pointer-events-none">
     {items.map((i) => <NotificationCard key={i.id} item={i} onClose={() => remove(i.id)} />)}
   </div>
-</>`}
+</div> */}`}
         htmlCode={`<!-- Pilha de notificações -->
 <div id="notif-stack" style="position:fixed; top:80px; right:24px; z-index:100; display:flex; flex-direction:column; gap:12px;"></div>
 

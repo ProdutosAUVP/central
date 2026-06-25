@@ -30,7 +30,7 @@ export function TabsGeistWidget() {
 const [selected, setSelected] = useState("apple");
 
 <div className="w-full">
-  <div role="tablist" className="relative flex items-center gap-6 border-b">
+  <div role="tablist" className="relative flex items-center gap-6 border-b border-border">
     {TABS.map((t) => {
       const active = selected === t.value;
       return (
@@ -40,7 +40,7 @@ const [selected, setSelected] = useState("apple");
           aria-selected={active}
           onClick={() => setSelected(t.value)}
           className={cn(
-            "relative -mb-px py-3 text-sm font-roboto transition-colors",
+            "relative -mb-px py-3 text-sm font-roboto transition-colors outline-none focus-visible:text-foreground",
             active ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
           )}
         >
@@ -50,7 +50,7 @@ const [selected, setSelected] = useState("apple");
       );
     })}
   </div>
-  <div className="pt-5 text-sm font-roboto text-foreground">
+  <div className="pt-5 text-sm font-roboto text-foreground min-h-[60px]">
     {CONTENT[selected]}
   </div>
 </div>`}

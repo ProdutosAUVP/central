@@ -19,17 +19,20 @@ export function PopconfirmWidget() {
       description="Confirmação leve ancorada ao gatilho — ideal para ações destrutivas rápidas (excluir item, sair, descartar) sem abrir um Dialog completo."
       code={`const { toast } = useToast();
 const [open, setOpen] = useState(false);
+const triggerRef = useRef<HTMLButtonElement>(null);
+const isDark = useIsDark(triggerRef);
 
 <Popover open={open} onOpenChange={setOpen}>
   <PopoverTrigger asChild>
     <Button
+      ref={triggerRef}
       variant="outline"
-      className="hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
+      className="hover:bg-destructive hover:text-destructive-foreground hover:border-destructive dark:hover:bg-destructive dark:hover:text-destructive-foreground dark:hover:border-destructive"
     >
       <Trash2 className="h-4 w-4 mr-2" /> Excluir item
     </Button>
   </PopoverTrigger>
-  <PopoverContent className="w-72" align="start">
+  <PopoverContent className={cn("w-72", isDark && "dark")} align="start">
     <div className="flex gap-3">
       <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
       <div className="flex-1 space-y-3">
@@ -46,7 +49,11 @@ const [open, setOpen] = useState(false);
             className="bg-error text-error-foreground hover:bg-error/90"
             onClick={() => {
               setOpen(false);
-              toast({ title: "Item excluído", description: "Lorem ipsum removido com sucesso." });
+              toast({
+                title: "Item excluído",
+                description: "Lorem ipsum removido com sucesso.",
+                className: isDark ? "dark bg-background text-foreground border-border" : undefined,
+              });
             }}
           >
             Excluir

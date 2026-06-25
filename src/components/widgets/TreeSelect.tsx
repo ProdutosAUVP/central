@@ -233,23 +233,28 @@ const toggleExpand = (k: string) => {
   setExpanded(next);
 };
 
-<Popover open={open} onOpenChange={setOpen}>
-  <PopoverTrigger asChild>
-    <Button variant="outline" className="w-full justify-between font-roboto normal-case">
-      <span className="truncate text-sm">{display}</span>
-      <ChevronDown className="h-4 w-4 opacity-60" />
-    </Button>
-  </PopoverTrigger>
-  <PopoverContent className="w-[--radix-popover-trigger-width] p-2" align="start">
-    <TreeNodes
-      nodes={TREE}
-      expanded={expanded}
-      onToggleExpand={toggleExpand}
-      selectedKey={selectedKey}
-      onSelect={(k) => { setSelectedKey(k); setOpen(false); }}
-    />
-  </PopoverContent>
-</Popover>`}
+<div className="w-full max-w-md">
+  <Popover open={open} onOpenChange={setOpen}>
+    <PopoverTrigger asChild>
+      <Button ref={triggerRef} variant="outline" className="w-full justify-between font-roboto normal-case">
+        <span className="truncate text-sm">{display}</span>
+        <ChevronDown className="h-4 w-4 opacity-60" />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent className={cn("w-[--radix-popover-trigger-width] p-2", isDark && "dark")} align="start">
+      <TreeNodes
+        nodes={TREE}
+        expanded={expanded}
+        onToggleExpand={toggleExpand}
+        selectedKey={selectedKey}
+        onSelect={(k) => { setSelectedKey(k); setOpen(false); }}
+      />
+    </PopoverContent>
+  </Popover>
+  <p className="text-xs text-muted-foreground mt-2 font-mono">
+    Selecionado: {selectedKey ?? "—"}
+  </p>
+</div>`}
       htmlCode={`<div style="position:relative; max-width:400px;">
   <button id="ts-trigger" onclick="document.getElementById('ts-pop').classList.toggle('open')"
     style="width:100%; display:flex; justify-content:space-between; padding:10px 14px; background:#fff; border:1px solid #e5e7eb; border-radius:8px; font-family:'Roboto'; font-size:14px; cursor:pointer;">
