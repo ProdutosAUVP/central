@@ -24,8 +24,7 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
     `// TODO: snippet React deste componente ainda não foi fornecido.\n// Passe a prop \`code\` (e opcionalmente \`htmlCode\`) ao ComponentShowcase\n// para que o bloco "Ver código" exiba o conteúdo correto.`;
   const hasCode = Boolean(code);
   const [showCode, setShowCode] = useState(false);
-  const [showAIFood, setShowAIFood] = useState(false);
-  const [codeTab, setCodeTab] = useState<"react" | "html">("react");
+  const [codeTab, setCodeTab] = useState<"react" | "html" | "ai-food">("react");
   const [isDark, setIsDark] = useState(false);
   const [aiFoodCopied, setAIFoodCopied] = useState(false);
 
@@ -42,33 +41,16 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
       <div className="px-6 py-4 border-b bg-muted/30">
         <div className="flex items-center justify-between gap-4">
           <h3 className="text-lg font-semibold min-w-0 truncate">{title}</h3>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowAIFood((v) => !v)}
-              aria-label="AI-Food — copiar prompt para IA"
-              title="AI-Food — copiar prompt para IA"
-              className={cn(
-                "inline-flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-lg border transition-colors text-[10px] font-roboto font-bold uppercase tracking-wider",
-                showAIFood
-                  ? "border-emerald-500/50 bg-emerald-950/80 text-emerald-400"
-                  : "border-border bg-background text-foreground hover:bg-muted"
-              )}
-            >
-              <Bot className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">AI-Food</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsDark((d) => !d)}
-              aria-label={isDark ? "Visualizar em tema claro" : "Visualizar em tema escuro"}
-              title={isDark ? "Tema claro" : "Tema escuro"}
-              className="inline-flex items-center justify-center gap-1.5 h-8 w-[88px] rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors text-[10px] font-roboto font-bold uppercase tracking-wider"
-            >
-              {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-              <span>{isDark ? "Claro" : "Escuro"}</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsDark((d) => !d)}
+            aria-label={isDark ? "Visualizar em tema claro" : "Visualizar em tema escuro"}
+            title={isDark ? "Tema claro" : "Tema escuro"}
+            className="shrink-0 inline-flex items-center justify-center gap-1.5 h-8 w-[88px] rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors text-[10px] font-roboto font-bold uppercase tracking-wider"
+          >
+            {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+            <span>{isDark ? "Claro" : "Escuro"}</span>
+          </button>
         </div>
         {description && <p className="text-sm text-muted-foreground mt-1 pr-[104px]">{description}</p>}
       </div>
@@ -78,42 +60,6 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
           {children}
         </div>
       </div>
-
-      {/* AI-Food inline panel */}
-      {showAIFood && (
-        <div className="border-t border-emerald-900/40 bg-[#0a1628]">
-          {/* Header */}
-          <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-900/30">
-            <div className="flex items-center gap-2">
-              <Bot className="h-4 w-4 text-emerald-400" />
-              <span className="text-xs font-bold font-roboto uppercase tracking-wider text-emerald-400">
-                AI-Food — {title}
-              </span>
-              <span className="text-[10px] text-emerald-700 font-roboto">
-                Prompt isolado · pronto para qualquer IA
-              </span>
-            </div>
-            <button
-              onClick={handleCopyAIFood}
-              className={cn(
-                "inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-bold font-roboto uppercase tracking-wider transition-all",
-                aiFoodCopied
-                  ? "bg-emerald-500 text-white"
-                  : "bg-emerald-900/60 text-emerald-300 hover:bg-emerald-800/80 border border-emerald-700/50"
-              )}
-            >
-              {aiFoodCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-              {aiFoodCopied ? "Copiado" : "Copiar"}
-            </button>
-          </div>
-          {/* Prompt content */}
-          <div className="p-5 max-h-[360px] overflow-y-auto">
-            <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed text-emerald-300/90 selection:bg-emerald-500/30 selection:text-white">
-              {aiFoodPrompt}
-            </pre>
-          </div>
-        </div>
-      )}
 
       <div className="border-t">
         <button
@@ -125,19 +71,19 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
         </button>
         {showCode && (
           <div>
-            {htmlCode && (
-              <div className="flex gap-1 px-6 pb-2">
-                <button
-                  onClick={() => setCodeTab("react")}
-                  className={cn(
-                    "px-3 py-1 text-xs font-bold uppercase tracking-wider rounded transition-colors",
-                    codeTab === "react"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  React
-                </button>
+            <div className="flex gap-1 px-6 pb-2 pt-1">
+              <button
+                onClick={() => setCodeTab("react")}
+                className={cn(
+                  "px-3 py-1 text-xs font-bold uppercase tracking-wider rounded transition-colors",
+                  codeTab === "react"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:text-foreground"
+                )}
+              >
+                React
+              </button>
+              {htmlCode && (
                 <button
                   onClick={() => setCodeTab("html")}
                   className={cn(
@@ -149,13 +95,59 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
                 >
                   HTML / CSS / JS
                 </button>
+              )}
+              <button
+                onClick={() => setCodeTab("ai-food")}
+                className={cn(
+                  "px-3 py-1 text-xs font-bold uppercase tracking-wider rounded transition-colors inline-flex items-center gap-1",
+                  codeTab === "ai-food"
+                    ? "bg-emerald-600 text-white"
+                    : "bg-muted text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <Bot className="h-3 w-3" />
+                AI-Food
+              </button>
+            </div>
+
+            {codeTab === "ai-food" ? (
+              <div className="border-t border-emerald-900/40 bg-[#0a1628]">
+                <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-900/30">
+                  <div className="flex items-center gap-2">
+                    <Bot className="h-4 w-4 text-emerald-400" />
+                    <span className="text-xs font-bold font-roboto uppercase tracking-wider text-emerald-400">
+                      AI-Food — {title}
+                    </span>
+                    <span className="text-[10px] text-emerald-700 font-roboto">
+                      Prompt isolado · pronto para qualquer IA
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleCopyAIFood}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 h-7 px-3 rounded-md text-[11px] font-bold font-roboto uppercase tracking-wider transition-all",
+                      aiFoodCopied
+                        ? "bg-emerald-500 text-white"
+                        : "bg-emerald-900/60 text-emerald-300 hover:bg-emerald-800/80 border border-emerald-700/50"
+                    )}
+                  >
+                    {aiFoodCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    {aiFoodCopied ? "Copiado" : "Copiar"}
+                  </button>
+                </div>
+                <div className="p-5 max-h-[360px] overflow-y-auto">
+                  <pre className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed text-emerald-300/90 selection:bg-emerald-500/30 selection:text-white">
+                    {aiFoodPrompt}
+                  </pre>
+                </div>
               </div>
+            ) : (
+              <CodeBlock
+                code={codeTab === "html" && htmlCode ? htmlCode : effectiveCode}
+                language={codeTab === "html" && htmlCode ? "html" : "tsx"}
+                className="border-0 rounded-none border-t"
+              />
             )}
-            <CodeBlock
-              code={codeTab === "html" && htmlCode ? htmlCode : effectiveCode}
-              language={codeTab === "html" && htmlCode ? "html" : "tsx"}
-              className="border-0 rounded-none border-t"
-            />
           </div>
         )}
       </div>
