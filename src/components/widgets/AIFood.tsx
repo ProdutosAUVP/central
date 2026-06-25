@@ -1,231 +1,307 @@
 import React, { useState, useMemo } from "react";
 import { useBrand } from "@/contexts/BrandContext";
 import { useSystemView, viewLabels } from "@/contexts/ViewContext";
-import { Copy, Check, Bot } from "lucide-react";
+import { Copy, Check, Bot, Sparkles, Code2, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const aiPrompts = {
+// ─── Master Prompts — 100% standalone, sem dependência externa ────────────────
+
+const masterPrompts = {
   capital: {
-    institucional: `Você atua como um Desenvolvedor Front-end Especialista. Gere o código (HTML, CSS com Tailwind) para uma seção de Landing Page (Sites & LPs) da marca AUVP Capital seguindo EXATAMENTE as regras do Design System abaixo:
+    institucional: `Você é um Desenvolvedor Front-end Especialista. Gere seções de Landing Page ou Site Institucional para a marca AUVP Capital seguindo EXATAMENTE as regras abaixo. Este prompt é autossuficiente: contém tudo que você precisa saber sobre o Design System AUVP Capital.
 
-[REGRAS DA AUVP CAPITAL — SITES & LPs]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0. ESSÊNCIA DA MARCA (inegociável)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A AUVP Capital é uma assessoria de investimentos institucional, séria, sóbria e técnica.
+Referência estética: Bloomberg + JP Morgan + finança bancária moderna.
+Tom: direto, com autoridade técnica. Sem promessas de enriquecimento.
+❌ NUNCA: glassmorphism, gradientes coloridos, emojis decorativos, estética startup colorida.
 
-## 0. ESSÊNCIA DA MARCA (obrigatório respeitar)
-- AUVP Capital é uma assessoria de investimentos institucional, séria, sóbria e técnica. Pense Bloomberg + JP Morgan + estética bancária moderna.
-- NUNCA use elementos lúdicos, glassmorphism translúcido, gradientes vibrantes, emojis decorativos ou estética "startup colorida".
-- Tom: institucional, direto, com autoridade técnica. Sem promessas de enriquecimento.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. PALETA OFICIAL (use SOMENTE estas cores)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Verde Institucional: #023619  → primária, botões, títulos em fundo claro
+• Verde Escuro:        #011F0E  → hover de botões verdes
+• Amarelo Destaque:    #EFBE4F  → acentos em fundo ESCURO apenas (nunca em fundo claro)
+• Branco Puro:         #FFFFFF
+• Cinza Claro:         #F2F2F2
+• Cinza Médio:         #6B6B6B  → textos secundários em fundo claro
+• Cinza Chumbo:        #1B1B1B  → cards em dark
+• Preto Puro:          #000000
+❌ PROIBIDO: roxo, rosa, azul, gradientes coloridos, neon
 
-## 1. PALETA OFICIAL (use SOMENTE estas cores)
-- Verde Institucional: #023619 (primária, botões, títulos em fundo claro)
-- Verde Escuro Profundo: #011F0E (hover de botões verdes)
-- Amarelo Destaque: #EFBE4F (acentos pontuais em fundo escuro, NUNCA em fundo claro)
-- Branco Puro: #FFFFFF
-- Cinza Claro: #F2F2F2
-- Cinza Médio (textos secundários): #6B6B6B
-- Cinza Chumbo (cards em dark): #1B1B1B
-- Preto Puro: #000000
-- ❌ PROIBIDO: roxo, rosa, azul, gradientes coloridos, neon.
+Cores de texto por fundo:
+• Fundo claro (#FFF / #F2F2F2): título #023619 | corpo #1B1B1B | secundário #6B6B6B
+• Fundo escuro (#000 / #1B1B1B): título #FFF (ou #EFBE4F destaque) | corpo #F2F2F2
 
-## 2. TIPOGRAFIA (regras estritas)
-- H1: 'Anek Latin', font-weight 600, 54px (desktop) / 36px (mobile), line-height 1.1, letter-spacing -0.02em.
-- H2: 'Anek Latin', font-weight 600, 41px / 30px mobile, line-height 1.15.
-- H3: 'Anek Latin', font-weight 600, 28px / 22px mobile.
-- Subtítulos: 'Roboto', 400, 20px, line-height 1.5, color #6B6B6B em fundo claro.
-- Corpo: 'Roboto', 400, 17px, line-height 1.6.
-- Eyebrow / pré-título: 'Sora', 700, 12px, UPPERCASE, letter-spacing 0.15em, cor #023619.
-- Cores de texto:
-  - Fundo claro (#FFF / #F2F2F2): título #023619, corpo #1B1B1B, secundário #6B6B6B.
-  - Fundo escuro (#000 / #1B1B1B): título #FFFFFF (ou #EFBE4F para destaque), corpo #F2F2F2.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. TIPOGRAFIA (regras estritas)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• H1:        Anek Latin 600  54px desktop / 36px mobile  lh 1.1   ls -0.02em
+• H2:        Anek Latin 600  41px / 30px                 lh 1.15
+• H3:        Anek Latin 600  28px / 22px
+• Subtítulo: Roboto     400  20px                         lh 1.5   #6B6B6B
+• Corpo:     Roboto     400  17px                         lh 1.6
+• Eyebrow:   Sora       700  12px UPPERCASE               ls 0.15em  #023619
+• Botão/CTA: Sora       700  14px UPPERCASE               ls 0.05em  (exclusivo botões)
 
-## 3. LAYOUT & RITMO VERTICAL
-- Sections SEMPRE alternam fundo: #FFFFFF → #F2F2F2 → #FFFFFF → #000000 (dobra de impacto) → #FFFFFF.
-- Padding vertical de section: padding-block: 60px (mobile) / 90px (desktop).
-- Container central: max-width 1200px, padding-inline 24px.
-- Grid e gaps OBRIGATORIAMENTE múltiplos de 15px: gap-[15px], gap-[30px], gap-[45px], gap-[60px].
-- Espaçamento entre título e corpo: margin-bottom 30px. Entre corpo e CTA: 45px.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. BOTÕES (identidade visual mais marcante da Capital)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• BORDAS RETAS — border-radius: 0px. NUNCA arredondar.
+• Padding: py-[18px] px-[32px]
+• Border: SEMPRE 1px solid
+• Primário (fundo claro): bg #023619  text #FFF   border #023619
+  Hover: bg transparent  text #023619  border #023619
+• Outline (fundo escuro): bg transparent  text #FFF  border #FFF
+  Hover: bg #FFF  text #023619  border #FFF
+• Transition: all 240ms ease
+• Ícone interno: 16px  gap 8px  alinhado verticalmente
 
-## 4. CARDS (regra de contraste baixo)
-- Em fundo #FFFFFF → card bg #F2F2F2.
-- Em fundo #F2F2F2 → card bg #FFFFFF.
-- Em fundo #000000 → card bg #1B1B1B.
-- border-radius: 12px SEMPRE. Sem exceção.
-- Padding interno: 30px desktop / 20px mobile.
-- Sombra: shadow-none por padrão. Apenas hover sutil: shadow-[0_8px_24px_rgba(0,0,0,0.06)] e translate-y-[-2px], transition 240ms.
-- Border: opcional 1px solid rgba(0,0,0,0.06) em fundos claros.
+Estados do botão:
+• Default → Hover (240ms) → Active (scale 0.99) → Focus (ring 2px offset 2px #023619)
+• Disabled: opacity 50%  cursor not-allowed  pointer-events none
+• Loading: spinner 16px + "Carregando..." + disabled
 
-## 5. BOTÕES (identidade visual mais marcante da Capital)
-- Família: 'Sora', font-weight 700, UPPERCASE, letter-spacing 0.05em, font-size 14px.
-- Formato: BORDAS RETAS — border-radius: 0px. Nunca arredondar.
-- Padding: py-[18px] px-[32px].
-- Border: SEMPRE 1px solid (mesma cor do fundo no default → fica "invisível").
-- Variante Primária (fundo claro): bg #023619, text #FFF, border #023619. Hover: bg transparent, text #023619, border #023619.
-- Variante Outline (fundo escuro): bg transparent, text #FFF, border #FFF. Hover: bg #FFF, text #023619, border #FFF.
-- Transition: all 240ms ease.
-- Ícones dentro do botão: 16px, gap 8px, alinhados verticalmente.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. CARDS E CONTAINERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• border-radius: 12px SEMPRE (exceto botões)
+• Padding: 30px desktop / 20px mobile
+• Hover: shadow-[0_8px_24px_rgba(0,0,0,0.06)] translateY(-2px) transition 240ms
+• Fundo branco   → card bg #F2F2F2
+• Fundo #F2F2F2  → card bg #FFF
+• Fundo preto    → card bg #1B1B1B
+• Border opcional: 1px solid rgba(0,0,0,0.06) em fundos claros
+❌ PROIBIDO: backdrop-blur, glassmorphism, transparências translúcidas
 
-## 6. ELEMENTOS AVANÇADOS (Grade Curricular, Timeline, Countdown, Tabela de Preços)
-- ❌ PROIBIDO backdrop-blur, glassmorphism, transparências translúcidas — isso é exclusivo da Escola.
-- Use fundos sólidos: #1B1B1B (escuro) ou #FFFFFF (claro).
-- Borders sólidas 1px: rgba(255,255,255,0.08) em dark / rgba(0,0,0,0.08) em light.
-- Tabs / pílulas: bordas retas, fundo sólido, ativo com bg #023619 e texto branco.
-- Timeline: bolinhas sólidas #023619 com border #FFF de 3px, conector linha sólida #023619.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. LAYOUT E RITMO VERTICAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Sections alternam obrigatoriamente: #FFF → #F2F2F2 → #FFF → #000 (impacto) → #FFF
+• Padding-block: 60px mobile / 90px desktop
+• Container: max-w 1200px  padding-inline 24px
+• TODOS os gaps múltiplos de 15px: gap-[15px] gap-[30px] gap-[45px] gap-[60px]
+• Espaçamento título→corpo: mb-[30px]  |  corpo→CTA: mb-[45px]
 
-## 7. EXEMPLO DE CÓDIGO (seção hero institucional)
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. ELEMENTOS AVANÇADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Tabs/pílulas: bordas retas, fundo sólido, ativo bg #023619 text white
+• Timeline: bolinhas sólidas #023619 + border-white 3px + conector linha sólida #023619
+• Badges: bg sólido (nunca translúcido), rounded 4px
+• Separadores: 1px solid rgba(0,0,0,0.08)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. CATÁLOGO DE COMPONENTES DISPONÍVEIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Use SOMENTE estes componentes. Se precisar de algo fora da lista, descreva em comentário.
+
+Fundamentos: Marca & Logos | Tipografia (Anek/Roboto/Sora) | Paleta + Data Viz | Ícones Phosphor
+Layout: Cards & Containers | Botões (Primário/Outline/Ghost/Destrutivo) | Grid e Espaçamento
+
+Seções de Página:
+• Grade Curricular (tabs pill-style + carrossel mobile)
+• Contagem Regressiva (timer, cards de unidade)
+• FAQ / Accordion (dropdown)
+• Tabela de Preços (toggle individual/pacotes, badge de desconto)
+• Jornada do Herói (timeline interativa + glow + progresso)
+• Widgets Flutuantes (botão circular 64px WhatsApp com pulse, ícone SVG oficial)
+• Calculadora de Rendimentos (versão LP)
+• Calculadora de Câmbio (versão ferramenta)
+
+Feedback & Overlays: Tooltip | Notificação/Toast | Popconfirm | Spin | Skeleton | Empty | Result
+Navegação: Drawer | Steps/Wizard | Segmented | Anchor/ScrollSpy | Tabs | Tour
+Entrada: Upload | Rate | AutoComplete | TreeSelect | Transfer | Mentions | Cascader | Checkbox | Choicebox
+Exibição: Statistic/KPI | Timeline | Tree | Descriptions | Tabela | Progress Bar | Gráfico Pizza | Watermark
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. EXEMPLO DE HERO INSTITUCIONAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <section class="bg-white py-[90px]">
   <div class="max-w-[1200px] mx-auto px-6">
-    <span class="font-roboto text-[12px] font-bold uppercase tracking-[0.15em] text-[#023619]">Assessoria Patrimonial</span>
-    <h1 class="font-anek text-[54px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#023619] mt-[15px]">Patrimônio construído com método.</h1>
-    <p class="font-roboto text-[20px] text-[#6B6B6B] mt-[30px] max-w-[640px]">Estratégias diversificadas para preservação e crescimento de capital de longo prazo.</p>
+    <span class="font-sora text-[12px] font-bold uppercase tracking-[0.15em] text-[#023619]">Assessoria Patrimonial</span>
+    <h1 class="font-anek text-[54px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#023619] mt-[15px]">
+      Patrimônio construído com método.
+    </h1>
+    <p class="font-roboto text-[20px] text-[#6B6B6B] mt-[30px] max-w-[640px]">
+      Estratégias diversificadas para preservação e crescimento de capital de longo prazo.
+    </p>
     <div class="flex gap-[15px] mt-[45px]">
-      <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-[#023619] text-white border border-[#023619] hover:bg-transparent hover:text-[#023619] transition-all duration-240">Falar com assessor</button>
-      <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-transparent text-[#023619] border border-[#023619] hover:bg-[#023619] hover:text-white transition-all duration-240">Ver portfólio</button>
+      <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-[#023619] text-white border border-[#023619] hover:bg-transparent hover:text-[#023619] transition-all duration-[240ms]">
+        Falar com assessor
+      </button>
+      <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-transparent text-[#023619] border border-[#023619] hover:bg-[#023619] hover:text-white transition-all duration-[240ms]">
+        Ver portfólio
+      </button>
     </div>
   </div>
 </section>
-\`\`\`
 
-## 8. CHECKLIST FINAL (revise antes de entregar)
-- [ ] Nenhum border-radius em botão (deve ser 0)
-- [ ] Cards com radius 12px
-- [ ] Tipografia Anek/Roboto/Sora corretamente atribuída
-- [ ] Múltiplos de 15px em todos os gaps
-- [ ] Sem backdrop-blur, sem gradientes coloridos
-- [ ] Alternância de fundo entre sections respeitada`,
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. CHECKLIST FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Nenhum border-radius em botão (deve ser 0)
+□ Cards com radius 12px
+□ Tipografia Anek/Roboto/Sora corretamente atribuída com pesos exatos
+□ Múltiplos de 15px em todos os gaps
+□ Sem backdrop-blur, sem gradientes coloridos
+□ Alternância de fundo entre sections respeitada
+□ Todos os estados dos botões: default, hover, active, focus, disabled, loading
+□ Acessibilidade: aria-label, focus-visible ring, contraste ≥ 4.5:1
 
-    ferramentas: `Você atua como um Desenvolvedor Front-end Especialista. Gere o código (HTML, CSS com Tailwind) para um Widget ou Calculadora da marca AUVP Capital seguindo EXATAMENTE as regras do Design System abaixo:
+Agora gere a seção solicitada:`,
 
-[REGRAS DA AUVP CAPITAL — FERRAMENTAS / CALCULADORAS / WIDGETS]
+    ferramentas: `Você é um Desenvolvedor Front-end Especialista. Gere um Widget ou Calculadora para a marca AUVP Capital seguindo EXATAMENTE as regras abaixo. Este prompt é autossuficiente: contém tudo que você precisa saber.
 
-## 0. CONTEXTO
-- Ferramentas são usadas DENTRO de LPs ou em apps standalone. A linguagem visual muda: aqui é "fintech moderna" (Nubank-like em estrutura, mas com paleta verde institucional).
-- O usuário precisa LER NÚMEROS rápido. Hierarquia tipográfica é tudo.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0. CONTEXTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ferramentas são usadas DENTRO de LPs ou como apps standalone. Linguagem visual: "fintech moderna"
+(estrutura Nubank-like, paleta verde institucional). O usuário precisa LER NÚMEROS rápido.
+Hierarquia tipográfica é tudo.
 
-## 1. CONTAINER PAI (sempre o mesmo padrão)
-- Tag: <div class="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto">
-- bg-white obrigatório (mesmo se a LP for escura — o card "fura" o fundo).
-- rounded-2xl (16px). Aqui SIM arredondamos — é a única exceção à regra de bordas retas da Capital.
-- shadow-xl: shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)].
-- max-w-md (448px) padrão. Para calculadoras complexas: max-w-lg.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. CONTAINER PAI (padrão fixo)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<div class="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto">
+• bg-white obrigatório (fura o fundo mesmo em LP escura)
+• rounded-2xl (16px) — ÚNICA exceção à regra de bordas retas da Capital
+• shadow-xl: shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)]
+• max-w-md (448px) padrão | max-w-lg para calculadoras complexas
 
-## 2. TIPOGRAFIA HIERÁRQUICA
-- Título da ferramenta: 'Anek Latin', 700, 22px, color #1B1B1B.
-- Valor monetário em destaque (resultado): 'Anek Latin', 700, 36px, color #023619. Use tabular-nums.
-- Valor secundário: 'Anek Latin', 600, 20px, color #1B1B1B.
-- Labels de input: 'Roboto', 500, 14px, color #6B6B6B, uppercase opcional.
-- Texto auxiliar / disclaimer: 'Roboto', 400, 12px, color #9CA3AF.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. TIPOGRAFIA HIERÁRQUICA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Título da ferramenta:         Anek Latin 700  22px  #1B1B1B
+• Valor monetário (resultado):  Anek Latin 700  36px  #023619  tabular-nums
+• Valor secundário:             Anek Latin 600  20px  #1B1B1B
+• Labels de input:              Roboto     500  13px  #6B6B6B  UPPERCASE tracking-wider
+• Texto auxiliar / disclaimer:  Roboto     400  12px  #9CA3AF
 
-## 3. PALETA APLICADA
-- Verde primário (CTA, slider thumb, valores positivos): #023619.
-- Verde claro (highlights, abas ativas): bg-green-50 (#F0FDF4).
-- Cinza input: bg-gray-50 (#F9FAFB) com border border-gray-100.
-- Texto positivo: #16A34A (apenas em deltas %).
-- Texto negativo: #DC2626.
-- Divisores: border-gray-100.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. PALETA APLICADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Verde primário (CTA, slider, positivo): #023619
+• Verde claro (highlight ativo):          bg-green-50 (#F0FDF4)
+• Cinza input:   bg-gray-50 (#F9FAFB)  border border-gray-100
+• Positivo delta %: #16A34A
+• Negativo delta %: #DC2626
+• Divisores:     border-gray-100
 
-## 4. INPUTS
-- Container: bg-gray-50 rounded-xl px-4 py-3.
-- Label acima: text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.
-- Input number: bg-transparent border-0 text-2xl font-anek font-bold text-gray-900 w-full focus:outline-none.
-- Prefixo "R$": text-gray-400 mr-2.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. INPUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<div class="bg-gray-50 rounded-xl px-4 py-3">
+  <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Label</label>
+  <div class="flex items-center">
+    <span class="text-gray-400 mr-2">R$</span>
+    <input class="bg-transparent border-0 text-2xl font-anek font-bold text-gray-900 w-full focus:outline-none" />
+  </div>
+</div>
 
-## 5. SLIDERS (range)
-- Track: h-2 bg-gray-200 rounded-full.
-- Fill: bg-[#023619].
-- Thumb: 20px circular, bg-[#023619], border-2 border-white, shadow-md.
-- accent-color: #023619.
-- Labels min/max abaixo: text-xs text-gray-400 flex justify-between.
+Estados do input:
+• Default: bg-gray-50 sem borda visível
+• Focus:   ring-2 ring-[#023619]/30 border-[#023619]/50
+• Error:   ring-2 ring-red-500/30 border-red-500/50 + mensagem abaixo
+• Disabled: opacity 50% cursor not-allowed
 
-## 6. BOTÕES (DIFERENTE da LP institucional!)
-- Aqui são ARREDONDADOS: rounded-xl (12px).
-- Primário: bg-[#023619] text-white font-sora font-bold uppercase text-sm py-3 px-6 hover:bg-[#011F0E] transition.
-- Secundário: bg-green-50 text-[#023619] rounded-xl py-3 px-6.
-- Botão de tab/pílula: rounded-full px-4 py-2, ativo bg-[#023619] text-white, inativo bg-gray-100 text-gray-600.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. SLIDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Track:  h-2 bg-gray-200 rounded-full
+• Fill:   bg-[#023619]
+• Thumb:  20px circular  bg-[#023619]  border-2 border-white  shadow-md  cursor-pointer
+• accent-color: #023619
+• Labels min/max: text-xs text-gray-400 flex justify-between mt-1
 
-## 7. CAIXA DE RESULTADO
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. BOTÕES (DIFERENTE da LP institucional — aqui são arredondados)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Primário:   bg-[#023619] text-white  font-sora font-bold uppercase text-sm  py-3 px-6  rounded-xl  hover:bg-[#011F0E]
+• Secundário: bg-green-50  text-[#023619]  rounded-xl  py-3 px-6
+• Tab/pílula: rounded-full px-4 py-2  |  ativo: bg-[#023619] text-white  |  inativo: bg-gray-100 text-gray-600
+
+Estados do botão:
+• Default → Hover → Active (brightness-90) → Focus (ring 2px #023619) → Disabled (opacity 50%)
+• Loading: spinner 16px inline + "Calculando..." + pointer-events none
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. CAIXA DE RESULTADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <div class="bg-green-50 rounded-xl p-5 mt-6">
   <p class="font-roboto text-xs uppercase tracking-wider text-[#023619]/70 font-medium">Você terá em 10 anos</p>
   <p class="font-anek text-4xl font-bold text-[#023619] mt-2 tabular-nums">R$ 1.234.567</p>
   <p class="font-roboto text-sm text-gray-500 mt-1">Rendimento: <span class="text-green-600 font-semibold">+R$ 234.567 (23,4%)</span></p>
 </div>
-\`\`\`
 
-## 8. EXEMPLO COMPLETO (calculadora simples)
-\`\`\`html
-<div class="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto">
-  <h3 class="font-anek text-[22px] font-bold text-gray-900 mb-1">Simulador de Aporte</h3>
-  <p class="font-roboto text-sm text-gray-500 mb-6">Veja quanto seu dinheiro pode render</p>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. ESTADOS OBRIGATÓRIOS PARA FERRAMENTAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Idle — valores de exemplo pré-preenchidos
+□ Editando — input com focus ring verde
+□ Calculando — botão disabled + spinner inline
+□ Resultado — caixa verde animada (fade-in 300ms)
+□ Reset — volta ao estado idle sem flash
+□ Erro de validação — mensagem abaixo do input, border vermelha
+□ Valor zerado — resultado mostra R$ 0,00 sem colapsar layout
+□ Valor máximo — testa overflow numérico (ex: R$ 9.999.999)
 
-  <div class="space-y-4">
-    <div class="bg-gray-50 rounded-xl px-4 py-3">
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Aporte mensal</label>
-      <div class="flex items-center">
-        <span class="text-gray-400 mr-2">R$</span>
-        <input type="number" value="1000" class="bg-transparent border-0 text-2xl font-anek font-bold text-gray-900 w-full focus:outline-none" />
-      </div>
-    </div>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. CHECKLIST FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Card pai: bg-white + rounded-2xl + shadow-xl
+□ Botões: rounded-xl (NÃO retos como na LP)
+□ Slider: thumb #023619 + border-white 2px + shadow
+□ Valores: tabular-nums + font-anek + cor #023619
+□ Labels: Roboto 500 uppercase
+□ Todos os 8 estados da ferramenta implementados
+□ Responsivo: max-w-md centrado, mobile com padding lateral
 
-    <div>
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Prazo: 10 anos</label>
-      <input type="range" min="1" max="30" value="10" class="w-full accent-[#023619]" />
-    </div>
-  </div>
+Agora gere a ferramenta solicitada:`,
 
-  <div class="bg-green-50 rounded-xl p-5 mt-6">
-    <p class="font-roboto text-xs uppercase tracking-wider text-[#023619]/70 font-medium">Total acumulado</p>
-    <p class="font-anek text-4xl font-bold text-[#023619] mt-2 tabular-nums">R$ 234.567</p>
-  </div>
-
-  <button class="w-full mt-6 bg-[#023619] text-white font-sora font-bold uppercase text-sm py-3 rounded-xl hover:bg-[#011F0E] transition">Quero investir</button>
-</div>
-\`\`\`
-
-## 9. CHECKLIST
-- [ ] Card pai sempre bg-white + rounded-2xl + shadow-xl
-- [ ] Botões rounded-xl (NÃO retos como na LP)
-- [ ] Sliders accent #023619
-- [ ] Valores em tabular-nums e font-anek
-- [ ] Labels Roboto, valores Anek`,
-
-    plataforma: `Regra não se aplica. A AUVP Capital não utiliza visão de Plataforma EAD neste contexto.`,
+    plataforma: `Este contexto não se aplica. A AUVP Capital não utiliza a visão Plataforma EAD.`,
   },
 
   escola: {
-    institucional: `Você atua como um Desenvolvedor Front-end Especialista. Gere o código (HTML, CSS custom) para uma seção de Landing Page (Sites & LPs) da marca AUVP Escola seguindo EXATAMENTE as regras do Design System abaixo:
+    institucional: `Você é um Desenvolvedor Front-end Especialista. Gere seções de Landing Page ou Site Institucional para a marca AUVP Escola seguindo EXATAMENTE as regras abaixo. Este prompt é autossuficiente: contém tudo que você precisa saber.
 
-[REGRAS DA AUVP ESCOLA — SITES & LPs]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0. ESSÊNCIA DA MARCA (inegociável)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A AUVP Escola é educação financeira INDEPENDENTE, rebelde, cultura pirata (estilo Anthony Bourdain goiano).
+Antítese de banco/instituição financeira tradicional.
+Visual: sofisticado, premium, editorial. Referência: Apple Education + Masterclass + revista de luxo.
+Glassmorphism É a assinatura visual (cards translúcidos com blur).
+❌ NUNCA use verde da Capital (#023619) como cor de fundo, borda ou ícone.
 
-## 0. ESSÊNCIA DA MARCA
-- AUVP Escola é educação financeira INDEPENDENTE, rebelde, com cultura pirata (estilo Anthony Bourdain). Antítese de banco/instituição financeira tradicional.
-- Visual sofisticado, premium, com toque editorial. Pense Apple Education + Masterclass + revista de luxo.
-- Glassmorphism é a assinatura visual (cards translúcidos com blur).
-- ❌ NUNCA use verde da Capital — é um sinal de outra marca.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. PALETA OFICIAL GOLD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Dourado Principal:  #EFBF4E  → acentos, ícones, botão primário, slider thumb
+• Dourado Escuro:     #D4A73D  → tipografia de destaque, eyebrow, badges ativos
+• Dourado Profundo:   #B8860B  → textos sobre fundo claro com forte destaque
+• Verde Capital:      #023619  → SOMENTE como cor de TEXTO dentro de botões dourados
+• Cinza Texto:        #18181B
+• Cinza Secundário:   #52525B / #71717A
+• Translúcido claro:  rgba(255,255,255,0.5)  rgba(255,255,255,0.85)
+• Border translúcida: rgba(0,0,0,0.12)
+• Tag dourada bg:     rgba(239,191,78,0.1)
+❌ PROIBIDO: verde Capital como cor de fundo/borda, azul, roxo, cores saturadas
 
-## 1. PALETA OFICIAL GOLD
-- Dourado Principal: #efbf4e (acentos, ícones, botões secundários, hover, slider thumb)
-- Dourado Escuro: #d4a73d (tipografia de destaque, eyebrow, badges)
-- Dourado Profundo: #B8860B (textos sobre fundo claro com forte destaque)
-- Verde Institucional: #023619 (USADO APENAS em texto de botões — herança da identidade unificada)
-- Cinza Texto Principal: #18181b
-- Cinza Texto Secundário: #52525b / #71717a
-- Branco translúcido: rgba(255,255,255,0.5) e rgba(255,255,255,0.85)
-- Fundo de tag dourada: rgba(239,191,78,0.1)
-- Border translúcida: rgba(0,0,0,0.12)
-- ❌ PROIBIDO: verde Capital, azul, roxo, cores saturadas vibrantes.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. FUNDO DE PÁGINA (assinatura da Escola)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• NUNCA fundo branco chapado. Sempre gradiente radial:
+  background: radial-gradient(ellipse at top, #f4f4f5 0%, #e4e4e7 100%);
 
-## 2. FUNDO DE PÁGINA (assinatura da Escola)
-- NUNCA fundo branco chapado. Use gradiente radial cinza sutil:
-\`\`\`css
-background: radial-gradient(ellipse at top, #f4f4f5 0%, #e4e4e7 100%);
-\`\`\`
-- Para sections de impacto: fundo #18181b (preto suave) com glow dourado:
-\`\`\`css
-background: radial-gradient(ellipse at center, rgba(239,191,78,0.08) 0%, #18181b 70%);
-\`\`\`
+• Sections de impacto (fundo escuro):
+  background: radial-gradient(ellipse at center, rgba(239,191,78,0.08) 0%, #18181b 70%);
 
-## 3. CARDS TRANSLÚCIDOS (assinatura visual)
-\`\`\`css
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. CARDS TRANSLÚCIDOS (assinatura visual — obrigatório em LP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 .escola-glass-card {
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(24px);
@@ -240,45 +316,95 @@ background: radial-gradient(ellipse at center, rgba(239,191,78,0.08) 0%, #18181b
   box-shadow: 0 20px 40px -10px rgba(239, 191, 78, 0.25);
   border-color: rgba(239, 191, 78, 0.4);
 }
-\`\`\`
-- Em fundo escuro: bg rgba(255,255,255,0.05), border rgba(255,255,255,0.1).
-- border-radius: 16px padrão, 12px para cards menores. NUNCA arredondamento exagerado.
 
-## 4. TIPOGRAFIA
-- Eyebrow / pré-título: 'Anek Latin', 600, 13px, UPPERCASE, letter-spacing 1.5px, color #d4a73d. Fundo: rgba(239,191,78,0.1), padding 6px 12px, rounded-full inline-flex.
-- H1: 'Anek Latin', 700, 56px / 36px mobile, color #18181b, letter-spacing -0.025em, line-height 1.05.
-- H2: 'Anek Latin', 600, 42px / 30px, color #18181b, letter-spacing -0.02em.
-- H3: 'Anek Latin', 600, 28px, color #18181b.
-- Corpo: 'Roboto', 400, 17px, color #52525b, line-height 1.65.
-- Destaque dourado em texto: <span class="text-[#d4a73d] font-semibold">.
+Em fundo escuro: bg rgba(255,255,255,0.05)  border rgba(255,255,255,0.1)
+border-radius: 16px padrão | 12px cards menores
 
-## 5. BOTÕES (regra UNIFICADA com Capital)
-- ❌ NUNCA rounded-full em LP. Pílulas só em Ferramentas.
-- Formato: border-radius 0 (retas).
-- Família: 'Sora', 700, UPPERCASE, letter-spacing 0.05em, font-size 14px.
-- Padding: py-[18px] px-[32px].
-- Variante Primária (botão dourado em fundo claro): bg #efbf4e, text #023619 (verde Capital — sim, é proposital), border #efbf4e. Hover: bg transparent, border #efbf4e visível, text #18181b.
-- Variante Outline: bg transparent, text #18181b, border #18181b. Hover: bg #18181b, text #efbf4e.
-- Em fundo escuro: bg #efbf4e, text #18181b. Hover: transparent + border dourada.
+Estados do card:
+• Default → Hover (translateY -8px + glow dourado 320ms) → Focus (ring dourado 2px)
 
-## 6. TAGS / BADGES
-\`\`\`html
-<span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-anek font-semibold uppercase tracking-[1.5px] text-[#d4a73d] bg-[rgba(239,191,78,0.1)] border border-[rgba(239,191,78,0.2)]">
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. TIPOGRAFIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Eyebrow: Anek Latin 600 13px UPPERCASE ls 1.5px text-[#D4A73D]
+           inline-flex px-3 py-1.5 rounded-full bg-[rgba(239,191,78,0.1)]
+• H1: Anek Latin 700  56px / 36px mobile  ls -0.025em  lh 1.05  #18181B
+• H2: Anek Latin 600  42px / 30px          ls -0.02em
+• H3: Anek Latin 600  28px
+• Corpo: Roboto 400  17px  #52525B  lh 1.65
+• Destaque dourado inline: <span class="text-[#D4A73D] font-semibold">texto</span>
+• Botão/CTA: Sora 700  14px UPPERCASE  ls 0.05em
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. BOTÕES (regra unificada com Capital em LPs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• ❌ NUNCA rounded-full em LP. Pílulas só em Ferramentas.
+• border-radius: 0px (bordas retas)
+• Padding: py-[18px] px-[32px]
+• Primário (fundo claro): bg #EFBF4E  text #023619  border #EFBF4E
+  Hover: bg transparent  border #EFBF4E  text #18181B
+• Outline: bg transparent  text #18181B  border #18181B
+  Hover:   bg #18181B  text #EFBF4E
+• Em fundo escuro: bg #EFBF4E  text #18181B
+  Hover: bg transparent  border #EFBF4E  text #EFBF4E
+• Transition: all 300ms ease
+
+Estados do botão:
+• Default → Hover → Active (brightness-90) → Focus (ring 2px #EFBF4E offset 2px)
+• Disabled: opacity 50%  cursor not-allowed
+• Loading: spinner dourado 16px + "Carregando..." + disabled
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. TAGS / BADGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-anek font-semibold uppercase tracking-[1.5px] text-[#D4A73D] bg-[rgba(239,191,78,0.1)] border border-[rgba(239,191,78,0.2)]">
   Educação Financeira
 </span>
-\`\`\`
 
-## 7. EXEMPLO DE SEÇÃO HERO
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. CATÁLOGO DE COMPONENTES DISPONÍVEIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Use SOMENTE estes componentes:
+
+Fundamentos: Marca & Logos | Tipografia (Anek/Roboto/Sora) | Paleta Gold + Data Viz | Ícones Phosphor
+Layout: Cards Translúcidos | Botões (Primário dourado/Outline) | Grid e Espaçamento
+
+Seções de Página:
+• Grade Curricular (tabs pill-style + carrossel mobile)
+• Contagem Regressiva (timer, cards de unidade)
+• FAQ / Accordion
+• Tabela de Preços (toggle individual/pacotes, badge de desconto)
+• Jornada do Herói (timeline interativa + glow dourado + progresso)
+• Widgets Flutuantes (botão circular 64px WhatsApp, pulse, SVG oficial)
+• Calculadora de Rendimentos (versão LP)
+
+Feedback & Overlays: Tooltip | Toast | Popconfirm | Spin | Skeleton | Empty | Result
+Navegação: Drawer | Steps/Wizard | Segmented | Anchor/ScrollSpy | Tabs | Tour
+Entrada: Upload | Rate | AutoComplete | TreeSelect | Transfer | Mentions | Cascader | Checkbox | Choicebox
+Exibição: Statistic/KPI | Timeline | Tree | Descriptions | Tabela | Progress Bar | Gráfico Pizza | Watermark
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. EXEMPLO DE HERO LP ESCOLA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <section style="background: radial-gradient(ellipse at top, #f4f4f5 0%, #e4e4e7 100%); padding: 120px 0;">
-  <div class="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+  <div class="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-[60px] items-center">
     <div>
-      <span class="inline-flex px-3 py-1.5 rounded-full text-[13px] font-anek font-semibold uppercase tracking-[1.5px] text-[#d4a73d] bg-[rgba(239,191,78,0.1)]">Curso AUVP Pro</span>
-      <h1 class="font-anek text-[56px] font-bold leading-[1.05] tracking-[-0.025em] text-[#18181b] mt-6">A escola que <span class="text-[#d4a73d]">o banco</span> não quer que você frequente.</h1>
-      <p class="font-roboto text-[17px] text-[#52525b] leading-[1.65] mt-6 max-w-[480px]">Educação financeira independente, sem produtos para te empurrar.</p>
-      <div class="flex gap-4 mt-10">
-        <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-[#efbf4e] text-[#023619] border border-[#efbf4e] hover:bg-transparent hover:text-[#18181b] transition-all duration-300">Quero estudar</button>
-        <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-transparent text-[#18181b] border border-[#18181b] hover:bg-[#18181b] hover:text-[#efbf4e] transition-all duration-300">Ver grade</button>
+      <span class="inline-flex px-3 py-1.5 rounded-full text-[13px] font-anek font-semibold uppercase tracking-[1.5px] text-[#D4A73D] bg-[rgba(239,191,78,0.1)]">
+        Curso AUVP Pro
+      </span>
+      <h1 class="font-anek text-[56px] font-bold leading-[1.05] tracking-[-0.025em] text-[#18181B] mt-6">
+        A escola que <span class="text-[#D4A73D]">o banco</span> não quer que você frequente.
+      </h1>
+      <p class="font-roboto text-[17px] text-[#52525B] leading-[1.65] mt-6 max-w-[480px]">
+        Educação financeira independente, sem produtos para te empurrar.
+      </p>
+      <div class="flex gap-[15px] mt-[45px]">
+        <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-[#EFBF4E] text-[#023619] border border-[#EFBF4E] hover:bg-transparent hover:text-[#18181B] transition-all duration-[300ms]">
+          Quero estudar
+        </button>
+        <button class="font-sora font-bold uppercase text-[14px] tracking-[0.05em] py-[18px] px-[32px] bg-transparent text-[#18181B] border border-[#18181B] hover:bg-[#18181B] hover:text-[#EFBF4E] transition-all duration-[300ms]">
+          Ver grade
+        </button>
       </div>
     </div>
     <div class="escola-glass-card">
@@ -286,385 +412,345 @@ background: radial-gradient(ellipse at center, rgba(239,191,78,0.08) 0%, #18181b
     </div>
   </div>
 </section>
-\`\`\`
 
-## 8. CHECKLIST
-- [ ] Cards com backdrop-filter: blur(24px)
-- [ ] Fundos com gradiente radial (nunca branco chapado)
-- [ ] Botões retos (radius 0) — pílula é proibida em LP
-- [ ] Eyebrow dourado com tracking alto
-- [ ] Verde aparece SOMENTE em texto de botão dourado
-- [ ] Hover de card: translateY(-8px) + glow dourado`,
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. CHECKLIST FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Cards com backdrop-filter: blur(24px)
+□ Fundos com gradiente radial (nunca branco chapado)
+□ Botões retos (radius 0) em LP — pílula PROIBIDA
+□ Eyebrow dourado com tracking 1.5px e pill container
+□ Verde Capital SOMENTE em texto de botão dourado
+□ Hover de card: translateY(-8px) + glow dourado 320ms
+□ Todos os estados dos botões: default, hover, active, focus, disabled, loading
+□ Acessibilidade: aria-label, focus ring dourado, contraste ≥ 4.5:1
 
-    ferramentas: `Você atua como um Desenvolvedor Front-end Especialista. Gere o código para uma Calculadora ou Widget da marca AUVP Escola seguindo EXATAMENTE as regras abaixo:
+Agora gere a seção solicitada:`,
 
-[REGRAS DA AUVP ESCOLA — FERRAMENTAS / CALCULADORAS / WIDGETS]
+    ferramentas: `Você é um Desenvolvedor Front-end Especialista. Gere uma Calculadora ou Widget para a marca AUVP Escola seguindo EXATAMENTE as regras abaixo. Este prompt é autossuficiente.
 
-## 0. CONTEXTO
-- Ferramentas educacionais que demonstram conceitos (juros compostos, inflação, aporte, FIRE, etc.).
-- Estilo: editorial premium, dourado sutil, foco em leitura limpa de números.
-- ❌ NUNCA use verde da Capital. Aqui o destaque é GOLD.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0. CONTEXTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ferramentas educacionais que demonstram conceitos (juros compostos, inflação, aporte, FIRE, etc.).
+Estilo: editorial premium, dourado sutil, foco em leitura limpa de números.
+❌ NUNCA use verde da Capital (#023619). Aqui o destaque é GOLD.
 
-## 1. CONTAINER PAI
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. CONTAINER PAI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <div class="bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-6 max-w-md mx-auto border border-gray-100">
-\`\`\`
-- bg-white sempre.
-- rounded-2xl (16px).
-- Shadow suave e elegante (não muito pronunciada).
-- Border 1px sutil para definir o card.
+• bg-white sempre
+• rounded-2xl (16px)
+• Shadow elegante e suave
+• Border 1px sutil
 
-## 2. PALETA APLICADA
-- Dourado destaque (valor positivo / resultado): #d4a73d ou #B8860B.
-- Dourado claro (highlight de input ativo): bg-[#efbf4e]/10.
-- Cinza neutro (negativo / comparações): text-zinc-500.
-- Inputs: bg-gray-50.
-- Botão primário: bg-[#efbf4e] text-zinc-900.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. PALETA APLICADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Dourado (resultado principal): #D4A73D ou #B8860B
+• Dourado claro (highlight input ativo): bg-[#EFBF4E]/10
+• Cinza neutro (comparações/negativo): text-zinc-500
+• Inputs: bg-gray-50
+• Botão primário: bg-[#EFBF4E] text-zinc-900
 
-## 3. TIPOGRAFIA HIERÁRQUICA
-- Título da ferramenta: 'Anek Latin', 600, 22px, color #18181b.
-- Valor em destaque (resultado principal): 'Anek Latin', 700, 36px, color #B8860B, tabular-nums.
-- Valor secundário: 'Anek Latin', 600, 20px, color #18181b.
-- Labels: 'Roboto', 500, 13px, UPPERCASE, tracking-wider, color #71717a.
-- Texto auxiliar: 'Roboto', 400, 12px, color #a1a1aa.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. TIPOGRAFIA HIERÁRQUICA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Título da ferramenta:         Anek Latin 600  22px  #18181B
+• Valor em destaque (resultado):Anek Latin 700  36px  #B8860B  tabular-nums
+• Valor secundário:             Anek Latin 600  20px  #18181B
+• Labels:                       Roboto     500  13px  UPPERCASE  tracking-wider  #71717A
+• Texto auxiliar:               Roboto     400  12px  #A1A1AA
 
-## 4. INPUTS
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. INPUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
-  <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Aporte mensal</label>
+  <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Label</label>
   <div class="flex items-center">
     <span class="text-gray-400 mr-2 font-roboto">R$</span>
     <input class="bg-transparent border-0 text-2xl font-anek font-bold text-gray-900 w-full focus:outline-none" />
   </div>
 </div>
-\`\`\`
 
-## 5. SLIDERS (regra crítica)
-\`\`\`css
-input[type="range"] {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  background: #d1d5db;
-  border-radius: 9999px;
-  outline: none;
-}
+Estados:
+• Default: bg-gray-50 border-gray-100
+• Focus:   ring-2 ring-[#EFBF4E]/40 border-[#EFBF4E]/60
+• Error:   ring-2 ring-red-500/30 + mensagem text-sm text-red-500
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. SLIDERS (regra crítica)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
-  background: #efbf4e;
+  width: 22px; height: 22px;
+  background: #EFBF4E;
   border: 3px solid #ffffff;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   cursor: pointer;
 }
-\`\`\`
-- Track cinza neutro #d1d5db.
-- Thumb dourado #efbf4e com borda branca 3px + shadow suave.
+Track: h-1.5 bg-d1d5db rounded-full
+accent-color: #EFBF4E
 
-## 6. BOTÕES
-- Primário: bg-[#efbf4e] text-zinc-900 font-sora font-bold uppercase text-sm py-3 px-6 rounded-xl hover:bg-[#d4a73d] transition.
-- Secundário: bg-zinc-100 text-zinc-700 rounded-xl py-3 px-6.
-- Tabs/pílulas (permitido aqui!): rounded-full px-4 py-2, ativo bg-[#efbf4e] text-zinc-900.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. BOTÕES (rounded aqui — diferente de LP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Primário:   bg-[#EFBF4E] text-zinc-900  font-sora font-bold uppercase text-sm  py-3 px-6  rounded-xl  hover:bg-[#D4A73D]
+• Secundário: bg-zinc-100  text-zinc-700   rounded-xl  py-3 px-6
+• Tab/pílula: rounded-full px-4 py-2  |  ativo: bg-[#EFBF4E] text-zinc-900  |  inativo: bg-zinc-100 text-zinc-600
 
-## 7. CAIXA DE RESULTADO
-\`\`\`html
+Estados:
+• Default → Hover (D4A73D) → Active (brightness-90) → Focus (ring #EFBF4E) → Disabled (opacity 50%)
+• Loading: spinner dourado + "Calculando..."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. CAIXA DE RESULTADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <div class="bg-gray-50 rounded-lg p-4 mt-6 border border-gray-100">
   <p class="font-roboto text-xs uppercase tracking-wider text-gray-500 font-medium">Total acumulado</p>
   <p class="font-anek text-4xl font-bold text-[#B8860B] mt-2 tabular-nums">R$ 1.234.567</p>
   <p class="font-roboto text-sm text-zinc-500 mt-1">Em 10 anos com aporte de R$ 1.000/mês</p>
 </div>
-\`\`\`
 
-## 8. EXEMPLO COMPLETO
-\`\`\`html
-<div class="bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-6 max-w-md mx-auto border border-gray-100">
-  <h3 class="font-anek text-[22px] font-semibold text-zinc-900 mb-1">Simulador de Juros Compostos</h3>
-  <p class="font-roboto text-sm text-zinc-500 mb-6">Entenda o poder do tempo</p>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. ESTADOS OBRIGATÓRIOS PARA FERRAMENTAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Idle — valores de exemplo pré-preenchidos
+□ Editando — input com focus ring dourado
+□ Calculando — botão disabled + spinner dourado inline
+□ Resultado — caixa cinza animada (fade-in 300ms), valor dourado
+□ Reset — volta ao idle sem flash
+□ Erro de validação — border dourada → vermelha + msg abaixo
+□ Valor zerado — R$ 0,00 sem colapsar layout
+□ Valor máximo — overflow numérico testado
 
-  <div class="space-y-4">
-    <div class="bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Aporte inicial</label>
-      <div class="flex items-center">
-        <span class="text-gray-400 mr-2">R$</span>
-        <input type="number" value="10000" class="bg-transparent border-0 text-2xl font-anek font-bold text-gray-900 w-full focus:outline-none" />
-      </div>
-    </div>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. CHECKLIST FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Sem verde Capital — apenas dourado e cinzas
+□ Slider: thumb dourado #EFBF4E + border-white 3px + shadow
+□ Valores: font-anek + tabular-nums + cor #B8860B
+□ Container: bg-white + rounded-2xl + shadow suave
+□ Botões: rounded-xl (aqui é permitido)
+□ Todos os 8 estados da ferramenta implementados
 
-    <div>
-      <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Prazo: <span class="text-[#B8860B] font-semibold">10 anos</span></label>
-      <input type="range" min="1" max="30" value="10" class="w-full" style="accent-color: #efbf4e;" />
-      <div class="flex justify-between text-xs text-gray-400 mt-1"><span>1 ano</span><span>30 anos</span></div>
-    </div>
-  </div>
+Agora gere a ferramenta solicitada:`,
 
-  <div class="bg-gray-50 rounded-lg p-4 mt-6 border border-gray-100">
-    <p class="font-roboto text-xs uppercase tracking-wider text-gray-500 font-medium">Total acumulado</p>
-    <p class="font-anek text-4xl font-bold text-[#B8860B] mt-2 tabular-nums">R$ 234.567</p>
-  </div>
+    plataforma: `Você é um Desenvolvedor Front-end Especialista. Gere interfaces de Plataforma EAD para a AUVP Escola seguindo EXATAMENTE as regras abaixo. Este prompt é autossuficiente.
 
-  <button class="w-full mt-6 bg-[#efbf4e] text-zinc-900 font-sora font-bold uppercase text-sm py-3 rounded-xl hover:bg-[#d4a73d] transition">Quero aprender mais</button>
-</div>
-\`\`\`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0. CONTEXTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Plataforma onde o aluno consome aulas, lê materiais, acompanha progresso, interage em comunidade.
+Estética: limpa, clara, focada em leitura longa, sem fadiga visual. Referência: Notion + Skool + Masterclass (light mode).
+❌ NÃO é o visual translúcido da LP. Aqui é UI funcional sólida.
 
-## 9. CHECKLIST
-- [ ] Sem verde — apenas dourado e cinzas
-- [ ] Slider com thumb dourado + borda branca 3px
-- [ ] Valores em font-anek + tabular-nums + cor #B8860B
-- [ ] Card pai bg-white + rounded-2xl + shadow suave
-- [ ] Botões rounded-xl (aqui é permitido)`,
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. LIGHT MODE (padrão obrigatório)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Body / fundo:     bg-gray-50 (#F9FAFB)
+• Cards / sidebars: bg-white + border border-gray-200
+• Divisores:        border-gray-100
+• Hover de listas:  bg-gray-50
 
-    plataforma: `Você atua como um Desenvolvedor Front-end Especialista. Gere o código (HTML e Tailwind) para uma Plataforma EAD da AUVP Escola seguindo EXATAMENTE as regras abaixo:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. DARK MODE (toggle alternativo)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Body:   bg-zinc-950
+• Cards:  bg-zinc-900 + border border-zinc-800
+• Divisores: border-zinc-800
 
-[REGRAS DA AUVP ESCOLA — PLATAFORMA DE AULAS / EAD]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. TIPOGRAFIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Título de módulo: Anek 700  24px  text-gray-900 (light) / text-white (dark)
+• Título de aula:   Anek 600  18px  text-gray-900
+• Meta (duração):   Roboto 400  13px  text-gray-500
+• Conteúdo/corpo:   Roboto 400  16px  text-gray-700  lh 1.65
+• Breadcrumb:       Roboto 500  14px  text-gray-600
 
-## 0. CONTEXTO
-- Plataforma onde o aluno consome aulas, lê materiais, acompanha progresso, interage em comunidade.
-- Estética: limpa, clara, focada em leitura longa, sem fadiga visual. Pense Notion + Skool + Masterclass (light mode).
-- ❌ NUNCA é o look "translúcido" da LP. Aqui é UI funcional sólida.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. IDENTIDADE GOLD — uso pontual e estratégico
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Cor primária: #EFBF4E (ou text-yellow-500 / bg-yellow-500 no Tailwind)
+Em fundo claro, prefira text-yellow-600 (#CA8A04) para contraste.
 
-## 1. MODO CLARO PADRÃO (Light Mode Default)
-- Body / fundo geral: bg-gray-50 (#F9FAFB).
-- Cards / sidebars / painéis: bg-white com border border-gray-200.
-- Divisores: border-gray-100.
-- Hover de listas: bg-gray-50.
+Aplicações:
+• Ícone Play ativo:           text-yellow-600
+• Barra de progresso de vídeo: bg-[#EFBF4E]
+• Aula em curso na playlist:   bg-yellow-50 border-l-4 border-yellow-500
+• Badge "Em andamento":        bg-yellow-100 text-yellow-800
+• Botão CTA de aula:           bg-[#EFBF4E] text-zinc-900 hover:bg-[#D4A73D]
+• Aulas concluídas:            ícone text-emerald-500
+• Aulas bloqueadas:            ícone text-gray-400 opacity-60
 
-## 2. MODO ESCURO ALTERNATIVO (toggle opcional)
-- Body: bg-zinc-950.
-- Cards: bg-zinc-900 com border border-zinc-800.
-- Divisores: border-zinc-800.
-- Mesmas regras de identidade gold se mantêm.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. VIDEO PLAYER (regra fixa)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Container: SEMPRE bg-black + aspect-video (mesmo no light mode)
+• Controles: dark sobre vídeo, gradiente from-black/80 to-transparent na parte inferior
+• Botão Play central: w-16 h-16 rounded-full bg-white/20 backdrop-blur + ícone branco
+• Barra de progresso: h-1 bg-white/20 + fill bg-[#EFBF4E]
+• Tempo: text-white text-xs font-mono
 
-## 3. TIPOGRAFIA
-- Título de módulo: 'Anek Latin', 700, 24px, text-gray-900 (light) / text-white (dark).
-- Título de aula: 'Anek Latin', 600, 18px, text-gray-900.
-- Meta info (duração, status): 'Roboto', 400, 13px, text-gray-500.
-- Descrição/conteúdo: 'Roboto', 400, 16px, text-gray-700, line-height 1.65.
-- Breadcrumb / navegação: 'Roboto', 500, 14px, text-gray-600.
+Estados do player:
+• Idle (poster)     — thumbnail + botão Play centrado
+• Loading           — spinner dourado centralizado
+• Playing           — controles visíveis no hover, ocultos após 3s
+• Paused            — controles sempre visíveis
+• Buffering         — barra de progresso pulsando
+• Erro              — ícone + mensagem "Vídeo indisponível"
+• Concluído         — overlay com botão "Próxima aula →"
 
-## 4. IDENTIDADE GOLD (uso pontual e estratégico)
-- Cor primária: #efbf4e (ou tailwind text-yellow-500 / bg-yellow-500).
-- Em fundo claro, prefira text-yellow-600 (#CA8A04) para contraste melhor.
-- Aplicações:
-  - Ícone de Play ativo: text-yellow-600.
-  - Barra de progresso de vídeo: bg-[#efbf4e].
-  - Aula em curso na playlist: bg-yellow-50 border-l-4 border-yellow-500.
-  - Badge "Em andamento": bg-yellow-100 text-yellow-800.
-  - Botão CTA de aula: bg-[#efbf4e] text-zinc-900 hover:bg-[#d4a73d].
-- Aulas concluídas: ícone check em text-emerald-500.
-- Aulas bloqueadas: ícone lock em text-gray-400.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. PLAYLIST DE AULAS (sidebar)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Estados de cada item:
+• Concluída:    ícone CheckCircle text-emerald-500  |  texto text-gray-500  |  hover bg-gray-50
+• Em andamento: bg-yellow-50  border-l-4 border-yellow-500  ícone PlayCircle text-yellow-600
+• Disponível:   hover bg-gray-50  |  ícone PlayCircle text-gray-400
+• Bloqueada:    opacity-60  ícone Lock text-gray-400  cursor-not-allowed
 
-## 5. VIDEO PLAYER (regra fixa)
-- Container do vídeo: SEMPRE bg-black com aspect-video, mesmo no light mode.
-- Controles: estilo dark sobre o vídeo, com gradiente from-black/80 to-transparent na parte inferior.
-- Botão Play central: w-16 h-16 rounded-full bg-white/20 backdrop-blur com ícone branco.
-- Barra de progresso: h-1 bg-white/20 com fill bg-[#efbf4e].
-- Tempo: text-white text-xs font-mono.
-
-## 6. PLAYLIST (sidebar de aulas)
-\`\`\`html
-<aside class="w-80 bg-white border-l border-gray-200 overflow-y-auto">
-  <div class="p-4 border-b border-gray-200">
-    <h3 class="font-anek text-lg font-bold text-gray-900">Módulo 1 — Fundamentos</h3>
-    <p class="font-roboto text-xs text-gray-500 mt-1">8 aulas · 2h 15min</p>
-  </div>
-
-  <ul>
-    <!-- Aula concluída -->
-    <li class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100">
-      <CheckCircle class="w-5 h-5 text-emerald-500 shrink-0" />
-      <div class="flex-1 min-w-0">
-        <p class="font-anek font-semibold text-sm text-gray-900 truncate">O que é renda fixa</p>
-        <p class="font-roboto text-xs text-gray-500">12:34</p>
-      </div>
-    </li>
-
-    <!-- Aula em andamento -->
-    <li class="flex items-center gap-3 px-4 py-3 bg-yellow-50 border-l-4 border-yellow-500 cursor-pointer">
-      <PlayCircle class="w-5 h-5 text-yellow-600 shrink-0" />
-      <div class="flex-1 min-w-0">
-        <p class="font-anek font-semibold text-sm text-gray-900 truncate">CDB, LCI e LCA na prática</p>
-        <p class="font-roboto text-xs text-yellow-700">Assistindo · 4:21 / 18:00</p>
-      </div>
-    </li>
-
-    <!-- Aula bloqueada -->
-    <li class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 opacity-60">
-      <Lock class="w-5 h-5 text-gray-400 shrink-0" />
-      <div class="flex-1 min-w-0">
-        <p class="font-anek font-semibold text-sm text-gray-900 truncate">Tesouro Direto</p>
-        <p class="font-roboto text-xs text-gray-500">15:20</p>
-      </div>
-    </li>
-  </ul>
+<aside class="w-80 bg-white border-l border-gray-200">
+  <!-- Aula concluída -->
+  <li class="flex gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100">
+    <CheckCircle class="w-5 h-5 text-emerald-500 shrink-0" />
+    <div><p class="font-anek font-semibold text-sm text-gray-900 truncate">O que é renda fixa</p>
+    <p class="font-roboto text-xs text-gray-500">12:34</p></div>
+  </li>
+  <!-- Em andamento -->
+  <li class="flex gap-3 px-4 py-3 bg-yellow-50 border-l-4 border-yellow-500">
+    <PlayCircle class="w-5 h-5 text-yellow-600 shrink-0" />
+    <div><p class="font-anek font-semibold text-sm text-gray-900 truncate">CDB, LCI e LCA na prática</p>
+    <p class="font-roboto text-xs text-yellow-700">Assistindo · 4:21 / 18:00</p></div>
+  </li>
+  <!-- Bloqueada -->
+  <li class="flex gap-3 px-4 py-3 hover:bg-gray-50 border-b border-gray-100 opacity-60">
+    <Lock class="w-5 h-5 text-gray-400 shrink-0" />
+    <div><p class="font-anek font-semibold text-sm text-gray-900 truncate">Tesouro Direto</p>
+    <p class="font-roboto text-xs text-gray-500">15:20</p></div>
+  </li>
 </aside>
-\`\`\`
 
-## 7. BARRA DE PROGRESSO DO MÓDULO
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. PROGRESSO DO MÓDULO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <div class="px-4 py-3 bg-white border-t border-gray-200">
   <div class="flex justify-between text-xs font-roboto text-gray-500 mb-2">
     <span>Progresso do módulo</span>
     <span class="font-semibold text-yellow-600">37%</span>
   </div>
   <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-    <div class="h-full bg-[#efbf4e] rounded-full transition-all" style="width: 37%"></div>
+    <div class="h-full bg-[#EFBF4E] rounded-full transition-all duration-500" style="width: 37%"></div>
   </div>
 </div>
-\`\`\`
 
-## 8. LAYOUT BASE DA TELA DE AULA
-\`\`\`html
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. LAYOUT BASE DA TELA DE AULA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 <div class="min-h-screen bg-gray-50">
   <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-    <!-- breadcrumb + logo + user -->
+    <!-- breadcrumb + logo + avatar do aluno -->
   </header>
-  <main class="flex">
-    <section class="flex-1 p-6">
+  <main class="flex h-[calc(100vh-65px)]">
+    <section class="flex-1 overflow-y-auto p-6">
       <div class="aspect-video bg-black rounded-xl overflow-hidden mb-6"><!-- player --></div>
       <h1 class="font-anek text-3xl font-bold text-gray-900">Título da aula</h1>
       <p class="font-roboto text-base text-gray-700 mt-4 leading-relaxed">Descrição...</p>
     </section>
-    <aside class="w-80 bg-white border-l border-gray-200"><!-- playlist --></aside>
+    <aside class="w-80 bg-white border-l border-gray-200 overflow-y-auto"><!-- playlist --></aside>
   </main>
 </div>
-\`\`\`
 
-## 9. CHECKLIST
-- [ ] Light mode é o default (bg-gray-50)
-- [ ] Vídeo SEMPRE bg-black (mesmo em light mode)
-- [ ] Aula em curso: bg-yellow-50 + border-l-4 border-yellow-500
-- [ ] Concluída: text-emerald-500
-- [ ] Bloqueada: opacity-60 + text-gray-400
-- [ ] Tipografia Anek para títulos, Roboto para meta/corpo
-- [ ] Gold #efbf4e em progressos e CTAs`,
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. CHECKLIST FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+□ Light mode como padrão (bg-gray-50)
+□ Vídeo SEMPRE bg-black (mesmo em light mode)
+□ Aula em curso: bg-yellow-50 + border-l-4 border-yellow-500
+□ Concluída: text-emerald-500
+□ Bloqueada: opacity-60 + text-gray-400
+□ Player com todos os 7 estados implementados
+□ Progresso: barra bg-[#EFBF4E] com transition-all
+□ Tipografia: Anek (títulos), Roboto (meta/corpo), Sora (botões CTA)
+□ Gold #EFBF4E apenas em CTAs, progresso e playlist ativa
+
+Agora gere a interface solicitada:`,
   },
 };
 
-// Catálogos compartilhados — listam componentes do Design System que a IA pode invocar
-// dentro do prompt gerado. Mantenha sincronizado com a sidebar de DesignSystem.tsx.
+// ─── Catálogos de componentes ─────────────────────────────────────────────────
+
 const componentCatalog = {
   institucional: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATÁLOGO COMPLETO — SITES & LPs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Use SOMENTE componentes desta lista:
 
-## 10. CATÁLOGO COMPLETO DO DESIGN SYSTEM (use quando fizer sentido)
+Fundamentos: Marca & Logos | Tipografia (Anek/Roboto/Sora) | Cores + Data Viz | Ícones Phosphor
+Layout: Cards & Containers | Botões | Grid e Espaçamento
 
-### Fundamentos
-- **Marca & Logos**: assinatura oficial em SVG/PNG/PDF. Respeite safe zone e versão preferencial por marca.
-- **Tipografia**: Anek Latin (títulos), Roboto (corpo/labels), Sora Bold 700 (EXCLUSIVO para botões/CTAs).
-- **Cores**: paleta institucional + Data Viz (8 categóricas, 5 sequenciais, 3 divergentes) + tokens de status (success/warning/info/error).
-- **Ícones**: Phosphor Icons (Regular padrão; Fill para estado ativo; Bold p/ ênfase; Duotone p/ decorativo).
+Seções LP: Grade Curricular | Contagem Regressiva | FAQ Accordion | Tabela de Preços
+          Jornada do Herói | Widgets Flutuantes | Calculadora de Rendimentos
 
-### Layout & Estrutura
-- **Layout & Espaçamento**: múltiplos de 15px, max-w-1200px, dobras alternadas.
-- **Cards & Containers**: radius 12px, hover translateY(-2px), badges de destaque para fundos escuros.
-- **Botões**: Primário, Outline, Ghost, Destrutivo. Sora Bold UPPERCASE — exclusivo para CTAs.
-
-### Seções de Página (use como blocos de LP)
-- **Grade Curricular** (abas pill-style + carrossel mobile)
-- **Contagem Regressiva** (timer com cards de unidade)
-- **FAQ / Dúvidas** (Accordion)
-- **Tabela de Preços** (toggle individual/pacotes, badge de desconto)
-- **Jornada do Herói** (timeline interativa com glow e progresso)
-- **Widgets Flutuantes** — botão circular 64×64px (WhatsApp) ou 60×60px (secundário), \`border-radius: 50%\`, posicionado \`fixed bottom-5 right-5\` com \`z-index: 99999\`. WhatsApp: SVG OFICIAL (branco) dentro do círculo ocupando ~70%, fundo gradiente \`linear-gradient(135deg,#25D366,#128C7E)\`, \`drop-shadow(0 1px 2px rgba(0,0,0,0.25))\`, pulse elegante (\`waSoftPulse 12s\` no botão + anel \`waPulseRing 10.5s cubic-bezier(0.22,1,0.36,1)\`, escala suave 0.98→1.9). Secundário (ex.: Porquinho): mesmo padrão "ícone-dentro-do-círculo", animação \`floatPiggy 3s ease-in-out infinite\`, empilhado acima do WhatsApp com gap mínimo de 30px (bottom 110px). Balão de texto opcional: largura máx 220px, Anek Latin 15px, borda inferior-direita reta, transição \`opacity + translateY + scale\` com easing \`cubic-bezier(0.175,0.885,0.32,1.275)\`; modos suportados: sem balão / sempre visível (delay 1.5s) / hover / clique. NUNCA substitua o WhatsApp por ícone genérico de chat.
-- **Calculadora de Rendimentos** (versão site/LP)
-- **Calculadora de Juros Compostos** (versão ferramenta)
-
-### Feedback & Overlays
-- **Tooltips & Popups** (Roboto bold uppercase 11px), **Notificações/Toasts** (success/warning/info/error, auto-dismiss 4s),
-  **Popconfirm**, **Spin (Loading)**, **Skeleton Avançado**, **Result** (sucesso/erro/403/404), **Empty** (estado vazio com CTA).
-
-### Navegação
-- **Drawer Multi-nível**, **Steps (Wizard)**, **Segmented**, **Anchor (Scroll Spy)**, **Tour** (onboarding com spotlight).
-
-### Entrada de Dados
-- **Upload com Preview**, **Rate (Avaliação)**, **AutoComplete**, **TreeSelect**, **Transfer**, **Mentions**, **Cascader**.
-
-### Exibição de Dados
-- **Statistic (KPIs)**, **Timeline** (linear, trilha horizontal e trilha vertical), **Tree**, **Descriptions** (\`<dl>\`),
-  **Gráfico de Pizza** (donut, paleta Data Viz), **Watermark**.
-
-⚠️ Use SOMENTE componentes desta lista. Se precisar de algo fora dela, descreva-o em comentário no código antes de criá-lo.`,
+Feedback: Tooltip | Toast/Notificação | Popconfirm | Spin | Skeleton | Empty | Result
+Navegação: Drawer | Steps/Wizard | Segmented | Tabs | Anchor | Tour
+Entrada:   Upload | Rate | AutoComplete | TreeSelect | Transfer | Mentions | Cascader
+Exibição:  Statistic | Timeline | Tree | Descriptions | Tabela | Progress Bar | Gráfico Pizza | Watermark`,
 
   ferramentas: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATÁLOGO COMPLETO — FERRAMENTAS / CALCULADORAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Fundamentos aplicáveis: Tipografia | Cores | Ícones Phosphor
 
-## 10. CATÁLOGO COMPLETO PARA FERRAMENTAS
-
-### Fundamentos aplicáveis
-- **Tipografia**: Anek (títulos/valores), Roboto (labels/auxiliar), Sora Bold (botões).
-- **Cores**: paleta da marca + tokens de status (success/warning/info/error) e Data Viz para gráficos.
-- **Ícones**: Phosphor Regular padrão; Fill para estados ativos.
-
-### Entrada (núcleo das ferramentas)
-- **AutoComplete** (busca de ativos), **TreeSelect** (classes), **Transfer** (lista de ativos), **Cascader** (categorias),
-  **Mentions** (notas), **Rate**, **Upload com Preview**.
-
-### Exibição de Resultados
-- **Statistic (KPIs)**: número principal com tabular-nums.
-- **Gráfico de Pizza** (donut, cores Data Viz).
-- **Timeline** (linear / trilha): cronograma de aportes ou eventos.
-- **Descriptions**: detalhamento técnico do resultado.
-- **Tree**: hierarquia de carteiras.
-- **Empty / Result**: quando não há dados ou após calcular.
-
-### Feedback durante o cálculo
-- **Spin** (loading), **Skeleton Avançado**, **Notificações** (toasts com tokens de status),
-  **Popconfirm** (resetar), **Tooltips & Popups** (dicas em campos).
-
-### Navegação interna
-- **Steps (Wizard)** multi-step, **Segmented** alternar visões, **Anchor (Scroll Spy)** para resultados longos,
-  **Tour** para onboarding da ferramenta, **Drawer Multi-nível** para filtros avançados.
-
-### Container & Layout
-- **Cards & Containers** (radius 12px, baixo contraste com a dobra).
-- **Layout & Espaçamento** em múltiplos de 15px.
-- **Botões** Sora Bold UPPERCASE.
-
-### Calculadora de Juros Compostos
-- Padrão de referência: Calculadora AUVP com slider thumb na cor da marca.
-
-⚠️ Combine 2-4 desses componentes. Não invente novos sem necessidade.`,
+Entradas (núcleo): AutoComplete | TreeSelect | Transfer | Cascader | Mentions | Rate | Upload
+Resultados:        Statistic/KPI | Gráfico Pizza | Timeline | Descriptions | Tree | Empty | Result
+Feedback:          Spin | Skeleton | Toast | Popconfirm (reset) | Tooltip (dicas nos campos)
+Navegação:         Steps (multi-step) | Segmented (alternância) | Anchor (resultados longos) | Tour | Drawer (filtros)
+Container:         Cards radius 12px | Layout múltiplos de 15px | Botões Sora Bold UPPERCASE`,
 
   plataforma: `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATÁLOGO COMPLETO — PLATAFORMA EAD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Específicos EAD: Visualização de Cursos | Video Player | Playlist | Dashboard do Aluno
+                  Notas & Anotações | Avaliação de Aulas | Certificados | Comunidade & Dúvidas
 
-## 10. CATÁLOGO COMPLETO DA PLATAFORMA EAD
+Globais reutilizáveis: Statistic | Timeline | Steps | Tree | Descriptions | Empty | Result | Tour
+                        Segmented | Anchor | Tooltip | Toast | Skeleton | Spin | Popconfirm
+                        AutoComplete (busca) | Rate (avaliar aula) | Mentions (comentários)
+                        Upload (exercícios) | Cascader / TreeSelect (filtros) | Transfer | Watermark
+                        Gráfico Pizza (progresso)
 
-### Específicos da Plataforma (AUVP Escola)
-- **Visualização de Cursos** (grid), **Video Player**, **Lista de Aulas (Playlist)**, **Dashboard do Aluno**,
-  **Notas & Anotações**, **Avaliação de Aulas**, **Certificados**, **Comunidade & Dúvidas**.
-
-### Fundamentos aplicáveis
-- **Tipografia** (Anek/Roboto/Sora), **Cores** (paleta Escola + tokens de status), **Ícones** Phosphor,
-  **Layout & Espaçamento** (múltiplos de 15px), **Cards & Containers** (radius 12px), **Botões** Sora Bold.
-
-### Componentes globais reutilizáveis aqui
-- **Statistic** (progresso, horas assistidas), **Timeline** (cronograma do curso, trilha vertical p/ jornada),
-  **Steps** (módulos), **Tree** (estrutura hierárquica), **Descriptions** (metadados da aula),
-  **Empty** (sem aulas), **Result** (curso concluído), **Tour** (onboarding do aluno),
-  **Segmented** (filtros), **Anchor** (navegação dentro de aula longa),
-  **Tooltips & Popups**, **Notificações** (tokens success/warning/info/error),
-  **Skeleton Avançado**, **Spin**, **Popconfirm**,
-  **AutoComplete** (busca), **Rate** (avaliar aula), **Mentions** (comentários),
-  **Upload com Preview** (envio de exercícios), **Cascader** / **TreeSelect** (filtros hierárquicos),
-  **Transfer** (organizar playlists), **Watermark** (proteção de vídeo),
-  **Gráfico de Pizza** (distribuição de progresso/categoria).
-
-⚠️ Mantenha sempre a hierarquia: Player → Conteúdo → Playlist. Componentes auxiliares são satélites.`,
+Hierarquia obrigatória: Player → Conteúdo → Playlist. Componentes auxiliares são satélites.`,
 };
+
+// ─── Componente ───────────────────────────────────────────────────────────────
+
+type TabId = "global" | "componentes";
 
 export function AIFood() {
   const { brand } = useBrand();
   const { view } = useSystemView();
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabId>("global");
 
   const prompt = useMemo(() => {
-    const base = aiPrompts[brand]?.[view];
+    const base = masterPrompts[brand]?.[view];
     if (!base) return "Prompt não disponível para esta combinação.";
     const catalog = componentCatalog[view as keyof typeof componentCatalog] ?? "";
     return base + catalog;
   }, [brand, view]);
 
   const brandLabel = brand === "capital" ? "AUVP Capital" : "AUVP Escola";
+  const brandColor = brand === "capital" ? "text-[#22c55e]/70" : "text-[#EFBF4E]/70";
+  const promptColor = brand === "capital" ? "text-[#4ade80]" : "text-[#fbbf24]";
+  const selectionColor = brand === "capital"
+    ? "selection:bg-[#4ade80]/30 selection:text-white"
+    : "selection:bg-[#fbbf24]/30 selection:text-white";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(prompt);
@@ -681,49 +767,173 @@ export function AIFood() {
             <Bot className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold font-anek">AI-Food (Prompt Builder)</h2>
+            <h2 className="text-2xl font-bold font-anek">AI-Food</h2>
+            <p className="text-xs text-muted-foreground font-roboto uppercase tracking-wider">Alimentadores automáticos para qualquer IA</p>
           </div>
         </div>
-        <p className="text-muted-foreground font-roboto leading-relaxed max-w-3xl">
-          Este espaço gera automaticamente um Master Prompt para a IA baseado na{" "}
-          <strong className="text-foreground">{brandLabel}</strong> e na visão de{" "}
-          <strong className="text-foreground">{viewLabels[view]}</strong> ativa.
-        </p>
-      </div>
 
-      {/* Prompt Display */}
-      <div className="bg-[#0f172a] rounded-xl overflow-hidden relative border border-[#1e293b] shadow-xl">
-        {/* Copy button */}
-        <div className="absolute top-4 right-4 z-10">
-          <Button
-            onClick={handleCopy}
-            variant="secondary"
-            size="sm"
-            className="bg-white text-[#0f172a] hover:bg-gray-200 font-bold shadow-lg gap-2"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? "Copiado!" : "Copiar Prompt"}
-          </Button>
-        </div>
-
-        {/* Info bar */}
-        <div className="flex items-center gap-2 px-6 pt-4 pb-2">
-          <span className={`text-[10px] font-bold uppercase tracking-widest font-roboto ${brand === "capital" ? "text-[#22c55e]/70" : "text-[#efbf4e]/70"}`}>
-            {brandLabel}
-          </span>
-          <span className="text-[#334155]">•</span>
-          <span className={`text-[10px] font-bold uppercase tracking-widest font-roboto ${brand === "capital" ? "text-[#22c55e]/70" : "text-[#efbf4e]/70"}`}>
-            {viewLabels[view]}
-          </span>
-        </div>
-
-        {/* Prompt content */}
-        <div className="p-6 pt-2 overflow-x-auto">
-          <pre className={`whitespace-pre-wrap font-mono text-[13px] leading-relaxed min-h-[400px] ${brand === "capital" ? "text-[#4ade80] selection:bg-[#4ade80]/30 selection:text-white" : "text-[#fbbf24] selection:bg-[#fbbf24]/30 selection:text-white"}`}>
-            {prompt}
-          </pre>
+        <div className="grid sm:grid-cols-3 gap-4 mt-4">
+          <div className="rounded-xl border bg-muted/30 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-4 w-4 text-accent" />
+              <span className="text-xs font-bold font-roboto uppercase tracking-wider">Prompt Global</span>
+            </div>
+            <p className="text-xs text-muted-foreground font-roboto leading-relaxed">
+              Alimenta a IA com todas as regras do Design System {brandLabel} para gerar seções do zero.
+            </p>
+          </div>
+          <div className="rounded-xl border bg-muted/30 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Layers className="h-4 w-4 text-accent" />
+              <span className="text-xs font-bold font-roboto uppercase tracking-wider">Por Componente</span>
+            </div>
+            <p className="text-xs text-muted-foreground font-roboto leading-relaxed">
+              Cada componente do Design System tem seu próprio AI-Food com código + estados + regras.
+            </p>
+          </div>
+          <div className="rounded-xl border bg-muted/30 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Code2 className="h-4 w-4 text-accent" />
+              <span className="text-xs font-bold font-roboto uppercase tracking-wider">100% Isolado</span>
+            </div>
+            <p className="text-xs text-muted-foreground font-roboto leading-relaxed">
+              Cada prompt é autossuficiente: funciona no ChatGPT, Claude, Cursor ou qualquer outra IA.
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* Tabs */}
+      <div className="flex items-center gap-1 border-b">
+        <button
+          onClick={() => setActiveTab("global")}
+          className={`px-4 py-2 text-sm font-medium font-roboto border-b-2 transition-colors ${
+            activeTab === "global"
+              ? "border-foreground text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5" />
+            Prompt Global
+          </span>
+        </button>
+        <button
+          onClick={() => setActiveTab("componentes")}
+          className={`px-4 py-2 text-sm font-medium font-roboto border-b-2 transition-colors ${
+            activeTab === "componentes"
+              ? "border-foreground text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <span className="flex items-center gap-1.5">
+            <Layers className="h-3.5 w-3.5" />
+            Por Componente
+          </span>
+        </button>
+      </div>
+
+      {activeTab === "global" && (
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground font-roboto leading-relaxed max-w-3xl">
+            Master Prompt gerado automaticamente para{" "}
+            <strong className="text-foreground">{brandLabel}</strong> /{" "}
+            <strong className="text-foreground">{viewLabels[view]}</strong>.
+            Inclui paleta, tipografia, botões, cards, layout, componentes disponíveis e checklist completo.
+          </p>
+
+          <div className="bg-[#0f172a] rounded-xl overflow-hidden relative border border-[#1e293b] shadow-xl">
+            {/* Copy button */}
+            <div className="absolute top-4 right-4 z-10">
+              <Button
+                onClick={handleCopy}
+                variant="secondary"
+                size="sm"
+                className="bg-white text-[#0f172a] hover:bg-gray-200 font-bold shadow-lg gap-2"
+              >
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copied ? "Copiado!" : "Copiar Prompt"}
+              </Button>
+            </div>
+
+            {/* Info bar */}
+            <div className="flex items-center gap-2 px-6 pt-4 pb-2">
+              <span className={`text-[10px] font-bold uppercase tracking-widest font-roboto ${brandColor}`}>
+                {brandLabel}
+              </span>
+              <span className="text-[#334155]">•</span>
+              <span className={`text-[10px] font-bold uppercase tracking-widest font-roboto ${brandColor}`}>
+                {viewLabels[view]}
+              </span>
+              <span className="text-[#334155]">•</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest font-roboto text-[#334155]">
+                Prompt Standalone
+              </span>
+            </div>
+
+            {/* Prompt content */}
+            <div className="p-6 pt-2 overflow-x-auto max-h-[600px] overflow-y-auto">
+              <pre className={`whitespace-pre-wrap font-mono text-[13px] leading-relaxed ${promptColor} ${selectionColor}`}>
+                {prompt}
+              </pre>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "componentes" && (
+        <div className="space-y-4">
+          <div className="rounded-xl border bg-muted/20 p-5">
+            <div className="flex items-start gap-3">
+              <Bot className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-bold font-anek text-foreground mb-1">
+                  AI-Food por componente — como usar
+                </p>
+                <p className="text-sm text-muted-foreground font-roboto leading-relaxed">
+                  Cada componente do Design System tem um botão <strong className="text-foreground">AI-Food</strong> no cabeçalho do showcase.
+                  Clique nele para expandir o prompt isolado daquele componente específico — inclui código React,
+                  código HTML, regras do Design System e todos os estados visuais obrigatórios.
+                  O prompt é 100% standalone: cole direto no ChatGPT, Claude, Cursor ou qualquer IA.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3">
+            {[
+              { label: "Botões", desc: "Primário, Outline, Ghost, Destrutivo — todos os estados (hover, active, focus, disabled, loading)" },
+              { label: "Cards & Containers", desc: "Variantes de fundo claro e escuro, hover com sombra, bordas e padding" },
+              { label: "Calculadoras", desc: "Container, inputs, sliders, caixa de resultado — 8 estados da ferramenta" },
+              { label: "Grade Curricular", desc: "Tabs pill, carrossel mobile, estados de módulo (aberto, fechado, ativo)" },
+              { label: "Tabela de Preços", desc: "Toggle individual/pacote, badge de desconto, plano em destaque" },
+              { label: "Video Player", desc: "7 estados: idle, loading, playing, paused, buffering, error, concluído" },
+              { label: "Playlist de Aulas", desc: "Estados: concluída, em andamento, disponível, bloqueada" },
+              { label: "Jornada do Herói", desc: "Timeline interativa com glow, progresso e estados de etapa" },
+              { label: "Notificações/Toasts", desc: "Success, warning, info, error — auto-dismiss 4s, ações inline" },
+              { label: "Steps / Wizard", desc: "Etapas: pendente, atual, concluída, com erro" },
+              { label: "Statistic / KPI", desc: "Valor principal, delta positivo/negativo, loading skeleton" },
+              { label: "Widgets Flutuantes", desc: "WhatsApp com pulse, balão de texto, animações de float" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-lg border bg-card p-4 flex items-start gap-3">
+                <Bot className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold font-anek text-foreground">{item.label}</p>
+                  <p className="text-xs text-muted-foreground font-roboto mt-0.5 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xs text-muted-foreground font-roboto text-center pt-2">
+            Navegue até qualquer componente acima e clique no botão{" "}
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-border bg-background text-foreground font-bold text-[10px] uppercase tracking-wider">
+              <Bot className="h-3 w-3" /> AI-Food
+            </span>{" "}
+            no cabeçalho do showcase para gerar e copiar o prompt isolado.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
