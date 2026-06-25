@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { TomEVoz } from "@/components/widgets/TomEVoz";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useBrand } from "@/contexts/BrandContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   BookOpen, Megaphone, Users, Heart,
   Landmark, GraduationCap, Menu,
   Anchor, Sparkles, Mic, Building2, Wheat,
   BarChart3, DollarSign, CreditCard, Shield, Award, Plane,
-  Lock, Eye, EyeOff
+  Lock, Eye, EyeOff, Sun, Moon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { olhoBranco } from "@/assets/olhos";
@@ -103,6 +104,7 @@ function SidebarNav({
 
 export default function TomEVozPage() {
   const { brand, setBrand } = useBrand();
+  const { theme, setTheme } = useTheme();
   const [previousBrand] = useState(brand);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("fundamentos");
@@ -250,6 +252,13 @@ export default function TomEVozPage() {
 
             <GlobalNav />
           </div>
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="h-8 w-8 md:h-9 md:w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            aria-label={theme === "dark" ? "Mudar para modo claro" : "Mudar para modo escuro"}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
         </div>
       </header>
 
