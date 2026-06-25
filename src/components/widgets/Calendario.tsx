@@ -27,13 +27,14 @@ export function CalendarioWidget() {
       <ComponentShowcase
         title="Calendário — data única"
         description="Calendário inline para seleção de uma única data. Ideal para agendamentos rápidos e formulários simples."
-        code={`const [date, setDate] = useState<Date | undefined>(new Date());
+        code={`const [date, setDate] = useState<Date | undefined>();
 
 <Calendar
   mode="single"
   selected={date}
   onSelect={setDate}
   locale={ptBR}
+  classNames={{ day_today: "" }}
   className="rounded-xl border bg-card p-3 pointer-events-auto"
 />`}
         htmlCode={`<!-- O Calendar usa react-day-picker. Em HTML puro, o equivalente mais próximo é <input type="date">. -->
@@ -82,10 +83,11 @@ const maxDate = new Date(now.getFullYear(), now.getMonth() + 2, now.getDate());
   mode="range"
   selected={range}
   onSelect={setRange}
-  numberOfMonths={2}
+  numberOfMonths={1}
   fromDate={minDate}
   toDate={maxDate}
   locale={ptBR}
+  classNames={{ day_today: "" }}
   className="rounded-xl border bg-card p-3 pointer-events-auto"
 />`}
         htmlCode={`<!-- Equivalente HTML simples para seleção de período -->

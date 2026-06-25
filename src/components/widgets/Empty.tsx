@@ -31,15 +31,29 @@ export function EmptyWidget() {
     <ComponentShowcase
       title="Empty (estado vazio)"
       description="Placeholder para listas, tabelas e buscas sem resultado. Inclui ícone, título, descrição curta e CTA opcional para guiar a próxima ação."
-      code={`<div className="border border-dashed rounded-xl p-8 text-center bg-muted/20">
-  <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-muted mb-4">
-    <Inbox className="h-6 w-6 text-muted-foreground" />
-  </div>
-  <h4 className="font-semibold mb-1">Nenhum item encontrado</h4>
-  <p className="text-sm text-muted-foreground mb-4">
-    Adicione seu primeiro item para começar.
-  </p>
-  <Button size="sm">Criar item</Button>
+      code={`function EmptyState({ icon: Icon, title, description, action }: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  action?: string;
+}) {
+  return (
+    <div className="flex-1 min-w-[240px] border border-dashed rounded-xl p-8 text-center bg-muted/20">
+      <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-muted text-muted-foreground dark:text-accent mb-4">
+        <Icon className="h-6 w-6" />
+      </div>
+      <h4 className="font-semibold text-foreground mb-1">{title}</h4>
+      <p className="text-sm text-muted-foreground mb-4">{description}</p>
+      {action && <Button size="sm">{action}</Button>}
+    </div>
+  );
+}
+
+// Grade com 3 variações de estado vazio
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <EmptyState icon={Inbox}  title="Nenhum item"              description="Adicione seu primeiro item para começar." action="Criar item" />
+  <EmptyState icon={Search} title="Sem resultados"           description="Tente ajustar os filtros ou termos de busca." />
+  <EmptyState icon={FileX}  title="Arquivos não encontrados" description="Faça upload de pelo menos um arquivo." action="Fazer upload" />
 </div>`}
       htmlCode={`<style>
   .empty-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }

@@ -8,13 +8,17 @@ export function SkeletonAvancado() {
       <ComponentShowcase
         title="Skeleton — Lista com avatar"
         description="Combinação avatar circular + linhas de texto. Padrão para feeds, comentários e listas de usuários."
-        code={`<div className="flex items-start gap-4">
-  <Skeleton className="h-12 w-12 rounded-full" />
-  <div className="flex-1 space-y-2">
-    <Skeleton className="h-4 w-1/3" />
-    <Skeleton className="h-3 w-full" />
-    <Skeleton className="h-3 w-4/5" />
-  </div>
+        code={`<div className="w-full max-w-md space-y-5">
+  {[0, 1, 2].map((i) => (
+    <div key={i} className="flex items-start gap-4">
+      <Skeleton className="h-12 w-12 rounded-full" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-3 w-4/5" />
+      </div>
+    </div>
+  ))}
 </div>`}
         htmlCode={`<style>
   .sk {
@@ -77,15 +81,19 @@ export function SkeletonAvancado() {
       <ComponentShowcase
         title="Skeleton — Card de conteúdo"
         description="Imagem destacada + título + parágrafo + ações. Use para cards de produto, curso ou artigo."
-        code={`<div className="rounded-xl border p-4 space-y-4">
-  <Skeleton className="h-40 w-full rounded-lg" />
-  <Skeleton className="h-5 w-2/3" />
-  <Skeleton className="h-3 w-full" />
-  <Skeleton className="h-3 w-5/6" />
-  <div className="flex gap-2 pt-2">
-    <Skeleton className="h-9 w-24 rounded-md" />
-    <Skeleton className="h-9 w-24 rounded-md" />
-  </div>
+        code={`<div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+  {[0, 1].map((i) => (
+    <div key={i} className="rounded-xl border bg-card p-4 space-y-4">
+      <Skeleton className="h-40 w-full rounded-lg" />
+      <Skeleton className="h-5 w-2/3" />
+      <Skeleton className="h-3 w-full" />
+      <Skeleton className="h-3 w-5/6" />
+      <div className="flex gap-2 pt-2">
+        <Skeleton className="h-9 w-24 rounded-md" />
+        <Skeleton className="h-9 w-24 rounded-md" />
+      </div>
+    </div>
+  ))}
 </div>`}
         htmlCode={`<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:16px;">
   <div style="border:1px solid hsl(var(--border, 120 10% 88%)); border-radius:12px; padding:16px; background:hsl(var(--card, 0 0% 100%)); display:flex; flex-direction:column; gap:16px;">

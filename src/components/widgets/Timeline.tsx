@@ -375,33 +375,59 @@ export function TimelineWidget() {
     <ComponentShowcase
       title="Timeline (linha do tempo)"
       description="Três variações: Linear (eventos com status semânticos), Trilha Horizontal (marcos com nós conectados — desktop) e Trilha Vertical (mobile, com barra de progresso e prêmios)."
-      code={`// Trilha Horizontal — nós conectados com fade lateral e setas
-const milestones = [
-  { id: 1, title: 'Aspirante', conversionsRequired: 5, ... },
-  ...
-];
+      code={`// Três variações em abas: Linear, Trilha Horizontal e Trilha Vertical
+const [selected, setSelected] = useState(3);
+const current = 3;      // último marco conquistado
+const progressNow = 22; // indicações atuais (entre marco 3 e 4)
 
-const reached = m.id <= current;       // já conquistado
-const isNext  = i === nextIndex;       // próximo marco
+<Tabs defaultValue="linear" className="w-full">
+  <TabsList className="grid grid-cols-3 max-w-md mb-6">
+    <TabsTrigger value="linear">Linear</TabsTrigger>
+    <TabsTrigger value="trilha-h">Trilha Horizontal</TabsTrigger>
+    <TabsTrigger value="trilha-v">Trilha Vertical</TabsTrigger>
+  </TabsList>
 
-<button className={cn(
-  "h-12 w-12 rounded-full border-2 flex items-center justify-center transition-all duration-200",
-  reached
-    ? "bg-primary border-primary text-primary-foreground shadow-[0_0_16px_hsl(var(--primary)/0.3)]"
-    : isNext
-    ? "bg-card border-accent text-accent shadow-[0_0_10px_hsl(var(--primary)/0.2)]"
-    : "bg-muted border-border text-muted-foreground",
-  isSelected && "ring-2 ring-primary ring-offset-2 ring-offset-background scale-110"
-)}>
-  <Icon className="h-5 w-5" fill={reached ? 'currentColor' : 'none'} />
-</button>
+  {/* Linear — eventos com status semânticos (done, active, pending, error) */}
+  <TabsContent value="linear">
+    <ol className="relative w-full space-y-6">
+      <span className="absolute left-4 top-2 bottom-2 w-px bg-border -translate-x-1/2" />
+      {linearItems.map((it, i) => {
+        const { Icon, color } = iconMap[it.status];
+        return (
+          <li key={i} className="relative pl-12 min-h-8">
+            <span className={cn("absolute left-0 top-0 flex items-center justify-center h-8 w-8 rounded-full", color)}>
+              <Icon className="h-4 w-4" />
+            </span>
+            <h4 className="font-semibold text-foreground font-anek leading-tight">{it.title}</h4>
+            <p className="text-sm text-muted-foreground mt-0.5 font-roboto">{it.description}</p>
+            <span className="text-[11px] uppercase tracking-wider font-roboto text-muted-foreground mt-1 block">{it.date}</span>
+          </li>
+        );
+      })}
+    </ol>
+  </TabsContent>
 
-// Conector com gradiente entre nós
-const connector = reached && nextReached
-  ? "bg-primary"
-  : reached
-  ? "bg-gradient-to-r from-primary to-border"
-  : "bg-border";`}
+  {/* Trilha Horizontal — nós clicáveis conectados com gradiente, detalhes do marco */}
+  <TabsContent value="trilha-h">
+    <div className="rounded-xl border bg-card p-4">
+      <HorizontalTrilha current={current} selected={selected} onSelect={setSelected} />
+      <div className="mt-4 pt-4 border-t border-border">
+        <p className="text-[11px] uppercase tracking-wider font-bold text-muted-foreground font-roboto">Marco selecionado</p>
+        <p className="text-sm font-anek font-bold mt-1">
+          {milestones.find((m) => m.id === selected)?.title} — <span className="text-accent">{milestones.find((m) => m.id === selected)?.prize}</span>
+        </p>
+        <p className="text-xs text-muted-foreground font-roboto mt-0.5">{milestones.find((m) => m.id === selected)?.prizeDescription}</p>
+      </div>
+    </div>
+  </TabsContent>
+
+  {/* Trilha Vertical — mobile-friendly com barra de progresso e prêmios */}
+  <TabsContent value="trilha-v">
+    <div className="max-w-md mx-auto rounded-xl border bg-card p-5">
+      <VerticalTrilha current={current} progressNow={progressNow} />
+    </div>
+  </TabsContent>
+</Tabs>`}
       htmlCode={`<style>
   .trilha { display:flex; gap:0; align-items:flex-start; padding:8px; }
   .trilha-step { flex:1; display:flex; flex-direction:column; align-items:center; min-width:88px; }
