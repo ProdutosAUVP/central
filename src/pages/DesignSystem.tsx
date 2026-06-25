@@ -66,6 +66,18 @@ import jornadaHeroiSrc from "@/components/widgets/JornadaHeroi?raw";
 import jornadaHeroiHtml from "@/components/widgets/html-snippets/jornada-heroi.html?raw";
 import marcaLogosSrc from "@/components/widgets/MarcaLogos?raw";
 import marcaLogosHtml from "@/components/widgets/html-snippets/marca-logos.html?raw";
+import paletaDataVizSrc from "@/components/widgets/PaletaDataViz?raw";
+import iconesSrc from "@/components/widgets/Icones?raw";
+import layoutEspacamentoSrc from "@/components/widgets/LayoutEspacamento?raw";
+import contagemRegressivaSrc from "@/components/widgets/ContagemRegressiva?raw";
+import faqDuvidasSrc from "@/components/widgets/FaqDuvidas?raw";
+import widgetsFlutuantesSrc from "@/components/widgets/WidgetsFlutuantes?raw";
+import calculadoraRendimentosSrc from "@/components/widgets/CalculadoraRendimentos?raw";
+import calculadoraSrc from "@/components/widgets/Calculadora?raw";
+import tooltipsPopupsSrc from "@/components/widgets/TooltipsPopups?raw";
+import graficoPizzaSrc from "@/components/widgets/GraficoPizza?raw";
+import graficoPizzaLegendasSrc from "@/components/widgets/GraficoPizzaLegendas?raw";
+import cardsContainersSrc from "@/components/widgets/CardsContainers?raw";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -735,7 +747,7 @@ export default function DesignSystemPage() {
                 </Button>
               </a>
             </div>
-            <SectionThemeToggle bare code={marcaLogosSrc} htmlCode={marcaLogosHtml}><MarcaLogos /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Marca & Logos" description="Aplicações oficiais de marca AUVP. Use sempre os arquivos originais sem distorções nem recortes." code={marcaLogosSrc} htmlCode={marcaLogosHtml}><MarcaLogos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -864,7 +876,7 @@ export default function DesignSystemPage() {
                 Conjunto expandido de cores derivado da identidade da marca, usado em tabelas com múltiplas categorias,
                 gráficos de pizza, barras, linhas e mapas de calor. As cores se adaptam automaticamente entre Capital e Escola.
               </p>
-              <SectionThemeToggle bare selfDocumented><PaletaDataViz /></SectionThemeToggle>
+              <SectionThemeToggle bare title="Paleta de Dados & Gráficos" description="Conjunto expandido de cores derivado da identidade de marca, usado em tabelas com múltiplas categorias, gráficos de pizza, barras, linhas e mapas de calor." code={paletaDataVizSrc} selfDocumented><PaletaDataViz /></SectionThemeToggle>
             </div>
           </section>
           </>}
@@ -874,7 +886,7 @@ export default function DesignSystemPage() {
           <section id="icons">
             <h2 className="text-2xl font-bold mb-2">Ícones</h2>
             <p className="text-muted-foreground mb-6">Biblioteca de ícones Phosphor Icons utilizada em todo o ecossistema AUVP.</p>
-            <SectionThemeToggle bare selfDocumented><Icones /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Ícones Phosphor" description="Biblioteca Phosphor Icons utilizada em todo o ecossistema AUVP. Inclui variantes regular, bold e fill." code={iconesSrc} selfDocumented><Icones /></SectionThemeToggle>
           </section>
           </>}
 
@@ -885,7 +897,7 @@ export default function DesignSystemPage() {
           <section id="layout">
             <h2 className="text-2xl font-bold mb-2">Layout & Espaçamento</h2>
             <p className="text-muted-foreground mb-6">Ritmo vertical e alinhamento baseados em múltiplos de 15px.</p>
-            <SectionThemeToggle bare selfDocumented><LayoutEspacamento /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Layout & Espaçamento" description="Ritmo vertical e alinhamento baseados em múltiplos de 15px. Container max-w-1200px, padding inline 24px, seções alternam entre #FFF → #F2F2F2 → #000." code={layoutEspacamentoSrc} selfDocumented><LayoutEspacamento /></SectionThemeToggle>
           </section>
           </>}
 
@@ -894,7 +906,13 @@ export default function DesignSystemPage() {
           <section id="cards-containers">
             <h2 className="text-2xl font-bold mb-2">Cards & Containers</h2>
             <p className="text-muted-foreground mb-6">Regras para criar cards e áreas destacadas dentro de dobras institucionais.</p>
-            <CardsContainers />
+            <ComponentShowcase
+              title="Cards & Containers"
+              description="Border radius 12px sempre. Contraste baixo entre card e fundo da dobra. Dobra preta → card #1B1B1B. Dobra cinza → card #FFF. Dobra branca → card #F2F2F2."
+              code={cardsContainersSrc}
+            >
+              <CardsContainers />
+            </ComponentShowcase>
           </section>
           </>}
 
@@ -1123,7 +1141,7 @@ function showTab(tabId) {
           <section id="countdown">
             <h2 className="text-2xl font-bold mb-2">Contagem Regressiva</h2>
             <p className="text-muted-foreground mb-6">Widget dinâmico focado em escassez, utilizando cards com backdrop-blur e transparência.</p>
-            <SectionThemeToggle bare selfDocumented><ContagemRegressiva /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Contagem Regressiva" description="Widget de countdown dinâmico focado em escassez. Cards com backdrop-blur e transparência. Exibe dias, horas, minutos e segundos em tempo real." code={contagemRegressivaSrc} selfDocumented><ContagemRegressiva /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1132,7 +1150,7 @@ function showTab(tabId) {
           <section id="faq">
             <h2 className="text-2xl font-bold mb-2">Dropdown</h2>
             <p className="text-muted-foreground mb-6">Componente global de dropdown para páginas de vendas, com temas claro e escuro.</p>
-            <SectionThemeToggle bare selfDocumented><FaqDuvidas /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Dropdown / FAQ" description="Accordion para páginas de vendas com temas claro e escuro. Ícone de + que gira para × na abertura. Transição suave de altura." code={faqDuvidasSrc} selfDocumented><FaqDuvidas /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1141,7 +1159,7 @@ function showTab(tabId) {
           <section id="pricing">
             <h2 className="text-2xl font-bold mb-2">Tabela de Preços</h2>
             <p className="text-muted-foreground mb-6">Toggle animado com cards translúcidos, badges de desconto e CTA.</p>
-            <SectionThemeToggle bare code={tabelaPrecosSrc} htmlCode={tabelaPrecosHtml}><TabelaPrecos /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Tabela de Preços" description="Toggle animado mensal/anual com cards translúcidos, badge de desconto percentual e CTA primário em destaque." code={tabelaPrecosSrc} htmlCode={tabelaPrecosHtml}><TabelaPrecos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1150,7 +1168,7 @@ function showTab(tabId) {
           <section id="journey">
             <h2 className="text-2xl font-bold mb-2">Jornada do Herói</h2>
             <p className="text-muted-foreground mb-6">Timeline interativa com pontos clicáveis e barra de progresso animada.</p>
-            <SectionThemeToggle bare code={jornadaHeroiSrc} htmlCode={jornadaHeroiHtml}><JornadaHeroi /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Jornada do Herói" description="Timeline interativa com pontos clicáveis, barra de progresso animada e painel de conteúdo contextual para cada etapa da jornada." code={jornadaHeroiSrc} htmlCode={jornadaHeroiHtml}><JornadaHeroi /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1159,7 +1177,7 @@ function showTab(tabId) {
           <section id="floaters">
             <h2 className="text-2xl font-bold mb-2">Widgets Flutuantes</h2>
             <p className="text-muted-foreground mb-6">Botões flutuantes (WhatsApp, Porquinho da Economia) com animação contínua.</p>
-            <SectionThemeToggle bare selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Widgets Flutuantes" description="Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado." code={widgetsFlutuantesSrc} selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1168,7 +1186,7 @@ function showTab(tabId) {
           <section id="site-calc">
             <h2 className="text-2xl font-bold mb-2">Calculadora de Rendimentos</h2>
             <p className="text-muted-foreground mb-6">Widget de simulação para landing pages com tipografia e CTAs do tema Sites.</p>
-            <SectionThemeToggle bare selfDocumented><CalculadoraRendimentos /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Calculadora de Rendimentos" description="Widget de simulação para landing pages com slider de valor, resultado animado e CTAs do tema Sites. Identidade visual Capital/Escola via contexto de marca." code={calculadoraRendimentosSrc} selfDocumented><CalculadoraRendimentos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1177,7 +1195,7 @@ function showTab(tabId) {
           <section id="tool-calc">
             <h2 className="text-2xl font-bold mb-2">Calculadora de Câmbio</h2>
             <p className="text-muted-foreground mb-6">Ferramenta interativa de conversão de moedas com IOF, VET e identidade visual da marca ({brand === "capital" ? "Capital" : "Escola"}).</p>
-            <SectionThemeToggle bare selfDocumented><Calculadora /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Calculadora de Câmbio" description="Ferramenta interativa de conversão de moedas com cálculo automático de IOF, VET e exibição de cotação. Suporta múltiplas moedas e sentidos de conversão." code={calculadoraSrc} selfDocumented><Calculadora /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1188,7 +1206,7 @@ function showTab(tabId) {
           <section id="tooltips">
             <h2 className="text-2xl font-bold mb-2">Tooltips & Popups</h2>
             <p className="text-muted-foreground mb-6">Elementos flutuantes e guias de interação para Landing Pages.</p>
-            <SectionThemeToggle bare selfDocumented><TooltipsPopups /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Tooltips & Popups" description="Elementos flutuantes ancorados ao gatilho: tooltip simples (hover), popover com conteúdo rico (clique) e popup de destaque para Landing Pages." code={tooltipsPopupsSrc} selfDocumented><TooltipsPopups /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1534,8 +1552,8 @@ function showTab(tabId) {
               em linha única, ou vertical à esquerda/direita do gráfico).
             </p>
             <div className="space-y-10">
-              <SectionThemeToggle bare selfDocumented><GraficoPizza /></SectionThemeToggle>
-              <SectionThemeToggle bare selfDocumented><GraficoPizzaLegendas /></SectionThemeToggle>
+              <SectionThemeToggle bare title="Gráfico Donut (Pizza)" description="Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais." code={graficoPizzaSrc} selfDocumented><GraficoPizza /></SectionThemeToggle>
+              <SectionThemeToggle bare title="Gráfico Donut com Legendas" description="Variações de posição da legenda: horizontal abaixo, em linha única e vertical lateral ao gráfico. Mesmas cores e regras do donut padrão." code={graficoPizzaLegendasSrc} selfDocumented><GraficoPizzaLegendas /></SectionThemeToggle>
             </div>
           </section>
           </>}
@@ -1550,7 +1568,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Grid de cursos com progresso e fácil retomada de aulas.</p>
-            <SectionThemeToggle bare code={platCursosSrc} htmlCode={platCursosHtml}><PlataformaCursos /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Visualização de Cursos" description="Grid de cursos com cards de progresso, thumbnail, badge de conclusão e botão de retomada de aula. Light/dark mode." code={platCursosSrc} htmlCode={platCursosHtml}><PlataformaCursos /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1562,7 +1580,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">O vídeo é o core da plataforma. Controles com overlay e auto-hide.</p>
-            <SectionThemeToggle bare code={platPlayerSrc} htmlCode={platPlayerHtml}><PlataformaPlayer /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Interface do Player" description="Player de vídeo com overlay de controles, barra de progresso clicável, volume, fullscreen e auto-hide dos controles após inatividade." code={platPlayerSrc} htmlCode={platPlayerHtml}><PlataformaPlayer /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1574,7 +1592,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Estados: Assistindo, Concluído e Bloqueado.</p>
-            <SectionThemeToggle bare code={platPlaylistSrc} htmlCode={platPlaylistHtml}><PlataformaPlaylist /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Lista de Aulas (Playlist)" description="Lista lateral de aulas com três estados visuais distintos: Assistindo (destaque amarelo), Concluído (check verde) e Bloqueado (cadeado + opacidade reduzida)." code={platPlaylistSrc} htmlCode={platPlaylistHtml}><PlataformaPlaylist /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1586,7 +1604,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Estatísticas, atividade semanal e conquistas.</p>
-            <SectionThemeToggle bare code={platDashboardSrc} htmlCode={platDashboardHtml}><PlataformaDashboard /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Dashboard do Aluno" description="Painel com KPIs (aulas assistidas, tempo total, streak), gráfico de barras de atividade semanal e grid de conquistas desbloqueadas." code={platDashboardSrc} htmlCode={platDashboardHtml}><PlataformaDashboard /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1598,7 +1616,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Notas sincronizadas com timestamp do vídeo.</p>
-            <SectionThemeToggle bare code={platNotasSrc} htmlCode={platNotasHtml}><PlataformaNotas /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Notas & Anotações" description="Bloco de notas vinculado ao timestamp do vídeo. Permite criar, editar e excluir notas com carimbos de tempo clicáveis para navegar na aula." code={platNotasSrc} htmlCode={platNotasHtml}><PlataformaNotas /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1610,7 +1628,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Rating por estrelas com feedback textual.</p>
-            <SectionThemeToggle bare code={platRatingSrc} htmlCode={platRatingHtml}><PlataformaRating /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Avaliação de Aulas" description="Sistema de rating por estrelas com hover preview e campo de feedback textual opcional. Exibe média e distribuição de notas." code={platRatingSrc} htmlCode={platRatingHtml}><PlataformaRating /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1622,7 +1640,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Certificados de conclusão emitidos automaticamente ao finalizar módulos.</p>
-            <SectionThemeToggle bare code={platCertificadosSrc} htmlCode={platCertificadosHtml}><PlataformaCertificados /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Certificados" description="Certificados de conclusão emitidos automaticamente ao finalizar módulos. Card com nome do aluno, curso, data e botão de download PDF." code={platCertificadosSrc} htmlCode={platCertificadosHtml}><PlataformaCertificados /></SectionThemeToggle>
           </section>
           </>}
 
@@ -1634,7 +1652,7 @@ function showTab(tabId) {
               <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">Beta</span>
             </div>
             <p className="text-muted-foreground mb-6">Fórum de dúvidas com votos e respostas de instrutores.</p>
-            <SectionThemeToggle bare code={platComunidadeSrc} htmlCode={platComunidadeHtml}><PlataformaComunidade /></SectionThemeToggle>
+            <SectionThemeToggle bare title="Comunidade & Dúvidas" description="Fórum de dúvidas com votos positivos/negativos, respostas de instrutores destacadas, filtros por status e paginação." code={platComunidadeSrc} htmlCode={platComunidadeHtml}><PlataformaComunidade /></SectionThemeToggle>
           </section>
           </>}
 

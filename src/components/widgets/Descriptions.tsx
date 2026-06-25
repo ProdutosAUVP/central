@@ -17,13 +17,13 @@ export function DescriptionsWidget() {
     <ComponentShowcase
       title="Descriptions (lista de propriedades)"
       description="Apresenta pares chave/valor estruturados em grid responsivo. Padrão para páginas de detalhe (perfil, pedido, fatura) — substitui listas DL com melhor leitura."
-      code={`<dl className="border rounded-xl divide-y bg-card">
+      code={`<dl className="w-full border rounded-xl divide-y bg-card overflow-hidden">
   {items.map((it, i) => (
     <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-1 px-5 py-3">
       <dt className="text-xs font-bold uppercase tracking-wider font-roboto text-muted-foreground">
         {it.label}
       </dt>
-      <dd className="md:col-span-2 text-sm font-roboto">{it.value}</dd>
+      <dd className="md:col-span-2 text-sm font-roboto text-foreground">{it.value}</dd>
     </div>
   ))}
 </dl>`}

@@ -240,8 +240,10 @@ const [v1, setV1] = useState(3);
       <ComponentShowcase
         title="Rate — somente leitura"
         description="Para exibição de avaliações já recebidas (cards de produtos, depoimentos)."
-        code={`<div className="flex items-center gap-3">
-  <Rate value={4} readOnly size="sm" />
+        code={`const [v3, setV3] = useState(4);
+
+<div className="flex items-center gap-3">
+  <Rate value={v3} readOnly size="sm" />
   <Rate value={4.5} allowHalf readOnly />
   <Rate value={5} readOnly size="lg" />
 </div>`}

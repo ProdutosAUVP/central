@@ -94,18 +94,22 @@ const select = (n: Node, depth: number) => {
 
 const display = path.length ? path.map((n) => n.label).join(" / ") : "Selecionar local";
 
-<Popover open={open} onOpenChange={setOpen}>
-  <PopoverTrigger asChild>
-    <Button variant="outline" className="w-full justify-between font-roboto normal-case h-10">
-      <span className="truncate text-sm">{display}</span>
-      <ChevronDown className="h-4 w-4 opacity-60 shrink-0 ml-2" />
-    </Button>
-  </PopoverTrigger>
-  <PopoverContent
-    className="p-0 w-auto max-w-[min(95vw,640px)] overflow-hidden rounded-lg border shadow-lg"
-    align="start"
-    sideOffset={6}
-  >
+const triggerRef = useRef<HTMLButtonElement>(null);
+const isDark = useIsDark(triggerRef);
+
+<div className="w-full max-w-md">
+  <Popover open={open} onOpenChange={setOpen}>
+    <PopoverTrigger asChild>
+      <Button ref={triggerRef} variant="outline" className="w-full justify-between font-roboto normal-case h-10">
+        <span className="truncate text-sm">{display}</span>
+        <ChevronDown className="h-4 w-4 opacity-60 shrink-0 ml-2" />
+      </Button>
+    </PopoverTrigger>
+    <PopoverContent
+      className={cn("p-0 w-auto max-w-[min(95vw,640px)] overflow-hidden rounded-lg border shadow-lg", isDark && "dark")}
+      align="start"
+      sideOffset={6}
+    >
     <div className="flex divide-x divide-border bg-popover">
       {columns.map((col, depth) => {
         const headerLabel =
@@ -142,8 +146,12 @@ const display = path.length ? path.map((n) => n.label).join(" / ") : "Selecionar
         );
       })}
     </div>
-  </PopoverContent>
-</Popover>`}
+    </PopoverContent>
+  </Popover>
+  <p className="text-xs text-muted-foreground mt-3 font-mono">
+    Caminho: {path.length ? path.map((n) => n.key).join(" → ") : "—"}
+  </p>
+</div>`}
       htmlCode={`<div style="position:relative; max-width:400px;">
   <button id="csc-btn" onclick="document.getElementById('csc-pop').classList.toggle('open')"
     style="width:100%; display:flex; justify-content:space-between; padding:10px 14px; background:#fff; border:1px solid #e5e7eb; border-radius:8px; font-family:'Roboto'; cursor:pointer;">

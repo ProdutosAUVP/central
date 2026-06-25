@@ -69,8 +69,20 @@ const [bg, setBg] = useState("");
 const ref = useRef<HTMLDivElement>(null);
 
 useEffect(() => {
-  const isDark = !!ref.current?.closest(".dark");
-  setBg(buildWatermarkUrl(text || " ", isDark));
+  const detect = () => {
+    const el = ref.current;
+    const isDark = !!el?.closest(".dark");
+    setBg(buildWatermarkUrl(text || " ", isDark));
+  };
+  detect();
+  // Reage a toggles de tema (mudança de classe nos ancestrais)
+  const observer = new MutationObserver(detect);
+  let node: HTMLElement | null = ref.current;
+  while (node) {
+    observer.observe(node, { attributes: true, attributeFilter: ["class"] });
+    node = node.parentElement;
+  }
+  return () => observer.disconnect();
 }, [text]);
 
 <div className="w-full space-y-4">

@@ -96,7 +96,7 @@ const close = () => setStep(-1);
         <div className="absolute inset-0 bg-[hsl(145_20%_44%/0.7)] z-40 rounded-xl pointer-events-none" />
         <div
           className="absolute z-40 rounded-lg ring-4 ring-primary pointer-events-none transition-all duration-300"
-          style={{ top: box.top, left: box.left, width: box.w, height: box.h }}
+          style={{ top: box.top, left: box.left, width: box.w, height: box.h, boxShadow: "0 0 0 9999px transparent" }}
         />
         <div
           className="absolute z-50 bg-popover border rounded-lg p-4 shadow-xl w-[260px]"

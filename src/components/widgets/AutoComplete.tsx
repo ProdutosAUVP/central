@@ -94,6 +94,8 @@ function highlight(text: string, query: string) {
 const [value, setValue] = useState("");
 const [open, setOpen] = useState(false);
 const [active, setActive] = useState(0);
+const inputRef = useRef<HTMLInputElement>(null);
+const isDark = useIsDark(inputRef);
 
 const filtered = useMemo(() => {
   if (!value.trim()) return [];
@@ -116,6 +118,7 @@ const onKey = (e: React.KeyboardEvent) => {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
+          ref={inputRef}
           value={value}
           placeholder="Busque um ativo..."
           onChange={(e) => { setValue(e.target.value); setOpen(true); setActive(0); }}
@@ -126,7 +129,7 @@ const onKey = (e: React.KeyboardEvent) => {
       </div>
     </PopoverTrigger>
     <PopoverContent
-      className="w-[--radix-popover-trigger-width] p-1"
+      className={cn("w-[--radix-popover-trigger-width] p-1", isDark && "dark")}
       align="start"
       onOpenAutoFocus={(e) => e.preventDefault()}
     >

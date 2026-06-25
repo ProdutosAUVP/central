@@ -16,13 +16,13 @@ export function TabelaWidget() {
       description="Tabela minimalista inspirada no Geist: cabeçalho discreto, linhas alternadas (zebra) e alinhamento da última coluna à direita. Útil para listagens de dados tabulares enxutos."
       code={`import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-<div className="rounded-xl border bg-card overflow-hidden">
+<div className="w-full rounded-xl border bg-card overflow-hidden">
   <Table>
     <TableHeader>
       <TableRow className="hover:bg-transparent border-b">
-        <TableHead className="text-xs font-roboto uppercase tracking-wider">Col 1</TableHead>
-        <TableHead className="text-xs font-roboto uppercase tracking-wider">Col 2</TableHead>
-        <TableHead className="text-xs font-roboto uppercase tracking-wider text-right">Col 3</TableHead>
+        <TableHead className="text-xs font-roboto uppercase tracking-wider font-medium">Col 1</TableHead>
+        <TableHead className="text-xs font-roboto uppercase tracking-wider font-medium">Col 2</TableHead>
+        <TableHead className="text-xs font-roboto uppercase tracking-wider font-medium text-right">Col 3</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -97,13 +97,13 @@ export function TabelaBorderedWidget() {
       description="Variação bordered: sem zebra, com divisor sutil entre todas as linhas. Indicada quando todas as linhas têm o mesmo peso visual e a leitura horizontal precisa de uma guia clara."
       code={`import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-<div className="rounded-xl border bg-card overflow-hidden">
+<div className="w-full rounded-xl border bg-card overflow-hidden">
   <Table>
     <TableHeader>
       <TableRow className="hover:bg-transparent border-b">
-        <TableHead className="text-xs font-roboto uppercase tracking-wider">Col 1</TableHead>
-        <TableHead className="text-xs font-roboto uppercase tracking-wider">Col 2</TableHead>
-        <TableHead className="text-xs font-roboto uppercase tracking-wider text-right">Col 3</TableHead>
+        <TableHead className="text-xs font-roboto uppercase tracking-wider font-medium">Col 1</TableHead>
+        <TableHead className="text-xs font-roboto uppercase tracking-wider font-medium">Col 2</TableHead>
+        <TableHead className="text-xs font-roboto uppercase tracking-wider font-medium text-right">Col 3</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
