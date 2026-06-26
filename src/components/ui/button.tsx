@@ -23,7 +23,7 @@ const buttonVariants = cva(
         cta: "bg-[hsl(var(--cta))] text-[hsl(var(--cta-foreground))] border border-transparent hover:bg-transparent hover:text-[hsl(var(--cta))] hover:border-[hsl(var(--cta))] uppercase tracking-wider text-sm",
         /** CTA invertido para fundos escuros — hover mantém fundo claro com leve atenuação para preservar contraste */
         "cta-inverted":
-          "bg-[hsl(0_0%_98%)] text-[hsl(var(--cta))] border border-[hsl(0_0%_98%)] hover:bg-[hsl(0_0%_88%)] hover:border-[hsl(0_0%_88%)] hover:text-[hsl(var(--cta))] dark:bg-[hsl(0_0%_98%)] dark:text-[hsl(155_93%_11%)] dark:hover:bg-[hsl(0_0%_88%)] dark:hover:border-[hsl(0_0%_88%)] dark:hover:text-[hsl(155_93%_11%)] uppercase tracking-wider text-sm",
+          "bg-[hsl(0_0%_98%)] text-[hsl(var(--cta))] border border-[hsl(0_0%_98%)] hover:bg-[hsl(0_0%_88%)] hover:border-[hsl(0_0%_88%)] hover:text-[hsl(var(--cta))] dark:bg-[hsl(0_0%_98%)] dark:text-[hsl(var(--cta))] dark:hover:bg-[hsl(0_0%_88%)] dark:hover:border-[hsl(0_0%_88%)] dark:hover:text-[hsl(var(--cta))] uppercase tracking-wider text-sm",
       },
       size: {
         default: "h-10 px-5 py-2 text-sm",

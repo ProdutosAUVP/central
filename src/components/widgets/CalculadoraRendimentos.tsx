@@ -219,7 +219,7 @@ export function CalculadoraRendimentos() {
                 </p>
                 <span
                   className="inline-block text-[clamp(1.5rem,6vw,2.5rem)] font-semibold transition-transform duration-200"
-                  style={{ transform: `scale(${scale})`, transformOrigin: "bottom center", color: "hsl(142 71% 25%)" }}
+                  style={{ transform: `scale(${scale})`, transformOrigin: "bottom center", color: "hsl(var(--accent))" }}
                 >
                   {fmtCurrency(finalValue, true)}
                 </span>

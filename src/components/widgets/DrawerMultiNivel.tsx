@@ -70,7 +70,7 @@ const isDark = useIsDark(triggerRef);
     padding:10px 16px;
     background:hsl(var(--primary, 155 93% 11%));
     color:hsl(var(--primary-foreground, 0 0% 100%));
-    border:none; border-radius:12px;
+    border:none; border-radius:5px;
     font-family:'Sora', sans-serif; font-weight:700;
     text-transform:uppercase; font-size:13px; cursor:pointer;
   }
@@ -263,7 +263,7 @@ const isDark = useIsDark(triggerRef);
   .dn-trigger {
     padding:10px 16px; background:hsl(var(--primary, 155 93% 11%));
     color:hsl(var(--primary-foreground, 0 0% 100%));
-    border:none; border-radius:12px;
+    border:none; border-radius:5px;
     font-family:'Sora', sans-serif; font-weight:700;
     text-transform:uppercase; font-size:13px; cursor:pointer;
   }
