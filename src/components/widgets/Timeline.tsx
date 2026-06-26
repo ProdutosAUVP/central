@@ -183,7 +183,7 @@ function HorizontalTrilha({ current, selected, onSelect }: TrilhaHProps) {
             const connectorClass = !isLast
               ? reached
                 ? "bg-primary"
-                : "bg-border dark:bg-[hsl(145_20%_44%/0.6)]"
+                : "bg-border"
               : "";
 
             return (
@@ -254,8 +254,8 @@ function connectorClassPrev(i: number, current: number) {
   const prevReached = milestones[i - 1]?.id <= current;
   const thisReached = milestones[i]?.id <= current;
   if (thisReached) return "bg-primary";
-  if (prevReached) return "bg-border dark:bg-[hsl(145_20%_44%/0.6)]";
-  return "bg-border dark:bg-[hsl(145_20%_44%/0.6)]";
+  if (prevReached) return "bg-border";
+  return "bg-border";
 }
 
 /* ---------- Vertical (mobile / Trilha mobile) ---------- */

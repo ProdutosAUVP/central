@@ -55,7 +55,7 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
         {description && <p className="text-sm text-muted-foreground mt-1 pr-[104px]">{description}</p>}
       </div>
 
-      <div className={cn(isDark && "dark")}>
+      <div className={cn(isDark ? "dark" : "light", brand === "escola" && "escola")}>
         <div className="p-6 flex flex-wrap items-center gap-4 bg-background text-foreground">
           {children}
         </div>

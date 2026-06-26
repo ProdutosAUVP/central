@@ -173,7 +173,7 @@
     --chart-div-mid: 40 30% 95%;
     --chart-div-pos: 42 100% 33%;
 
-    --spotlight: hsl(145 55% 38% / 0.09);
+    --spotlight: hsl(42 84% 63% / 0.09);
   }
 
   .dark {
@@ -284,8 +284,8 @@
     --accent: 42 90% 65%;
     --accent-foreground: 0 0% 8%;
 
-    --border: 40 10% 18%;
-    --input: 40 10% 16%;
+    --border: 42 30% 20%;
+    --input: 42 25% 17%;
     --ring: 42 90% 65%;
 
     --brand: 42 90% 65%;
@@ -295,8 +295,9 @@
     --brand-gradient-from: 42 84% 55%;
     --brand-gradient-to: 38 80% 25%;
 
-    --cta: 42 90% 65%;
-    --cta-foreground: 0 0% 8%;
+    /* CTA sempre verde mesmo na escola — identidade de conversão */
+    --cta: 155 93% 11%;
+    --cta-foreground: 0 0% 100%;
 
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 45 25% 92%;
@@ -443,4 +444,113 @@
 /* Livro — animação fechado → aberto no hover */
 .group\/livro:hover .livro-inner {
   transform: rotateY(-28deg) rotateX(4deg);
+}
+
+/* === .light / .light.escola ===
+   Usados pelo ComponentShowcase e SectionThemeToggle para forçar o tema
+   claro localmente mesmo quando o ancestral html tem a classe .dark.
+   Redeclara todas as variáveis que .dark sobrescreve. */
+.light {
+  --background: 0 0% 100%;
+  --foreground: 110 78% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 110 78% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 110 78% 9%;
+  --primary: 155 93% 11%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 160 55% 18%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 120 10% 95%;
+  --muted-foreground: 110 10% 40%;
+  --accent: 155 93% 11%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 142 71% 35%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 220 15% 15%;
+  --info: 210 90% 50%;
+  --info-foreground: 0 0% 100%;
+  --error: 0 84% 55%;
+  --error-foreground: 0 0% 100%;
+  --border: 120 10% 88%;
+  --input: 120 10% 88%;
+  --ring: 155 93% 11%;
+  --brand: 155 93% 11%;
+  --brand-foreground: 0 0% 100%;
+  --brand-dark: 110 78% 9%;
+  --brand-hover: 155 80% 15%;
+  --brand-gradient-from: 155 93% 11%;
+  --brand-gradient-to: 140 70% 20%;
+  --cta: 155 93% 11%;
+  --cta-foreground: 0 0% 100%;
+  --spotlight: transparent;
+  --chart-1: 152 80% 30%;
+  --chart-2: 270 60% 55%;
+  --chart-3: 38 92% 55%;
+  --chart-4: 199 89% 48%;
+  --chart-5: 340 75% 55%;
+  --chart-6: 15 80% 50%;
+  --chart-7: 90 55% 40%;
+  --chart-8: 220 30% 35%;
+  --chart-seq-1: 145 40% 92%;
+  --chart-seq-2: 150 50% 78%;
+  --chart-seq-3: 152 60% 60%;
+  --chart-seq-4: 154 75% 40%;
+  --chart-seq-5: 155 93% 11%;
+  --chart-div-neg: 0 72% 51%;
+  --chart-div-mid: 40 30% 92%;
+  --chart-div-pos: 155 93% 25%;
+}
+
+.light.escola {
+  --foreground: 220 15% 15%;
+  --card-foreground: 220 15% 15%;
+  --popover-foreground: 220 15% 15%;
+  --primary: 42 84% 63%;
+  --primary-foreground: 220 15% 15%;
+  --secondary: 40 64% 54%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 40 30% 95%;
+  --muted-foreground: 40 15% 40%;
+  --accent: 42 83% 62%;
+  --accent-foreground: 220 15% 15%;
+  --success: 145 60% 38%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 95% 52%;
+  --warning-foreground: 220 15% 15%;
+  --info: 205 80% 48%;
+  --info-foreground: 0 0% 100%;
+  --error: 0 78% 52%;
+  --error-foreground: 0 0% 100%;
+  --border: 120 10% 88%;
+  --input: 120 10% 88%;
+  --ring: 42 84% 63%;
+  --brand: 42 84% 63%;
+  --brand-foreground: 220 15% 15%;
+  --brand-dark: 42 100% 33%;
+  --brand-hover: 40 64% 54%;
+  --brand-gradient-from: 38 100% 79%;
+  --brand-gradient-to: 42 100% 33%;
+  --cta: 155 93% 11%;
+  --cta-foreground: 0 0% 100%;
+  --spotlight: hsl(42 84% 63% / 0.09);
+  --chart-1: 42 84% 55%;
+  --chart-2: 15 75% 55%;
+  --chart-3: 200 75% 45%;
+  --chart-4: 350 70% 55%;
+  --chart-5: 160 55% 40%;
+  --chart-6: 270 55% 55%;
+  --chart-7: 90 50% 45%;
+  --chart-8: 220 25% 35%;
+  --chart-seq-1: 45 80% 95%;
+  --chart-seq-2: 44 82% 80%;
+  --chart-seq-3: 43 84% 65%;
+  --chart-seq-4: 38 85% 50%;
+  --chart-seq-5: 32 90% 35%;
+  --chart-div-neg: 0 72% 51%;
+  --chart-div-mid: 40 30% 95%;
+  --chart-div-pos: 42 100% 33%;
 }

@@ -177,7 +177,7 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
             {themeButton}
           </div>
         </div>
-        <div className={cn(isDark && "dark")}>
+        <div className={cn(isDark ? "dark" : "light", brand === "escola" && "escola")}>
           <div className="p-6 bg-background text-foreground">{children}</div>
         </div>
         {codeFooter}
@@ -193,7 +193,7 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
         </span>
         {themeButton}
       </div>
-      <div className={cn(isDark && "dark")}>
+      <div className={cn(isDark ? "dark" : "light", brand === "escola" && "escola")}>
         <div className="bg-background text-foreground">{children}</div>
       </div>
       {codeFooter}

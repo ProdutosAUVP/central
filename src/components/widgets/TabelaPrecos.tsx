@@ -133,13 +133,13 @@ export function TabelaPrecos() {
             )}
           >
             {plan.featuredLabel && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground dark:bg-[hsl(145_20%_44%)] dark:text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap shadow-md">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground dark:bg-[hsl(var(--brand))] dark:text-[hsl(var(--brand-foreground))] px-5 py-1.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap shadow-md">
                 {plan.featuredLabel}
               </div>
             )}
 
             {plan.discount && (
-              <Badge variant="secondary" className="w-fit mb-3 bg-foreground text-background dark:bg-[hsl(145_20%_44%)] dark:text-white text-[10px] font-bold uppercase">
+              <Badge variant="secondary" className="w-fit mb-3 bg-foreground text-background dark:bg-[hsl(var(--brand))] dark:text-[hsl(var(--brand-foreground))] text-[10px] font-bold uppercase">
                 {plan.discount}
               </Badge>
             )}
