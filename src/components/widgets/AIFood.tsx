@@ -49,7 +49,7 @@ Cores de texto por fundo:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 3. BOTÕES (identidade visual mais marcante da Capital)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• BORDAS RETAS — border-radius: 0px. NUNCA arredondar.
+• border-radius: 5px (padrão do Design System)
 • Padding: py-[18px] px-[32px]
 • Border: SEMPRE 1px solid
 • Primário (fundo claro): bg #023619  text #FFF   border #023619
@@ -142,7 +142,7 @@ Exibição: Statistic/KPI | Timeline | Tree | Descriptions | Tabela | Progress B
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 9. CHECKLIST FINAL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-□ Nenhum border-radius em botão (deve ser 0)
+□ Botões com border-radius: 5px
 □ Cards com radius 12px
 □ Tipografia Anek/Roboto/Sora corretamente atribuída com pesos exatos
 □ Múltiplos de 15px em todos os gaps
@@ -219,8 +219,8 @@ Estados do input:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 6. BOTÕES (DIFERENTE da LP institucional — aqui são arredondados)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Primário:   bg-[#023619] text-white  font-sora font-bold uppercase text-sm  py-3 px-6  rounded-xl  hover:bg-[#011F0E]
-• Secundário: bg-green-50  text-[#023619]  rounded-xl  py-3 px-6
+• Primário:   bg-[#023619] text-white  font-sora font-bold uppercase text-sm  py-3 px-6  rounded-[5px]  hover:bg-[#011F0E]
+• Secundário: bg-green-50  text-[#023619]  rounded-[5px]  py-3 px-6
 • Tab/pílula: rounded-full px-4 py-2  |  ativo: bg-[#023619] text-white  |  inativo: bg-gray-100 text-gray-600
 
 Estados do botão:
@@ -252,7 +252,7 @@ Estados do botão:
 9. CHECKLIST FINAL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 □ Card pai: bg-white + rounded-2xl + shadow-xl
-□ Botões: rounded-xl (NÃO retos como na LP)
+□ Botões: rounded-[5px] (border-radius: 5px)
 □ Slider: thumb #023619 + border-white 2px + shadow
 □ Valores: tabular-nums + font-anek + cor #023619
 □ Labels: Roboto 500 uppercase
@@ -339,7 +339,7 @@ Estados do card:
 5. BOTÕES (regra unificada com Capital em LPs)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • ❌ NUNCA rounded-full em LP. Pílulas só em Ferramentas.
-• border-radius: 0px (bordas retas)
+• border-radius: 5px (padrão do Design System)
 • Padding: py-[18px] px-[32px]
 • Primário (fundo claro): bg #EFBF4E  text #023619  border #EFBF4E
   Hover: bg transparent  border #EFBF4E  text #18181B
@@ -418,7 +418,7 @@ Exibição: Statistic/KPI | Timeline | Tree | Descriptions | Tabela | Progress B
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 □ Cards com backdrop-filter: blur(24px)
 □ Fundos com gradiente radial (nunca branco chapado)
-□ Botões retos (radius 0) em LP — pílula PROIBIDA
+□ Botões com border-radius: 5px em LP — pílula PROIBIDA
 □ Eyebrow dourado com tracking 1.5px e pill container
 □ Verde Capital SOMENTE em texto de botão dourado
 □ Hover de card: translateY(-8px) + glow dourado 320ms
@@ -494,10 +494,10 @@ Track: h-1.5 bg-d1d5db rounded-full
 accent-color: #EFBF4E
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-6. BOTÕES (rounded aqui — diferente de LP)
+6. BOTÕES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Primário:   bg-[#EFBF4E] text-zinc-900  font-sora font-bold uppercase text-sm  py-3 px-6  rounded-xl  hover:bg-[#D4A73D]
-• Secundário: bg-zinc-100  text-zinc-700   rounded-xl  py-3 px-6
+• Primário:   bg-[#EFBF4E] text-zinc-900  font-sora font-bold uppercase text-sm  py-3 px-6  rounded-[5px]  hover:bg-[#D4A73D]
+• Secundário: bg-zinc-100  text-zinc-700   rounded-[5px]  py-3 px-6
 • Tab/pílula: rounded-full px-4 py-2  |  ativo: bg-[#EFBF4E] text-zinc-900  |  inativo: bg-zinc-100 text-zinc-600
 
 Estados:
@@ -532,7 +532,7 @@ Estados:
 □ Slider: thumb dourado #EFBF4E + border-white 3px + shadow
 □ Valores: font-anek + tabular-nums + cor #B8860B
 □ Container: bg-white + rounded-2xl + shadow suave
-□ Botões: rounded-xl (aqui é permitido)
+□ Botões: rounded-[5px] (border-radius: 5px)
 □ Todos os 8 estados da ferramenta implementados
 
 Agora gere a ferramenta solicitada:`,

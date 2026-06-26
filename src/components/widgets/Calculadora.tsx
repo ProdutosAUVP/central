@@ -719,7 +719,7 @@ export function Calculadora() {
     font-size: 14px; color: hsl(var(--muted-foreground)); margin-bottom: 24px; }
   .details-link { background: 0; border: 0; cursor: pointer; color: hsl(var(--accent)); font-weight: 500; }
   .cta { width: 100%; padding: 12px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground));
-    border: 0; border-radius: 12px; font-weight: 600; font-family: 'Sora', sans-serif; cursor: pointer; }
+    border: 0; border-radius: 5px; font-weight: 600; font-family: 'Sora', sans-serif; cursor: pointer; }
   .dropdown { position: absolute; left: 0; top: 100%; margin-top: 8px; width: 224px;
     background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-height: 240px; overflow-y: auto; z-index: 10; }

@@ -173,6 +173,17 @@
     --chart-div-mid: 40 30% 95%;
     --chart-div-pos: 42 100% 33%;
 
+    --border: 45 80% 95%;
+    --input: 45 80% 95%;
+
+    /* === Status semânticos (Escola) — âmbar em vez de verde === */
+    --success: 38 80% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* CTA dourado na Escola */
+    --cta: 42 84% 63%;
+    --cta-foreground: 220 15% 15%;
+
     --spotlight: hsl(42 84% 63% / 0.09);
   }
 
@@ -295,9 +306,13 @@
     --brand-gradient-from: 42 84% 55%;
     --brand-gradient-to: 38 80% 25%;
 
-    /* CTA sempre verde mesmo na escola — identidade de conversão */
-    --cta: 155 93% 11%;
-    --cta-foreground: 0 0% 100%;
+    /* CTA dourado na escola dark */
+    --cta: 42 90% 65%;
+    --cta-foreground: 0 0% 8%;
+
+    /* Status — âmbar em vez de verde */
+    --success: 38 80% 55%;
+    --success-foreground: 0 0% 8%;
 
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 45 25% 92%;
@@ -525,8 +540,8 @@
   --info-foreground: 0 0% 100%;
   --error: 0 78% 52%;
   --error-foreground: 0 0% 100%;
-  --border: 120 10% 88%;
-  --input: 120 10% 88%;
+  --border: 45 80% 95%;
+  --input: 45 80% 95%;
   --ring: 42 84% 63%;
   --brand: 42 84% 63%;
   --brand-foreground: 220 15% 15%;
@@ -534,8 +549,10 @@
   --brand-hover: 40 64% 54%;
   --brand-gradient-from: 38 100% 79%;
   --brand-gradient-to: 42 100% 33%;
-  --cta: 155 93% 11%;
-  --cta-foreground: 0 0% 100%;
+  --success: 38 80% 45%;
+  --success-foreground: 0 0% 100%;
+  --cta: 42 84% 63%;
+  --cta-foreground: 220 15% 15%;
   --spotlight: hsl(42 84% 63% / 0.09);
   --chart-1: 42 84% 55%;
   --chart-2: 15 75% 55%;

@@ -910,6 +910,7 @@ export default function DesignSystemPage() {
               title="Cards & Containers"
               description="Border radius 12px sempre. Contraste baixo entre card e fundo da dobra. Dobra preta → card #1B1B1B. Dobra cinza → card #FFF. Dobra branca → card #F2F2F2."
               code={cardsContainersSrc}
+              showToggle={false}
             >
               <CardsContainers />
             </ComponentShowcase>
@@ -942,7 +943,7 @@ import { ArrowRight } from "lucide-react";
                 htmlCode={`<!-- Base compartilhada por todas as variantes -->
 <style>
   .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem;
-    padding:0.625rem 1.25rem; border-radius:12px; font-family:'Sora',sans-serif;
+    padding:0.625rem 1.25rem; border-radius:5px; font-family:'Sora',sans-serif;
     font-weight:700; text-transform:uppercase; font-size:13px; letter-spacing:0.02em;
     border:1px solid transparent; cursor:pointer; transition:all 0.2s; }
   .btn-lg { padding:1rem 2rem; height:48px; font-size:14px; }
@@ -952,11 +953,11 @@ import { ArrowRight } from "lucide-react";
   .btn-default:hover { background:transparent; color:var(--primary,#023619); }
 
   /* CTA Landing Page */
-  .btn-cta { background:#023619; color:#fff; border-radius:0; }
+  .btn-cta { background:#023619; color:#fff; }
   .btn-cta:hover { background:transparent; color:#023619; border-color:#023619; }
 
   /* CTA Invertido (para fundos escuros) */
-  .btn-cta-inverted { background:#fafafa; color:#023619; border-color:#fafafa; border-radius:0; }
+  .btn-cta-inverted { background:#fafafa; color:#023619; border-color:#fafafa; }
   .btn-cta-inverted:hover { background:#e0e0e0; border-color:#e0e0e0; }
 
   /* Secundário */
@@ -1011,7 +1012,7 @@ import { ArrowRight } from "lucide-react";
                 htmlCode={`<style>
   .btn { display:inline-flex; align-items:center; justify-content:center;
     background:var(--primary,#023619); color:#fff; border:1px solid var(--primary,#023619);
-    border-radius:12px; font-family:'Sora',sans-serif; font-weight:700; text-transform:uppercase;
+    border-radius:5px; font-family:'Sora',sans-serif; font-weight:700; text-transform:uppercase;
     cursor:pointer; }
   .btn-sm      { height:36px; padding:0 0.75rem;  font-size:12px; }
   .btn-default { height:40px; padding:0 1.25rem;  font-size:13px; }
@@ -1033,7 +1034,7 @@ import { ArrowRight } from "lucide-react";
               </ComponentShowcase>
               <ComponentShowcase title="CTA em Fundo Escuro" description="Comportamento do botão invertido"
                 code={`<Button variant="cta-inverted" size="lg">Começar Agora</Button>`}
-                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fff; color:#023619; padding:1rem 2rem; border-radius:12px; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:13px; border:none; cursor:pointer;">COMEÇAR AGORA</button>\n</div>`}>
+                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fff; color:#023619; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:13px; border:none; cursor:pointer;">COMEÇAR AGORA</button>\n</div>`}>
                 <div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg flex items-center gap-4 w-full">
                   <Button variant="cta-inverted" size="lg">Começar Agora</Button>
                 </div>
