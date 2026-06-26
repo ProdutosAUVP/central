@@ -93,7 +93,7 @@ const close = () => setStep(-1);
 
     {step >= 0 && box && (
       <>
-        <div className="absolute inset-0 bg-[hsl(145_20%_44%/0.7)] z-40 rounded-xl pointer-events-none" />
+        <div className="absolute inset-0 z-40 rounded-xl pointer-events-none" style={{ backgroundColor: "rgba(0,0,0,0.6)" }} />
         <div
           className="absolute z-40 rounded-lg ring-4 ring-primary pointer-events-none transition-all duration-300"
           style={{ top: box.top, left: box.left, width: box.w, height: box.h, boxShadow: "0 0 0 9999px transparent" }}
@@ -161,7 +161,7 @@ const close = () => setStep(-1);
   .tour-pill-3 { width:24px; background:hsl(var(--warning, 38 92% 50%)); }
   .tour-overlay {
     position:absolute; inset:0; z-index:40; border-radius:12px; pointer-events:none;
-    background:hsl(145 20% 44% / 0.7);
+    background:rgba(0,0,0,0.6);
   }
   .tour-spot {
     position:absolute; z-index:41; border-radius:8px; pointer-events:none;
@@ -283,7 +283,7 @@ const close = () => setStep(-1);
 
           {step >= 0 && box && (
             <>
-              <div className="absolute inset-0 bg-[hsl(145_20%_44%/0.7)] z-40 rounded-xl pointer-events-none" />
+              <div className="absolute inset-0 z-40 rounded-xl pointer-events-none" style={{ backgroundColor: "rgba(0,0,0,0.6)" }} />
               <div
                 className="absolute z-40 rounded-lg ring-4 ring-primary pointer-events-none transition-all duration-300"
                 style={{ top: box.top, left: box.left, width: box.w, height: box.h, boxShadow: "0 0 0 9999px transparent" }}
