@@ -76,6 +76,10 @@ Sem isso, o path quebra no GitHub Pages (base `/central/`).
 1. Criar componente em `src/components/widgets/NomeWidget.tsx`
 2. Importar e adicionar em `src/pages/DesignSystem.tsx` dentro de um `<ComponentShowcase>`
 
+## Pull Requests
+
+Todo PR deve ser escrito **em português**: título, descrição e comentários. Isso inclui PRs gerados por IA.
+
 ## Build e deploy
 
 ```bash

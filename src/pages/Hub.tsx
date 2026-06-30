@@ -602,15 +602,10 @@ function RotatingPreview({ items }: { items: string[] }) {
   );
 }
 
-function SectionHeader({ icon: Icon, title, action }: { icon: React.ElementType; title: string; action?: React.ReactNode }) {
+function SectionHeader({ title, action }: { icon?: React.ElementType; title: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
-          <Icon className="h-5 w-5" />
-        </div>
-        <h2 className="text-base sm:text-xl font-bold font-anek text-foreground">{title}</h2>
-      </div>
+      <h2 className="text-base sm:text-xl font-bold font-anek text-foreground">{title}</h2>
       {action && <div className="shrink-0">{action}</div>}
     </div>
   );
@@ -872,7 +867,6 @@ export default function Hub() {
                     )}
                   </div>
                   <div className="p-3 flex flex-col gap-1">
-                    <span className={cn("text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded w-fit font-roboto", item.tagColor)}>{item.tag}</span>
                     <p className="font-semibold font-anek text-foreground text-sm leading-snug">{item.nome}</p>
                     <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
                   </div>
