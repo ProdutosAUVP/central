@@ -12,14 +12,15 @@ export function FeedbackButton() {
 
   const handleClick = useCallback(() => {
     new Audio(publicUrl("/meow.mp3")).play().catch(() => {});
-    window.Userback?.open?.();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    try { (window as any).Userback?.open(); } catch {}
   }, []);
 
   return (
     <div className="fixed bottom-6 right-6 z-[55] flex flex-col items-end gap-2 pointer-events-none">
       {/* Tooltip permanente com seta apontando para o gatinho */}
       <div className="relative pointer-events-none px-3 py-1.5 rounded-xl text-xs font-roboto font-medium whitespace-nowrap bg-card border border-border shadow-md text-foreground">
-        Enviar review
+        Sentiu falta de algo?
         <span className="absolute -bottom-[5px] right-7 w-2.5 h-2.5 bg-card border-r border-b border-border rotate-45" />
       </div>
 
