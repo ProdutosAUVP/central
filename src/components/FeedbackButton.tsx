@@ -31,7 +31,7 @@ export function FeedbackButton() {
 
   return (
     <div className="fixed bottom-6 right-6 z-[55] flex flex-col items-end gap-2.5 pointer-events-none">
-      {/* Tooltip nativo */}
+      {/* Tooltip */}
       <div
         className={cn(
           "pointer-events-none px-3 py-1.5 rounded-xl text-xs font-roboto font-medium whitespace-nowrap",
@@ -40,7 +40,7 @@ export function FeedbackButton() {
           hovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         )}
       >
-        Enviar feedback
+        Enviar review
       </div>
 
       {/* Botão gatinho */}
@@ -57,7 +57,7 @@ export function FeedbackButton() {
           "active:scale-95",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         )}
-        aria-label="Enviar feedback"
+        aria-label="Enviar review"
       >
         <img
           src={publicUrl(hovered ? "/gatin2.webp" : "/gatin1.webp")}

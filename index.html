@@ -49,6 +49,7 @@
        * mas um nível abaixo (z-index 54 < z-[55] do React).
        * O gatinho fica visível; ao clicar, o elementFromPoint encontra
        * o botão do Userback abaixo e dispara seu handler nativo.
+       * Todo o texto nativo ("Não encontrou o que precisava" etc.) é ocultado.
        */
       .userback-button-e,
       #userback-button-e,
@@ -58,6 +59,21 @@
         z-index: 54 !important;
         opacity: 0 !important;
         /* Sem pointer-events:none — elementFromPoint precisa encontrá-lo */
+      }
+
+      /* Oculta qualquer texto / label nativo do widget Userback */
+      [class*="userback-button"] span,
+      [class*="userback-button"] p,
+      [class*="userback-button"] .label,
+      [class*="userback-button"] .ub-label,
+      [class*="userback-button"] .ub-text,
+      [id*="userback-button"] span,
+      [id*="userback-button"] p,
+      [id*="userback"] .ub-label,
+      [id*="userback"] .ub-text,
+      [class*="userback-launcher"],
+      [id*="userback-launcher"] {
+        display: none !important;
       }
     </style>
     <script>
