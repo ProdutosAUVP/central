@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { ChevronDown, Sun, Moon, Bot, Check, Copy } from "lucide-react";
 import { useBrand } from "@/contexts/BrandContext";
 import { useSystemView } from "@/contexts/ViewContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { generateComponentPrompt } from "@/lib/ai-food-generator";
 
 interface ComponentShowcaseProps {
@@ -19,6 +20,7 @@ interface ComponentShowcaseProps {
 export function ComponentShowcase({ title, description, code, htmlCode, children, className, showToggle = true }: ComponentShowcaseProps) {
   const { brand } = useBrand();
   const { view } = useSystemView();
+  const { theme } = useTheme();
 
   const effectiveCode =
     code ??
@@ -26,8 +28,12 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
   const hasCode = Boolean(code);
   const [showCode, setShowCode] = useState(false);
   const [codeTab, setCodeTab] = useState<"react" | "html" | "ai-food">("react");
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(theme === "dark");
   const [aiFoodCopied, setAIFoodCopied] = useState(false);
+
+  useEffect(() => {
+    setIsDark(theme === "dark");
+  }, [theme]);
 
   const aiFoodPrompt = generateComponentPrompt(brand, view, title, description, code, htmlCode);
 
