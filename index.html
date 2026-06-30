@@ -43,45 +43,31 @@
         }
       }(window.location));
     </script>
-    <style>
-      /*
-       * Posiciona o botão nativo do Userback no mesmo canto que o gatinho
-       * mas um nível abaixo (z-index 54 < z-[55] do React).
-       * O gatinho fica visível; ao clicar, o elementFromPoint encontra
-       * o botão do Userback abaixo e dispara seu handler nativo.
-       * Todo o texto nativo ("Não encontrou o que precisava" etc.) é ocultado.
-       */
-      .userback-button-e,
-      #userback-button-e,
-      [id*="userback-button-e"] {
-        bottom: 1.5rem !important;
-        right: 1.5rem !important;
-        z-index: 54 !important;
-        opacity: 0 !important;
-        /* Sem pointer-events:none — elementFromPoint precisa encontrá-lo */
-      }
-
-      /* Oculta qualquer texto / label nativo do widget Userback */
-      [class*="userback-button"] span,
-      [class*="userback-button"] p,
-      [class*="userback-button"] .label,
-      [class*="userback-button"] .ub-label,
-      [class*="userback-button"] .ub-text,
-      [id*="userback-button"] span,
-      [id*="userback-button"] p,
-      [id*="userback"] .ub-label,
-      [id*="userback"] .ub-text,
-      [class*="userback-launcher"],
-      [id*="userback-launcher"] {
-        display: none !important;
-      }
-    </style>
     <script>
       window.Userback = window.Userback || {};
       Userback.access_token = "A-F3dpS5OyrysALHYgAKS1QdXBt";
       (function(d) {
         var s = d.createElement('script');s.async = true;s.src = 'https://static.userback.io/widget/v1.js';(d.head || d.body).appendChild(s);
       })(document);
+
+      /*
+       * Esconde o botão nativo do Userback via JS (mais confiável que CSS,
+       * pois o widget usa estilos inline que sobrescrevem opacity/display).
+       * O formulário de feedback continua abrindo via window.Userback.open().
+       */
+      (function() {
+        var tries = 0;
+        function hideNativeBtn() {
+          var els = document.querySelectorAll(
+            '#userback-button, .userback-button, #userback-button-e, .userback-button-e, [id*="userback-button"], [class*="userback-button"]'
+          );
+          els.forEach(function(el) {
+            el.style.setProperty('display', 'none', 'important');
+          });
+          if (tries++ < 60) setTimeout(hideNativeBtn, 500);
+        }
+        hideNativeBtn();
+      })();
     </script>
   </head>
 
