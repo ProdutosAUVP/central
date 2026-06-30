@@ -255,6 +255,7 @@ function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fg
   const ref = React.useRef<HTMLDivElement>(null);
   const [hex, setHex] = useState("");
   const [rgb, setRgb] = useState("");
+  const { theme } = useTheme();
 
   React.useEffect(() => {
     if (!ref.current) return;
@@ -265,7 +266,7 @@ function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fg
       setHex(rgbToHex(r, g, b));
       setRgb(`${r}, ${g}, ${b}`);
     }
-  });
+  }, [cssVar, theme]);
 
   return (
     <div className="space-y-2" ref={ref}>
@@ -438,9 +439,6 @@ export default function DesignSystemPage() {
     const el = document.querySelector<HTMLElement>(`[data-nav-id="${activeSection}"]`);
     el?.scrollIntoView({ block: "nearest" });
   }, [activeSection]);
-
-  // Todas as seções estão sempre montadas; a busca filtra apenas a sidebar.
-  const isVisible = (_sectionId: string) => true;
 
   // Navega para uma seção (sempre presente no DOM).
   const goToSection = React.useCallback((id: string) => {
@@ -721,11 +719,10 @@ export default function DesignSystemPage() {
         <main className="flex-1 py-6 md:py-8 pl-0 md:pl-8 space-y-12 md:space-y-16 min-w-0 overflow-hidden">
 
           {/* ===== GERAL ===== */}
-          {isVisible("intro") && <section id="intro"><Introducao /></section>}
+          <section id="intro"><Introducao /></section>
 
-          {isVisible("marca") && <>
-          {isVisible("intro") && <Separator />}
-          <section id="marca" className={!isVisible("intro") ? "pt-0" : ""}>
+          <Separator />
+          <section id="marca">
             <h2 className="text-2xl font-bold mb-2">Marca & Logos</h2>
             <p className="text-muted-foreground mb-6">Repositório oficial das aplicações da marca. Utilize sempre os arquivos originais sem distorções.</p>
             <div className="rounded-xl border border-border bg-muted/40 p-4 md:p-5 mb-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
@@ -749,9 +746,7 @@ export default function DesignSystemPage() {
             </div>
             <SectionThemeToggle bare title="Marca & Logos" description="Aplicações oficiais de marca AUVP. Use sempre os arquivos originais sem distorções nem recortes." code={marcaLogosSrc} htmlCode={marcaLogosHtml}><MarcaLogos /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("typography") && <>
           <Separator />
           <section id="typography">
             <h2 className="text-2xl font-bold mb-2">Tipografia</h2>
@@ -791,9 +786,7 @@ export default function DesignSystemPage() {
               <button className="bg-primary text-primary-foreground px-4 md:px-6 py-2.5 md:py-3 font-sora font-bold text-[13px] uppercase tracking-wider rounded-xl">Botão — Sora Bold 13px (exclusivo)</button>
             </div>
           </section>
-          </>}
 
-          {isVisible("colors") && <>
           <Separator />
           <section id="colors">
             <h2 className="text-2xl font-bold mb-2">Cores</h2>
@@ -879,29 +872,23 @@ export default function DesignSystemPage() {
               <SectionThemeToggle bare title="Paleta de Dados & Gráficos" description="Conjunto expandido de cores derivado da identidade de marca, usado em tabelas com múltiplas categorias, gráficos de pizza, barras, linhas e mapas de calor." code={paletaDataVizSrc} selfDocumented><PaletaDataViz /></SectionThemeToggle>
             </div>
           </section>
-          </>}
 
-          {isVisible("icons") && <>
           <Separator />
           <section id="icons">
             <h2 className="text-2xl font-bold mb-2">Ícones</h2>
             <p className="text-muted-foreground mb-6">Biblioteca de ícones Phosphor Icons utilizada em todo o ecossistema AUVP.</p>
             <SectionThemeToggle bare title="Ícones Phosphor" description="Biblioteca Phosphor Icons utilizada em todo o ecossistema AUVP. Inclui variantes regular, bold e fill." code={iconesSrc} selfDocumented><Icones /></SectionThemeToggle>
           </section>
-          </>}
 
 
           {/* ===== LAYOUT & ESTRUTURA ===== */}
-          {isVisible("layout") && <>
           <Separator />
           <section id="layout">
             <h2 className="text-2xl font-bold mb-2">Layout & Espaçamento</h2>
             <p className="text-muted-foreground mb-6">Ritmo vertical e alinhamento baseados em múltiplos de 15px.</p>
             <SectionThemeToggle bare title="Layout & Espaçamento" description="Ritmo vertical e alinhamento baseados em múltiplos de 15px. Container max-w-1200px, padding inline 24px, seções alternam entre #FFF → #F2F2F2 → #000." code={layoutEspacamentoSrc} selfDocumented><LayoutEspacamento /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("cards-containers") && <>
           <Separator />
           <section id="cards-containers">
             <h2 className="text-2xl font-bold mb-2">Cards & Containers</h2>
@@ -915,9 +902,7 @@ export default function DesignSystemPage() {
               <CardsContainers />
             </ComponentShowcase>
           </section>
-          </>}
 
-          {isVisible("buttons") && <>
           <Separator />
           <section id="buttons">
             <h2 className="text-2xl font-bold mb-2">Botões</h2>
@@ -1041,11 +1026,9 @@ import { ArrowRight } from "lucide-react";
               </ComponentShowcase>
             </div>
           </section>
-          </>}
 
 
           {/* ===== SEÇÕES DE PÁGINA ===== */}
-          {isVisible("grade") && <>
           <Separator />
           <section id="grade">
             <h2 className="text-2xl font-bold mb-2">Grade Curricular</h2>
@@ -1135,282 +1118,222 @@ function showTab(tabId) {
               <GradeCurricular />
             </ComponentShowcase>
           </section>
-          </>}
 
-          {isVisible("countdown") && <>
           <Separator />
           <section id="countdown">
             <h2 className="text-2xl font-bold mb-2">Contagem Regressiva</h2>
             <p className="text-muted-foreground mb-6">Widget dinâmico focado em escassez, utilizando cards com backdrop-blur e transparência.</p>
             <SectionThemeToggle bare title="Contagem Regressiva" description="Widget de countdown dinâmico focado em escassez. Cards com backdrop-blur e transparência. Exibe dias, horas, minutos e segundos em tempo real." code={contagemRegressivaSrc} selfDocumented><ContagemRegressiva /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("faq") && <>
           <Separator />
           <section id="faq">
             <h2 className="text-2xl font-bold mb-2">Dropdown</h2>
             <p className="text-muted-foreground mb-6">Componente global de dropdown para páginas de vendas, com temas claro e escuro.</p>
             <SectionThemeToggle bare title="Dropdown / FAQ" description="Accordion para páginas de vendas com temas claro e escuro. Ícone de + que gira para × na abertura. Transição suave de altura." code={faqDuvidasSrc} selfDocumented><FaqDuvidas /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("pricing") && <>
           <Separator />
           <section id="pricing">
             <h2 className="text-2xl font-bold mb-2">Tabela de Preços</h2>
             <p className="text-muted-foreground mb-6">Toggle animado com cards translúcidos, badges de desconto e CTA.</p>
             <SectionThemeToggle bare title="Tabela de Preços" description="Toggle animado mensal/anual com cards translúcidos, badge de desconto percentual e CTA primário em destaque." code={tabelaPrecosSrc} htmlCode={tabelaPrecosHtml}><TabelaPrecos /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("journey") && <>
           <Separator />
           <section id="journey">
             <h2 className="text-2xl font-bold mb-2">Jornada do Herói</h2>
             <p className="text-muted-foreground mb-6">Timeline interativa com pontos clicáveis e barra de progresso animada.</p>
             <SectionThemeToggle bare title="Jornada do Herói" description="Timeline interativa com pontos clicáveis, barra de progresso animada e painel de conteúdo contextual para cada etapa da jornada." code={jornadaHeroiSrc} htmlCode={jornadaHeroiHtml}><JornadaHeroi /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("floaters") && <>
           <Separator />
           <section id="floaters">
             <h2 className="text-2xl font-bold mb-2">Widgets Flutuantes</h2>
             <p className="text-muted-foreground mb-6">Botões flutuantes (WhatsApp, Porquinho da Economia) com animação contínua.</p>
             <SectionThemeToggle bare title="Widgets Flutuantes" description="Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado." code={widgetsFlutuantesSrc} selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("site-calc") && <>
           <Separator />
           <section id="site-calc">
             <h2 className="text-2xl font-bold mb-2">Calculadora de Rendimentos</h2>
             <p className="text-muted-foreground mb-6">Widget de simulação para landing pages com tipografia e CTAs do tema Sites.</p>
             <SectionThemeToggle bare title="Calculadora de Rendimentos" description="Widget de simulação para landing pages com slider de valor, resultado animado e CTAs do tema Sites. Identidade visual Capital/Escola via contexto de marca." code={calculadoraRendimentosSrc} selfDocumented><CalculadoraRendimentos /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tool-calc") && <>
           <Separator />
           <section id="tool-calc">
             <h2 className="text-2xl font-bold mb-2">Calculadora de Câmbio</h2>
             <p className="text-muted-foreground mb-6">Ferramenta interativa de conversão de moedas com IOF, VET e identidade visual da marca ({brand === "capital" ? "Capital" : "Escola"}).</p>
             <SectionThemeToggle bare title="Calculadora de Câmbio" description="Ferramenta interativa de conversão de moedas com cálculo automático de IOF, VET e exibição de cotação. Suporta múltiplas moedas e sentidos de conversão." code={calculadoraSrc} selfDocumented><Calculadora /></SectionThemeToggle>
           </section>
-          </>}
 
 
           {/* ===== FEEDBACK & OVERLAYS ===== */}
-          {isVisible("tooltips") && <>
           <Separator />
           <section id="tooltips">
             <h2 className="text-2xl font-bold mb-2">Tooltips & Popups</h2>
             <p className="text-muted-foreground mb-6">Elementos flutuantes e guias de interação para Landing Pages.</p>
             <SectionThemeToggle bare title="Tooltips & Popups" description="Elementos flutuantes ancorados ao gatilho: tooltip simples (hover), popover com conteúdo rico (clique) e popup de destaque para Landing Pages." code={tooltipsPopupsSrc} selfDocumented><TooltipsPopups /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("notifications") && <>
           <Separator />
           <section id="notifications">
             <h2 className="text-2xl font-bold mb-2">Notificações</h2>
             <p className="text-muted-foreground mb-6">Pilha persistente de mensagens com tipos semânticos (success / info / warning / error). Diferente do Toast: usadas para fluxos longos como uploads, salvamentos automáticos e alertas de sistema.</p>
-            <Notifications />
+            <SectionThemeToggle bare title="Notificações"><Notifications /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("popconfirm") && <>
           <Separator />
           <section id="popconfirm">
             <h2 className="text-2xl font-bold mb-2">Popconfirm</h2>
             <p className="text-muted-foreground mb-6">Confirmação inline ancorada ao gatilho — alternativa leve ao Dialog para ações destrutivas rápidas.</p>
-            <PopconfirmWidget />
+            <SectionThemeToggle bare title="Popconfirm"><PopconfirmWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("spin") && <>
           <Separator />
           <section id="spin">
             <h2 className="text-2xl font-bold mb-2">Spin (Loading)</h2>
             <p className="text-muted-foreground mb-6">Indicador de carregamento com mensagem opcional em Sora uppercase. Inclui modo overlay para encobrir áreas durante operações assíncronas.</p>
-            <SpinTipWidget />
+            <SectionThemeToggle bare title="Spin (Loading)"><SpinTipWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("skeleton-avancado") && <>
           <Separator />
           <section id="skeleton-avancado">
             <h2 className="text-2xl font-bold mb-2">Skeleton Avançado</h2>
             <p className="text-muted-foreground mb-6">Composições prontas de skeletons (lista com avatar, card de conteúdo, tabela) para evitar layout shift durante o carregamento.</p>
-            <SkeletonAvancado />
+            <SectionThemeToggle bare title="Skeleton Avançado"><SkeletonAvancado /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("empty") && <>
           <Separator />
           <section id="empty">
             <h2 className="text-2xl font-bold mb-2">Empty (Estado Vazio)</h2>
             <p className="text-muted-foreground mb-6">Placeholder para listas, buscas e tabelas sem dados, com ícone, descrição e CTA opcional para guiar a próxima ação.</p>
-            <EmptyWidget />
+            <SectionThemeToggle bare title="Empty (Estado Vazio)"><EmptyWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("result") && <>
           <Separator />
           <section id="result">
             <h2 className="text-2xl font-bold mb-2">Result</h2>
             <p className="text-muted-foreground mb-6">Tela de feedback após operações críticas (sucesso, erro, acesso negado) usando tokens semânticos success / error / warning.</p>
-            <ResultWidget />
+            <SectionThemeToggle bare title="Result"><ResultWidget /></SectionThemeToggle>
           </section>
-          </>}
 
 
           {/* ===== NAVEGAÇÃO ===== */}
-          {isVisible("drawer-simples") && <>
           <Separator />
           <section id="drawer-simples">
             <h2 className="text-2xl font-bold mb-2">Drawer</h2>
             <p className="text-muted-foreground mb-6">Painel lateral simples para edição, detalhes ou formulários secundários sem sair do contexto principal.</p>
-            <DrawerSimples />
+            <SectionThemeToggle bare title="Drawer"><DrawerSimples /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("drawer-multi") && <>
           <Separator />
           <section id="drawer-multi">
             <h2 className="text-2xl font-bold mb-2">Drawer Multi-nível</h2>
             <p className="text-muted-foreground mb-6">Drawers empilhados (push) que preservam a hierarquia em fluxos detalhados de edição sem perder o contexto da camada anterior.</p>
-            <DrawerMultiNivel />
+            <SectionThemeToggle bare title="Drawer Multi-nível"><DrawerMultiNivel /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("steps") && <>
           <Separator />
           <section id="steps">
             <h2 className="text-2xl font-bold mb-2">Steps (Wizard)</h2>
             <p className="text-muted-foreground mb-6">Etapas numeradas com estados completo / atual / pendente e linha de progresso para fluxos guiados.</p>
-            <StepsWidget />
+            <SectionThemeToggle bare title="Steps (Wizard)"><StepsWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("segmented") && <>
           <Separator />
           <section id="segmented">
             <h2 className="text-2xl font-bold mb-2">Switch</h2>
             <p className="text-muted-foreground mb-6">Toggle compacto para alternar entre poucas opções (períodos, modos de visualização) ou estados binários (on/off).</p>
-            <SegmentedWidget />
-            <div className="mt-6">
-              <SwitchSimplesWidget />
-            </div>
-            <div className="mt-6">
-              <SwitchDisabledWidget />
-            </div>
+            <SectionThemeToggle bare title="Switch">
+              <div className="w-full space-y-6">
+                <SegmentedWidget />
+                <SwitchSimplesWidget />
+                <SwitchDisabledWidget />
+              </div>
+            </SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("anchor") && <>
           <Separator />
           <section id="anchor">
             <h2 className="text-2xl font-bold mb-2">Anchor (Scroll Spy)</h2>
             <p className="text-muted-foreground mb-6">Menu lateral de âncoras que destaca a seção visível enquanto o usuário rola a página.</p>
-            <AnchorWidget />
+            <SectionThemeToggle bare title="Anchor (Scroll Spy)"><AnchorWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tabs-geist") && <>
           <Separator />
           <section id="tabs-geist">
             <h2 className="text-2xl font-bold mb-2">Tabs</h2>
             <p className="text-muted-foreground mb-6">Tabs minimalistas inspiradas no Geist: indicador em barra sob a aba ativa e divisor inferior contínuo, sem fundos coloridos.</p>
-            <TabsGeistWidget />
+            <SectionThemeToggle bare title="Tabs"><TabsGeistWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tour") && <>
           <Separator />
           <section id="tour">
             <h2 className="text-2xl font-bold mb-2">Tour</h2>
             <p className="text-muted-foreground mb-6">Onboarding guiado em sequência: overlay escuro com spotlight no elemento alvo e popover com descrição e navegação.</p>
-            <TourWidget />
+            <SectionThemeToggle bare title="Tour"><TourWidget /></SectionThemeToggle>
           </section>
-          </>}
 
 
           {/* ===== ENTRADA DE DADOS ===== */}
-          {isVisible("upload-preview") && <>
           <Separator />
           <section id="upload-preview">
             <h2 className="text-2xl font-bold mb-2">Upload com Preview</h2>
             <p className="text-muted-foreground mb-6">Dropzone de imagens com preview em grid, progresso simulado, contagem e remoção individual.</p>
-            <UploadComPreview />
+            <SectionThemeToggle bare title="Upload com Preview"><UploadComPreview /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("calendar") && <>
           <Separator />
           <section id="calendar">
             <h2 className="text-2xl font-bold mb-2">Calendário</h2>
             <p className="text-muted-foreground mb-6">Componentes de calendário para seleção de data única, intervalo de datas e versão compacta em popover. Localização em <code className="bg-muted px-1 rounded text-sm font-mono">pt-BR</code>.</p>
-            <CalendarioWidget />
+            <SectionThemeToggle bare title="Calendário"><CalendarioWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("rate") && <>
           <Separator />
           <section id="rate">
             <h2 className="text-2xl font-bold mb-2">Rate (Avaliação)</h2>
             <p className="text-muted-foreground mb-6">Estrelas interativas com hover preview, suporte a meias estrelas e modo somente-leitura. Cor padrão usa o token semântico <code className="bg-muted px-1 rounded text-sm font-mono">warning</code>.</p>
-            <RateWidget />
+            <SectionThemeToggle bare title="Rate (Avaliação)"><RateWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("mentions") && <>
           <Separator />
           <section id="mentions">
             <h2 className="text-2xl font-bold mb-2">Mentions</h2>
             <p className="text-muted-foreground mb-6">Textarea que detecta '@' (menções) ou '#' (tags) e abre sugestões em popover ancorado ao caret.</p>
-            <MentionsWidget />
+            <SectionThemeToggle bare title="Mentions"><MentionsWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("cascader") && <>
           <Separator />
           <section id="cascader">
             <h2 className="text-2xl font-bold mb-2">Cascader</h2>
             <p className="text-muted-foreground mb-6">Drill-down em colunas para navegar categorias hierárquicas (alternativa ao TreeSelect com colunas lado a lado).</p>
-            <CascaderWidget />
+            <SectionThemeToggle bare title="Cascader"><CascaderWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tool-autocomplete") && <>
           <Separator />
           <section id="tool-autocomplete">
             <h2 className="text-2xl font-bold mb-2">AutoComplete</h2>
             <p className="text-muted-foreground mb-6">Input com sugestões filtradas em popover, navegação por teclado (↑ ↓ Enter Esc) e highlight do trecho buscado.</p>
-            <AutoCompleteWidget />
+            <SectionThemeToggle bare title="AutoComplete"><AutoCompleteWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tool-treeselect") && <>
           <Separator />
           <section id="tool-treeselect">
             <h2 className="text-2xl font-bold mb-2">TreeSelect</h2>
             <p className="text-muted-foreground mb-6">Select hierárquico com nodes expansíveis para classes de ativos, taxonomias e categorias aninhadas.</p>
-            <TreeSelectWidget />
+            <SectionThemeToggle bare title="TreeSelect"><TreeSelectWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tool-transfer") && <>
           <Separator />
           <section id="tool-transfer">
             <h2 className="text-2xl font-bold mb-2">Transfer</h2>
             <p className="text-muted-foreground mb-6">Transferência de itens entre listas (disponíveis ↔ selecionados) com checkboxes, busca e ações em massa.</p>
-            <TransferWidget />
+            <SectionThemeToggle bare title="Transfer"><TransferWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("checkbox") && <>
           <Separator />
           <section id="checkbox">
             <h2 className="text-2xl font-bold mb-2">Checkbox</h2>
@@ -1436,9 +1359,7 @@ function showTab(tabId) {
               </ComponentShowcase>
             </div>
           </section>
-          </>}
 
-          {isVisible("choicebox") && <>
           <Separator />
           <section id="choicebox">
             <h2 className="text-2xl font-bold mb-2">Choicebox</h2>
@@ -1473,78 +1394,64 @@ function showTab(tabId) {
               </ComponentShowcase>
             </div>
           </section>
-          </>}
 
 
 
           {/* ===== EXIBIÇÃO DE DADOS ===== */}
-          {isVisible("statistic") && <>
           <Separator />
           <section id="statistic">
             <h2 className="text-2xl font-bold mb-2">Statistic (KPIs)</h2>
             <p className="text-muted-foreground mb-6">Cards numéricos com contagem progressiva animada, prefixos/sufixos e tendência (up/down) em tokens semânticos.</p>
-            <StatisticWidget />
+            <SectionThemeToggle bare title="Statistic (KPIs)"><StatisticWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("timeline") && <>
           <Separator />
           <section id="timeline">
             <h2 className="text-2xl font-bold mb-2">Timeline</h2>
             <p className="text-muted-foreground mb-6">Linha do tempo vertical com estados semânticos (concluído, ativo, pendente, erro) para histórico e jornada do usuário.</p>
-            <TimelineWidget />
+            <SectionThemeToggle bare title="Timeline"><TimelineWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tree") && <>
           <Separator />
           <section id="tree">
             <h2 className="text-2xl font-bold mb-2">Tree</h2>
             <p className="text-muted-foreground mb-6">Árvore expansível com ícones de pasta/arquivo para explorar estruturas hierárquicas profundas.</p>
-            <TreeWidget />
+            <SectionThemeToggle bare title="Tree"><TreeWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("descriptions") && <>
           <Separator />
           <section id="descriptions">
             <h2 className="text-2xl font-bold mb-2">Descriptions</h2>
             <p className="text-muted-foreground mb-6">Lista de propriedades chave/valor em grid responsivo. Padrão para páginas de detalhe (perfil, pedido, fatura).</p>
-            <DescriptionsWidget />
+            <SectionThemeToggle bare title="Descriptions"><DescriptionsWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tabela") && <>
           <Separator />
           <section id="tabela">
             <h2 className="text-2xl font-bold mb-2">Tabela</h2>
             <p className="text-muted-foreground mb-6">Tabela enxuta inspirada no Geist: cabeçalho discreto em caixa alta, zebra sutil nas linhas e última coluna alinhada à direita.</p>
-            <TabelaWidget />
-            <div className="mt-6">
-              <TabelaBorderedWidget />
-            </div>
+            <SectionThemeToggle bare title="Tabela">
+              <div className="w-full space-y-6">
+                <TabelaWidget />
+                <TabelaBorderedWidget />
+              </div>
+            </SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("progress-geist") && <>
           <Separator />
           <section id="progress-geist">
             <h2 className="text-2xl font-bold mb-2">Progress Bar</h2>
             <p className="text-muted-foreground mb-6">Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido e cantos totalmente arredondados.</p>
-            <ProgressGeistWidget />
+            <SectionThemeToggle bare title="Progress Bar"><ProgressGeistWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("watermark") && <>
           <Separator />
           <section id="watermark">
             <h2 className="text-2xl font-bold mb-2">Watermark (Marca d'água)</h2>
             <p className="text-muted-foreground mb-6">Texto repetido em diagonal sobre conteúdo sensível (relatórios, dashboards internos), gerado via canvas em data URL.</p>
-            <WatermarkWidget />
+            <SectionThemeToggle bare title="Watermark (Marca d'água)"><WatermarkWidget /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("tool-graficos") && <>
           <Separator />
           <section id="tool-graficos">
             <h2 className="text-2xl font-bold mb-2">Gráficos</h2>
@@ -1557,11 +1464,9 @@ function showTab(tabId) {
               <SectionThemeToggle bare title="Gráfico Donut com Legendas" description="Variações de posição da legenda: horizontal abaixo, em linha única e vertical lateral ao gráfico. Mesmas cores e regras do donut padrão." code={graficoPizzaLegendasSrc} selfDocumented><GraficoPizzaLegendas /></SectionThemeToggle>
             </div>
           </section>
-          </>}
 
 
           {/* ===== PLATAFORMA DE AULAS ===== */}
-          {isVisible("plat-courses") && <>
           <Separator />
           <section id="plat-courses">
             <div className="flex items-center gap-2 mb-2">
@@ -1571,9 +1476,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Grid de cursos com progresso e fácil retomada de aulas.</p>
             <SectionThemeToggle bare title="Visualização de Cursos" description="Grid de cursos com cards de progresso, thumbnail, badge de conclusão e botão de retomada de aula. Light/dark mode." code={platCursosSrc} htmlCode={platCursosHtml}><PlataformaCursos /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-player") && <>
           <Separator />
           <section id="plat-player">
             <div className="flex items-center gap-2 mb-2">
@@ -1583,9 +1486,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">O vídeo é o core da plataforma. Controles com overlay e auto-hide.</p>
             <SectionThemeToggle bare title="Interface do Player" description="Player de vídeo com overlay de controles, barra de progresso clicável, volume, fullscreen e auto-hide dos controles após inatividade." code={platPlayerSrc} htmlCode={platPlayerHtml}><PlataformaPlayer /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-playlist") && <>
           <Separator />
           <section id="plat-playlist">
             <div className="flex items-center gap-2 mb-2">
@@ -1595,9 +1496,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Estados: Assistindo, Concluído e Bloqueado.</p>
             <SectionThemeToggle bare title="Lista de Aulas (Playlist)" description="Lista lateral de aulas com três estados visuais distintos: Assistindo (destaque amarelo), Concluído (check verde) e Bloqueado (cadeado + opacidade reduzida)." code={platPlaylistSrc} htmlCode={platPlaylistHtml}><PlataformaPlaylist /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-dashboard") && <>
           <Separator />
           <section id="plat-dashboard">
             <div className="flex items-center gap-2 mb-2">
@@ -1607,9 +1506,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Estatísticas, atividade semanal e conquistas.</p>
             <SectionThemeToggle bare title="Dashboard do Aluno" description="Painel com KPIs (aulas assistidas, tempo total, streak), gráfico de barras de atividade semanal e grid de conquistas desbloqueadas." code={platDashboardSrc} htmlCode={platDashboardHtml}><PlataformaDashboard /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-notes") && <>
           <Separator />
           <section id="plat-notes">
             <div className="flex items-center gap-2 mb-2">
@@ -1619,9 +1516,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Notas sincronizadas com timestamp do vídeo.</p>
             <SectionThemeToggle bare title="Notas & Anotações" description="Bloco de notas vinculado ao timestamp do vídeo. Permite criar, editar e excluir notas com carimbos de tempo clicáveis para navegar na aula." code={platNotasSrc} htmlCode={platNotasHtml}><PlataformaNotas /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-rating") && <>
           <Separator />
           <section id="plat-rating">
             <div className="flex items-center gap-2 mb-2">
@@ -1631,9 +1526,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Rating por estrelas com feedback textual.</p>
             <SectionThemeToggle bare title="Avaliação de Aulas" description="Sistema de rating por estrelas com hover preview e campo de feedback textual opcional. Exibe média e distribuição de notas." code={platRatingSrc} htmlCode={platRatingHtml}><PlataformaRating /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-certificates") && <>
           <Separator />
           <section id="plat-certificates">
             <div className="flex items-center gap-2 mb-2">
@@ -1643,9 +1536,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Certificados de conclusão emitidos automaticamente ao finalizar módulos.</p>
             <SectionThemeToggle bare title="Certificados" description="Certificados de conclusão emitidos automaticamente ao finalizar módulos. Card com nome do aluno, curso, data e botão de download PDF." code={platCertificadosSrc} htmlCode={platCertificadosHtml}><PlataformaCertificados /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-community") && <>
           <Separator />
           <section id="plat-community">
             <div className="flex items-center gap-2 mb-2">
@@ -1655,9 +1546,7 @@ function showTab(tabId) {
             <p className="text-muted-foreground mb-6">Fórum de dúvidas com votos e respostas de instrutores.</p>
             <SectionThemeToggle bare title="Comunidade & Dúvidas" description="Fórum de dúvidas com votos positivos/negativos, respostas de instrutores destacadas, filtros por status e paginação." code={platComunidadeSrc} htmlCode={platComunidadeHtml}><PlataformaComunidade /></SectionThemeToggle>
           </section>
-          </>}
 
-          {isVisible("plat-livro") && <>
           <Separator />
           <section id="plat-livro">
             <div className="flex items-center gap-2 mb-2">
@@ -1744,13 +1633,10 @@ function showTab(tabId) {
               </ComponentShowcase>
             </div>
           </section>
-          </>}
 
 
-          {isVisible("ai-food") && <>
           <Separator />
           <section id="ai-food"><AIFood /></section>
-          </>}
 
           <div className="h-16" />
         </main>
