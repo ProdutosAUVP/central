@@ -10,37 +10,17 @@ declare global {
 export function FeedbackButton() {
   const [hovered, setHovered] = useState(false);
 
-  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = useCallback(() => {
     new Audio(publicUrl("/meow.mp3")).play().catch(() => {});
-
-    if (typeof window.Userback?.open === "function") {
-      window.Userback.open();
-      return;
-    }
-
-    const btn = e.currentTarget;
-    const x = e.clientX;
-    const y = e.clientY;
-    btn.style.pointerEvents = "none";
-    const target = document.elementFromPoint(x, y) as HTMLElement | null;
-    btn.style.pointerEvents = "";
-    if (target && target !== btn && target !== document.documentElement && target !== document.body) {
-      target.click();
-    }
+    window.Userback?.open?.();
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[55] flex flex-col items-end gap-2.5 pointer-events-none">
-      {/* Tooltip */}
-      <div
-        className={cn(
-          "pointer-events-none px-3 py-1.5 rounded-xl text-xs font-roboto font-medium whitespace-nowrap",
-          "bg-card border border-border shadow-md text-foreground",
-          "transition-all duration-200 ease-apple",
-          hovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-        )}
-      >
+    <div className="fixed bottom-6 right-6 z-[55] flex flex-col items-end gap-2 pointer-events-none">
+      {/* Tooltip permanente com seta apontando para o gatinho */}
+      <div className="relative pointer-events-none px-3 py-1.5 rounded-xl text-xs font-roboto font-medium whitespace-nowrap bg-card border border-border shadow-md text-foreground">
         Enviar review
+        <span className="absolute -bottom-[5px] right-7 w-2.5 h-2.5 bg-card border-r border-b border-border rotate-45" />
       </div>
 
       {/* Botão gatinho */}
