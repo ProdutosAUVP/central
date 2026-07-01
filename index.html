@@ -46,34 +46,21 @@
     <script>
       window.Userback = window.Userback || {};
       Userback.access_token = "A-F3dpS5OyrysALHYgAKS1QdXBt";
+      /*
+       * Esconde o launcher nativo do Userback assim que o widget carrega,
+       * usando a API oficial `Userback.hide()`. O gatinho (FeedbackButton)
+       * é o nosso disparador — ele chama `Userback.open('general', 'form')`.
+       *
+       * Usamos a API oficial em vez de forçar display:none no DOM porque o
+       * hack de CSS também escondia o formulário aberto (o widget reaproveita
+       * containers com "userback" no nome), impedindo o feedback de aparecer.
+       */
+      Userback.on_load = function() {
+        if (typeof Userback.hide === 'function') Userback.hide();
+      };
       (function(d) {
         var s = d.createElement('script');s.async = true;s.src = 'https://static.userback.io/widget/v1.js';(d.head || d.body).appendChild(s);
       })(document);
-
-      /*
-       * Esconde o botão nativo do Userback via JS (mais confiável que CSS,
-       * pois o widget usa estilos inline que sobrescrevem opacity/display).
-       * O formulário de feedback continua abrindo via window.Userback.open().
-       *
-       * IMPORTANTE: o Userback reaproveita elementos com "userback-button" no
-       * nome (ex: .userback-button-container) para renderizar o próprio
-       * formulário/iframe quando aberto. Por isso, nunca escondemos um
-       * elemento que contenha um <iframe> — só o botão flutuante vazio.
-       */
-      (function() {
-        var tries = 0;
-        function hideNativeBtn() {
-          var els = document.querySelectorAll(
-            '#userback-button, .userback-button, #userback-button-e, .userback-button-e, [id*="userback-button"], [class*="userback-button"]'
-          );
-          els.forEach(function(el) {
-            if (el.querySelector('iframe')) return;
-            el.style.setProperty('display', 'none', 'important');
-          });
-          if (tries++ < 60) setTimeout(hideNativeBtn, 500);
-        }
-        hideNativeBtn();
-      })();
     </script>
   </head>
 

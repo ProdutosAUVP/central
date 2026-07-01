@@ -32,6 +32,15 @@ function ThemeToggle() {
   );
 }
 
+/** Mapa de nome do mês (pt-BR) → número com dois dígitos, para o badge do Mural. */
+const MES_NUMERO: Record<string, string> = {
+  janeiro: "01", fevereiro: "02", março: "03", marco: "03", abril: "04",
+  maio: "05", junho: "06", julho: "07", agosto: "08", setembro: "09",
+  outubro: "10", novembro: "11", dezembro: "12",
+};
+
+const mesNumero = (mes: string) => MES_NUMERO[mes.trim().toLowerCase()] ?? "--";
+
 const novidadesMensais = [
   {
     mes: "Maio", ano: 2025,
@@ -679,7 +688,7 @@ export default function Hub() {
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="sm:-mt-16 md:-mt-28">
+        <Reveal className="sm:-mt-24 md:-mt-36">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
@@ -732,8 +741,9 @@ export default function Hub() {
                 >
                   <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
                     <div className="flex items-center gap-3 text-left flex-1 min-w-0">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
-                        <CalendarDays className="h-4 w-4" />
+                      <div className="flex flex-col h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 leading-none">
+                        <span className="text-[8px] font-bold font-roboto uppercase tracking-wider">mês</span>
+                        <span className="text-base font-extrabold font-anek mt-0.5">{mesNumero(n.mes)}</span>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">

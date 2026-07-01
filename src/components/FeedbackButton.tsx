@@ -3,7 +3,10 @@ import { publicUrl, cn } from "@/lib/utils";
 
 declare global {
   interface Window {
-    Userback?: { open?: () => void };
+    Userback?: {
+      open?: (feedbackType?: string, destination?: string) => void;
+      hide?: () => void;
+    };
   }
 }
 
@@ -17,7 +20,10 @@ export function FeedbackButton() {
     const openUserback = () => {
       const ub = window.Userback;
       if (ub?.open) {
-        try { ub.open(); } catch {}
+        // Abre direto o formulário ('form'), sem passar pela captura de
+        // screenshot — o modo screenshot costuma falhar/travar em SPAs,
+        // deixando o widget sem abrir (só o som do gatinho tocava).
+        try { ub.open("general", "form"); } catch { /* widget indisponível */ }
         return;
       }
       // Script do Userback ainda carregando de forma assíncrona — tenta de novo por até 5s.
