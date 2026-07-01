@@ -688,7 +688,7 @@ export default function Hub() {
         </div>
 
         {/* Acessos Rápidos — agora antes das Novidades */}
-        <Reveal className="sm:-mt-24 md:-mt-36">
+        <Reveal className="sm:-mt-32 md:-mt-48">
           <section>
             <SectionHeader icon={Zap} title="Acessos Rápidos" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
