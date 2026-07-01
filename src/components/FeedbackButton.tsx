@@ -4,8 +4,12 @@ import { publicUrl, cn } from "@/lib/utils";
 declare global {
   interface Window {
     Userback?: {
+      /** Next-Gen: abre o formulário de feedback. */
+      openForm?: () => void;
+      /** Clássico: open(feedback_type, destination). */
       open?: (feedbackType?: string, destination?: string) => void;
       hide?: () => void;
+      hideLauncher?: () => void;
     };
   }
 }
@@ -17,19 +21,23 @@ export function FeedbackButton() {
     new Audio(publicUrl("/meow.mp3")).play().catch(() => {});
 
     let tries = 0;
-    const openUserback = () => {
+    const trigger = () => {
       const ub = window.Userback;
+      // Widget Next-Gen (o que a AUVP usa): openForm() abre o formulário
+      // de feedback direto. É a API correta — o open() clássico não abria.
+      if (ub?.openForm) {
+        try { ub.openForm(); } catch { /* widget indisponível */ }
+        return;
+      }
+      // Fallback para o widget clássico: open(feedback_type, destination).
       if (ub?.open) {
-        // Abre direto o formulário ('form'), sem passar pela captura de
-        // screenshot — o modo screenshot costuma falhar/travar em SPAs,
-        // deixando o widget sem abrir (só o som do gatinho tocava).
         try { ub.open("general", "form"); } catch { /* widget indisponível */ }
         return;
       }
-      // Script do Userback ainda carregando de forma assíncrona — tenta de novo por até 5s.
-      if (tries++ < 10) setTimeout(openUserback, 500);
+      // Script do Userback ainda carregando de forma assíncrona — tenta de novo por até 6s.
+      if (tries++ < 12) setTimeout(trigger, 500);
     };
-    openUserback();
+    trigger();
   }, []);
 
   return (

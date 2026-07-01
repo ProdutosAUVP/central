@@ -742,8 +742,8 @@ export default function Hub() {
                   <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
                     <div className="flex items-center gap-3 text-left flex-1 min-w-0">
                       <div className="flex flex-col h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 leading-none">
-                        <span className="text-[8px] font-bold font-roboto uppercase tracking-wider">mês</span>
-                        <span className="text-base font-extrabold font-anek mt-0.5">{mesNumero(n.mes)}</span>
+                        <span className="text-[8px] font-bold font-roboto uppercase tracking-wider mt-1.5">mês</span>
+                        <span className="text-base font-extrabold font-anek leading-none">{mesNumero(n.mes)}</span>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
