@@ -54,6 +54,11 @@
        * Esconde o botão nativo do Userback via JS (mais confiável que CSS,
        * pois o widget usa estilos inline que sobrescrevem opacity/display).
        * O formulário de feedback continua abrindo via window.Userback.open().
+       *
+       * IMPORTANTE: o Userback reaproveita elementos com "userback-button" no
+       * nome (ex: .userback-button-container) para renderizar o próprio
+       * formulário/iframe quando aberto. Por isso, nunca escondemos um
+       * elemento que contenha um <iframe> — só o botão flutuante vazio.
        */
       (function() {
         var tries = 0;
@@ -62,6 +67,7 @@
             '#userback-button, .userback-button, #userback-button-e, .userback-button-e, [id*="userback-button"], [class*="userback-button"]'
           );
           els.forEach(function(el) {
+            if (el.querySelector('iframe')) return;
             el.style.setProperty('display', 'none', 'important');
           });
           if (tries++ < 60) setTimeout(hideNativeBtn, 500);

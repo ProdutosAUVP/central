@@ -12,8 +12,18 @@ export function FeedbackButton() {
 
   const handleClick = useCallback(() => {
     new Audio(publicUrl("/meow.mp3")).play().catch(() => {});
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    try { (window as any).Userback?.open(); } catch {}
+
+    let tries = 0;
+    const openUserback = () => {
+      const ub = window.Userback;
+      if (ub?.open) {
+        try { ub.open(); } catch {}
+        return;
+      }
+      // Script do Userback ainda carregando de forma assíncrona — tenta de novo por até 5s.
+      if (tries++ < 10) setTimeout(openUserback, 500);
+    };
+    openUserback();
   }, []);
 
   return (
