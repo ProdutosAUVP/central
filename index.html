@@ -47,16 +47,17 @@
       window.Userback = window.Userback || {};
       Userback.access_token = "A-F3dpS5OyrysALHYgAKS1QdXBt";
       /*
-       * Esconde o launcher nativo do Userback assim que o widget carrega,
-       * usando a API oficial `Userback.hide()`. O gatinho (FeedbackButton)
-       * é o nosso disparador — ele chama `Userback.open('general', 'form')`.
+       * Esconde apenas o launcher (botão flutuante) nativo do Userback assim
+       * que o widget carrega. O gatinho (FeedbackButton) é o nosso disparador
+       * — ele chama `Userback.openForm()`.
        *
-       * Usamos a API oficial em vez de forçar display:none no DOM porque o
-       * hack de CSS também escondia o formulário aberto (o widget reaproveita
-       * containers com "userback" no nome), impedindo o feedback de aparecer.
+       * IMPORTANTE: no widget Next-Gen, `hideLauncher()` esconde só o botão,
+       * enquanto `hide()` esconde o widget inteiro (o que impedia o formulário
+       * de abrir). Por isso usamos `hideLauncher()`, com fallback para `hide()`.
        */
       Userback.on_load = function() {
-        if (typeof Userback.hide === 'function') Userback.hide();
+        if (typeof Userback.hideLauncher === 'function') Userback.hideLauncher();
+        else if (typeof Userback.hide === 'function') Userback.hide();
       };
       (function(d) {
         var s = d.createElement('script');s.async = true;s.src = 'https://static.userback.io/widget/v1.js';(d.head || d.body).appendChild(s);
