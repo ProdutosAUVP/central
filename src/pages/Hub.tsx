@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { PageShell } from "@/components/PageShell";
 import { Tag, tagToneClasses } from "@/components/widgets/Tag";
+import { NovidadeCard } from "@/components/widgets/NovidadeCard";
 import { baixarAgendaIcs } from "@/components/CommandPalette";
 import { novidadesMensais, mesNumero } from "@/data/novidades";
 import { eventos, proximosEventos, type Evento } from "@/data/eventos";
@@ -738,28 +739,7 @@ export default function Hub() {
                       )}
                       <div className="space-y-5">
                         {n.items.map((item, j) => (
-                          <div key={j} className="flex gap-3">
-                            <span className="text-base leading-none shrink-0 mt-0.5">{item.emoji}</span>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-bold font-anek text-foreground text-sm mb-1 leading-snug">{item.titulo}</p>
-                              <p className="text-xs font-roboto text-muted-foreground leading-relaxed">{item.corpo}</p>
-                              {item.subitems && (
-                                <ul className="mt-2 space-y-1">
-                                  {item.subitems.map((sub, k) => (
-                                    <li key={k} className="flex gap-2 text-xs font-roboto text-muted-foreground">
-                                      <span className="text-primary shrink-0 mt-0.5">•</span>
-                                      <span>{sub}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                              {item.link && (
-                                <a href={item.link} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold font-roboto text-primary hover:underline">
-                                  Ver <ChevronRight className="h-3 w-3" />
-                                </a>
-                              )}
-                            </div>
-                          </div>
+                          <NovidadeCard key={j} item={item} />
                         ))}
                       </div>
                       {n.spoiler.length > 0 && (
