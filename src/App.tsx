@@ -6,6 +6,8 @@ import { BrandProvider } from "@/contexts/BrandContext";
 import { ViewProvider } from "@/contexts/ViewContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { CommandPalette } from "@/components/CommandPalette";
+import { EasterEgg } from "@/components/EasterEgg";
 import React from "react";
 import Hub from "./pages/Hub";
 import TimePage from "./pages/TimePage";
@@ -58,6 +60,8 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter basename={import.meta.env.BASE_URL}>
+              <CommandPalette />
+              <EasterEgg />
               <Routes>
                 <Route path="/" element={<Hub />} />
                 <Route path="/time" element={<TimePage />} />

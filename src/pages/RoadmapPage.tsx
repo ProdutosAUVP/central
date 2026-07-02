@@ -1,17 +1,8 @@
 import React, { useState } from "react";
-import { GlobalNav } from "@/components/GlobalNav";
-import { useTheme } from "@/contexts/ThemeContext";
-import { Sun, Moon, Map, Circle, CheckCircle2, Clock, Hourglass } from "lucide-react";
+import { Map, Circle, CheckCircle2, Clock, Hourglass } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  return (
-    <button onClick={toggle} aria-label={theme === "dark" ? "Tema claro" : "Tema escuro"} className="h-9 w-9 flex items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors">
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
-  );
-}
+import { PageShell } from "@/components/PageShell";
+import { Tag, type TagTone } from "@/components/widgets/Tag";
 
 type Status = "concluido" | "em-progresso" | "planejado" | "futuro";
 
@@ -23,11 +14,11 @@ interface Item {
   trimestre: string;
 }
 
-const statusConfig: Record<Status, { label: string; color: string; icon: React.ElementType; dot: string }> = {
-  "concluido":    { label: "Concluído",     color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300", icon: CheckCircle2, dot: "bg-emerald-500" },
-  "em-progresso": { label: "Em progresso",  color: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",           icon: Hourglass,    dot: "bg-blue-500"    },
-  "planejado":    { label: "Planejado",      color: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",       icon: Clock,        dot: "bg-amber-500"   },
-  "futuro":       { label: "Futuro",         color: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400",          icon: Circle,       dot: "bg-slate-400"   },
+const statusConfig: Record<Status, { label: string; tone: TagTone; icon: React.ElementType }> = {
+  "concluido":    { label: "Concluído",    tone: "success", icon: CheckCircle2 },
+  "em-progresso": { label: "Em progresso", tone: "info",    icon: Hourglass    },
+  "planejado":    { label: "Planejado",    tone: "warning", icon: Clock        },
+  "futuro":       { label: "Futuro",       tone: "neutral", icon: Circle       },
 };
 
 const roadmap: Item[] = [
@@ -85,15 +76,7 @@ export default function RoadmapPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
-          <GlobalNav />
-          <ThemeToggle />
-        </div>
-      </header>
-
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 md:px-8 py-12 space-y-10">
+    <PageShell width="5xl" footer="Roadmap do Time de Produto AUVP" mainClassName="py-12 space-y-10">
 
         {/* Hero */}
         <div>
@@ -113,10 +96,10 @@ export default function RoadmapPage() {
           {Object.entries(statusConfig).map(([key, cfg]) => {
             const Icon = cfg.icon;
             return (
-              <div key={key} className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold font-roboto", cfg.color)}>
+              <Tag key={key} tone={cfg.tone} className="px-3 py-1.5 text-xs normal-case tracking-normal">
                 <Icon className="h-3.5 w-3.5" />
                 {cfg.label}
-              </div>
+              </Tag>
             );
           })}
         </div>
@@ -161,25 +144,46 @@ export default function RoadmapPage() {
         {sortedTrimestres.length === 0 ? (
           <p className="text-muted-foreground font-roboto text-sm">Nenhum item encontrado com os filtros selecionados.</p>
         ) : (
-          sortedTrimestres.map((trimestre) => (
+          sortedTrimestres.map((trimestre) => {
+            const itens = grouped[trimestre];
+            const concluidos = itens.filter((i) => i.status === "concluido").length;
+            const progresso = Math.round((concluidos / itens.length) * 100);
+            return (
             <section key={trimestre}>
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-4 flex-wrap">
                 <h2 className="text-lg font-bold font-anek text-foreground">{trimestre}</h2>
                 <div className="flex-1 h-px bg-border" />
-                <span className="text-xs text-muted-foreground font-roboto">{grouped[trimestre].length} {grouped[trimestre].length === 1 ? "item" : "itens"}</span>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="h-1.5 w-24 rounded-full bg-muted overflow-hidden"
+                    role="progressbar"
+                    aria-valuenow={progresso}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`Progresso de ${trimestre}`}
+                  >
+                    <div
+                      className="h-full rounded-full bg-[hsl(var(--success))] transition-[width] duration-500 ease-apple"
+                      style={{ width: `${progresso}%` }}
+                    />
+                  </div>
+                  <span className="text-xs text-muted-foreground font-roboto whitespace-nowrap">
+                    {concluidos}/{itens.length} concluído{concluidos === 1 ? "" : "s"}
+                  </span>
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {grouped[trimestre].map((item, i) => {
+                {itens.map((item, i) => {
                   const cfg = statusConfig[item.status];
                   const Icon = cfg.icon;
                   return (
                     <div key={i} className="rounded-xl border bg-card p-5 flex flex-col gap-3">
                       <div className="flex items-start justify-between gap-2">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-primary font-roboto">{item.produto}</span>
-                        <span className={cn("inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full font-roboto shrink-0", cfg.color)}>
+                        <Tag tone={cfg.tone} className="shrink-0">
                           <Icon className="h-3 w-3" />
                           {cfg.label}
-                        </span>
+                        </Tag>
                       </div>
                       <div>
                         <p className="font-semibold font-anek text-foreground text-sm mb-1">{item.titulo}</p>
@@ -190,16 +194,10 @@ export default function RoadmapPage() {
                 })}
               </div>
             </section>
-          ))
+            );
+          })
         )}
 
-      </main>
-
-      <footer className="border-t py-6 px-4 md:px-8">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs text-muted-foreground font-roboto">Roadmap do Time de Produto AUVP &copy; {new Date().getFullYear()}</p>
-        </div>
-      </footer>
-    </div>
+    </PageShell>
   );
 }

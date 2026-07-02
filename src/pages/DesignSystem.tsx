@@ -138,107 +138,8 @@ import { ResultWidget } from "@/components/widgets/Result";
 import { TourWidget } from "@/components/widgets/Tour";
 import { WatermarkWidget } from "@/components/widgets/Watermark";
 
-type SectionDef = {
-  id: string;
-  label: string;
-  icon: React.ElementType;
-  category: string;
-};
-
-type SectionDefWithKeywords = SectionDef & { keywords?: string };
-
-// IMPORTANTE: a ORDEM deste array deve corresponder à ordem em que as
-// seções aparecem no JSX (DOM). O scroll-spy usa esta ordem para decidir o
-// item ativo, evitando "saltos" quando categorias estão intercaladas no DOM.
-const sections: SectionDefWithKeywords[] = [
-  // FUNDAMENTOS
-  { id: "intro", label: "Introdução", icon: Info, category: "fundamentos", keywords: "início boas-vindas overview" },
-  { id: "marca", label: "Marca & Logos", icon: Download, category: "fundamentos", keywords: "logo brand identidade download svg png" },
-  { id: "typography", label: "Tipografia", icon: Type, category: "fundamentos", keywords: "fonte fontes texto sora roboto anek" },
-  { id: "colors", label: "Cores", icon: Palette, category: "fundamentos", keywords: "paleta cor token hsl" },
-  { id: "icons", label: "Ícones", icon: Shapes, category: "fundamentos", keywords: "iconografia phosphor svg" },
-
-  // LAYOUT & ESTRUTURA
-  { id: "layout", label: "Layout & Espaçamento", icon: Layout, category: "layout", keywords: "grid spacing padding margin" },
-  { id: "cards-containers", label: "Cards & Containers", icon: Package, category: "layout", keywords: "caixa box container card" },
-  { id: "buttons", label: "Botões", icon: Square, category: "layout", keywords: "button cta ação click" },
-
-  // SEÇÕES DE PÁGINA
-  { id: "grade", label: "Grade Curricular", icon: GraduationCap, category: "secoes", keywords: "curso aula grade ementa" },
-  { id: "countdown", label: "Contagem Regressiva", icon: Clock, category: "secoes", keywords: "countdown timer contagem" },
-  { id: "faq", label: "Dropdown", icon: HelpCircle, category: "secoes", keywords: "faq dúvida pergunta accordion dropdown" },
-  { id: "pricing", label: "Tabela de Preços", icon: DollarSign, category: "secoes", keywords: "preço plano pricing assinatura" },
-  { id: "journey", label: "Jornada do Herói", icon: Map, category: "secoes", keywords: "jornada herói storytelling" },
-  { id: "floaters", label: "Widgets Flutuantes", icon: MessageCircle, category: "secoes", keywords: "whatsapp flutuante float botão" },
-  { id: "site-calc", label: "Calculadora de Rendimentos", icon: Calculator, category: "secoes", keywords: "calculadora rendimento simulação" },
-  { id: "tool-calc", label: "Calculadora de Câmbio", icon: Calculator, category: "secoes", keywords: "calculadora câmbio cambio dólar euro conversão moeda" },
-
-  // FEEDBACK & OVERLAYS
-  { id: "tooltips", label: "Tooltips & Popups", icon: MessageSquare, category: "feedback", keywords: "tooltip popover hint dica" },
-  { id: "notifications", label: "Notificações", icon: Bell, category: "feedback", keywords: "toast alert aviso" },
-  { id: "popconfirm", label: "Popconfirm", icon: ShieldAlert, category: "feedback", keywords: "confirmação confirm dialog" },
-  { id: "spin", label: "Spin (Loading)", icon: Loader2, category: "feedback", keywords: "loading carregando spinner" },
-  { id: "skeleton-avancado", label: "Skeleton Avançado", icon: Layers, category: "feedback", keywords: "skeleton placeholder loading" },
-  { id: "empty", label: "Empty (Vazio)", icon: InboxIcon, category: "feedback", keywords: "vazio nenhum nada empty state" },
-  { id: "result", label: "Result", icon: CheckCircle2, category: "feedback", keywords: "resultado sucesso erro 404 403" },
-
-  // NAVEGAÇÃO
-  { id: "drawer-simples", label: "Drawer", icon: PanelRightOpen, category: "navegacao", keywords: "drawer painel lateral sheet" },
-  { id: "drawer-multi", label: "Drawer Multi-nível", icon: PanelRightOpen, category: "navegacao", keywords: "drawer menu lateral nested" },
-  { id: "steps", label: "Steps (Wizard)", icon: ListChecks, category: "navegacao", keywords: "wizard passos etapas stepper" },
-  { id: "segmented", label: "Switch", icon: ToggleLeft, category: "navegacao", keywords: "segmented toggle aba switch" },
-  { id: "tabs-geist", label: "Tabs", icon: Columns3, category: "navegacao", keywords: "tabs abas guia geist underline" },
-  { id: "anchor", label: "Anchor (Scroll Spy)", icon: AnchorIcon, category: "navegacao", keywords: "scroll spy âncora navegação" },
-  { id: "tour", label: "Tour", icon: Compass, category: "navegacao", keywords: "onboarding tour guia spotlight" },
-
-  // ENTRADA DE DADOS
-  { id: "upload-preview", label: "Upload com Preview", icon: UploadCloud, category: "entrada", keywords: "upload arquivo file imagem" },
-  { id: "calendar", label: "Calendário", icon: CalendarIcon, category: "entrada", keywords: "calendar calendário data date picker agenda intervalo período" },
-  { id: "rate", label: "Rate (Avaliação)", icon: StarIcon, category: "entrada", keywords: "rating estrela nota avaliação" },
-  { id: "mentions", label: "Mentions", icon: AtSign, category: "entrada", keywords: "menção @ usuário tag" },
-  { id: "cascader", label: "Cascader", icon: Columns3, category: "entrada", keywords: "cascade hierárquico cascata" },
-  { id: "tool-autocomplete", label: "AutoComplete", icon: Search, category: "entrada", keywords: "busca autocomplete sugestão input" },
-  { id: "tool-treeselect", label: "TreeSelect", icon: FolderTree, category: "entrada", keywords: "select hierárquico árvore" },
-  { id: "tool-transfer", label: "Transfer", icon: ArrowLeftRight, category: "entrada", keywords: "transfer lista shuttle" },
-  { id: "checkbox", label: "Checkbox", icon: SquareCheck, category: "entrada", keywords: "checkbox seleção marcar opção" },
-  { id: "choicebox", label: "Choicebox", icon: CheckCircle2, category: "entrada", keywords: "choicebox cartão opção radio plano" },
-
-  // EXIBIÇÃO DE DADOS
-  { id: "statistic", label: "Statistic (KPIs)", icon: Activity, category: "exibicao", keywords: "kpi métrica número estatística" },
-  { id: "timeline", label: "Timeline", icon: GitCommit, category: "exibicao", keywords: "linha tempo timeline histórico" },
-  { id: "tree", label: "Tree", icon: ListTree, category: "exibicao", keywords: "árvore hierarquia tree" },
-  { id: "descriptions", label: "Descriptions", icon: ClipboardList, category: "exibicao", keywords: "descrição lista chave valor" },
-  { id: "tabela", label: "Tabela", icon: TableIcon, category: "exibicao", keywords: "tabela table grid linhas colunas geist zebra" },
-  { id: "progress-geist", label: "Progress Bar", icon: Activity, category: "exibicao", keywords: "progress bar progresso barra carregamento geist" },
-  { id: "watermark", label: "Watermark", icon: Stamp, category: "exibicao", keywords: "marca dágua watermark proteção" },
-  { id: "tool-graficos", label: "Gráficos", icon: PieChartIcon, category: "exibicao", keywords: "chart pizza donut gráfico pie legenda horizontal vertical lateral" },
-
-  // PLATAFORMA DE AULAS
-  { id: "plat-courses", label: "Visualização de Cursos", icon: BookOpen, category: "plataforma", keywords: "ead curso plataforma" },
-  { id: "plat-player", label: "Video Player", icon: Video, category: "plataforma", keywords: "player vídeo aula" },
-  { id: "plat-playlist", label: "Lista de Aulas", icon: ListOrdered, category: "plataforma", keywords: "playlist aulas lista" },
-  { id: "plat-dashboard", label: "Dashboard do Aluno", icon: BarChart3, category: "plataforma", keywords: "dashboard aluno progresso" },
-  { id: "plat-notes", label: "Notas & Anotações", icon: PenLine, category: "plataforma", keywords: "anotação nota notes" },
-  { id: "plat-rating", label: "Avaliação de Aulas", icon: Star, category: "plataforma", keywords: "rating aula avaliação" },
-  { id: "plat-certificates", label: "Certificados", icon: Award, category: "plataforma", keywords: "certificado conclusão diploma" },
-  { id: "plat-community", label: "Comunidade & Dúvidas", icon: MessageCircle, category: "plataforma", keywords: "comunidade fórum dúvida" },
-  { id: "plat-livro", label: "Livro", icon: BookOpen, category: "plataforma", keywords: "livro book capa cover ebook módulo" },
-
-  // AI-FOOD
-  { id: "ai-food", label: "AI-Food (Prompt)", icon: Bot, category: "ai-food", keywords: "ia gpt prompt gerador master" },
-];
-
-const categoryLabels: Record<string, string> = {
-  fundamentos: "Fundamentos",
-  layout: "Layout & Estrutura",
-  feedback: "Feedback & Overlays",
-  navegacao: "Navegação",
-  entrada: "Entrada de Dados",
-  exibicao: "Exibição de Dados",
-  secoes: "Seções de Página",
-  plataforma: "Plataforma de Aulas",
-  "ai-food": "AI-Food",
-};
+import { sections, categoryLabels, type SectionDefWithKeywords } from "@/data/designSystemSections";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   s /= 100; l /= 100;
@@ -268,11 +169,29 @@ function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fg
     }
   }, [cssVar, theme]);
 
+  const [copied, setCopied] = useState(false);
+  const copyHex = () => {
+    if (!hex) return;
+    navigator.clipboard?.writeText(hex).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  };
+
   return (
     <div className="space-y-2" ref={ref}>
-      <div className="h-24 rounded-lg border flex items-end p-3" style={{ backgroundColor: `hsl(var(--${cssVar}))` }}>
-        <span className="text-xs font-semibold" style={{ color: `hsl(var(--${fgVar}))` }}>{name}</span>
-      </div>
+      <button
+        type="button"
+        onClick={copyHex}
+        title={hex ? `Copiar ${hex}` : name}
+        aria-label={hex ? `Copiar ${hex}` : name}
+        className="h-24 w-full rounded-lg border flex items-end p-3 cursor-pointer transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        style={{ backgroundColor: `hsl(var(--${cssVar}))` }}
+      >
+        <span className="text-xs font-semibold" style={{ color: `hsl(var(--${fgVar}))` }}>
+          {copied ? "Copiado! ✓" : name}
+        </span>
+      </button>
       <div className="space-y-0.5">
         <p className="text-xs text-muted-foreground font-mono">--{cssVar}</p>
         {hex && <p className="text-xs text-foreground font-mono font-semibold">{hex}</p>}
@@ -282,18 +201,7 @@ function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fg
   );
 }
 
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  return (
-    <button
-      onClick={toggle}
-      aria-label={theme === "dark" ? "Mudar para tema claro" : "Mudar para tema escuro"}
-      className="h-9 w-9 flex items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors"
-    >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
-  );
-}
+
 
 export default function DesignSystemPage() {
   const [activeSection, setActiveSection] = useState("intro");

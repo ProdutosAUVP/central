@@ -437,6 +437,25 @@
 .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
 .dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: hsl(var(--border)) !important; }
 
+/* === Acessibilidade — menos movimento ===
+   Neutraliza animações e transições de CSS quando o sistema do usuário
+   pede menos movimento. Animações dirigidas por JS usam o hook
+   useReducedMotion (src/hooks/use-reduced-motion.ts). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Easter egg — gatinho atravessa a tela (Konami code) */
+@keyframes auvp-cat-walk {
+  from { transform: translateX(-90px); }
+  to   { transform: translateX(calc(100vw + 90px)); }
+}
+
 /* Timeline scrollbar (Trilha Horizontal) */
 .timeline-scrollbar::-webkit-scrollbar { height: 4px; }
 .timeline-scrollbar::-webkit-scrollbar-track {
