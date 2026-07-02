@@ -235,6 +235,7 @@ export function TomEVoz() {
             )}
           </div>
         </CardBox>
+        <TomEVozAIFoodInline type="area" id="raul" label="Voz do Raul" />
       </section>
 
       {/* ============================================================= */}
@@ -632,6 +633,7 @@ export function TomEVoz() {
             ))}
           </ul>
         </CardBox>
+        <TomEVozAIFoodInline type="area" id="produtoCx" label="Produto e CX" />
       </section>
 
       {/* ============================================================= */}
