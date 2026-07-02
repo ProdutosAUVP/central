@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { publicUrl } from "@/lib/utils";
 
 /**
- * Easter egg: digitando o Konami code (↑ ↑ ↓ ↓ ← → ← → B A) o gatinho da
- * AUVP atravessa a tela miando. Usa os assets remanescentes do antigo
- * gatinho de feedback (public/gatin1.webp, gatin2.webp e meow.mp3).
+ * Easter egg: digitando o Konami code (↑ ↑ ↓ ↓ ← → ← → B A) — ou
+ * encontrando o Jorginho escondido na busca global (Ctrl/Cmd+K) — o
+ * gatinho da AUVP atravessa a tela miando. Usa os assets remanescentes
+ * do antigo gatinho de feedback (public/gatin1.webp, gatin2.webp e
+ * meow.mp3).
  */
 
 const KONAMI = [
@@ -14,6 +16,9 @@ const KONAMI = [
 ];
 
 const WALK_DURATION_MS = 6000;
+
+/** Evento global — dispara o mesmo efeito do Konami code (usado pelo Jorginho na busca). */
+export const TRIGGER_CAT_EVENT = "auvp:trigger-cat";
 
 export function EasterEgg() {
   const [running, setRunning] = useState(false);
@@ -29,8 +34,13 @@ export function EasterEgg() {
         setRunning(true);
       }
     };
+    const onTrigger = () => setRunning(true);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener(TRIGGER_CAT_EVENT, onTrigger);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener(TRIGGER_CAT_EVENT, onTrigger);
+    };
   }, []);
 
   useEffect(() => {

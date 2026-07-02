@@ -4,6 +4,7 @@ import {
   Home, Users, Palette, Volume2, Map, Newspaper,
   ExternalLink, Sun, Moon, CalendarDays, User,
 } from "lucide-react";
+import { CatIcon } from "@phosphor-icons/react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -17,6 +18,7 @@ import { sections, categoryLabels } from "@/data/designSystemSections";
 import { teamMembers } from "@/data/time";
 import { gerarIcs } from "@/data/eventos";
 import { tomEVozSections, tomEVozGroupLabels, TOM_E_VOZ_AUTH_KEY, TOM_E_VOZ_UNLOCKED_EVENT } from "@/data/tomEVozSections";
+import { TRIGGER_CAT_EVENT } from "@/components/EasterEgg";
 import { useTheme } from "@/contexts/ThemeContext";
 
 /** Evento global disparado pelo botão de busca do header. */
@@ -183,6 +185,14 @@ export function CommandPalette() {
               {l.label}
             </CommandItem>
           ))}
+          {/* Easter egg — o Jorginho só aparece pra quem procura por ele. */}
+          <CommandItem
+            value="jorginho gato cat miau meow surpresa easter egg"
+            onSelect={() => run(() => window.dispatchEvent(new CustomEvent(TRIGGER_CAT_EVENT)))}
+          >
+            <CatIcon size={32} className="mr-2 shrink-0" style={{ width: 32, height: 32 }} />
+            Jorginho
+          </CommandItem>
         </CommandGroup>
       </CommandList>
     </CommandDialog>
