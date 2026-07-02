@@ -2,29 +2,16 @@ import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from
 import { createPortal } from "react-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { GlobalNav } from "@/components/GlobalNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { SearchButton } from "@/components/SearchButton";
 import { olhoBranco } from "@/assets/olhos";
 import { teamPhotos } from "@/assets/team";
-import { useTheme } from "@/contexts/ThemeContext";
 import {
-  Sun, Moon,
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
   Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown, User, X,
   Headphones, Video, TrendingUp, Cpu, Wallet, Megaphone, Scale,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  return (
-    <button
-      onClick={toggle}
-      aria-label={theme === "dark" ? "Tema claro" : "Tema escuro"}
-      className="h-9 w-9 flex items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors"
-    >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
-  );
-}
 
 function useReveal(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -930,7 +917,10 @@ export default function TimePage() {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
           <GlobalNav />
-          <ThemeToggle />
+          <div className="flex items-center gap-2 shrink-0">
+            <SearchButton />
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
