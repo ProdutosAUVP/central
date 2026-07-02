@@ -4,62 +4,18 @@ import { TomEVoz } from "@/components/widgets/TomEVoz";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useBrand } from "@/contexts/BrandContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import {
-  BookOpen, Megaphone, Users, Heart,
-  Landmark, GraduationCap, Menu,
-  Anchor, Sparkles, Mic, Building2, Wheat,
-  BarChart3, DollarSign, CreditCard, Shield, Award, Plane,
-  Lock, Eye, EyeOff, Sun, Moon
-} from "lucide-react";
+import { BookOpen, Menu, Lock, Eye, EyeOff, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { olhoBranco } from "@/assets/olhos";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { SearchButton } from "@/components/SearchButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { tomEVozGroups, tomEVozSections, TOM_E_VOZ_AUTH_KEY, TOM_E_VOZ_UNLOCKED_EVENT } from "@/data/tomEVozSections";
 
 const MANUAL_PASSWORD = "BUY-AND-HOLD";
 
-type NavGroup = {
-  label?: string;
-  items: { id: string; label: string; icon: React.ElementType }[];
-};
-
-const navGroups: NavGroup[] = [
-  {
-    label: "Introdução",
-    items: [
-      { id: "fundamentos", label: "Fundamentos", icon: BookOpen },
-      { id: "raul", label: "Voz do Raul", icon: Mic },
-    ],
-  },
-  {
-    label: "Áreas da Empresa",
-    items: [
-      { id: "marketing", label: "Marketing", icon: Megaphone },
-      { id: "comercial", label: "Comercial", icon: Users },
-      { id: "atendimento", label: "Atendimento", icon: Heart },
-      { id: "consultoria", label: "Consultoria", icon: Landmark },
-      { id: "produto-wealth", label: "AUVP Wealth", icon: Building2 },
-      { id: "capital", label: "Capital Humano", icon: Anchor },
-      { id: "produto-cx", label: "Produto e Cx", icon: Sparkles },
-    ],
-  },
-  {
-    label: "Produtos",
-    items: [
-      { id: "produto-agro", label: "Agro", icon: Wheat },
-      { id: "produto-escola", label: "Escola", icon: GraduationCap },
-      { id: "produto-analitica", label: "Analítica", icon: BarChart3 },
-      { id: "produto-cambio", label: "Câmbio", icon: DollarSign },
-      { id: "produto-credito", label: "Crédito", icon: CreditCard },
-      { id: "produto-seguros", label: "Seguros", icon: Shield },
-      { id: "produto-pro", label: "Pro", icon: Award },
-      { id: "produto-experience", label: "Experience", icon: Plane },
-    ],
-  },
-];
-
-const allSectionIds = navGroups.flatMap((g) => g.items.map((i) => i.id));
+const allSectionIds = tomEVozSections.map((s) => s.id);
 
 function SidebarNav({
   activeSection,
@@ -70,7 +26,7 @@ function SidebarNav({
 }) {
   return (
     <>
-      {navGroups.map((group, gi) => (
+      {tomEVozGroups.map((group, gi) => (
         <div key={gi}>
           {gi > 0 && <div className="my-3 border-b border-border" />}
           {group.label && (
@@ -111,7 +67,7 @@ export default function TomEVozPage() {
 
   // Password gate
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return sessionStorage.getItem("tom-e-voz-auth") === "true";
+    return sessionStorage.getItem(TOM_E_VOZ_AUTH_KEY) === "true";
   });
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -121,7 +77,8 @@ export default function TomEVozPage() {
     e.preventDefault();
     if (password === MANUAL_PASSWORD) {
       setIsAuthenticated(true);
-      sessionStorage.setItem("tom-e-voz-auth", "true");
+      sessionStorage.setItem(TOM_E_VOZ_AUTH_KEY, "true");
+      window.dispatchEvent(new Event(TOM_E_VOZ_UNLOCKED_EVENT));
       setError(false);
     } else {
       setError(true);
@@ -250,6 +207,7 @@ export default function TomEVozPage() {
                 </nav>
               </SheetContent>
             </Sheet>
+            <SearchButton />
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="h-8 w-8 md:h-9 md:w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"

@@ -71,18 +71,26 @@ const accessLinks: AccessLink[] = [
   { label: "GitHub", desc: "Repositórios", icon: GitHubIcon, href: "https://github.com/produtosauvp", internal: false, gradient: "from-slate-600 to-slate-800" },
   { label: "Notion", desc: "Documentações", icon: NotionIcon, internal: false, soon: true, gradient: "from-neutral-600 to-neutral-800" },
   { label: "Analytics", desc: "Métricas de produto", icon: BarChart3, internal: false, soon: true, gradient: "from-emerald-500 to-teal-600 dark:from-[#5A8770] dark:to-[#3d6b57]" },
-  { label: "AUVP Escola", desc: "Plataforma de cursos", icon: GraduationCap, to: "/escola", internal: true, newTab: true, gradient: "from-amber-500 to-orange-600" },
 ];
 
-const produtos = [
-  { name: "AUVP Capital", desc: "Plataforma de investimentos", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", img: "" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", status: "Ativo", statusColor: "bg-green-100 text-green-700 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", to: "/escola", img: "" },
-  { name: "AUVP Analítica", desc: "Análise de investimentos", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700", img: "" },
-  { name: "AUVP Agro", desc: "Produtos do agronegócio", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700", img: "" },
-  { name: "AUVP Câmbio", desc: "Operações de câmbio", status: "Beta", statusColor: "bg-yellow-100 text-yellow-700", img: "" },
-  { name: "AUVP Crédito", desc: "Soluções de crédito", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700", img: "" },
-  { name: "AUVP Seguros", desc: "Produtos de seguro", status: "Em desenvolvimento", statusColor: "bg-blue-100 text-blue-700", img: "" },
-  { name: "AUVP Experience", desc: "Experiências premium", status: "Planejado", statusColor: "bg-gray-100 text-gray-600", img: "" },
+interface ProdutoDigital {
+  name: string;
+  desc: string;
+  /** Seção do Guia de Vendas ou LP própria do produto. */
+  href?: string;
+  /** Ainda sem link publicado — cartão fica com aspecto inativo. */
+  soon?: boolean;
+}
+
+const produtos: ProdutoDigital[] = [
+  { name: "AUVP Capital", desc: "Plataforma de investimentos", href: "https://auvpcapital.com.br/" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
+  { name: "AUVP Analítica", desc: "Análise de investimentos", href: "https://produtosauvp.github.io/projetodelta/#auvp-analitica" },
+  { name: "AUVP Agro", desc: "Produtos do agronegócio", href: "https://produtosauvp.github.io/projetodelta/#auvp-agro" },
+  { name: "AUVP Câmbio", desc: "Operações de câmbio", href: "https://auvpcapital.com.br/cambio/" },
+  { name: "AUVP Crédito", desc: "Soluções de crédito", href: "https://auvpcapital.com.br/credito/" },
+  { name: "AUVP Seguros", desc: "Produtos de seguro", href: "https://auvpcapital.com.br/seguros/" },
+  { name: "AUVP Experience", desc: "Experiências premium", soon: true },
 ];
 
 interface DocLink {
@@ -787,27 +795,32 @@ export default function Hub() {
                 const card = (
                   <div className={cn(
                     "group relative overflow-hidden rounded-2xl border bg-card flex items-stretch min-h-[88px] sm:min-h-[100px] transition-[transform,box-shadow,border-color] duration-300 ease-apple",
-                    p.to ? "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer" : "sm:hover:border-primary/20 sm:hover:shadow-md"
+                    p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
                   )}>
                     {/* Image / placeholder */}
                     <div className="w-24 sm:w-32 shrink-0 border-r bg-muted/40 flex items-center justify-center overflow-hidden">
-                      {p.img ? (
-                        <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-3xl font-bold font-anek text-muted-foreground/25 select-none">{productInitial}</span>
-                      )}
+                      <span className={cn("text-3xl font-bold font-anek text-muted-foreground/25 select-none", p.soon && "grayscale")}>{productInitial}</span>
                     </div>
                     {/* Content */}
                     <div className="flex flex-col justify-center gap-1.5 p-3 flex-1 min-w-0">
-                      <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
+                        {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
+                      </div>
                       <p className="text-xs text-muted-foreground font-roboto leading-snug">{p.desc}</p>
                     </div>
+                    {!p.soon && (
+                      <div className="pr-3 flex items-center shrink-0">
+                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
+                    )}
                   </div>
                 );
-                return p.to ? (
-                  <Link key={i} to={p.to} target="_blank" rel="noopener noreferrer">{card}</Link>
-                ) : (
-                  <div key={i}>{card}</div>
+                if (p.soon) {
+                  return <div key={i} aria-disabled="true" className="cursor-default">{card}</div>;
+                }
+                return (
+                  <a key={i} href={p.href} target="_blank" rel="noopener noreferrer">{card}</a>
                 );
               })}
             </div>
