@@ -208,7 +208,7 @@ export default function DesignSystemPage() {
   const [activeSection, setActiveSection] = useState("intro");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [brandOpen, setBrandOpen] = useState(false);
+  const [brandOpen, setBrandOpen] = useState(true);
   const { brand, setBrand } = useBrand();
 
   // Reseta para Capital ao sair do Design System
