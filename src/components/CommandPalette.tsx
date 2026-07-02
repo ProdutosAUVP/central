@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Home, Users, Palette, Volume2, GraduationCap, Map, Newspaper,
+  Home, Users, Palette, Volume2, Map, Newspaper,
   ExternalLink, Sun, Moon, CalendarDays, User,
 } from "lucide-react";
 import {
@@ -27,7 +27,6 @@ const paginas = [
   { label: "Nosso Time", path: "/time", icon: Users, keywords: "time organograma pessoas equipe" },
   { label: "Design System", path: "/design-system", icon: Palette, keywords: "componentes tokens cores tipografia" },
   { label: "Manual de Tom e Voz", path: "/tom-e-voz", icon: Volume2, keywords: "comunicação escrita linguagem voz" },
-  { label: "AUVP Escola", path: "/escola", icon: GraduationCap, keywords: "escola documentação produto educação" },
   { label: "Roadmap", path: "/roadmap", icon: Map, keywords: "roadmap entregas trimestre planejamento" },
   { label: "Mural de Novidades", path: "/novidades", icon: Newspaper, keywords: "novidades atualizações mural mensal" },
 ];

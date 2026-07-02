@@ -11,7 +11,6 @@ import { EasterEgg } from "@/components/EasterEgg";
 import React from "react";
 import Hub from "./pages/Hub";
 import TimePage from "./pages/TimePage";
-import EscolaPage from "./pages/EscolaPage";
 import RoadmapPage from "./pages/RoadmapPage";
 import NovidadesPage from "./pages/NovidadesPage";
 import DesignSystem from "./pages/DesignSystem";
@@ -65,7 +64,6 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Hub />} />
                 <Route path="/time" element={<TimePage />} />
-                <Route path="/escola" element={<EscolaPage />} />
                 <Route path="/roadmap" element={<RoadmapPage />} />
                 <Route path="/novidades" element={<NovidadesPage />} />
                 <Route path="/design-system" element={<DesignSystem />} />
