@@ -1,20 +1,10 @@
 import React from "react";
-import { GlobalNav } from "@/components/GlobalNav";
-import { useTheme } from "@/contexts/ThemeContext";
 import {
-  Sun, Moon, GraduationCap, BookOpen, Users, Clock,
-  Video, RefreshCw, MessageCircle, TrendingUp, BarChart2,
+  GraduationCap, BookOpen, Users, Clock,
+  TrendingUp, BarChart2,
   Wrench, Headphones, Shield
 } from "lucide-react";
-
-function ThemeToggle() {
-  const { theme, toggle } = useTheme();
-  return (
-    <button onClick={toggle} aria-label={theme === "dark" ? "Tema claro" : "Tema escuro"} className="h-9 w-9 flex items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted transition-colors">
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
-  );
-}
+import { PageShell } from "@/components/PageShell";
 
 function SectionTitle({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) {
   return (
@@ -43,16 +33,7 @@ function SubTitle({ children }: { children: React.ReactNode }) {
 
 export default function EscolaPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
-          <GlobalNav />
-          <ThemeToggle />
-        </div>
-      </header>
-
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 md:px-8 py-12 space-y-8">
+    <PageShell width="4xl" footer="AUVP Escola — Documentação interna do Time de Produto" mainClassName="py-12 space-y-8">
 
         {/* Hero */}
         <div>
@@ -163,13 +144,6 @@ export default function EscolaPage() {
           <P>Esta ferramenta <strong>não substitui</strong> os perfis de investidores realizados e fornecidos pelas corretoras.</P>
         </Card>
 
-      </main>
-
-      <footer className="border-t py-6 px-4 md:px-8">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs text-muted-foreground font-roboto">AUVP Escola — Documentação interna do Time de Produto &copy; {new Date().getFullYear()}</p>
-        </div>
-      </footer>
-    </div>
+    </PageShell>
   );
 }
