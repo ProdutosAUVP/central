@@ -140,6 +140,7 @@ import { WatermarkWidget } from "@/components/widgets/Watermark";
 
 import { sections, categoryLabels, type SectionDefWithKeywords } from "@/data/designSystemSections";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SearchButton } from "@/components/SearchButton";
 
 function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   s /= 100; l /= 100;
@@ -519,7 +520,10 @@ export default function DesignSystemPage() {
 
             <GlobalNav />
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2 shrink-0">
+            <SearchButton />
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

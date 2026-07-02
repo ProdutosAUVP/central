@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { olhoBranco } from "@/assets/olhos";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { SearchButton } from "@/components/SearchButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -250,6 +251,7 @@ export default function TomEVozPage() {
                 </nav>
               </SheetContent>
             </Sheet>
+            <SearchButton />
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="h-8 w-8 md:h-9 md:w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
