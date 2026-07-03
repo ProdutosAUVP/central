@@ -121,7 +121,7 @@ const orgPeople: Record<string, OrgPerson> = {
     responsibilities: ["Visual design e identidade", "UX research", "Motion e micro-interações", "Assets para marketing"],
   },
   mateus: {
-    id: "mateus", name: "Mateus Graff", role: "Redator Pl. I",
+    id: "mateus", name: "Mateus Graff", role: "Redator / Roteirista Pl. I",
     initials: "MG", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting.",
     responsibilities: ["Copywriting de produto", "Apostilas e materiais educativos", "Roteiros audiovisuais", "Revisão editorial"],
@@ -865,10 +865,6 @@ function Section({ children, className }: { children: React.ReactNode; className
   );
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-xs font-bold font-roboto uppercase tracking-[0.15em] text-primary mb-3">{children}</p>;
-}
-
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">{children}</h2>;
 }
@@ -931,7 +927,6 @@ export default function TimePage() {
         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28">
           <div className="max-w-3xl">
-            <SectionLabel>Time de Produto e CX</SectionLabel>
             <h1 className="text-5xl md:text-7xl font-bold font-anek text-foreground leading-[1.05] mb-6">
               Conheça o <span className="text-primary">time</span>
             </h1>
@@ -1012,7 +1007,6 @@ export default function TimePage() {
         <Section className="relative rounded-3xl border bg-muted/40 dark:bg-muted/20 px-6 py-10 md:px-10 md:py-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
             <div className="lg:flex-1">
-              <SectionLabel>Rede interna</SectionLabel>
               <SectionTitle>A rede que nos conecta</SectionTitle>
               <p className="text-muted-foreground font-roboto max-w-md mb-10 lg:mb-0">
                 Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.
@@ -1024,7 +1018,6 @@ export default function TimePage() {
         </Section>
 
         <Section>
-          <SectionLabel>Dia a dia</SectionLabel>
           <SectionTitle>O que fazemos no dia a dia</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Conheça a atuação de cada especialista e saiba exatamente a quem recorrer para resolver seus desafios.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1054,7 +1047,6 @@ export default function TimePage() {
         </Section>
 
         <Section>
-          <SectionLabel>Pilares</SectionLabel>
           <SectionTitle>O que sustenta nossas entregas</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Nove princípios que orientam como trabalhamos, priorizamos e entregamos valor.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

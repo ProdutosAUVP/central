@@ -294,7 +294,7 @@ function CalendarioWidget() {
 const faqs = [
   { q: "Como acesso o Design System?", a: "Clique em 'Design System' nos Acessos Rápidos ou use o menu de navegação global no canto superior esquerdo." },
   { q: "O que é o Manual de Tom e Voz?", a: "É o guia de comunicação verbal da AUVP, com diretrizes de linguagem para cada área e produto da empresa." },
-  { q: "Como sugiro um novo componente?", a: "Abra uma issue no repositório do Design System no GitHub ou entre em contato com o time de Produto." },
+  { q: "Como sugiro um novo componente?", a: "A proposição de um novo componente deve vir via solicitação no ClickUp." },
   { q: "Com que frequência o Design System é atualizado?", a: "O Design System é atualizado continuamente. Novidades são comunicadas no Mural de Novidades desta Central." },
 ];
 
@@ -603,10 +603,10 @@ export default function Hub() {
                   {todayCapitalized}
                 </p>
                 <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold font-anek text-foreground mb-3 leading-[1.05]">
-                  Central <span className="text-primary">AUVP</span>
+                  Central do Time de <span className="text-primary">Produto</span>
                 </h1>
                 <p className="text-sm sm:text-lg text-muted-foreground mb-4 max-w-2xl font-roboto leading-relaxed">
-                  Central de Produto do Time de Produto. Encontre ferramentas, documentações, o time e os sistemas em um único lugar.
+                  Encontre ferramentas, documentações, informações sobre nosso time e os sistemas em um único lugar.
                 </p>
                 {proximoEvento && (
                   <button
