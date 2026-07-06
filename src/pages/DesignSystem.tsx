@@ -932,6 +932,8 @@ export default function DesignSystemPage() {
             </ComponentShowcase>
           </section>
 
+
+          {/* ===== BOTÕES & AÇÕES ===== */}
           <Separator />
           <section id="buttons">
             <h2 className="text-2xl font-bold mb-2">Botões</h2>
@@ -1057,6 +1059,13 @@ import { ArrowRight } from "lucide-react";
             </div>
           </section>
 
+          <Separator />
+          <section id="floaters">
+            <h2 className="text-2xl font-bold mb-2">Widgets Flutuantes</h2>
+            <p className="text-muted-foreground mb-6">Botões flutuantes (WhatsApp, Porquinho da Economia) com animação contínua.</p>
+            <SectionThemeToggle bare title="Widgets Flutuantes" description="Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado." code={widgetsFlutuantesSrc} selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
+          </section>
+
 
           {/* ===== SEÇÕES DE PÁGINA ===== */}
           <Separator />
@@ -1143,13 +1152,6 @@ function showTab(tabId) {
           </section>
 
           <Separator />
-          <section id="floaters">
-            <h2 className="text-2xl font-bold mb-2">Widgets Flutuantes</h2>
-            <p className="text-muted-foreground mb-6">Botões flutuantes (WhatsApp, Porquinho da Economia) com animação contínua.</p>
-            <SectionThemeToggle bare title="Widgets Flutuantes" description="Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado." code={widgetsFlutuantesSrc} selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
-          </section>
-
-          <Separator />
           <section id="site-calc">
             <h2 className="text-2xl font-bold mb-2">Calculadora de Rendimentos</h2>
             <p className="text-muted-foreground mb-6">Widget de simulação para landing pages com tipografia e CTAs do tema Sites.</p>
@@ -1191,6 +1193,13 @@ function showTab(tabId) {
             <h2 className="text-2xl font-bold mb-2">Spin (Loading)</h2>
             <p className="text-muted-foreground mb-6">Indicador de carregamento com mensagem opcional em Sora uppercase. Inclui modo overlay para encobrir áreas durante operações assíncronas.</p>
             <SpinTipWidget />
+          </section>
+
+          <Separator />
+          <section id="progress-geist">
+            <h2 className="text-2xl font-bold mb-2">Progress Bar</h2>
+            <p className="text-muted-foreground mb-6">Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido e cantos totalmente arredondados.</p>
+            <ProgressGeistWidget />
           </section>
 
           <Separator />
@@ -1344,7 +1353,6 @@ const { toast } = useToast();
           </section>
 
 
-          {/* ===== NAVEGAÇÃO ===== */}
           <Separator />
           <section id="drawer-simples">
             <h2 className="text-2xl font-bold mb-2">Drawer</h2>
@@ -1359,22 +1367,13 @@ const { toast } = useToast();
             <DrawerMultiNivel />
           </section>
 
+
+          {/* ===== NAVEGAÇÃO ===== */}
           <Separator />
           <section id="steps">
             <h2 className="text-2xl font-bold mb-2">Steps (Wizard)</h2>
             <p className="text-muted-foreground mb-6">Etapas numeradas com estados completo / atual / pendente e linha de progresso para fluxos guiados.</p>
             <StepsWidget />
-          </section>
-
-          <Separator />
-          <section id="segmented">
-            <h2 className="text-2xl font-bold mb-2">Switch</h2>
-            <p className="text-muted-foreground mb-6">Toggle compacto para alternar entre poucas opções (períodos, modos de visualização) ou estados binários (on/off).</p>
-            <div className="space-y-6">
-              <SegmentedWidget />
-              <SwitchSimplesWidget />
-              <SwitchDisabledWidget />
-            </div>
           </section>
 
           <Separator />
@@ -1626,6 +1625,17 @@ const { toast } = useToast();
           </section>
 
           <Separator />
+          <section id="segmented">
+            <h2 className="text-2xl font-bold mb-2">Switch</h2>
+            <p className="text-muted-foreground mb-6">Toggle compacto para alternar entre poucas opções (períodos, modos de visualização) ou estados binários (on/off).</p>
+            <div className="space-y-6">
+              <SegmentedWidget />
+              <SwitchSimplesWidget />
+              <SwitchDisabledWidget />
+            </div>
+          </section>
+
+          <Separator />
           <section id="upload-preview">
             <h2 className="text-2xl font-bold mb-2">Upload com Preview</h2>
             <p className="text-muted-foreground mb-6">Dropzone de imagens com preview em grid, progresso simulado, contagem e remoção individual.</p>
@@ -1781,13 +1791,6 @@ const { toast } = useToast();
               <TabelaWidget />
               <TabelaBorderedWidget />
             </div>
-          </section>
-
-          <Separator />
-          <section id="progress-geist">
-            <h2 className="text-2xl font-bold mb-2">Progress Bar</h2>
-            <p className="text-muted-foreground mb-6">Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido e cantos totalmente arredondados.</p>
-            <ProgressGeistWidget />
           </section>
 
           <Separator />
