@@ -9,6 +9,8 @@ import {
   ListChecks, ToggleLeft, Anchor as AnchorIcon, AtSign, Columns3,
   Activity, GitCommit, ListTree, ClipboardList, Inbox as InboxIcon, CheckCircle2, Compass, Stamp,
   CalendarIcon, SquareCheck, Table as TableIcon,
+  Zap, AppWindow, BellRing, ChevronRight as ChevronRightIcon,
+  Tag as TagIcon, CircleUser,
 } from "lucide-react";
 
 export type SectionDef = {
@@ -31,6 +33,8 @@ export const sections: SectionDefWithKeywords[] = [
   { id: "typography", label: "Tipografia", icon: Type, category: "fundamentos", keywords: "fonte fontes texto sora roboto anek" },
   { id: "colors", label: "Cores", icon: Palette, category: "fundamentos", keywords: "paleta cor token hsl" },
   { id: "icons", label: "Ícones", icon: Shapes, category: "fundamentos", keywords: "iconografia phosphor svg" },
+  { id: "elevation", label: "Sombras & Elevação", icon: Layers, category: "fundamentos", keywords: "sombra shadow elevação profundidade hover" },
+  { id: "motion", label: "Motion & Animações", icon: Zap, category: "fundamentos", keywords: "animação transição duração easing movimento reduced-motion" },
 
   // LAYOUT & ESTRUTURA
   { id: "layout", label: "Layout & Espaçamento", icon: Layout, category: "layout", keywords: "grid spacing padding margin" },
@@ -55,6 +59,8 @@ export const sections: SectionDefWithKeywords[] = [
   { id: "skeleton-avancado", label: "Skeleton Avançado", icon: Layers, category: "feedback", keywords: "skeleton placeholder loading" },
   { id: "empty", label: "Empty (Vazio)", icon: InboxIcon, category: "feedback", keywords: "vazio nenhum nada empty state" },
   { id: "result", label: "Result", icon: CheckCircle2, category: "feedback", keywords: "resultado sucesso erro 404 403" },
+  { id: "dialog", label: "Modal (Dialog)", icon: AppWindow, category: "feedback", keywords: "modal dialog janela sobreposição confirmação alert" },
+  { id: "toast", label: "Toast", icon: BellRing, category: "feedback", keywords: "toast snackbar aviso mensagem temporária" },
 
   // NAVEGAÇÃO
   { id: "drawer-simples", label: "Drawer", icon: PanelRightOpen, category: "navegacao", keywords: "drawer painel lateral sheet" },
@@ -64,8 +70,11 @@ export const sections: SectionDefWithKeywords[] = [
   { id: "tabs-geist", label: "Tabs", icon: Columns3, category: "navegacao", keywords: "tabs abas guia geist underline" },
   { id: "anchor", label: "Anchor (Scroll Spy)", icon: AnchorIcon, category: "navegacao", keywords: "scroll spy âncora navegação" },
   { id: "tour", label: "Tour", icon: Compass, category: "navegacao", keywords: "onboarding tour guia spotlight" },
+  { id: "breadcrumb", label: "Breadcrumb", icon: ChevronRightIcon, category: "navegacao", keywords: "breadcrumb trilha caminho migalha navegação" },
+  { id: "pagination", label: "Pagination", icon: ListOrdered, category: "navegacao", keywords: "paginação páginas anterior próxima lista" },
 
   // ENTRADA DE DADOS
+  { id: "form-inputs", label: "Inputs & Formulários", icon: PenLine, category: "entrada", keywords: "input campo formulário texto textarea select radio slider label erro validação" },
   { id: "upload-preview", label: "Upload com Preview", icon: UploadCloud, category: "entrada", keywords: "upload arquivo file imagem" },
   { id: "calendar", label: "Calendário", icon: CalendarIcon, category: "entrada", keywords: "calendar calendário data date picker agenda intervalo período" },
   { id: "rate", label: "Rate (Avaliação)", icon: StarIcon, category: "entrada", keywords: "rating estrela nota avaliação" },
@@ -86,6 +95,8 @@ export const sections: SectionDefWithKeywords[] = [
   { id: "progress-geist", label: "Progress Bar", icon: Activity, category: "exibicao", keywords: "progress bar progresso barra carregamento geist" },
   { id: "watermark", label: "Watermark", icon: Stamp, category: "exibicao", keywords: "marca dágua watermark proteção" },
   { id: "tool-graficos", label: "Gráficos", icon: PieChartIcon, category: "exibicao", keywords: "chart pizza donut gráfico pie legenda horizontal vertical lateral" },
+  { id: "tags-badges", label: "Badges & Tags", icon: TagIcon, category: "exibicao", keywords: "badge tag etiqueta rótulo status chip" },
+  { id: "avatar", label: "Avatar", icon: CircleUser, category: "exibicao", keywords: "avatar foto usuário iniciais perfil grupo" },
 
   // PLATAFORMA DE AULAS
   { id: "plat-courses", label: "Visualização de Cursos", icon: BookOpen, category: "plataforma", keywords: "ead curso plataforma" },

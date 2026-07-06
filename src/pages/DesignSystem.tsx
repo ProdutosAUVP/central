@@ -93,6 +93,15 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis } from "@/components/ui/breadcrumb";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationEllipsis } from "@/components/ui/pagination";
+import { useToast } from "@/hooks/use-toast";
+import { Tag } from "@/components/widgets/Tag";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
@@ -110,7 +119,7 @@ import {
   ArrowLeftRight, FolderTree, UploadCloud, Star as StarIcon, ListFilter, Search,
   ListChecks, ToggleLeft, Anchor as AnchorIcon, AtSign, Columns3,
   Activity, GitCommit, ListTree, ClipboardList, Inbox as InboxIcon, CheckCircle2, Compass, Stamp,
-  ChevronRight, CalendarIcon, SquareCheck, Table as TableIcon,
+  ChevronRight, ChevronLeft, CalendarIcon, SquareCheck, Table as TableIcon,
   Sun, Moon
 } from "lucide-react";
 import { Notifications } from "@/components/widgets/Notifications";
@@ -213,6 +222,7 @@ export default function DesignSystemPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [brandOpen, setBrandOpen] = useState(true);
   const { brand, setBrand } = useBrand();
+  const { toast } = useToast();
 
   // Reseta para Capital ao sair do Design System
   useEffect(() => {
@@ -795,6 +805,110 @@ export default function DesignSystemPage() {
             <SectionThemeToggle bare title="Ícones Phosphor" description="Biblioteca Phosphor Icons utilizada em todo o ecossistema AUVP. Inclui variantes regular, bold e fill." code={iconesSrc} selfDocumented><Icones /></SectionThemeToggle>
           </section>
 
+          <Separator />
+          <section id="elevation">
+            <h2 className="text-2xl font-bold mb-2">Sombras & Elevação</h2>
+            <p className="text-muted-foreground mb-6">Escala de sombras para hierarquia de profundidade. O hover oficial de cards usa <code className="bg-muted px-1 rounded text-sm font-mono">0 8px 24px rgba(0,0,0,0.06)</code> com <code className="bg-muted px-1 rounded text-sm font-mono">translateY(-2px)</code>.</p>
+            <ComponentShowcase
+              title="Escala de Elevação"
+              description="Do mais sutil (inputs) ao mais elevado (modais). Sombras nunca substituem borda em fundos escuros — combine com border."
+              code={`<div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+  {[
+    { cls: "shadow-sm", uso: "Inputs e elementos sutis" },
+    { cls: "shadow-md", uso: "Cards em destaque leve" },
+    { cls: "shadow-lg", uso: "Popovers e dropdowns" },
+    { cls: "shadow-xl", uso: "Modais e ferramentas" },
+  ].map((s) => (
+    <div key={s.cls} className={\`bg-card border border-border rounded-xl p-6 text-center \${s.cls}\`}>
+      <p className="font-mono text-sm font-bold text-foreground">{s.cls}</p>
+      <p className="text-xs text-muted-foreground mt-1">{s.uso}</p>
+    </div>
+  ))}
+</div>
+
+{/* Hover oficial de cards do DS */}
+<div className="bg-card border border-border rounded-xl p-6 text-center transition-all duration-[240ms] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 cursor-pointer w-full max-w-xs">
+  <p className="font-bold text-foreground font-anek">Hover oficial de card</p>
+  <p className="text-xs text-muted-foreground mt-1">shadow 0 8px 24px rgba(0,0,0,0.06) + translateY(-2px) em 240ms</p>
+</div>`}
+            >
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+                {[
+                  { cls: "shadow-sm", uso: "Inputs e elementos sutis" },
+                  { cls: "shadow-md", uso: "Cards em destaque leve" },
+                  { cls: "shadow-lg", uso: "Popovers e dropdowns" },
+                  { cls: "shadow-xl", uso: "Modais e ferramentas" },
+                ].map((s) => (
+                  <div key={s.cls} className={`bg-card border border-border rounded-xl p-6 text-center ${s.cls}`}>
+                    <p className="font-mono text-sm font-bold text-foreground">{s.cls}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{s.uso}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-card border border-border rounded-xl p-6 text-center transition-all duration-[240ms] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 cursor-pointer w-full max-w-xs">
+                <p className="font-bold text-foreground font-anek">Hover oficial de card</p>
+                <p className="text-xs text-muted-foreground mt-1">shadow 0 8px 24px rgba(0,0,0,0.06) + translateY(-2px) em 240ms</p>
+              </div>
+            </ComponentShowcase>
+          </section>
+
+          <Separator />
+          <section id="motion">
+            <h2 className="text-2xl font-bold mb-2">Motion & Animações</h2>
+            <p className="text-muted-foreground mb-6">Durações e easings padronizados. Animações via JS devem respeitar <code className="bg-muted px-1 rounded text-sm font-mono">prefers-reduced-motion</code> (hook <code className="bg-muted px-1 rounded text-sm font-mono">useReducedMotion</code>); as de CSS já são neutralizadas globalmente.</p>
+            <ComponentShowcase
+              title="Durações & Easings"
+              description="Passe o cursor sobre os cards para sentir cada duração. 240ms ease é o padrão do sistema; 320ms nas LPs da Escola."
+              code={`<div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+  {[
+    { ms: "150ms", cls: "duration-150", uso: "Micro-interações: ícones, toggles, tooltips" },
+    { ms: "240ms", cls: "duration-[240ms]", uso: "Padrão do sistema: botões, cards, hovers" },
+    { ms: "320ms", cls: "duration-[320ms]", uso: "Escola LP: cards translúcidos e destaques" },
+  ].map((d) => (
+    <div key={d.ms} className={\`bg-card border border-border rounded-xl p-6 text-center transition-all ease-out hover:-translate-y-1 hover:shadow-md cursor-pointer \${d.cls}\`}>
+      <p className="font-mono text-2xl font-bold text-foreground">{d.ms}</p>
+      <p className="text-xs text-muted-foreground mt-2">{d.uso}</p>
+    </div>
+  ))}
+</div>
+
+{/* Easings oficiais */}
+<div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+  <div className="rounded-lg border border-border bg-muted/30 p-4">
+    <p className="font-mono font-bold text-foreground">ease / ease-out</p>
+    <p className="text-xs text-muted-foreground mt-1">Padrão para hovers e transições de cor/sombra.</p>
+  </div>
+  <div className="rounded-lg border border-border bg-muted/30 p-4">
+    <p className="font-mono font-bold text-foreground">cubic-bezier(0.175, 0.885, 0.32, 1.275)</p>
+    <p className="text-xs text-muted-foreground mt-1">Overshoot sutil — popups e balões dos widgets flutuantes.</p>
+  </div>
+</div>`}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                {[
+                  { ms: "150ms", cls: "duration-150", uso: "Micro-interações: ícones, toggles, tooltips" },
+                  { ms: "240ms", cls: "duration-[240ms]", uso: "Padrão do sistema: botões, cards, hovers" },
+                  { ms: "320ms", cls: "duration-[320ms]", uso: "Escola LP: cards translúcidos e destaques" },
+                ].map((d) => (
+                  <div key={d.ms} className={`bg-card border border-border rounded-xl p-6 text-center transition-all ease-out hover:-translate-y-1 hover:shadow-md cursor-pointer ${d.cls}`}>
+                    <p className="font-mono text-2xl font-bold text-foreground">{d.ms}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{d.uso}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="rounded-lg border border-border bg-muted/30 p-4">
+                  <p className="font-mono font-bold text-foreground">ease / ease-out</p>
+                  <p className="text-xs text-muted-foreground mt-1">Padrão para hovers e transições de cor/sombra.</p>
+                </div>
+                <div className="rounded-lg border border-border bg-muted/30 p-4">
+                  <p className="font-mono font-bold text-foreground">cubic-bezier(0.175, 0.885, 0.32, 1.275)</p>
+                  <p className="text-xs text-muted-foreground mt-1">Overshoot sutil — popups e balões dos widgets flutuantes.</p>
+                </div>
+              </div>
+            </ComponentShowcase>
+          </section>
+
 
           {/* ===== LAYOUT & ESTRUTURA ===== */}
           <Separator />
@@ -1100,6 +1214,135 @@ function showTab(tabId) {
             <ResultWidget />
           </section>
 
+          <Separator />
+          <section id="dialog">
+            <h2 className="text-2xl font-bold mb-2">Modal (Dialog)</h2>
+            <p className="text-muted-foreground mb-6">Sobreposição centralizada para formulários curtos e confirmações críticas. Para ações destrutivas, use o <strong>AlertDialog</strong> — ele exige uma escolha explícita (sem fechar clicando fora).</p>
+            <ComponentShowcase
+              title="Dialog & AlertDialog"
+              description="Dialog para edições rápidas; AlertDialog para confirmações destrutivas. O conteúdo abre em portal e segue o tema global da página."
+              showToggle={false}
+              code={`<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="outline">Abrir modal</Button>
+  </DialogTrigger>
+  <DialogContent className="sm:max-w-md">
+    <DialogHeader>
+      <DialogTitle>Editar apelido</DialogTitle>
+      <DialogDescription>Como você prefere ser chamado dentro da plataforma?</DialogDescription>
+    </DialogHeader>
+    <div className="grid gap-1.5 py-2">
+      <Label htmlFor="apelido">Apelido</Label>
+      <Input id="apelido" placeholder="Ex.: Raul" />
+    </div>
+    <DialogFooter>
+      <Button variant="ghost">Cancelar</Button>
+      <Button>Salvar</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button variant="destructive">Excluir conta</Button>
+  </AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Tem certeza absoluta?</AlertDialogTitle>
+      <AlertDialogDescription>
+        Esta ação não pode ser desfeita. Sua conta e todos os dados associados serão removidos permanentemente.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+      <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+        Excluir
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>`}
+            >
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline">Abrir modal</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Editar apelido</DialogTitle>
+                    <DialogDescription>Como você prefere ser chamado dentro da plataforma?</DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-1.5 py-2">
+                    <Label htmlFor="apelido">Apelido</Label>
+                    <Input id="apelido" placeholder="Ex.: Raul" />
+                  </div>
+                  <DialogFooter>
+                    <Button variant="ghost">Cancelar</Button>
+                    <Button>Salvar</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">Excluir conta</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Tem certeza absoluta?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta ação não pode ser desfeita. Sua conta e todos os dados associados serão removidos permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Excluir
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </ComponentShowcase>
+          </section>
+
+          <Separator />
+          <section id="toast">
+            <h2 className="text-2xl font-bold mb-2">Toast</h2>
+            <p className="text-muted-foreground mb-6">Mensagem temporária e auto-descartável para feedback imediato de ações. Diferente das <strong>Notificações</strong>, que persistem em pilha para fluxos longos.</p>
+            <ComponentShowcase
+              title="Toast"
+              description="Dispare pelo hook useToast. Variante destructive para erros. O toast abre em portal e segue o tema global da página."
+              showToggle={false}
+              code={`import { useToast } from "@/hooks/use-toast";
+
+const { toast } = useToast();
+
+<Button
+  variant="outline"
+  onClick={() => toast({ title: "Alterações salvas", description: "Suas preferências foram atualizadas." })}
+>
+  Toast padrão
+</Button>
+<Button
+  variant="outline"
+  onClick={() => toast({ variant: "destructive", title: "Erro ao salvar", description: "Tente novamente em instantes." })}
+>
+  Toast destrutivo
+</Button>`}
+            >
+              <Button
+                variant="outline"
+                onClick={() => toast({ title: "Alterações salvas", description: "Suas preferências foram atualizadas." })}
+              >
+                Toast padrão
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => toast({ variant: "destructive", title: "Erro ao salvar", description: "Tente novamente em instantes." })}
+              >
+                Toast destrutivo
+              </Button>
+            </ComponentShowcase>
+          </section>
+
 
           {/* ===== NAVEGAÇÃO ===== */}
           <Separator />
@@ -1155,8 +1398,233 @@ function showTab(tabId) {
             <TourWidget />
           </section>
 
+          <Separator />
+          <section id="breadcrumb">
+            <h2 className="text-2xl font-bold mb-2">Breadcrumb</h2>
+            <p className="text-muted-foreground mb-6">Trilha de navegação hierárquica. Use ellipsis para colapsar níveis intermediários em caminhos profundos.</p>
+            <ComponentShowcase
+              title="Breadcrumb"
+              description="Último item é a página atual (sem link). Roboto 14px, separador chevron."
+              code={`<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="#">Início</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="#">Cursos</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Renda Fixa na Prática</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`}
+            >
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="#">Início</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbEllipsis />
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="#">Cursos</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Renda Fixa na Prática</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </ComponentShowcase>
+          </section>
+
+          <Separator />
+          <section id="pagination">
+            <h2 className="text-2xl font-bold mb-2">Pagination</h2>
+            <p className="text-muted-foreground mb-6">Navegação entre páginas de listas e tabelas. Página ativa com borda; ellipsis para intervalos longos.</p>
+            <ComponentShowcase
+              title="Pagination"
+              description="Anterior/Próxima nas extremidades, página ativa destacada com isActive."
+              code={`<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationLink href="#" className="w-auto gap-1 px-3">
+        <ChevronLeft className="h-4 w-4" /> Anterior
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
+    <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
+    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+    <PaginationItem><PaginationEllipsis /></PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" className="w-auto gap-1 px-3">
+        Próxima <ChevronRight className="h-4 w-4" />
+      </PaginationLink>
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>`}
+            >
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationLink href="#" className="w-auto gap-1 px-3">
+                      <ChevronLeft className="h-4 w-4" /> Anterior
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
+                  <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
+                  <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+                  <PaginationItem><PaginationEllipsis /></PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" className="w-auto gap-1 px-3">
+                      Próxima <ChevronRight className="h-4 w-4" />
+                    </PaginationLink>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </ComponentShowcase>
+          </section>
+
 
           {/* ===== ENTRADA DE DADOS ===== */}
+          <Separator />
+          <section id="form-inputs">
+            <h2 className="text-2xl font-bold mb-2">Inputs & Formulários</h2>
+            <p className="text-muted-foreground mb-6">Campos base de formulário: texto, textarea, select, radio e slider. Labels em Roboto; mensagens de erro em <code className="bg-muted px-1 rounded text-sm font-mono">text-destructive</code> abaixo do campo.</p>
+            <div className="space-y-6">
+              <ComponentShowcase
+                title="Campos de Texto"
+                description="Estados: padrão, erro (aria-invalid + mensagem) e desabilitado. Textarea para textos longos."
+                code={`<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="nome">Nome</Label>
+  <Input id="nome" placeholder="Seu nome completo" />
+</div>
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="email-erro">E-mail</Label>
+  <Input
+    id="email-erro"
+    type="email"
+    defaultValue="email-invalido"
+    aria-invalid="true"
+    className="border-destructive focus-visible:ring-destructive"
+  />
+  <p className="text-xs text-destructive">Informe um e-mail válido.</p>
+</div>
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="desabilitado">Desabilitado</Label>
+  <Input id="desabilitado" placeholder="Campo desabilitado" disabled />
+</div>
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="mensagem">Mensagem</Label>
+  <Textarea id="mensagem" placeholder="Escreva sua mensagem..." />
+</div>`}
+              >
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="nome">Nome</Label>
+                  <Input id="nome" placeholder="Seu nome completo" />
+                </div>
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="email-erro">E-mail</Label>
+                  <Input
+                    id="email-erro"
+                    type="email"
+                    defaultValue="email-invalido"
+                    aria-invalid="true"
+                    className="border-destructive focus-visible:ring-destructive"
+                  />
+                  <p className="text-xs text-destructive">Informe um e-mail válido.</p>
+                </div>
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="desabilitado">Desabilitado</Label>
+                  <Input id="desabilitado" placeholder="Campo desabilitado" disabled />
+                </div>
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="mensagem">Mensagem</Label>
+                  <Textarea id="mensagem" placeholder="Escreva sua mensagem..." />
+                </div>
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Seleção (Select & Radio)"
+                description="Select para listas longas; RadioGroup para até 4 opções visíveis."
+                code={`<div className="grid w-full max-w-sm gap-1.5">
+  <Label>Perfil de investidor</Label>
+  <Select>
+    <SelectTrigger>
+      <SelectValue placeholder="Selecione um perfil" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="conservador">Conservador</SelectItem>
+      <SelectItem value="moderado">Moderado</SelectItem>
+      <SelectItem value="arrojado">Arrojado</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+
+<RadioGroup defaultValue="mensal" className="gap-3">
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="mensal" id="r-mensal" />
+    <Label htmlFor="r-mensal">Aporte mensal</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="unico" id="r-unico" />
+    <Label htmlFor="r-unico">Aporte único</Label>
+  </div>
+</RadioGroup>`}
+              >
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label>Perfil de investidor</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um perfil" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="conservador">Conservador</SelectItem>
+                      <SelectItem value="moderado">Moderado</SelectItem>
+                      <SelectItem value="arrojado">Arrojado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <RadioGroup defaultValue="mensal" className="gap-3">
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="mensal" id="r-mensal" />
+                    <Label htmlFor="r-mensal">Aporte mensal</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="unico" id="r-unico" />
+                    <Label htmlFor="r-unico">Aporte único</Label>
+                  </div>
+                </RadioGroup>
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Slider"
+                description="Para valores numéricos em faixa contínua. Thumb na cor primária da marca ativa."
+                code={`<div className="grid w-full max-w-sm gap-3">
+  <Label>Valor do aporte</Label>
+  <Slider defaultValue={[5000]} max={10000} step={100} />
+</div>`}
+              >
+                <div className="grid w-full max-w-sm gap-3">
+                  <Label>Valor do aporte</Label>
+                  <Slider defaultValue={[5000]} max={10000} step={100} />
+                </div>
+              </ComponentShowcase>
+            </div>
+          </section>
+
           <Separator />
           <section id="upload-preview">
             <h2 className="text-2xl font-bold mb-2">Upload com Preview</h2>
@@ -1340,6 +1808,106 @@ function showTab(tabId) {
               <SectionThemeToggle bare title="Gráfico Donut (Pizza)" description="Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais." code={graficoPizzaSrc} selfDocumented aiFood={false}><GraficoPizza /></SectionThemeToggle>
               <SectionThemeToggle bare title="Gráfico Donut com Legendas" description="Variações de posição da legenda: horizontal abaixo, em linha única e vertical lateral ao gráfico. Mesmas cores e regras do donut padrão." code={graficoPizzaLegendasSrc} selfDocumented><GraficoPizzaLegendas /></SectionThemeToggle>
             </div>
+          </section>
+
+          <Separator />
+          <section id="tags-badges">
+            <h2 className="text-2xl font-bold mb-2">Badges & Tags</h2>
+            <p className="text-muted-foreground mb-6">Badge (shadcn) para status simples; <strong>Tag</strong> tokenizada para categorias e estados — usa os tokens <code className="bg-muted px-1 rounded text-sm font-mono">--chart-*</code> e semânticos, adaptando-se a light/dark e às marcas Capital/Escola.</p>
+            <div className="space-y-6">
+              <ComponentShowcase
+                title="Badge"
+                description="Quatro variantes do componente base."
+                code={`import { Badge } from "@/components/ui/badge";
+
+<Badge>Padrão</Badge>
+<Badge variant="secondary">Secundário</Badge>
+<Badge variant="destructive">Destrutivo</Badge>
+<Badge variant="outline">Contorno</Badge>`}
+              >
+                <Badge>Padrão</Badge>
+                <Badge variant="secondary">Secundário</Badge>
+                <Badge variant="destructive">Destrutivo</Badge>
+                <Badge variant="outline">Contorno</Badge>
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Tag (tokenizada)"
+                description="Tons semânticos (success/warning/info/error) e categóricos (chart-1 a chart-8). Nunca use classes Tailwind de cor hardcoded em tags."
+                code={`import { Tag } from "@/components/widgets/Tag";
+
+{/* Tons semânticos */}
+<Tag tone="success">Success</Tag>
+<Tag tone="warning">Warning</Tag>
+<Tag tone="info">Info</Tag>
+<Tag tone="error">Error</Tag>
+<Tag tone="neutral">Neutral</Tag>
+<Tag tone="primary">Primary</Tag>
+
+{/* Tons categóricos (paleta de dataviz) */}
+<Tag tone="green">Green</Tag>
+<Tag tone="violet">Violet</Tag>
+<Tag tone="amber">Amber</Tag>
+<Tag tone="blue">Blue</Tag>
+<Tag tone="magenta">Magenta</Tag>
+<Tag tone="brick">Brick</Tag>
+<Tag tone="olive">Olive</Tag>
+<Tag tone="graphite">Graphite</Tag>`}
+              >
+                <Tag tone="success">Success</Tag>
+                <Tag tone="warning">Warning</Tag>
+                <Tag tone="info">Info</Tag>
+                <Tag tone="error">Error</Tag>
+                <Tag tone="neutral">Neutral</Tag>
+                <Tag tone="primary">Primary</Tag>
+                <Tag tone="green">Green</Tag>
+                <Tag tone="violet">Violet</Tag>
+                <Tag tone="amber">Amber</Tag>
+                <Tag tone="blue">Blue</Tag>
+                <Tag tone="magenta">Magenta</Tag>
+                <Tag tone="brick">Brick</Tag>
+                <Tag tone="olive">Olive</Tag>
+                <Tag tone="graphite">Graphite</Tag>
+              </ComponentShowcase>
+            </div>
+          </section>
+
+          <Separator />
+          <section id="avatar">
+            <h2 className="text-2xl font-bold mb-2">Avatar</h2>
+            <p className="text-muted-foreground mb-6">Representação de usuários com fallback em iniciais (Anek, fundo muted). Grupos empilhados com contador para listas de participantes.</p>
+            <ComponentShowcase
+              title="Avatar"
+              description="Tamanhos, fallback em iniciais e grupo empilhado com excedente."
+              code={`import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+{/* Tamanhos */}
+<Avatar className="h-8 w-8"><AvatarFallback className="text-xs">RS</AvatarFallback></Avatar>
+<Avatar><AvatarFallback>RS</AvatarFallback></Avatar>
+<Avatar className="h-14 w-14"><AvatarFallback className="text-lg">RS</AvatarFallback></Avatar>
+
+{/* Grupo empilhado */}
+<div className="flex -space-x-3">
+  <Avatar className="border-2 border-background"><AvatarFallback>RS</AvatarFallback></Avatar>
+  <Avatar className="border-2 border-background"><AvatarFallback>AC</AvatarFallback></Avatar>
+  <Avatar className="border-2 border-background"><AvatarFallback>MF</AvatarFallback></Avatar>
+  <Avatar className="border-2 border-background">
+    <AvatarFallback className="bg-primary text-primary-foreground text-xs">+12</AvatarFallback>
+  </Avatar>
+</div>`}
+            >
+              <Avatar className="h-8 w-8"><AvatarFallback className="text-xs">RS</AvatarFallback></Avatar>
+              <Avatar><AvatarFallback>RS</AvatarFallback></Avatar>
+              <Avatar className="h-14 w-14"><AvatarFallback className="text-lg">RS</AvatarFallback></Avatar>
+              <div className="flex -space-x-3">
+                <Avatar className="border-2 border-background"><AvatarFallback>RS</AvatarFallback></Avatar>
+                <Avatar className="border-2 border-background"><AvatarFallback>AC</AvatarFallback></Avatar>
+                <Avatar className="border-2 border-background"><AvatarFallback>MF</AvatarFallback></Avatar>
+                <Avatar className="border-2 border-background">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">+12</AvatarFallback>
+                </Avatar>
+              </div>
+            </ComponentShowcase>
           </section>
 
 
