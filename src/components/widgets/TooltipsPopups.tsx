@@ -83,19 +83,7 @@ export function TooltipsPopups() {
           {
             label: "React",
             language: "tsx",
-            code: `// Tooltip animada da landing page (preview superior)
-<div className="bg-card border border-border p-12 rounded-xl flex items-center justify-center min-h-[200px]">
-  <div className="relative bg-primary text-primary-foreground text-[11px]
-                  font-roboto font-bold uppercase px-3 py-1.5 rounded-none
-                  shadow-lg whitespace-nowrap animate-bounce">
-    Clique para interagir
-    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2
-                    w-2 h-2 bg-primary rotate-45" />
-  </div>
-</div>
-
-// ──────────────────────────────────────────────────────────
-// Posicionamento (top / bottom / left / right) — preview inferior
+            code: `// Posicionamento (top / bottom / left / right)
 type Pos = "top" | "bottom" | "left" | "right";
 
 function TooltipDemo({ pos }: { pos: Pos }) {
@@ -132,25 +120,57 @@ function TooltipDemo({ pos }: { pos: Pos }) {
   );
 }
 
-<div className="bg-card border border-border rounded-xl p-12">
-  <div className="grid grid-cols-4 gap-4 items-center min-h-[140px]">
-    <div className="flex justify-center"><TooltipDemo pos="top" /></div>
-    <div className="flex justify-center"><TooltipDemo pos="bottom" /></div>
-    <div className="flex justify-center"><TooltipDemo pos="left" /></div>
-    <div className="flex justify-center"><TooltipDemo pos="right" /></div>
-  </div>
-  <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
-    <div className="text-center text-sm font-roboto font-semibold">Top</div>
-    <div className="text-center text-sm font-roboto font-semibold">Bottom</div>
-    <div className="text-center text-sm font-roboto font-semibold">Left</div>
-    <div className="text-center text-sm font-roboto font-semibold">Right</div>
-  </div>
-</div>`
+export function TooltipsPopups() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-lg font-bold mb-4 font-anek">Tooltip Animada de Conversão</h3>
+        <p className="text-muted-foreground mb-4">
+          Bordas retas (<code>rounded-none</code>), tipografia Roboto Uppercase e
+          animação de flutuação vertical contínua.
+        </p>
+        <div className="bg-card border border-border p-12 rounded-xl flex items-center justify-center min-h-[200px]">
+          <div className="relative bg-primary text-primary-foreground text-[11px] font-roboto font-bold uppercase px-3 py-1.5 rounded-none shadow-lg whitespace-nowrap animate-bounce">
+            Clique para interagir
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rotate-45" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-bold mb-4 font-anek">Posicionamento em relação ao texto</h3>
+        <p className="text-muted-foreground mb-6">
+          Quatro variações: tooltip <strong>acima</strong> (vertical/topo), <strong>abaixo</strong> (vertical/base),
+          à <strong>esquerda</strong> e à <strong>direita</strong> do elemento de referência.
+        </p>
+        <div className="bg-card border border-border rounded-xl p-12">
+          <div className="grid grid-cols-4 gap-4 items-center min-h-[140px]">
+            <div className="flex justify-center"><TooltipDemo pos="top" /></div>
+            <div className="flex justify-center"><TooltipDemo pos="bottom" /></div>
+            <div className="flex justify-center"><TooltipDemo pos="left" /></div>
+            <div className="flex justify-center"><TooltipDemo pos="right" /></div>
+          </div>
+          <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
+            <div className="text-center text-sm font-roboto font-semibold">Top</div>
+            <div className="text-center text-sm font-roboto font-semibold">Bottom</div>
+            <div className="text-center text-sm font-roboto font-semibold">Left</div>
+            <div className="text-center text-sm font-roboto font-semibold">Right</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}`
           },
           {
             label: "HTML / CSS / JS",
             language: "html",
             code: `<!-- Tooltip animada (preview superior) -->
+<h3 class="tt-title">Tooltip Animada de Conversão</h3>
+<p class="tt-desc">
+  Bordas retas (border-radius: 0), tipografia Roboto Uppercase e animação de
+  flutuação vertical contínua.
+</p>
 <div class="tt-stage">
   <div class="tt-bouncing">
     Clique para interagir
@@ -159,6 +179,11 @@ function TooltipDemo({ pos }: { pos: Pos }) {
 </div>
 
 <!-- Posicionamento — top / bottom / left / right (preview inferior) -->
+<h3 class="tt-title">Posicionamento em relação ao texto</h3>
+<p class="tt-desc">
+  Quatro variações: tooltip <strong>acima</strong> (vertical/topo), <strong>abaixo</strong> (vertical/base),
+  à <strong>esquerda</strong> e à <strong>direita</strong> do elemento de referência.
+</p>
 <div class="tt-grid-card">
   <div class="tt-grid">
     <div class="tt-cell"><span class="tt-trigger" data-pos="top">Texto de referência<span class="tt-balloon">Clique para interagir<span class="tt-arrow"></span></span></span></div>
@@ -176,6 +201,8 @@ function TooltipDemo({ pos }: { pos: Pos }) {
     --tt-bg: hsl(var(--primary));
     --tt-fg: hsl(var(--primary-foreground));
   }
+  .tt-title{ font-family:'Anek Latin',sans-serif; font-size:18px; font-weight:700; margin:0 0 1rem; }
+  .tt-desc{ color:hsl(var(--muted-foreground)); margin:0 0 1.5rem; }
   .tt-stage{
     background:hsl(var(--card)); border:1px solid hsl(var(--border));
     border-radius:12px; padding:3rem; min-height:200px;

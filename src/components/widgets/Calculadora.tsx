@@ -650,17 +650,27 @@ export function Calculadora() {
               <button onClick={() => setShowDetails(false)}><X className="h-6 w-6" /></button>
             </div>
             <div className="space-y-4">
-              <div className="flex justify-between"><span>IOF</span>
+              <div className="flex justify-between">
+                <span className="underline decoration-dotted decoration-primary underline-offset-2 cursor-help"
+                  title="Imposto federal cobrado em operações de câmbio.">IOF</span>
                 <span className="font-semibold">R$ {formatCurrency(brlAmount * iofRate)}</span></div>
-              <div className="flex justify-between"><span>Taxa Administrativa</span>
+              <div className="flex justify-between">
+                <span className="underline decoration-dotted decoration-primary underline-offset-2 cursor-help"
+                  title="Valor cobrado pela intermediação da operação.">Taxa Administrativa</span>
                 <span className="font-semibold">R$ {formatCurrency(brlAmount * spreadRate)}</span></div>
               {userType === "pj" && (
-                <div className="flex justify-between"><span>Custos transacionais</span>
+                <div className="flex justify-between">
+                  <span className="underline decoration-dotted decoration-primary underline-offset-2 cursor-help"
+                    title="Valor cobrado pela intermediação da operação.">Custos transacionais</span>
                   <span className="font-semibold">R$ 90,00</span></div>
               )}
               <div className="flex justify-between"><span>VET</span>
                 <span className="font-semibold">1 {currencyObj.code.toUpperCase()} = BRL {formatRate(vetDisplay)}</span></div>
             </div>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Disclaimer: Os valores apresentados são apenas <strong>uma simulação e não
+              representam uma oferta final.</strong> As taxas estão sujeitas a variação.
+            </p>
             <button onClick={() => setShowDetails(false)}
               className="mt-8 w-full bg-primary text-primary-foreground font-semibold py-3 rounded-xl">
               Fechar
@@ -732,6 +742,7 @@ export function Calculadora() {
   .modal-card { background: hsl(var(--card)); border-radius: 16px; padding: 24px;
     max-width: 480px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
   .modal-row { display: flex; justify-content: space-between; padding: 8px 0; }
+  .hint { text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
 </style>
 
 <div class="calc">
@@ -795,10 +806,14 @@ export function Calculadora() {
       <h2 style="font-size:20px;font-weight:600;margin:0;">Detalhes da Operação</h2>
       <button onclick="closeModal()" style="background:0;border:0;cursor:pointer;font-size:24px;">×</button>
     </div>
-    <div class="modal-row"><span>IOF</span><span id="m-iof">R$ 0,00</span></div>
-    <div class="modal-row"><span>Taxa Administrativa</span><span id="m-spread">R$ 0,00</span></div>
-    <div class="modal-row" id="m-pj-row" style="display:none;"><span>Custos transacionais</span><span>R$ 90,00</span></div>
+    <div class="modal-row"><span class="hint" title="Imposto federal cobrado em operações de câmbio.">IOF</span><span id="m-iof">R$ 0,00</span></div>
+    <div class="modal-row"><span class="hint" title="Valor cobrado pela intermediação da operação.">Taxa Administrativa</span><span id="m-spread">R$ 0,00</span></div>
+    <div class="modal-row" id="m-pj-row" style="display:none;"><span class="hint" title="Valor cobrado pela intermediação da operação.">Custos transacionais</span><span>R$ 90,00</span></div>
     <div class="modal-row"><span>VET</span><span id="m-vet">1 USD = BRL 5,5350</span></div>
+    <p style="margin-top:16px;font-size:12px;color:#6b7280;">
+      Disclaimer: Os valores apresentados são apenas <strong>uma simulação e não representam
+      uma oferta final.</strong> As taxas estão sujeitas a variação.
+    </p>
     <button class="cta" onclick="closeModal()" style="margin-top:24px;">Fechar</button>
   </div>
 </div>

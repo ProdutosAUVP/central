@@ -74,9 +74,8 @@ export function Icones() {
             {
               label: "React",
               language: "tsx",
-              code: `// Grade dos 4 pesos exibida no preview
-// Recomendamos @phosphor-icons/react. Lucide-react também já está no projeto.
-import { Eye } from "lucide-react";
+              code: `// Recomendamos @phosphor-icons/react. Lucide-react também já está no projeto.
+import { ExternalLink } from "lucide-react";
 
 function IconWeight({ prefixLabel, description, strokeWidth, fill, opacity }) {
   return (
@@ -112,22 +111,51 @@ function IconWeight({ prefixLabel, description, strokeWidth, fill, opacity }) {
   );
 }
 
-<div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-  <IconWeight prefixLabel="ph (Regular)" description="Padrão do sistema"
-    strokeWidth={1.5} fill="none" />
-  <IconWeight prefixLabel="ph-fill" description="Para estados ativos"
-    strokeWidth={0} fill="currentColor" />
-  <IconWeight prefixLabel="ph-bold" description="Ênfase extra"
-    strokeWidth={2.5} fill="none" />
-  <IconWeight prefixLabel="ph-duotone" description="Estilo decorativo"
-    strokeWidth={1.5} fill="currentColor" opacity={0.2} />
-</div>`
+export function Icones() {
+  return (
+    <div className="space-y-12">
+      <div>
+        <h3 className="text-lg font-bold mb-4 font-anek">Pesos e Variações (Weights)</h3>
+        <p className="text-muted-foreground mb-4">
+          A biblioteca permite alternar entre estilos apenas mudando o prefixo da classe
+          do ícone. O padrão do design system é o <em>Regular</em>, usando <em>Fill</em>{" "}
+          para interações de estado ativo ou vídeos.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <IconWeight prefixLabel="ph (Regular)" description="Padrão do sistema"
+            strokeWidth={1.5} fill="none" />
+          <IconWeight prefixLabel="ph-fill" description="Para estados ativos"
+            strokeWidth={0} fill="currentColor" />
+          <IconWeight prefixLabel="ph-bold" description="Ênfase extra"
+            strokeWidth={2.5} fill="none" />
+          <IconWeight prefixLabel="ph-duotone" description="Estilo decorativo"
+            strokeWidth={1.5} fill="currentColor" opacity={0.2} />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-bold mb-4 font-anek">Implementação e Referência</h3>
+        <a href="https://phosphoricons.com/" target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-bold text-sm uppercase rounded-lg hover:opacity-90 transition-opacity">
+          Acessar Catálogo Phosphor <ExternalLink className="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  );
+}`
             },
             {
               label: "HTML / CSS / JS",
               language: "html",
-              code: `<!-- Phosphor Icons via CDN — espelha a grid de 4 pesos do preview -->
+              code: `<!-- Phosphor Icons via CDN — espelha o preview completo -->
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<h3 class="section-title">Pesos e Variações (Weights)</h3>
+<p class="section-desc">
+  A biblioteca permite alternar entre estilos apenas mudando o prefixo da classe do ícone.
+  O padrão do design system é o <em>Regular</em>, usando <em>Fill</em> para interações de
+  estado ativo ou vídeos.
+</p>
 
 <div class="weights-grid">
   <div class="weight-card">
@@ -146,13 +174,28 @@ function IconWeight({ prefixLabel, description, strokeWidth, fill, opacity }) {
     <span class="weight-desc">Ênfase extra</span>
   </div>
   <div class="weight-card">
+    <!-- Duotone: no SVG equivale a fill="currentColor" opacity=0.2 -->
     <i class="ph-duotone ph-eye"></i>
     <span class="weight-prefix">ph-duotone</span>
     <span class="weight-desc">Estilo decorativo</span>
   </div>
 </div>
 
+<h3 class="section-title">Implementação e Referência</h3>
+<a class="catalog-btn" href="https://phosphoricons.com/" target="_blank" rel="noopener noreferrer">
+  Acessar Catálogo Phosphor
+</a>
+
 <style>
+  .section-title { font-family:'Anek Latin',sans-serif; font-size:18px; font-weight:700; margin:2rem 0 1rem; }
+  .section-desc { color:hsl(var(--muted-foreground)); margin-bottom:1rem; }
+  .catalog-btn {
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding:.75rem 1.5rem; border-radius:8px;
+    background:hsl(var(--foreground)); color:hsl(var(--background));
+    font-weight:700; font-size:.875rem; text-transform:uppercase; text-decoration:none;
+  }
+  .catalog-btn:hover { opacity:.9; }
   .weights-grid {
     display:grid; grid-template-columns:repeat(4, 1fr); gap:1.5rem;
   }

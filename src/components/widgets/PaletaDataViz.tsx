@@ -233,26 +233,53 @@ export function PaletaDataViz() {
               code: `import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 // Donut padrão AUVP — sempre rounded (cornerRadius) e com paddingAngle
-<ResponsiveContainer width="100%" height="100%">
-  <PieChart>
-    <Pie
-      data={data}
-      cx="50%"
-      cy="50%"
-      innerRadius={55}
-      outerRadius={82}
-      paddingAngle={3}
-      dataKey="value"
-      stroke="none"
-      cornerRadius={4}
-    >
-      {data.map((_, i) => (
-        <Cell key={i} fill={\`hsl(var(--chart-\${(i % 8) + 1}))\`} />
-      ))}
-    </Pie>
-    <Tooltip />
-  </PieChart>
-</ResponsiveContainer>
+function DonutDemo() {
+  const data = [
+    { name: "Renda Fixa", value: 35 }, { name: "Ações BR", value: 22 },
+    { name: "Ações US", value: 18 }, { name: "FIIs", value: 12 },
+    { name: "Cripto", value: 7 }, { name: "Outros", value: 6 },
+  ];
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/60 p-6">
+      <h4 className="text-lg font-semibold tracking-tight">Distribuição de Carteira</h4>
+      <p className="text-xs text-muted-foreground">Exemplo aplicando os tokens categóricos</p>
+      <ResponsiveContainer width="100%" height={200}>
+        <PieChart>
+          <Pie data={data} cx="50%" cy="50%" innerRadius={55} outerRadius={82}
+            paddingAngle={3} dataKey="value" stroke="none" cornerRadius={4}>
+            {data.map((_, i) => (
+              <Cell key={i} fill={\`hsl(var(--chart-\${(i % 8) + 1}))\`} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+// Heatmap sequencial: célula colorida por intensidade (1 a 5)
+// <td style={{ backgroundColor: \`hsl(var(--chart-seq-\${v}))\` }}>{v}</td>
+// Cabeçalho: Ativo | Q1 | Q2 | Q3 | Q4
+
+export function PaletaDataViz() {
+  return (
+    <div className="space-y-10">
+      <h3 className="text-lg font-bold">Paleta Categórica (8 cores)</h3>
+      {/* --chart-1 a --chart-8 em MiniSwatch, seguidos do DonutDemo */}
+      <DonutDemo />
+
+      <h3 className="text-lg font-bold">Paleta Sequencial (5 níveis)</h3>
+      {/* --chart-seq-1 a --chart-seq-5 + TabelaIntensidadeDemo */}
+
+      <h3 className="text-lg font-bold">Paleta Divergente</h3>
+      {/* --chart-div-neg / --chart-div-mid / --chart-div-pos */}
+
+      <h3 className="text-lg font-bold">Como usar</h3>
+      {/* Os tokens estão definidos em src/index.css e mudam conforme a marca. */}
+    </div>
+  );
+}
 
 // CSS / inline
 <div style={{ backgroundColor: 'hsl(var(--chart-2))' }} />
@@ -263,25 +290,65 @@ export function PaletaDataViz() {
             {
               label: "HTML / CSS / JS",
               language: "html",
-              code: `<!-- Tokens AUVP de Data Viz: definidos em :root via CSS custom properties -->
+              code: `<!-- Tokens AUVP de Data Viz (Capital, light) — mesmos valores de src/index.css -->
+<!-- Equivalente React: export function PaletaDataViz() -->
 <style>
   :root {
-    --chart-1: 142 64% 12%;
-    --chart-2: 38 78% 62%;
-    --chart-3: 200 70% 45%;
-    --chart-4: 12  76% 55%;
-    --chart-5: 280 60% 55%;
-    --chart-6: 165 55% 40%;
-    --chart-7: 32  90% 50%;
-    --chart-8: 240 50% 45%;
+    --chart-1: 152 80% 30%;   /* Verde AUVP */
+    --chart-2: 270 60% 55%;   /* Violeta */
+    --chart-3: 38 92% 55%;    /* Âmbar */
+    --chart-4: 199 89% 48%;   /* Azul */
+    --chart-5: 340 75% 55%;   /* Magenta */
+    --chart-6: 15 80% 50%;    /* Vermelho-tijolo */
+    --chart-7: 90 55% 40%;    /* Oliva */
+    --chart-8: 220 30% 35%;   /* Grafite azulado */
+
+    --chart-seq-1: 145 40% 92%;
+    --chart-seq-2: 150 50% 78%;
+    --chart-seq-3: 152 60% 60%;
+    --chart-seq-4: 154 75% 40%;
+    --chart-seq-5: 155 93% 11%;
+
+    --chart-div-neg: 0 72% 51%;
+    --chart-div-mid: 40 30% 92%;
+    --chart-div-pos: 155 93% 25%;
   }
   .swatch { display:inline-block; width:32px; height:32px; border-radius:8px; }
+  h3 { font-family:'Anek Latin',sans-serif; font-size:18px; font-weight:700; }
 </style>
 
-<!-- Uso direto via background-color -->
+<h3>Paleta Categórica (8 cores)</h3>
 <span class="swatch" style="background:hsl(var(--chart-1));"></span>
 <span class="swatch" style="background:hsl(var(--chart-2));"></span>
 <span class="swatch" style="background:hsl(var(--chart-3));"></span>
+
+<!-- Card do donut: "Distribuição de Carteira" / "Exemplo aplicando os tokens categóricos" -->
+<div class="card">
+  <h4>Distribuição de Carteira</h4>
+  <p>Exemplo aplicando os tokens categóricos</p>
+  <canvas id="donut" width="240" height="240"></canvas>
+</div>
+
+<h3>Paleta Sequencial (5 níveis)</h3>
+<!-- Heatmap: colunas Ativo | Q1 | Q2 | Q3 | Q4, célula com hsl(var(--chart-seq-N)) -->
+<table>
+  <thead><tr><th>Ativo</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr></thead>
+  <tbody>
+    <tr><td>Ativo A</td>
+      <td style="background:hsl(var(--chart-seq-1));">1</td>
+      <td style="background:hsl(var(--chart-seq-2));">2</td>
+      <td style="background:hsl(var(--chart-seq-3));">3</td>
+      <td style="background:hsl(var(--chart-seq-5)); color:#fff;">5</td></tr>
+  </tbody>
+</table>
+
+<h3>Paleta Divergente</h3>
+<span class="swatch" style="background:hsl(var(--chart-div-neg));"></span>
+<span class="swatch" style="background:hsl(var(--chart-div-mid));"></span>
+<span class="swatch" style="background:hsl(var(--chart-div-pos));"></span>
+
+<h3>Como usar</h3>
+<!-- Os tokens estão definidos em src/index.css e mudam conforme a marca ativa. -->
 
 <!-- Donut com Chart.js (cutout ~67% equivalente ao innerRadius do Recharts) -->
 <canvas id="donut" width="240" height="240"></canvas>

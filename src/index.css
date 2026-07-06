@@ -111,8 +111,10 @@
     --primary: 42 84% 63%;
     --primary-foreground: 220 15% 15%;
 
+    /* Foreground escuro sobre dourado — branco sobre hsl(40 64% 54%) fica
+       abaixo de 3:1 e reprova o mínimo de 4.5:1 do design system. */
     --secondary: 40 64% 54%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary-foreground: 220 15% 15%;
 
     --muted: 40 30% 95%;
     --muted-foreground: 40 15% 40%;
@@ -173,8 +175,10 @@
     --chart-div-mid: 40 30% 95%;
     --chart-div-pos: 42 100% 33%;
 
-    --border: 45 80% 95%;
-    --input: 45 80% 95%;
+    /* Borda com contraste visível sobre branco (≈ rgba(0,0,0,0.12) do DS).
+       O valor anterior (45 80% 95%) era praticamente invisível. */
+    --border: 42 30% 87%;
+    --input: 42 30% 87%;
 
     /* === Status semânticos (Escola) — âmbar em vez de verde === */
     --success: 38 80% 45%;
@@ -210,7 +214,7 @@
     --muted-foreground: 0 0% 70%;
 
     --accent: 145 20% 44%;
-    --accent-foreground: 0 0% 98%;
+    --accent-foreground: 0 0% 8%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -396,46 +400,50 @@
 
 /* === Dark mode contrast overrides ===
    Camada defensiva para neutralizar classes Tailwind hardcoded
-   garantindo contraste adequado em fundo preto. */
-.dark .bg-white { background-color: hsl(var(--card)) !important; }
-.dark .bg-black { background-color: hsl(var(--background)) !important; }
-.dark .text-white { color: hsl(0 0% 98%) !important; }
-.dark .text-black { color: hsl(var(--foreground)) !important; }
+   garantindo contraste adequado em fundo preto.
+   O `:not(.light *)` isenta previews forçados para o tema claro
+   (ComponentShowcase/SectionThemeToggle) dentro do html.dark — sem isso,
+   um preview "Claro" sob tema global escuro tinha bg-black/text-white
+   neutralizados e quebrava o contraste do componente exibido. */
+.dark .bg-white:not(.light *) { background-color: hsl(var(--card)) !important; }
+.dark .bg-black:not(.light *) { background-color: hsl(var(--background)) !important; }
+.dark .text-white:not(.light *) { color: hsl(0 0% 98%) !important; }
+.dark .text-black:not(.light *) { color: hsl(var(--foreground)) !important; }
 
-.dark .bg-gray-50, .dark .bg-gray-100,
-.dark .bg-slate-50, .dark .bg-slate-100,
-.dark .bg-zinc-50, .dark .bg-zinc-100,
-.dark .bg-neutral-50, .dark .bg-neutral-100 { background-color: hsl(var(--muted)) !important; }
+.dark .bg-gray-50:not(.light *), .dark .bg-gray-100:not(.light *),
+.dark .bg-slate-50:not(.light *), .dark .bg-slate-100:not(.light *),
+.dark .bg-zinc-50:not(.light *), .dark .bg-zinc-100:not(.light *),
+.dark .bg-neutral-50:not(.light *), .dark .bg-neutral-100:not(.light *) { background-color: hsl(var(--muted)) !important; }
 
-.dark .bg-gray-200, .dark .bg-slate-200,
-.dark .bg-zinc-200, .dark .bg-neutral-200 { background-color: hsl(var(--secondary)) !important; }
+.dark .bg-gray-200:not(.light *), .dark .bg-slate-200:not(.light *),
+.dark .bg-zinc-200:not(.light *), .dark .bg-neutral-200:not(.light *) { background-color: hsl(var(--secondary)) !important; }
 
-.dark .bg-gray-800, .dark .bg-gray-900,
-.dark .bg-slate-800, .dark .bg-slate-900,
-.dark .bg-zinc-800, .dark .bg-zinc-900,
-.dark .bg-neutral-800, .dark .bg-neutral-900 { background-color: hsl(var(--card)) !important; }
+.dark .bg-gray-800:not(.light *), .dark .bg-gray-900:not(.light *),
+.dark .bg-slate-800:not(.light *), .dark .bg-slate-900:not(.light *),
+.dark .bg-zinc-800:not(.light *), .dark .bg-zinc-900:not(.light *),
+.dark .bg-neutral-800:not(.light *), .dark .bg-neutral-900:not(.light *) { background-color: hsl(var(--card)) !important; }
 
-.dark .text-gray-900, .dark .text-gray-800, .dark .text-gray-700,
-.dark .text-slate-900, .dark .text-slate-800, .dark .text-slate-700,
-.dark .text-zinc-900, .dark .text-zinc-800, .dark .text-zinc-700,
-.dark .text-neutral-900, .dark .text-neutral-800, .dark .text-neutral-700 { color: hsl(var(--foreground)) !important; }
+.dark .text-gray-900:not(.light *), .dark .text-gray-800:not(.light *), .dark .text-gray-700:not(.light *),
+.dark .text-slate-900:not(.light *), .dark .text-slate-800:not(.light *), .dark .text-slate-700:not(.light *),
+.dark .text-zinc-900:not(.light *), .dark .text-zinc-800:not(.light *), .dark .text-zinc-700:not(.light *),
+.dark .text-neutral-900:not(.light *), .dark .text-neutral-800:not(.light *), .dark .text-neutral-700:not(.light *) { color: hsl(var(--foreground)) !important; }
 
-.dark .text-gray-600, .dark .text-gray-500, .dark .text-gray-400,
-.dark .text-slate-600, .dark .text-slate-500, .dark .text-slate-400,
-.dark .text-zinc-600, .dark .text-zinc-500, .dark .text-zinc-400,
-.dark .text-neutral-600, .dark .text-neutral-500, .dark .text-neutral-400 { color: hsl(var(--muted-foreground)) !important; }
+.dark .text-gray-600:not(.light *), .dark .text-gray-500:not(.light *), .dark .text-gray-400:not(.light *),
+.dark .text-slate-600:not(.light *), .dark .text-slate-500:not(.light *), .dark .text-slate-400:not(.light *),
+.dark .text-zinc-600:not(.light *), .dark .text-zinc-500:not(.light *), .dark .text-zinc-400:not(.light *),
+.dark .text-neutral-600:not(.light *), .dark .text-neutral-500:not(.light *), .dark .text-neutral-400:not(.light *) { color: hsl(var(--muted-foreground)) !important; }
 
-.dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300,
-.dark .border-slate-100, .dark .border-slate-200, .dark .border-slate-300,
-.dark .border-zinc-100, .dark .border-zinc-200, .dark .border-zinc-300,
-.dark .border-neutral-100, .dark .border-neutral-200, .dark .border-neutral-300 { border-color: hsl(var(--border)) !important; }
+.dark .border-gray-100:not(.light *), .dark .border-gray-200:not(.light *), .dark .border-gray-300:not(.light *),
+.dark .border-slate-100:not(.light *), .dark .border-slate-200:not(.light *), .dark .border-slate-300:not(.light *),
+.dark .border-zinc-100:not(.light *), .dark .border-zinc-200:not(.light *), .dark .border-zinc-300:not(.light *),
+.dark .border-neutral-100:not(.light *), .dark .border-neutral-200:not(.light *), .dark .border-neutral-300:not(.light *) { border-color: hsl(var(--border)) !important; }
 
-.dark .border-white, .dark .border-black { border-color: hsl(var(--border)) !important; }
+.dark .border-white:not(.light *), .dark .border-black:not(.light *) { border-color: hsl(var(--border)) !important; }
 
-.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
-.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]),
-.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
-.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: hsl(var(--border)) !important; }
+.dark .divide-gray-100:not(.light *) > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-200:not(.light *) > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-100:not(.light *) > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-200:not(.light *) > :not([hidden]) ~ :not([hidden]) { border-color: hsl(var(--border)) !important; }
 
 /* === Acessibilidade — menos movimento ===
    Neutraliza animações e transições de CSS quando o sistema do usuário
@@ -546,7 +554,7 @@
   --primary: 42 84% 63%;
   --primary-foreground: 220 15% 15%;
   --secondary: 40 64% 54%;
-  --secondary-foreground: 0 0% 100%;
+  --secondary-foreground: 220 15% 15%;
   --muted: 40 30% 95%;
   --muted-foreground: 40 15% 40%;
   --accent: 42 83% 62%;
@@ -559,8 +567,8 @@
   --info-foreground: 0 0% 100%;
   --error: 0 78% 52%;
   --error-foreground: 0 0% 100%;
-  --border: 45 80% 95%;
-  --input: 45 80% 95%;
+  --border: 42 30% 87%;
+  --input: 42 30% 87%;
   --ring: 42 84% 63%;
   --brand: 42 84% 63%;
   --brand-foreground: 220 15% 15%;

@@ -41,9 +41,12 @@ import livroIllustrationHtml from "@/components/widgets/html-snippets/livro-illu
 import livroTexturedHtml from "@/components/widgets/html-snippets/livro-textured.html?raw";
 import livroResponsivoHtml from "@/components/widgets/html-snippets/livro-responsivo.html?raw";
 import { CheckboxDefault, CheckboxDisabled } from "@/components/widgets/CheckboxGeist";
+import checkboxGeistSrc from "@/components/widgets/CheckboxGeist?raw";
 import checkboxHtml from "@/components/widgets/html-snippets/checkbox.html?raw";
 import { ChoiceboxRadio, ChoiceboxCheckbox, ChoiceboxDisabled } from "@/components/widgets/ChoiceboxGeist";
+import choiceboxGeistSrc from "@/components/widgets/ChoiceboxGeist?raw";
 import choiceboxHtml from "@/components/widgets/html-snippets/choicebox.html?raw";
+import gradeCurricularSrc from "@/components/widgets/GradeCurricular?raw";
 import platCursosSrc from "@/components/widgets/PlataformaCursos?raw";
 import platPlayerSrc from "@/components/widgets/PlataformaPlayer?raw";
 import platPlaylistSrc from "@/components/widgets/PlataformaPlaylist?raw";
@@ -90,6 +93,15 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis } from "@/components/ui/breadcrumb";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationEllipsis } from "@/components/ui/pagination";
+import { useToast } from "@/hooks/use-toast";
+import { Tag } from "@/components/widgets/Tag";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
@@ -107,7 +119,7 @@ import {
   ArrowLeftRight, FolderTree, UploadCloud, Star as StarIcon, ListFilter, Search,
   ListChecks, ToggleLeft, Anchor as AnchorIcon, AtSign, Columns3,
   Activity, GitCommit, ListTree, ClipboardList, Inbox as InboxIcon, CheckCircle2, Compass, Stamp,
-  ChevronRight, CalendarIcon, SquareCheck, Table as TableIcon,
+  ChevronRight, ChevronLeft, CalendarIcon, SquareCheck, Table as TableIcon,
   Sun, Moon
 } from "lucide-react";
 import { Notifications } from "@/components/widgets/Notifications";
@@ -210,6 +222,7 @@ export default function DesignSystemPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [brandOpen, setBrandOpen] = useState(true);
   const { brand, setBrand } = useBrand();
+  const { toast } = useToast();
 
   // Reseta para Capital ao sair do Design System
   useEffect(() => {
@@ -792,6 +805,110 @@ export default function DesignSystemPage() {
             <SectionThemeToggle bare title="Ícones Phosphor" description="Biblioteca Phosphor Icons utilizada em todo o ecossistema AUVP. Inclui variantes regular, bold e fill." code={iconesSrc} selfDocumented><Icones /></SectionThemeToggle>
           </section>
 
+          <Separator />
+          <section id="elevation">
+            <h2 className="text-2xl font-bold mb-2">Sombras & Elevação</h2>
+            <p className="text-muted-foreground mb-6">Escala de sombras para hierarquia de profundidade. O hover oficial de cards usa <code className="bg-muted px-1 rounded text-sm font-mono">0 8px 24px rgba(0,0,0,0.06)</code> com <code className="bg-muted px-1 rounded text-sm font-mono">translateY(-2px)</code>.</p>
+            <ComponentShowcase
+              title="Escala de Elevação"
+              description="Do mais sutil (inputs) ao mais elevado (modais). Sombras nunca substituem borda em fundos escuros — combine com border."
+              code={`<div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+  {[
+    { cls: "shadow-sm", uso: "Inputs e elementos sutis" },
+    { cls: "shadow-md", uso: "Cards em destaque leve" },
+    { cls: "shadow-lg", uso: "Popovers e dropdowns" },
+    { cls: "shadow-xl", uso: "Modais e ferramentas" },
+  ].map((s) => (
+    <div key={s.cls} className={\`bg-card border border-border rounded-xl p-6 text-center \${s.cls}\`}>
+      <p className="font-mono text-sm font-bold text-foreground">{s.cls}</p>
+      <p className="text-xs text-muted-foreground mt-1">{s.uso}</p>
+    </div>
+  ))}
+</div>
+
+{/* Hover oficial de cards do DS */}
+<div className="bg-card border border-border rounded-xl p-6 text-center transition-all duration-[240ms] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 cursor-pointer w-full max-w-xs">
+  <p className="font-bold text-foreground font-anek">Hover oficial de card</p>
+  <p className="text-xs text-muted-foreground mt-1">shadow 0 8px 24px rgba(0,0,0,0.06) + translateY(-2px) em 240ms</p>
+</div>`}
+            >
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+                {[
+                  { cls: "shadow-sm", uso: "Inputs e elementos sutis" },
+                  { cls: "shadow-md", uso: "Cards em destaque leve" },
+                  { cls: "shadow-lg", uso: "Popovers e dropdowns" },
+                  { cls: "shadow-xl", uso: "Modais e ferramentas" },
+                ].map((s) => (
+                  <div key={s.cls} className={`bg-card border border-border rounded-xl p-6 text-center ${s.cls}`}>
+                    <p className="font-mono text-sm font-bold text-foreground">{s.cls}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{s.uso}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-card border border-border rounded-xl p-6 text-center transition-all duration-[240ms] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 cursor-pointer w-full max-w-xs">
+                <p className="font-bold text-foreground font-anek">Hover oficial de card</p>
+                <p className="text-xs text-muted-foreground mt-1">shadow 0 8px 24px rgba(0,0,0,0.06) + translateY(-2px) em 240ms</p>
+              </div>
+            </ComponentShowcase>
+          </section>
+
+          <Separator />
+          <section id="motion">
+            <h2 className="text-2xl font-bold mb-2">Motion & Animações</h2>
+            <p className="text-muted-foreground mb-6">Durações e easings padronizados. Animações via JS devem respeitar <code className="bg-muted px-1 rounded text-sm font-mono">prefers-reduced-motion</code> (hook <code className="bg-muted px-1 rounded text-sm font-mono">useReducedMotion</code>); as de CSS já são neutralizadas globalmente.</p>
+            <ComponentShowcase
+              title="Durações & Easings"
+              description="Passe o cursor sobre os cards para sentir cada duração. 240ms ease é o padrão do sistema; 320ms nas LPs da Escola."
+              code={`<div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+  {[
+    { ms: "150ms", cls: "duration-150", uso: "Micro-interações: ícones, toggles, tooltips" },
+    { ms: "240ms", cls: "duration-[240ms]", uso: "Padrão do sistema: botões, cards, hovers" },
+    { ms: "320ms", cls: "duration-[320ms]", uso: "Escola LP: cards translúcidos e destaques" },
+  ].map((d) => (
+    <div key={d.ms} className={\`bg-card border border-border rounded-xl p-6 text-center transition-all ease-out hover:-translate-y-1 hover:shadow-md cursor-pointer \${d.cls}\`}>
+      <p className="font-mono text-2xl font-bold text-foreground">{d.ms}</p>
+      <p className="text-xs text-muted-foreground mt-2">{d.uso}</p>
+    </div>
+  ))}
+</div>
+
+{/* Easings oficiais */}
+<div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+  <div className="rounded-lg border border-border bg-muted/30 p-4">
+    <p className="font-mono font-bold text-foreground">ease / ease-out</p>
+    <p className="text-xs text-muted-foreground mt-1">Padrão para hovers e transições de cor/sombra.</p>
+  </div>
+  <div className="rounded-lg border border-border bg-muted/30 p-4">
+    <p className="font-mono font-bold text-foreground">cubic-bezier(0.175, 0.885, 0.32, 1.275)</p>
+    <p className="text-xs text-muted-foreground mt-1">Overshoot sutil — popups e balões dos widgets flutuantes.</p>
+  </div>
+</div>`}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                {[
+                  { ms: "150ms", cls: "duration-150", uso: "Micro-interações: ícones, toggles, tooltips" },
+                  { ms: "240ms", cls: "duration-[240ms]", uso: "Padrão do sistema: botões, cards, hovers" },
+                  { ms: "320ms", cls: "duration-[320ms]", uso: "Escola LP: cards translúcidos e destaques" },
+                ].map((d) => (
+                  <div key={d.ms} className={`bg-card border border-border rounded-xl p-6 text-center transition-all ease-out hover:-translate-y-1 hover:shadow-md cursor-pointer ${d.cls}`}>
+                    <p className="font-mono text-2xl font-bold text-foreground">{d.ms}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{d.uso}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="rounded-lg border border-border bg-muted/30 p-4">
+                  <p className="font-mono font-bold text-foreground">ease / ease-out</p>
+                  <p className="text-xs text-muted-foreground mt-1">Padrão para hovers e transições de cor/sombra.</p>
+                </div>
+                <div className="rounded-lg border border-border bg-muted/30 p-4">
+                  <p className="font-mono font-bold text-foreground">cubic-bezier(0.175, 0.885, 0.32, 1.275)</p>
+                  <p className="text-xs text-muted-foreground mt-1">Overshoot sutil — popups e balões dos widgets flutuantes.</p>
+                </div>
+              </div>
+            </ComponentShowcase>
+          </section>
+
 
           {/* ===== LAYOUT & ESTRUTURA ===== */}
           <Separator />
@@ -815,13 +932,14 @@ export default function DesignSystemPage() {
             </ComponentShowcase>
           </section>
 
+
+          {/* ===== BOTÕES & AÇÕES ===== */}
           <Separator />
           <section id="buttons">
             <h2 className="text-2xl font-bold mb-2">Botões</h2>
             <p className="text-muted-foreground mb-6">
-              {brand === "capital"
-                ? "Capital: bordas retas (rounded-none), fonte Sora Bold 700, hover revela borda."
-                : "Escola: bordas arredondadas (rounded-xl), fonte Sora Bold 700, hover revela borda."}
+              Fonte Sora Bold em caixa alta, border-radius de 5px e hover que revela a borda
+              (fundo transparente). Pílulas (rounded-full) só são permitidas em ferramentas.
             </p>
             <div className="space-y-6">
               <ComponentShowcase title="Variantes de Botão" description="Todos os estilos disponíveis"
@@ -840,12 +958,12 @@ import { ArrowRight } from "lucide-react";
                 htmlCode={`<!-- Base compartilhada por todas as variantes -->
 <style>
   .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem;
-    padding:0.625rem 1.25rem; border-radius:5px; font-family:'Sora',sans-serif;
-    font-weight:700; text-transform:uppercase; font-size:13px; letter-spacing:0.02em;
+    height:40px; padding:0.5rem 1.25rem; border-radius:5px; font-family:'Sora',sans-serif;
+    font-weight:600; text-transform:uppercase; font-size:14px;
     border:1px solid transparent; cursor:pointer; transition:all 0.2s; }
-  .btn-lg { padding:1rem 2rem; height:48px; font-size:14px; }
+  .btn-lg { padding:1rem 2rem; height:48px; font-size:14px; letter-spacing:0.05em; }
 
-  /* Padrão (default) */
+  /* Padrão (default) — hover revela a borda */
   .btn-default { background:var(--primary,#023619); color:#fff; border-color:var(--primary,#023619); }
   .btn-default:hover { background:transparent; color:var(--primary,#023619); }
 
@@ -853,22 +971,22 @@ import { ArrowRight } from "lucide-react";
   .btn-cta { background:#023619; color:#fff; }
   .btn-cta:hover { background:transparent; color:#023619; border-color:#023619; }
 
-  /* CTA Invertido (para fundos escuros) */
-  .btn-cta-inverted { background:#fafafa; color:#023619; border-color:#fafafa; }
-  .btn-cta-inverted:hover { background:#e0e0e0; border-color:#e0e0e0; }
+  /* CTA Invertido (para fundos escuros) — hover atenua o fundo claro */
+  .btn-cta-inverted { background:#fafafa; color:#011F0E; border-color:#011F0E; }
+  .btn-cta-inverted:hover { background:#e0e0e0; }
 
   /* Secundário */
-  .btn-secondary { background:var(--secondary,#f1f1f1); color:var(--secondary-foreground,#111);
-    border-color:var(--secondary,#f1f1f1); }
-  .btn-secondary:hover { background:transparent; color:var(--secondary-foreground,#111); }
+  .btn-secondary { background:var(--secondary,#15472F); color:#fff;
+    border-color:var(--secondary,#15472F); }
+  .btn-secondary:hover { background:transparent; color:var(--secondary,#15472F); }
 
-  /* Contorno (outline) */
-  .btn-outline { background:transparent; color:inherit; border-color:#e5e5e5; }
-  .btn-outline:hover { background:#f5f5f5; }
+  /* Contorno (outline) — hover usa a cor de acento */
+  .btn-outline { background:transparent; color:inherit; border-color:#dfe3df; }
+  .btn-outline:hover { background:var(--accent,#023619); color:#fff; }
 
-  /* Fantasma (ghost) */
+  /* Fantasma (ghost) — hover usa a cor de acento */
   .btn-ghost { background:transparent; color:inherit; border-color:transparent; }
-  .btn-ghost:hover { background:#f5f5f5; }
+  .btn-ghost:hover { background:var(--accent,#023619); color:#fff; }
 
   /* Link */
   .btn-link { background:transparent; color:var(--primary,#023619); border:none; padding:0;
@@ -876,8 +994,8 @@ import { ArrowRight } from "lucide-react";
   .btn-link:hover { text-decoration:underline; }
 
   /* Destrutivo */
-  .btn-destructive { background:#dc2626; color:#fff; border-color:#dc2626; }
-  .btn-destructive:hover { background:#b91c1c; border-color:#b91c1c; }
+  .btn-destructive { background:#ef4444; color:#fff; border-color:#ef4444; }
+  .btn-destructive:hover { background:rgba(239,68,68,0.9); }
 </style>
 
 <button class="btn btn-default">PADRÃO</button>
@@ -912,9 +1030,9 @@ import { ArrowRight } from "lucide-react";
     border-radius:5px; font-family:'Sora',sans-serif; font-weight:700; text-transform:uppercase;
     cursor:pointer; }
   .btn-sm      { height:36px; padding:0 0.75rem;  font-size:12px; }
-  .btn-default { height:40px; padding:0 1.25rem;  font-size:13px; }
+  .btn-default { height:40px; padding:0 1.25rem;  font-size:14px; }
   .btn-lg      { height:48px; padding:0 2rem;     font-size:14px; }
-  .btn-xl      { height:56px; padding:0 2.5rem;   font-size:15px; }
+  .btn-xl      { height:56px; padding:0 2.5rem;   font-size:16px; }
   .btn-icon    { height:40px; width:40px; padding:0; }
 </style>
 
@@ -930,13 +1048,22 @@ import { ArrowRight } from "lucide-react";
                 <Button size="icon"><ArrowRight className="h-4 w-4" /></Button>
               </ComponentShowcase>
               <ComponentShowcase title="CTA em Fundo Escuro" description="Comportamento do botão invertido"
-                code={`<Button variant="cta-inverted" size="lg">Começar Agora</Button>`}
-                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fff; color:#023619; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:13px; border:none; cursor:pointer;">COMEÇAR AGORA</button>\n</div>`}>
+                code={`<div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg">
+  <Button variant="cta-inverted" size="lg">Começar Agora</Button>
+</div>`}
+                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fafafa; color:#011F0E; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; font-size:14px; border:1px solid #fafafa; cursor:pointer;">COMEÇAR AGORA</button>\n</div>\n<!-- Hover: background #e0e0e0 (atenuação leve, mantém contraste) -->`}>
                 <div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg flex items-center gap-4 w-full">
                   <Button variant="cta-inverted" size="lg">Começar Agora</Button>
                 </div>
               </ComponentShowcase>
             </div>
+          </section>
+
+          <Separator />
+          <section id="floaters">
+            <h2 className="text-2xl font-bold mb-2">Widgets Flutuantes</h2>
+            <p className="text-muted-foreground mb-6">Botões flutuantes (WhatsApp, Porquinho da Economia) com animação contínua.</p>
+            <SectionThemeToggle bare title="Widgets Flutuantes" description="Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado." code={widgetsFlutuantesSrc} selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
           </section>
 
 
@@ -946,42 +1073,7 @@ import { ArrowRight } from "lucide-react";
             <h2 className="text-2xl font-bold mb-2">Grade Curricular</h2>
             <p className="text-muted-foreground mb-6">Abas pill-style com cards translúcidos em grid responsivo.</p>
             <ComponentShowcase title="Grade Curricular" description="Tabs com categorias e cards de módulos"
-              code={`import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-const categories = [
-  { id: "fundamentos", label: "Fundamentos" },
-  { id: "renda-fixa", label: "Renda Fixa" },
-  { id: "acoes", label: "Ações" },
-];
-
-const modules = {
-  fundamentos: [
-    { icon: BookOpen, number: "01", title: "Mentalidade Financeira", description: "Construa uma base sólida." },
-    { icon: BarChart3, number: "02", title: "Reserva de Emergência", description: "Proteção financeira essencial." },
-  ],
-};
-
-<Tabs defaultValue="fundamentos">
-  <TabsList className="flex flex-wrap gap-2 bg-transparent">
-    {categories.map((cat) => (
-      <TabsTrigger key={cat.id} value={cat.id} className="rounded-full px-6 py-3 text-[13px] font-bold uppercase">
-        {cat.label}
-      </TabsTrigger>
-    ))}
-  </TabsList>
-  {Object.entries(modules).map(([key, items]) => (
-    <TabsContent key={key} value={key}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {items.map((mod) => (
-          <div key={mod.number} className="bg-background/60 border rounded-xl p-6">
-            <h4 className="font-bold text-sm">{mod.title}</h4>
-            <p className="text-xs text-muted-foreground">{mod.description}</p>
-          </div>
-        ))}
-      </div>
-    </TabsContent>
-  ))}
-</Tabs>`}
+              code={gradeCurricularSrc}
               htmlCode={`<!-- Grade Curricular -->
 <style>
   .grade-container { background: #f5f5f5; padding: 2rem; border-radius: 1rem; border: 1px solid #e5e5e5; }
@@ -1060,13 +1152,6 @@ function showTab(tabId) {
           </section>
 
           <Separator />
-          <section id="floaters">
-            <h2 className="text-2xl font-bold mb-2">Widgets Flutuantes</h2>
-            <p className="text-muted-foreground mb-6">Botões flutuantes (WhatsApp, Porquinho da Economia) com animação contínua.</p>
-            <SectionThemeToggle bare title="Widgets Flutuantes" description="Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado." code={widgetsFlutuantesSrc} selfDocumented><WidgetsFlutuantes /></SectionThemeToggle>
-          </section>
-
-          <Separator />
           <section id="site-calc">
             <h2 className="text-2xl font-bold mb-2">Calculadora de Rendimentos</h2>
             <p className="text-muted-foreground mb-6">Widget de simulação para landing pages com tipografia e CTAs do tema Sites.</p>
@@ -1093,157 +1178,517 @@ function showTab(tabId) {
           <section id="notifications">
             <h2 className="text-2xl font-bold mb-2">Notificações</h2>
             <p className="text-muted-foreground mb-6">Pilha persistente de mensagens com tipos semânticos (success / info / warning / error). Diferente do Toast: usadas para fluxos longos como uploads, salvamentos automáticos e alertas de sistema.</p>
-            <SectionThemeToggle bare title="Notificações"><Notifications /></SectionThemeToggle>
+            <Notifications />
           </section>
 
           <Separator />
           <section id="popconfirm">
             <h2 className="text-2xl font-bold mb-2">Popconfirm</h2>
             <p className="text-muted-foreground mb-6">Confirmação inline ancorada ao gatilho — alternativa leve ao Dialog para ações destrutivas rápidas.</p>
-            <SectionThemeToggle bare title="Popconfirm"><PopconfirmWidget /></SectionThemeToggle>
+            <PopconfirmWidget />
           </section>
 
           <Separator />
           <section id="spin">
             <h2 className="text-2xl font-bold mb-2">Spin (Loading)</h2>
             <p className="text-muted-foreground mb-6">Indicador de carregamento com mensagem opcional em Sora uppercase. Inclui modo overlay para encobrir áreas durante operações assíncronas.</p>
-            <SectionThemeToggle bare title="Spin (Loading)"><SpinTipWidget /></SectionThemeToggle>
+            <SpinTipWidget />
+          </section>
+
+          <Separator />
+          <section id="progress-geist">
+            <h2 className="text-2xl font-bold mb-2">Progress Bar</h2>
+            <p className="text-muted-foreground mb-6">Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido e cantos totalmente arredondados.</p>
+            <ProgressGeistWidget />
           </section>
 
           <Separator />
           <section id="skeleton-avancado">
             <h2 className="text-2xl font-bold mb-2">Skeleton Avançado</h2>
             <p className="text-muted-foreground mb-6">Composições prontas de skeletons (lista com avatar, card de conteúdo, tabela) para evitar layout shift durante o carregamento.</p>
-            <SectionThemeToggle bare title="Skeleton Avançado"><SkeletonAvancado /></SectionThemeToggle>
+            <SkeletonAvancado />
           </section>
 
           <Separator />
           <section id="empty">
             <h2 className="text-2xl font-bold mb-2">Empty (Estado Vazio)</h2>
             <p className="text-muted-foreground mb-6">Placeholder para listas, buscas e tabelas sem dados, com ícone, descrição e CTA opcional para guiar a próxima ação.</p>
-            <SectionThemeToggle bare title="Empty (Estado Vazio)"><EmptyWidget /></SectionThemeToggle>
+            <EmptyWidget />
           </section>
 
           <Separator />
           <section id="result">
             <h2 className="text-2xl font-bold mb-2">Result</h2>
             <p className="text-muted-foreground mb-6">Tela de feedback após operações críticas (sucesso, erro, acesso negado) usando tokens semânticos success / error / warning.</p>
-            <SectionThemeToggle bare title="Result"><ResultWidget /></SectionThemeToggle>
+            <ResultWidget />
+          </section>
+
+          <Separator />
+          <section id="dialog">
+            <h2 className="text-2xl font-bold mb-2">Modal (Dialog)</h2>
+            <p className="text-muted-foreground mb-6">Sobreposição centralizada para formulários curtos e confirmações críticas. Para ações destrutivas, use o <strong>AlertDialog</strong> — ele exige uma escolha explícita (sem fechar clicando fora).</p>
+            <ComponentShowcase
+              title="Dialog & AlertDialog"
+              description="Dialog para edições rápidas; AlertDialog para confirmações destrutivas. O conteúdo abre em portal e segue o tema global da página."
+              showToggle={false}
+              code={`<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="outline">Abrir modal</Button>
+  </DialogTrigger>
+  <DialogContent className="sm:max-w-md">
+    <DialogHeader>
+      <DialogTitle>Editar apelido</DialogTitle>
+      <DialogDescription>Como você prefere ser chamado dentro da plataforma?</DialogDescription>
+    </DialogHeader>
+    <div className="grid gap-1.5 py-2">
+      <Label htmlFor="apelido">Apelido</Label>
+      <Input id="apelido" placeholder="Ex.: Raul" />
+    </div>
+    <DialogFooter>
+      <Button variant="ghost">Cancelar</Button>
+      <Button>Salvar</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button variant="destructive">Excluir conta</Button>
+  </AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Tem certeza absoluta?</AlertDialogTitle>
+      <AlertDialogDescription>
+        Esta ação não pode ser desfeita. Sua conta e todos os dados associados serão removidos permanentemente.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+      <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+        Excluir
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>`}
+            >
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline">Abrir modal</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Editar apelido</DialogTitle>
+                    <DialogDescription>Como você prefere ser chamado dentro da plataforma?</DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-1.5 py-2">
+                    <Label htmlFor="apelido">Apelido</Label>
+                    <Input id="apelido" placeholder="Ex.: Raul" />
+                  </div>
+                  <DialogFooter>
+                    <Button variant="ghost">Cancelar</Button>
+                    <Button>Salvar</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">Excluir conta</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Tem certeza absoluta?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta ação não pode ser desfeita. Sua conta e todos os dados associados serão removidos permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Excluir
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </ComponentShowcase>
+          </section>
+
+          <Separator />
+          <section id="toast">
+            <h2 className="text-2xl font-bold mb-2">Toast</h2>
+            <p className="text-muted-foreground mb-6">Mensagem temporária e auto-descartável para feedback imediato de ações. Diferente das <strong>Notificações</strong>, que persistem em pilha para fluxos longos.</p>
+            <ComponentShowcase
+              title="Toast"
+              description="Dispare pelo hook useToast. Variante destructive para erros. O toast abre em portal e segue o tema global da página."
+              showToggle={false}
+              code={`import { useToast } from "@/hooks/use-toast";
+
+const { toast } = useToast();
+
+<Button
+  variant="outline"
+  onClick={() => toast({ title: "Alterações salvas", description: "Suas preferências foram atualizadas." })}
+>
+  Toast padrão
+</Button>
+<Button
+  variant="outline"
+  onClick={() => toast({ variant: "destructive", title: "Erro ao salvar", description: "Tente novamente em instantes." })}
+>
+  Toast destrutivo
+</Button>`}
+            >
+              <Button
+                variant="outline"
+                onClick={() => toast({ title: "Alterações salvas", description: "Suas preferências foram atualizadas." })}
+              >
+                Toast padrão
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => toast({ variant: "destructive", title: "Erro ao salvar", description: "Tente novamente em instantes." })}
+              >
+                Toast destrutivo
+              </Button>
+            </ComponentShowcase>
           </section>
 
 
-          {/* ===== NAVEGAÇÃO ===== */}
           <Separator />
           <section id="drawer-simples">
             <h2 className="text-2xl font-bold mb-2">Drawer</h2>
             <p className="text-muted-foreground mb-6">Painel lateral simples para edição, detalhes ou formulários secundários sem sair do contexto principal.</p>
-            <SectionThemeToggle bare title="Drawer"><DrawerSimples /></SectionThemeToggle>
+            <DrawerSimples />
           </section>
 
           <Separator />
           <section id="drawer-multi">
             <h2 className="text-2xl font-bold mb-2">Drawer Multi-nível</h2>
             <p className="text-muted-foreground mb-6">Drawers empilhados (push) que preservam a hierarquia em fluxos detalhados de edição sem perder o contexto da camada anterior.</p>
-            <SectionThemeToggle bare title="Drawer Multi-nível"><DrawerMultiNivel /></SectionThemeToggle>
+            <DrawerMultiNivel />
           </section>
 
+
+          {/* ===== NAVEGAÇÃO ===== */}
           <Separator />
           <section id="steps">
             <h2 className="text-2xl font-bold mb-2">Steps (Wizard)</h2>
             <p className="text-muted-foreground mb-6">Etapas numeradas com estados completo / atual / pendente e linha de progresso para fluxos guiados.</p>
-            <SectionThemeToggle bare title="Steps (Wizard)"><StepsWidget /></SectionThemeToggle>
-          </section>
-
-          <Separator />
-          <section id="segmented">
-            <h2 className="text-2xl font-bold mb-2">Switch</h2>
-            <p className="text-muted-foreground mb-6">Toggle compacto para alternar entre poucas opções (períodos, modos de visualização) ou estados binários (on/off).</p>
-            <SectionThemeToggle bare title="Switch">
-              <div className="w-full space-y-6">
-                <SegmentedWidget />
-                <SwitchSimplesWidget />
-                <SwitchDisabledWidget />
-              </div>
-            </SectionThemeToggle>
+            <StepsWidget />
           </section>
 
           <Separator />
           <section id="anchor">
             <h2 className="text-2xl font-bold mb-2">Anchor (Scroll Spy)</h2>
             <p className="text-muted-foreground mb-6">Menu lateral de âncoras que destaca a seção visível enquanto o usuário rola a página.</p>
-            <SectionThemeToggle bare title="Anchor (Scroll Spy)"><AnchorWidget /></SectionThemeToggle>
+            <AnchorWidget />
           </section>
 
           <Separator />
           <section id="tabs-geist">
             <h2 className="text-2xl font-bold mb-2">Tabs</h2>
             <p className="text-muted-foreground mb-6">Tabs minimalistas inspiradas no Geist: indicador em barra sob a aba ativa e divisor inferior contínuo, sem fundos coloridos.</p>
-            <SectionThemeToggle bare title="Tabs"><TabsGeistWidget /></SectionThemeToggle>
+            <TabsGeistWidget />
           </section>
 
           <Separator />
           <section id="tour">
             <h2 className="text-2xl font-bold mb-2">Tour</h2>
             <p className="text-muted-foreground mb-6">Onboarding guiado em sequência: overlay escuro com spotlight no elemento alvo e popover com descrição e navegação.</p>
-            <SectionThemeToggle bare title="Tour"><TourWidget /></SectionThemeToggle>
+            <TourWidget />
+          </section>
+
+          <Separator />
+          <section id="breadcrumb">
+            <h2 className="text-2xl font-bold mb-2">Breadcrumb</h2>
+            <p className="text-muted-foreground mb-6">Trilha de navegação hierárquica. Use ellipsis para colapsar níveis intermediários em caminhos profundos.</p>
+            <ComponentShowcase
+              title="Breadcrumb"
+              description="Último item é a página atual (sem link). Roboto 14px, separador chevron."
+              code={`<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="#">Início</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="#">Cursos</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Renda Fixa na Prática</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`}
+            >
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="#">Início</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbEllipsis />
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="#">Cursos</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Renda Fixa na Prática</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </ComponentShowcase>
+          </section>
+
+          <Separator />
+          <section id="pagination">
+            <h2 className="text-2xl font-bold mb-2">Pagination</h2>
+            <p className="text-muted-foreground mb-6">Navegação entre páginas de listas e tabelas. Página ativa com borda; ellipsis para intervalos longos.</p>
+            <ComponentShowcase
+              title="Pagination"
+              description="Anterior/Próxima nas extremidades, página ativa destacada com isActive."
+              code={`<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationLink href="#" className="w-auto gap-1 px-3">
+        <ChevronLeft className="h-4 w-4" /> Anterior
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
+    <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
+    <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+    <PaginationItem><PaginationEllipsis /></PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" className="w-auto gap-1 px-3">
+        Próxima <ChevronRight className="h-4 w-4" />
+      </PaginationLink>
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>`}
+            >
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationLink href="#" className="w-auto gap-1 px-3">
+                      <ChevronLeft className="h-4 w-4" /> Anterior
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem><PaginationLink href="#">1</PaginationLink></PaginationItem>
+                  <PaginationItem><PaginationLink href="#" isActive>2</PaginationLink></PaginationItem>
+                  <PaginationItem><PaginationLink href="#">3</PaginationLink></PaginationItem>
+                  <PaginationItem><PaginationEllipsis /></PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" className="w-auto gap-1 px-3">
+                      Próxima <ChevronRight className="h-4 w-4" />
+                    </PaginationLink>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </ComponentShowcase>
           </section>
 
 
           {/* ===== ENTRADA DE DADOS ===== */}
           <Separator />
+          <section id="form-inputs">
+            <h2 className="text-2xl font-bold mb-2">Inputs & Formulários</h2>
+            <p className="text-muted-foreground mb-6">Campos base de formulário: texto, textarea, select, radio e slider. Labels em Roboto; mensagens de erro em <code className="bg-muted px-1 rounded text-sm font-mono">text-destructive</code> abaixo do campo.</p>
+            <div className="space-y-6">
+              <ComponentShowcase
+                title="Campos de Texto"
+                description="Estados: padrão, erro (aria-invalid + mensagem) e desabilitado. Textarea para textos longos."
+                code={`<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="nome">Nome</Label>
+  <Input id="nome" placeholder="Seu nome completo" />
+</div>
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="email-erro">E-mail</Label>
+  <Input
+    id="email-erro"
+    type="email"
+    defaultValue="email-invalido"
+    aria-invalid="true"
+    className="border-destructive focus-visible:ring-destructive"
+  />
+  <p className="text-xs text-destructive">Informe um e-mail válido.</p>
+</div>
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="desabilitado">Desabilitado</Label>
+  <Input id="desabilitado" placeholder="Campo desabilitado" disabled />
+</div>
+
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="mensagem">Mensagem</Label>
+  <Textarea id="mensagem" placeholder="Escreva sua mensagem..." />
+</div>`}
+              >
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="nome">Nome</Label>
+                  <Input id="nome" placeholder="Seu nome completo" />
+                </div>
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="email-erro">E-mail</Label>
+                  <Input
+                    id="email-erro"
+                    type="email"
+                    defaultValue="email-invalido"
+                    aria-invalid="true"
+                    className="border-destructive focus-visible:ring-destructive"
+                  />
+                  <p className="text-xs text-destructive">Informe um e-mail válido.</p>
+                </div>
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="desabilitado">Desabilitado</Label>
+                  <Input id="desabilitado" placeholder="Campo desabilitado" disabled />
+                </div>
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label htmlFor="mensagem">Mensagem</Label>
+                  <Textarea id="mensagem" placeholder="Escreva sua mensagem..." />
+                </div>
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Seleção (Select & Radio)"
+                description="Select para listas longas; RadioGroup para até 4 opções visíveis."
+                code={`<div className="grid w-full max-w-sm gap-1.5">
+  <Label>Perfil de investidor</Label>
+  <Select>
+    <SelectTrigger>
+      <SelectValue placeholder="Selecione um perfil" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="conservador">Conservador</SelectItem>
+      <SelectItem value="moderado">Moderado</SelectItem>
+      <SelectItem value="arrojado">Arrojado</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+
+<RadioGroup defaultValue="mensal" className="gap-3">
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="mensal" id="r-mensal" />
+    <Label htmlFor="r-mensal">Aporte mensal</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="unico" id="r-unico" />
+    <Label htmlFor="r-unico">Aporte único</Label>
+  </div>
+</RadioGroup>`}
+              >
+                <div className="grid w-full max-w-sm gap-1.5">
+                  <Label>Perfil de investidor</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um perfil" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="conservador">Conservador</SelectItem>
+                      <SelectItem value="moderado">Moderado</SelectItem>
+                      <SelectItem value="arrojado">Arrojado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <RadioGroup defaultValue="mensal" className="gap-3">
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="mensal" id="r-mensal" />
+                    <Label htmlFor="r-mensal">Aporte mensal</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="unico" id="r-unico" />
+                    <Label htmlFor="r-unico">Aporte único</Label>
+                  </div>
+                </RadioGroup>
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Slider"
+                description="Para valores numéricos em faixa contínua. Thumb na cor primária da marca ativa."
+                code={`<div className="grid w-full max-w-sm gap-3">
+  <Label>Valor do aporte</Label>
+  <Slider defaultValue={[5000]} max={10000} step={100} />
+</div>`}
+              >
+                <div className="grid w-full max-w-sm gap-3">
+                  <Label>Valor do aporte</Label>
+                  <Slider defaultValue={[5000]} max={10000} step={100} />
+                </div>
+              </ComponentShowcase>
+            </div>
+          </section>
+
+          <Separator />
+          <section id="segmented">
+            <h2 className="text-2xl font-bold mb-2">Switch</h2>
+            <p className="text-muted-foreground mb-6">Toggle compacto para alternar entre poucas opções (períodos, modos de visualização) ou estados binários (on/off).</p>
+            <div className="space-y-6">
+              <SegmentedWidget />
+              <SwitchSimplesWidget />
+              <SwitchDisabledWidget />
+            </div>
+          </section>
+
+          <Separator />
           <section id="upload-preview">
             <h2 className="text-2xl font-bold mb-2">Upload com Preview</h2>
             <p className="text-muted-foreground mb-6">Dropzone de imagens com preview em grid, progresso simulado, contagem e remoção individual.</p>
-            <SectionThemeToggle bare title="Upload com Preview"><UploadComPreview /></SectionThemeToggle>
+            <UploadComPreview />
           </section>
 
           <Separator />
           <section id="calendar">
             <h2 className="text-2xl font-bold mb-2">Calendário</h2>
             <p className="text-muted-foreground mb-6">Componentes de calendário para seleção de data única, intervalo de datas e versão compacta em popover. Localização em <code className="bg-muted px-1 rounded text-sm font-mono">pt-BR</code>.</p>
-            <SectionThemeToggle bare title="Calendário"><CalendarioWidget /></SectionThemeToggle>
+            <CalendarioWidget />
           </section>
 
           <Separator />
           <section id="rate">
             <h2 className="text-2xl font-bold mb-2">Rate (Avaliação)</h2>
             <p className="text-muted-foreground mb-6">Estrelas interativas com hover preview, suporte a meias estrelas e modo somente-leitura. Cor padrão usa o token semântico <code className="bg-muted px-1 rounded text-sm font-mono">warning</code>.</p>
-            <SectionThemeToggle bare title="Rate (Avaliação)"><RateWidget /></SectionThemeToggle>
+            <RateWidget />
           </section>
 
           <Separator />
           <section id="mentions">
             <h2 className="text-2xl font-bold mb-2">Mentions</h2>
             <p className="text-muted-foreground mb-6">Textarea que detecta '@' (menções) ou '#' (tags) e abre sugestões em popover ancorado ao caret.</p>
-            <SectionThemeToggle bare title="Mentions"><MentionsWidget /></SectionThemeToggle>
+            <MentionsWidget />
           </section>
 
           <Separator />
           <section id="cascader">
             <h2 className="text-2xl font-bold mb-2">Cascader</h2>
             <p className="text-muted-foreground mb-6">Drill-down em colunas para navegar categorias hierárquicas (alternativa ao TreeSelect com colunas lado a lado).</p>
-            <SectionThemeToggle bare title="Cascader"><CascaderWidget /></SectionThemeToggle>
+            <CascaderWidget />
           </section>
 
           <Separator />
           <section id="tool-autocomplete">
             <h2 className="text-2xl font-bold mb-2">AutoComplete</h2>
             <p className="text-muted-foreground mb-6">Input com sugestões filtradas em popover, navegação por teclado (↑ ↓ Enter Esc) e highlight do trecho buscado.</p>
-            <SectionThemeToggle bare title="AutoComplete"><AutoCompleteWidget /></SectionThemeToggle>
+            <AutoCompleteWidget />
           </section>
 
           <Separator />
           <section id="tool-treeselect">
             <h2 className="text-2xl font-bold mb-2">TreeSelect</h2>
             <p className="text-muted-foreground mb-6">Select hierárquico com nodes expansíveis para classes de ativos, taxonomias e categorias aninhadas.</p>
-            <SectionThemeToggle bare title="TreeSelect"><TreeSelectWidget /></SectionThemeToggle>
+            <TreeSelectWidget />
           </section>
 
           <Separator />
           <section id="tool-transfer">
             <h2 className="text-2xl font-bold mb-2">Transfer</h2>
             <p className="text-muted-foreground mb-6">Transferência de itens entre listas (disponíveis ↔ selecionados) com checkboxes, busca e ações em massa.</p>
-            <SectionThemeToggle bare title="Transfer"><TransferWidget /></SectionThemeToggle>
+            <TransferWidget />
           </section>
 
           <Separator />
@@ -1255,7 +1700,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Default"
                 description="Checkbox controlado com estado de marcado/desmarcado."
-                code={`import { Checkbox } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [checked, setChecked] = useState(false);\n  return (\n    <Checkbox checked={checked} onChange={(): void => setChecked((b) => !b)}>\n      Option 1\n    </Checkbox>\n  );\n}`}
+                code={checkboxGeistSrc}
                 htmlCode={checkboxHtml}
               >
                 <CheckboxDefault />
@@ -1264,7 +1709,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Disabled"
                 description="Estados desabilitados: padrão, marcado e indeterminado."
-                code={`import { Checkbox } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-4 flex-initial">\n      <Checkbox disabled>Disabled</Checkbox>\n      <Checkbox checked disabled>\n        Disabled Checked\n      </Checkbox>\n      <Checkbox disabled indeterminate>\n        Disabled Indeterminate\n      </Checkbox>\n    </div>\n  );\n}`}
+                code={checkboxGeistSrc}
                 htmlCode={checkboxHtml}
               >
                 <CheckboxDisabled />
@@ -1281,7 +1726,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Radio (escolha única)"
                 description="Grupo de cartões com seleção única usando type='radio'."
-                code={`'use client';\nimport { ChoiceboxGroup } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [value, setValue] = useState('trial');\n  return (\n    <ChoiceboxGroup\n      direction="row"\n      label="select a plan"\n      onChange={setValue}\n      type="radio"\n      value={value}\n    >\n      <ChoiceboxGroup.Item description="Free for two weeks" title="Pro Trial" value="trial" />\n      <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n    </ChoiceboxGroup>\n  );\n}`}
+                code={choiceboxGeistSrc}
                 htmlCode={choiceboxHtml}
               >
                 <ChoiceboxRadio />
@@ -1290,7 +1735,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Checkbox (múltipla escolha)"
                 description="Grupo de cartões permitindo seleção múltipla usando type='checkbox'."
-                code={`'use client';\nimport { ChoiceboxGroup } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [value, setValue] = useState([] as string[]);\n  return (\n    <ChoiceboxGroup\n      direction="row"\n      label="select a plan"\n      onChange={setValue}\n      type="checkbox"\n      value={value}\n    >\n      <ChoiceboxGroup.Item description="Free for two weeks" title="Pro Trial" value="trial" />\n      <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n    </ChoiceboxGroup>\n  );\n}`}
+                code={choiceboxGeistSrc}
                 htmlCode={choiceboxHtml}
               >
                 <ChoiceboxCheckbox />
@@ -1299,7 +1744,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Disabled"
                 description="Grupo inteiro desabilitado e item individual desabilitado."
-                code={`'use client';\nimport { ChoiceboxGroup } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [value, setValue] = useState('');\n  const [value2, setValue2] = useState([] as string[]);\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-6 flex-initial">\n      <ChoiceboxGroup direction="row" disabled label="Choicebox group disabled" onChange={setValue} showLabel type="radio" value={value}>\n        <ChoiceboxGroup.Item description="Free for two weeks" title="Pro Trial" value="trial" />\n        <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n      </ChoiceboxGroup>\n      <ChoiceboxGroup direction="row" label="Single input disabled" onChange={setValue2} showLabel type="checkbox" value={value2}>\n        <ChoiceboxGroup.Item description="Free for two weeks" disabled title="Pro Trial" value="trial" />\n        <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n      </ChoiceboxGroup>\n    </div>\n  );\n}`}
+                code={choiceboxGeistSrc}
                 htmlCode={choiceboxHtml}
               >
                 <ChoiceboxDisabled />
@@ -1314,54 +1759,45 @@ function showTab(tabId) {
           <section id="statistic">
             <h2 className="text-2xl font-bold mb-2">Statistic (KPIs)</h2>
             <p className="text-muted-foreground mb-6">Cards numéricos com contagem progressiva animada, prefixos/sufixos e tendência (up/down) em tokens semânticos.</p>
-            <SectionThemeToggle bare title="Statistic (KPIs)"><StatisticWidget /></SectionThemeToggle>
+            <StatisticWidget />
           </section>
 
           <Separator />
           <section id="timeline">
             <h2 className="text-2xl font-bold mb-2">Timeline</h2>
             <p className="text-muted-foreground mb-6">Linha do tempo vertical com estados semânticos (concluído, ativo, pendente, erro) para histórico e jornada do usuário.</p>
-            <SectionThemeToggle bare title="Timeline"><TimelineWidget /></SectionThemeToggle>
+            <TimelineWidget />
           </section>
 
           <Separator />
           <section id="tree">
             <h2 className="text-2xl font-bold mb-2">Tree</h2>
             <p className="text-muted-foreground mb-6">Árvore expansível com ícones de pasta/arquivo para explorar estruturas hierárquicas profundas.</p>
-            <SectionThemeToggle bare title="Tree"><TreeWidget /></SectionThemeToggle>
+            <TreeWidget />
           </section>
 
           <Separator />
           <section id="descriptions">
             <h2 className="text-2xl font-bold mb-2">Descriptions</h2>
             <p className="text-muted-foreground mb-6">Lista de propriedades chave/valor em grid responsivo. Padrão para páginas de detalhe (perfil, pedido, fatura).</p>
-            <SectionThemeToggle bare title="Descriptions"><DescriptionsWidget /></SectionThemeToggle>
+            <DescriptionsWidget />
           </section>
 
           <Separator />
           <section id="tabela">
             <h2 className="text-2xl font-bold mb-2">Tabela</h2>
             <p className="text-muted-foreground mb-6">Tabela enxuta inspirada no Geist: cabeçalho discreto em caixa alta, zebra sutil nas linhas e última coluna alinhada à direita.</p>
-            <SectionThemeToggle bare title="Tabela">
-              <div className="w-full space-y-6">
-                <TabelaWidget />
-                <TabelaBorderedWidget />
-              </div>
-            </SectionThemeToggle>
-          </section>
-
-          <Separator />
-          <section id="progress-geist">
-            <h2 className="text-2xl font-bold mb-2">Progress Bar</h2>
-            <p className="text-muted-foreground mb-6">Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido e cantos totalmente arredondados.</p>
-            <SectionThemeToggle bare title="Progress Bar"><ProgressGeistWidget /></SectionThemeToggle>
+            <div className="space-y-6">
+              <TabelaWidget />
+              <TabelaBorderedWidget />
+            </div>
           </section>
 
           <Separator />
           <section id="watermark">
             <h2 className="text-2xl font-bold mb-2">Watermark (Marca d'água)</h2>
             <p className="text-muted-foreground mb-6">Texto repetido em diagonal sobre conteúdo sensível (relatórios, dashboards internos), gerado via canvas em data URL.</p>
-            <SectionThemeToggle bare title="Watermark (Marca d'água)"><WatermarkWidget /></SectionThemeToggle>
+            <WatermarkWidget />
           </section>
 
           <Separator />
@@ -1372,9 +1808,109 @@ function showTab(tabId) {
               em linha única, ou vertical à esquerda/direita do gráfico).
             </p>
             <div className="space-y-10">
-              <SectionThemeToggle bare title="Gráfico Donut (Pizza)" description="Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais." code={graficoPizzaSrc} selfDocumented><GraficoPizza /></SectionThemeToggle>
+              <SectionThemeToggle bare title="Gráfico Donut (Pizza)" description="Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais." code={graficoPizzaSrc} selfDocumented aiFood={false}><GraficoPizza /></SectionThemeToggle>
               <SectionThemeToggle bare title="Gráfico Donut com Legendas" description="Variações de posição da legenda: horizontal abaixo, em linha única e vertical lateral ao gráfico. Mesmas cores e regras do donut padrão." code={graficoPizzaLegendasSrc} selfDocumented><GraficoPizzaLegendas /></SectionThemeToggle>
             </div>
+          </section>
+
+          <Separator />
+          <section id="tags-badges">
+            <h2 className="text-2xl font-bold mb-2">Badges & Tags</h2>
+            <p className="text-muted-foreground mb-6">Badge (shadcn) para status simples; <strong>Tag</strong> tokenizada para categorias e estados — usa os tokens <code className="bg-muted px-1 rounded text-sm font-mono">--chart-*</code> e semânticos, adaptando-se a light/dark e às marcas Capital/Escola.</p>
+            <div className="space-y-6">
+              <ComponentShowcase
+                title="Badge"
+                description="Quatro variantes do componente base."
+                code={`import { Badge } from "@/components/ui/badge";
+
+<Badge>Padrão</Badge>
+<Badge variant="secondary">Secundário</Badge>
+<Badge variant="destructive">Destrutivo</Badge>
+<Badge variant="outline">Contorno</Badge>`}
+              >
+                <Badge>Padrão</Badge>
+                <Badge variant="secondary">Secundário</Badge>
+                <Badge variant="destructive">Destrutivo</Badge>
+                <Badge variant="outline">Contorno</Badge>
+              </ComponentShowcase>
+
+              <ComponentShowcase
+                title="Tag (tokenizada)"
+                description="Tons semânticos (success/warning/info/error) e categóricos (chart-1 a chart-8). Nunca use classes Tailwind de cor hardcoded em tags."
+                code={`import { Tag } from "@/components/widgets/Tag";
+
+{/* Tons semânticos */}
+<Tag tone="success">Success</Tag>
+<Tag tone="warning">Warning</Tag>
+<Tag tone="info">Info</Tag>
+<Tag tone="error">Error</Tag>
+<Tag tone="neutral">Neutral</Tag>
+<Tag tone="primary">Primary</Tag>
+
+{/* Tons categóricos (paleta de dataviz) */}
+<Tag tone="green">Green</Tag>
+<Tag tone="violet">Violet</Tag>
+<Tag tone="amber">Amber</Tag>
+<Tag tone="blue">Blue</Tag>
+<Tag tone="magenta">Magenta</Tag>
+<Tag tone="brick">Brick</Tag>
+<Tag tone="olive">Olive</Tag>
+<Tag tone="graphite">Graphite</Tag>`}
+              >
+                <Tag tone="success">Success</Tag>
+                <Tag tone="warning">Warning</Tag>
+                <Tag tone="info">Info</Tag>
+                <Tag tone="error">Error</Tag>
+                <Tag tone="neutral">Neutral</Tag>
+                <Tag tone="primary">Primary</Tag>
+                <Tag tone="green">Green</Tag>
+                <Tag tone="violet">Violet</Tag>
+                <Tag tone="amber">Amber</Tag>
+                <Tag tone="blue">Blue</Tag>
+                <Tag tone="magenta">Magenta</Tag>
+                <Tag tone="brick">Brick</Tag>
+                <Tag tone="olive">Olive</Tag>
+                <Tag tone="graphite">Graphite</Tag>
+              </ComponentShowcase>
+            </div>
+          </section>
+
+          <Separator />
+          <section id="avatar">
+            <h2 className="text-2xl font-bold mb-2">Avatar</h2>
+            <p className="text-muted-foreground mb-6">Representação de usuários com fallback em iniciais (Anek, fundo muted). Grupos empilhados com contador para listas de participantes.</p>
+            <ComponentShowcase
+              title="Avatar"
+              description="Tamanhos, fallback em iniciais e grupo empilhado com excedente."
+              code={`import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+{/* Tamanhos */}
+<Avatar className="h-8 w-8"><AvatarFallback className="text-xs">RS</AvatarFallback></Avatar>
+<Avatar><AvatarFallback>RS</AvatarFallback></Avatar>
+<Avatar className="h-14 w-14"><AvatarFallback className="text-lg">RS</AvatarFallback></Avatar>
+
+{/* Grupo empilhado */}
+<div className="flex -space-x-3">
+  <Avatar className="border-2 border-background"><AvatarFallback>RS</AvatarFallback></Avatar>
+  <Avatar className="border-2 border-background"><AvatarFallback>AC</AvatarFallback></Avatar>
+  <Avatar className="border-2 border-background"><AvatarFallback>MF</AvatarFallback></Avatar>
+  <Avatar className="border-2 border-background">
+    <AvatarFallback className="bg-primary text-primary-foreground text-xs">+12</AvatarFallback>
+  </Avatar>
+</div>`}
+            >
+              <Avatar className="h-8 w-8"><AvatarFallback className="text-xs">RS</AvatarFallback></Avatar>
+              <Avatar><AvatarFallback>RS</AvatarFallback></Avatar>
+              <Avatar className="h-14 w-14"><AvatarFallback className="text-lg">RS</AvatarFallback></Avatar>
+              <div className="flex -space-x-3">
+                <Avatar className="border-2 border-background"><AvatarFallback>RS</AvatarFallback></Avatar>
+                <Avatar className="border-2 border-background"><AvatarFallback>AC</AvatarFallback></Avatar>
+                <Avatar className="border-2 border-background"><AvatarFallback>MF</AvatarFallback></Avatar>
+                <Avatar className="border-2 border-background">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">+12</AvatarFallback>
+                </Avatar>
+              </div>
+            </ComponentShowcase>
           </section>
 
 
@@ -1475,7 +2011,11 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Default"
                 description="Capa padrão: seção superior colorida + área inferior branca com título e sulco de lombada."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return <Book title="The user experience of the Frontend Cloud" />;\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroDefault() {
+  return <Livro title="The user experience of the Frontend Cloud" />;
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroDefaultHtml}
               >
                 <LivroDefault />
@@ -1484,7 +2024,16 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Variants"
                 description="simple remove o sulco da lombada; stripe adiciona uma faixa horizontal decorativa."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book\n        title="The user experience of the Frontend Cloud"\n        variant="simple"\n        width={196}\n      />\n      <Book\n        title="The user experience of the Frontend Cloud"\n        variant="stripe"\n        width={196}\n      />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroVariants() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">
+      <Livro title="The user experience of the Frontend Cloud" variant="simple" width={196} />
+      <Livro title="The user experience of the Frontend Cloud" variant="stripe" width={196} />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroVariantsHtml}
               >
                 <LivroVariants />
@@ -1493,7 +2042,17 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Custom color"
                 description="Cores via color. Ao definir textColor, a capa inteira usa a cor de destaque — ideal para capas monocromáticas."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book\n        color="#9D2127"\n        title="How Vercel improves your website's search engine ranking"\n      />\n      <Book\n        color="#7DC1C1"\n        textColor="white"\n        title="Design Engineering at Vercel"\n        variant="simple"\n      />\n      <Book color="#FED954" title="The user experience of the Frontend Cloud" />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroCustomColor() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro color="#9D2127" title="How Vercel improves your website's search engine ranking" />
+      <Livro color="#7DC1C1" textColor="white" title="Design Engineering at Vercel" variant="simple" />
+      <Livro color="#FED954" title="The user experience of the Frontend Cloud" />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroCustomHtml}
               >
                 <LivroCustomColor />
@@ -1502,7 +2061,19 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Icon"
                 description="Ícone ou logo exibido na seção superior colorida via prop icon."
-                code={`import { Book } from 'geist/components';\nimport { LogoIconVercel, LogoIconNext, LogoIconReact } from '@vercel/geistcn-assets/logos';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book icon={<LogoIconVercel />} title="Vercel Platform Guide" />\n      <Book icon={<LogoIconNext />} title="Next.js Documentation" />\n      <Book icon={<LogoIconReact />} title="React Essentials" />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+// IconBarChart, IconOpenBook e IconCoin são SVGs internos de Livro.tsx —
+// a prop \`icon\` aceita qualquer ReactNode (ex.: ícones lucide-react).
+export function LivroIcone() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro icon={<IconBarChart size={40} />} title="Fundamentos de Finanças" />
+      <Livro icon={<IconOpenBook size={40} />} title="Guia Completo de Investimentos" />
+      <Livro icon={<IconCoin size={40} />} title="Renda Fixa na Prática" />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroIconHtml}
               >
                 <LivroIcone />
@@ -1511,7 +2082,18 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Illustration"
                 description="Ilustração decorativa que preenche a seção superior via prop illustration."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\nimport Lines from './lines';\nimport Icon from './icon';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-stretch justify-start gap-8 flex-initial">\n      <Book\n        illustration={<Lines />}\n        title="The user experience of the Frontend Cloud"\n      />\n      <Book\n        illustration={<Icon />}\n        title="The user experience of the Frontend Cloud"\n        variant="simple"\n      />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+// IllustrationLines e IllustrationDots são SVGs internos de Livro.tsx —
+// a prop \`illustration\` aceita qualquer ReactNode.
+export function LivroIlustrado() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro illustration={<IllustrationLines />} title="The user experience of the Frontend Cloud" />
+      <Livro illustration={<IllustrationDots />} title="The user experience of the Frontend Cloud" variant="simple" />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroIllustrationHtml}
               >
                 <LivroIlustrado />
@@ -1520,7 +2102,24 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Textured"
                 description="textured aplica uma textura de pontos sobre a capa sólida. Combine com textColor para controlar a cor do título."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-12 flex-initial">\n      <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n        <Book color="#7DC1C1" textured title="Design Engineering at Vercel" />\n        <Book color="#9D2127" textured title="Design Engineering at Vercel" />\n        <Book color="#FED954" textured title="Design Engineering at Vercel" />\n      </div>\n      <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n        <Book color="#7DC1C1" textColor="white" textured title="Design Engineering at Vercel" variant="simple" />\n        <Book color="#9D2127" textColor="#ece4db" textured title="Design Engineering at Vercel" variant="simple" />\n        <Book color="#FED954" textColor="#9d3b05" textured title="Design Engineering at Vercel" variant="simple" />\n      </div>\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroTexturado() {
+  return (
+    <div className="flex flex-col gap-8 flex-initial">
+      <div className="flex flex-row items-baseline justify-start gap-8 flex-wrap">
+        <Livro color="#7DC1C1" textured title="Design Engineering at Vercel" />
+        <Livro color="#9D2127" textured title="Design Engineering at Vercel" />
+        <Livro color="#FED954" textured title="Design Engineering at Vercel" />
+      </div>
+      <div className="flex flex-row items-baseline justify-start gap-8 flex-wrap">
+        <Livro color="#7DC1C1" textColor="white" textured title="Design Engineering at Vercel" variant="simple" />
+        <Livro color="#9D2127" textColor="#ece4db" textured title="Design Engineering at Vercel" variant="simple" />
+        <Livro color="#FED954" textColor="#9d3b05" textured title="Design Engineering at Vercel" variant="simple" />
+      </div>
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroTexturedHtml}
               >
                 <LivroTexturado />
@@ -1529,7 +2128,17 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Sizes"
                 description="Largura customizável via prop width (pixels). A altura é calculada automaticamente (ratio 1:1.32)."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book title="The user experience of the Frontend Cloud" width={300} />\n      <Book title="The user experience of the Frontend Cloud" width={200} />\n      <Book title="The user experience of the Frontend Cloud" width={150} />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroTamanhos() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro title="The user experience of the Frontend Cloud" width={300} />
+      <Livro title="The user experience of the Frontend Cloud" width={200} />
+      <Livro title="The user experience of the Frontend Cloud" width={150} />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n<!-- width={300} -->\n<div class=\"lv\" style=\"--w:300px;\">...</div>\n<!-- width={200} -->\n<div class=\"lv\" style=\"--w:200px;\">...</div>\n<!-- width={150} -->\n<div class=\"lv\" style=\"--w:150px;\">...</div>"}
               >
                 <LivroTamanhos />
@@ -1538,7 +2147,11 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Responsive"
                 description="Largura responsiva com objeto { sm, md } por breakpoint."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <Book\n      title="The user experience of the Frontend Cloud"\n      width={{ sm: 150, md: 196 }}\n    />\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroResponsivo() {
+  return <Livro title="The user experience of the Frontend Cloud" width={{ sm: 150, md: 196 }} />;
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroResponsivoHtml}
               >
                 <LivroResponsivo />

@@ -9,11 +9,16 @@ interface CodeFooterProps {
   effectiveCode: string;
   htmlCode?: string;
   aiFoodPrompt: string;
+  /**
+   * Exibe apenas o AI-Food (sem abas React/HTML). Usado quando o widget já
+   * renderiza o próprio bloco de código, evitando duplicação.
+   */
+  aiFoodOnly?: boolean;
 }
 
-export function CodeFooter({ title, hasCode, effectiveCode, htmlCode, aiFoodPrompt }: CodeFooterProps) {
+export function CodeFooter({ title, hasCode, effectiveCode, htmlCode, aiFoodPrompt, aiFoodOnly = false }: CodeFooterProps) {
   const [showCode, setShowCode] = useState(false);
-  const [codeTab, setCodeTab] = useState<"react" | "html" | "ai-food">("react");
+  const [codeTab, setCodeTab] = useState<"react" | "html" | "ai-food">(aiFoodOnly ? "ai-food" : "react");
   const [aiFoodCopied, setAIFoodCopied] = useState(false);
 
   const handleCopyAIFood = () => {
@@ -29,11 +34,12 @@ export function CodeFooter({ title, hasCode, effectiveCode, htmlCode, aiFoodProm
         aria-expanded={showCode}
         className="w-full flex items-center justify-between px-6 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
       >
-        <span>Ver código{!hasCode && " (pendente)"}</span>
+        <span>{aiFoodOnly ? "AI-Food (Prompt)" : `Ver código${!hasCode ? " (pendente)" : ""}`}</span>
         <ChevronDown className={cn("h-4 w-4 transition-transform", showCode && "rotate-180")} />
       </button>
       {showCode && (
         <div>
+          {!aiFoodOnly && (
           <div role="tablist" aria-label="Formato do código" className="flex gap-1 px-6 pb-2 pt-1">
             <button
               role="tab"
@@ -78,6 +84,7 @@ export function CodeFooter({ title, hasCode, effectiveCode, htmlCode, aiFoodProm
               AI-Food
             </button>
           </div>
+          )}
 
           {codeTab === "ai-food" ? (
             <div className="border-t border-emerald-900/40 bg-[#0a1628]">

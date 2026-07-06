@@ -23,9 +23,16 @@ interface SectionThemeToggleProps {
   htmlCode?: string;
   /**
    * Marque `true` quando o widget filho já renderiza o próprio bloco "Ver código"
-   * (CodeBlock interno). Suprime o footer padrão para evitar duplicação.
+   * (CodeBlock interno). Suprime as abas React/HTML do footer para evitar
+   * duplicação, mas mantém o AI-Food (gerado a partir de `code`) — a menos
+   * que `aiFood` seja `false`.
    */
   selfDocumented?: boolean;
+  /**
+   * Defina `false` quando o widget filho já renderiza o próprio AI-Food
+   * (ex.: GraficoPizza), suprimindo o footer AI-Food padrão.
+   */
+  aiFood?: boolean;
 }
 
 /**
@@ -33,7 +40,7 @@ interface SectionThemeToggleProps {
  * seção do Design System que não use ComponentShowcase. O toggle aplica a classe
  * `.dark` apenas ao conteúdo interno, mantendo o tema de outras seções intacto.
  */
-export function SectionThemeToggle({ children, className, bare = false, label, title, description, code, htmlCode, selfDocumented = false }: SectionThemeToggleProps) {
+export function SectionThemeToggle({ children, className, bare = false, label, title, description, code, htmlCode, selfDocumented = false, aiFood = true }: SectionThemeToggleProps) {
   const { theme } = useTheme();
   const { brand } = useBrand();
   const { view } = useSystemView();
@@ -47,8 +54,8 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
   const aiFoodTitle = title ?? label ?? "Componente";
 
   const aiFoodPrompt = useMemo(
-    () => selfDocumented ? "" : generateComponentPrompt(brand, view, aiFoodTitle, description, code, htmlCode),
-    [brand, view, aiFoodTitle, description, code, htmlCode, selfDocumented]
+    () => generateComponentPrompt(brand, view, aiFoodTitle, description, code, htmlCode),
+    [brand, view, aiFoodTitle, description, code, htmlCode]
   );
 
   const effectiveCode =
@@ -69,7 +76,20 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
     </button>
   );
 
-  const codeFooter = selfDocumented ? null : (
+  // Widget auto-documentado: sem abas React/HTML (já renderiza o próprio
+  // código), mas mantém o AI-Food quando houver `code` para alimentar o prompt.
+  const codeFooter = selfDocumented ? (
+    aiFood && hasCode ? (
+      <CodeFooter
+        title={aiFoodTitle}
+        hasCode={hasCode}
+        effectiveCode={effectiveCode}
+        htmlCode={htmlCode}
+        aiFoodPrompt={aiFoodPrompt}
+        aiFoodOnly
+      />
+    ) : null
+  ) : (
     <CodeFooter
       title={aiFoodTitle}
       hasCode={hasCode}

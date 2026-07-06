@@ -37,7 +37,7 @@ TIPOGRAFIA
 • Botão/CTA: Sora       700  14px UPPERCASE               ls 0.05em  (exclusivo botões)
 
 BOTÕES — identidade visual mais marcante
-• border-radius: 0px — NUNCA arredondar
+• border-radius: 5px (padrão do Design System) — NUNCA pílulas (rounded-full)
 • Padding:        py-[18px] px-[32px]
 • Border:         SEMPRE 1px solid
 • Primário (fundo claro):  bg #023619  text #FFF   border #023619
@@ -109,7 +109,7 @@ TIPOGRAFIA
 • Botão/CTA: Sora 700 14px UPPERCASE ls 0.05em (exclusivo botões)
 
 BOTÕES (regra UNIFICADA com Capital em LPs)
-• border-radius: 0px em LP — NUNCA pílulas
+• border-radius: 5px em LP (padrão do Design System) — NUNCA pílulas (rounded-full)
 • Primário (fundo claro): bg #EFBF4E  text #023619  border #EFBF4E
   Hover: bg transparent  border #EFBF4E  text #18181B
 • Outline: bg transparent  text #18181B  border #18181B
@@ -125,7 +125,8 @@ const FERRAMENTAS_EXTRA = `
 CONTEXTO: FERRAMENTAS / CALCULADORAS / WIDGETS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • Container pai: bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto
-• EXCEÇÃO À REGRA DE BORDAS: botões aqui são rounded-xl (12px)
+  (rounded-2xl é a ÚNICA exceção à regra de bordas de cards)
+• Botões: rounded-[5px] — mesmo padrão do Design System
 • Tabs/pílulas: rounded-full (permitido apenas em ferramentas)
 • Valores financeiros: tabular-nums font-anek font-bold text-4xl
 • Inputs: bg-gray-50 rounded-xl px-4 py-3 (sem border visível no default)
@@ -180,9 +181,9 @@ CHECKLIST ANTES DE ENTREGAR
 □ Gaps e espaçamentos múltiplos de 15px
 □ Responsivo mobile/desktop testado
 □ Acessibilidade: aria-label nos ícones, focus-visible ring, contraste ≥ 4.5:1
-□ Capital: sem glassmorphism, sem gradientes coloridos, botões com bordas retas
+□ Capital: sem glassmorphism, sem gradientes coloridos, botões com border-radius 5px
 □ Escola LP: cards translúcidos (backdrop-blur 24px), gradiente radial no fundo
-□ Escola Ferramentas: botões rounded-xl, slider thumb dourado
+□ Escola Ferramentas: botões rounded-[5px], slider thumb dourado
 □ Plataforma: vídeo sempre bg-black, aula ativa com border-l-4 amarela`;
 
 // ─── Função principal ────────────────────────────────────────────────────────
