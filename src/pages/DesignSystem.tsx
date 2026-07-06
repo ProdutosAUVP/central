@@ -41,9 +41,12 @@ import livroIllustrationHtml from "@/components/widgets/html-snippets/livro-illu
 import livroTexturedHtml from "@/components/widgets/html-snippets/livro-textured.html?raw";
 import livroResponsivoHtml from "@/components/widgets/html-snippets/livro-responsivo.html?raw";
 import { CheckboxDefault, CheckboxDisabled } from "@/components/widgets/CheckboxGeist";
+import checkboxGeistSrc from "@/components/widgets/CheckboxGeist?raw";
 import checkboxHtml from "@/components/widgets/html-snippets/checkbox.html?raw";
 import { ChoiceboxRadio, ChoiceboxCheckbox, ChoiceboxDisabled } from "@/components/widgets/ChoiceboxGeist";
+import choiceboxGeistSrc from "@/components/widgets/ChoiceboxGeist?raw";
 import choiceboxHtml from "@/components/widgets/html-snippets/choicebox.html?raw";
+import gradeCurricularSrc from "@/components/widgets/GradeCurricular?raw";
 import platCursosSrc from "@/components/widgets/PlataformaCursos?raw";
 import platPlayerSrc from "@/components/widgets/PlataformaPlayer?raw";
 import platPlaylistSrc from "@/components/widgets/PlataformaPlaylist?raw";
@@ -819,9 +822,8 @@ export default function DesignSystemPage() {
           <section id="buttons">
             <h2 className="text-2xl font-bold mb-2">Botões</h2>
             <p className="text-muted-foreground mb-6">
-              {brand === "capital"
-                ? "Capital: bordas retas (rounded-none), fonte Sora Bold 700, hover revela borda."
-                : "Escola: bordas arredondadas (rounded-xl), fonte Sora Bold 700, hover revela borda."}
+              Fonte Sora Bold em caixa alta, border-radius de 5px e hover que revela a borda
+              (fundo transparente). Pílulas (rounded-full) só são permitidas em ferramentas.
             </p>
             <div className="space-y-6">
               <ComponentShowcase title="Variantes de Botão" description="Todos os estilos disponíveis"
@@ -840,12 +842,12 @@ import { ArrowRight } from "lucide-react";
                 htmlCode={`<!-- Base compartilhada por todas as variantes -->
 <style>
   .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem;
-    padding:0.625rem 1.25rem; border-radius:5px; font-family:'Sora',sans-serif;
-    font-weight:700; text-transform:uppercase; font-size:13px; letter-spacing:0.02em;
+    height:40px; padding:0.5rem 1.25rem; border-radius:5px; font-family:'Sora',sans-serif;
+    font-weight:600; text-transform:uppercase; font-size:14px;
     border:1px solid transparent; cursor:pointer; transition:all 0.2s; }
-  .btn-lg { padding:1rem 2rem; height:48px; font-size:14px; }
+  .btn-lg { padding:1rem 2rem; height:48px; font-size:14px; letter-spacing:0.05em; }
 
-  /* Padrão (default) */
+  /* Padrão (default) — hover revela a borda */
   .btn-default { background:var(--primary,#023619); color:#fff; border-color:var(--primary,#023619); }
   .btn-default:hover { background:transparent; color:var(--primary,#023619); }
 
@@ -853,22 +855,22 @@ import { ArrowRight } from "lucide-react";
   .btn-cta { background:#023619; color:#fff; }
   .btn-cta:hover { background:transparent; color:#023619; border-color:#023619; }
 
-  /* CTA Invertido (para fundos escuros) */
-  .btn-cta-inverted { background:#fafafa; color:#023619; border-color:#fafafa; }
-  .btn-cta-inverted:hover { background:#e0e0e0; border-color:#e0e0e0; }
+  /* CTA Invertido (para fundos escuros) — hover atenua o fundo claro */
+  .btn-cta-inverted { background:#fafafa; color:#011F0E; border-color:#011F0E; }
+  .btn-cta-inverted:hover { background:#e0e0e0; }
 
   /* Secundário */
-  .btn-secondary { background:var(--secondary,#f1f1f1); color:var(--secondary-foreground,#111);
-    border-color:var(--secondary,#f1f1f1); }
-  .btn-secondary:hover { background:transparent; color:var(--secondary-foreground,#111); }
+  .btn-secondary { background:var(--secondary,#15472F); color:#fff;
+    border-color:var(--secondary,#15472F); }
+  .btn-secondary:hover { background:transparent; color:var(--secondary,#15472F); }
 
-  /* Contorno (outline) */
-  .btn-outline { background:transparent; color:inherit; border-color:#e5e5e5; }
-  .btn-outline:hover { background:#f5f5f5; }
+  /* Contorno (outline) — hover usa a cor de acento */
+  .btn-outline { background:transparent; color:inherit; border-color:#dfe3df; }
+  .btn-outline:hover { background:var(--accent,#023619); color:#fff; }
 
-  /* Fantasma (ghost) */
+  /* Fantasma (ghost) — hover usa a cor de acento */
   .btn-ghost { background:transparent; color:inherit; border-color:transparent; }
-  .btn-ghost:hover { background:#f5f5f5; }
+  .btn-ghost:hover { background:var(--accent,#023619); color:#fff; }
 
   /* Link */
   .btn-link { background:transparent; color:var(--primary,#023619); border:none; padding:0;
@@ -876,8 +878,8 @@ import { ArrowRight } from "lucide-react";
   .btn-link:hover { text-decoration:underline; }
 
   /* Destrutivo */
-  .btn-destructive { background:#dc2626; color:#fff; border-color:#dc2626; }
-  .btn-destructive:hover { background:#b91c1c; border-color:#b91c1c; }
+  .btn-destructive { background:#ef4444; color:#fff; border-color:#ef4444; }
+  .btn-destructive:hover { background:rgba(239,68,68,0.9); }
 </style>
 
 <button class="btn btn-default">PADRÃO</button>
@@ -912,9 +914,9 @@ import { ArrowRight } from "lucide-react";
     border-radius:5px; font-family:'Sora',sans-serif; font-weight:700; text-transform:uppercase;
     cursor:pointer; }
   .btn-sm      { height:36px; padding:0 0.75rem;  font-size:12px; }
-  .btn-default { height:40px; padding:0 1.25rem;  font-size:13px; }
+  .btn-default { height:40px; padding:0 1.25rem;  font-size:14px; }
   .btn-lg      { height:48px; padding:0 2rem;     font-size:14px; }
-  .btn-xl      { height:56px; padding:0 2.5rem;   font-size:15px; }
+  .btn-xl      { height:56px; padding:0 2.5rem;   font-size:16px; }
   .btn-icon    { height:40px; width:40px; padding:0; }
 </style>
 
@@ -930,8 +932,10 @@ import { ArrowRight } from "lucide-react";
                 <Button size="icon"><ArrowRight className="h-4 w-4" /></Button>
               </ComponentShowcase>
               <ComponentShowcase title="CTA em Fundo Escuro" description="Comportamento do botão invertido"
-                code={`<Button variant="cta-inverted" size="lg">Começar Agora</Button>`}
-                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fff; color:#023619; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:13px; border:none; cursor:pointer;">COMEÇAR AGORA</button>\n</div>`}>
+                code={`<div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg">
+  <Button variant="cta-inverted" size="lg">Começar Agora</Button>
+</div>`}
+                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fafafa; color:#011F0E; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; font-size:14px; border:1px solid #fafafa; cursor:pointer;">COMEÇAR AGORA</button>\n</div>\n<!-- Hover: background #e0e0e0 (atenuação leve, mantém contraste) -->`}>
                 <div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg flex items-center gap-4 w-full">
                   <Button variant="cta-inverted" size="lg">Começar Agora</Button>
                 </div>
@@ -946,42 +950,7 @@ import { ArrowRight } from "lucide-react";
             <h2 className="text-2xl font-bold mb-2">Grade Curricular</h2>
             <p className="text-muted-foreground mb-6">Abas pill-style com cards translúcidos em grid responsivo.</p>
             <ComponentShowcase title="Grade Curricular" description="Tabs com categorias e cards de módulos"
-              code={`import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-const categories = [
-  { id: "fundamentos", label: "Fundamentos" },
-  { id: "renda-fixa", label: "Renda Fixa" },
-  { id: "acoes", label: "Ações" },
-];
-
-const modules = {
-  fundamentos: [
-    { icon: BookOpen, number: "01", title: "Mentalidade Financeira", description: "Construa uma base sólida." },
-    { icon: BarChart3, number: "02", title: "Reserva de Emergência", description: "Proteção financeira essencial." },
-  ],
-};
-
-<Tabs defaultValue="fundamentos">
-  <TabsList className="flex flex-wrap gap-2 bg-transparent">
-    {categories.map((cat) => (
-      <TabsTrigger key={cat.id} value={cat.id} className="rounded-full px-6 py-3 text-[13px] font-bold uppercase">
-        {cat.label}
-      </TabsTrigger>
-    ))}
-  </TabsList>
-  {Object.entries(modules).map(([key, items]) => (
-    <TabsContent key={key} value={key}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {items.map((mod) => (
-          <div key={mod.number} className="bg-background/60 border rounded-xl p-6">
-            <h4 className="font-bold text-sm">{mod.title}</h4>
-            <p className="text-xs text-muted-foreground">{mod.description}</p>
-          </div>
-        ))}
-      </div>
-    </TabsContent>
-  ))}
-</Tabs>`}
+              code={gradeCurricularSrc}
               htmlCode={`<!-- Grade Curricular -->
 <style>
   .grade-container { background: #f5f5f5; padding: 2rem; border-radius: 1rem; border: 1px solid #e5e5e5; }
@@ -1093,42 +1062,42 @@ function showTab(tabId) {
           <section id="notifications">
             <h2 className="text-2xl font-bold mb-2">Notificações</h2>
             <p className="text-muted-foreground mb-6">Pilha persistente de mensagens com tipos semânticos (success / info / warning / error). Diferente do Toast: usadas para fluxos longos como uploads, salvamentos automáticos e alertas de sistema.</p>
-            <SectionThemeToggle bare title="Notificações"><Notifications /></SectionThemeToggle>
+            <Notifications />
           </section>
 
           <Separator />
           <section id="popconfirm">
             <h2 className="text-2xl font-bold mb-2">Popconfirm</h2>
             <p className="text-muted-foreground mb-6">Confirmação inline ancorada ao gatilho — alternativa leve ao Dialog para ações destrutivas rápidas.</p>
-            <SectionThemeToggle bare title="Popconfirm"><PopconfirmWidget /></SectionThemeToggle>
+            <PopconfirmWidget />
           </section>
 
           <Separator />
           <section id="spin">
             <h2 className="text-2xl font-bold mb-2">Spin (Loading)</h2>
             <p className="text-muted-foreground mb-6">Indicador de carregamento com mensagem opcional em Sora uppercase. Inclui modo overlay para encobrir áreas durante operações assíncronas.</p>
-            <SectionThemeToggle bare title="Spin (Loading)"><SpinTipWidget /></SectionThemeToggle>
+            <SpinTipWidget />
           </section>
 
           <Separator />
           <section id="skeleton-avancado">
             <h2 className="text-2xl font-bold mb-2">Skeleton Avançado</h2>
             <p className="text-muted-foreground mb-6">Composições prontas de skeletons (lista com avatar, card de conteúdo, tabela) para evitar layout shift durante o carregamento.</p>
-            <SectionThemeToggle bare title="Skeleton Avançado"><SkeletonAvancado /></SectionThemeToggle>
+            <SkeletonAvancado />
           </section>
 
           <Separator />
           <section id="empty">
             <h2 className="text-2xl font-bold mb-2">Empty (Estado Vazio)</h2>
             <p className="text-muted-foreground mb-6">Placeholder para listas, buscas e tabelas sem dados, com ícone, descrição e CTA opcional para guiar a próxima ação.</p>
-            <SectionThemeToggle bare title="Empty (Estado Vazio)"><EmptyWidget /></SectionThemeToggle>
+            <EmptyWidget />
           </section>
 
           <Separator />
           <section id="result">
             <h2 className="text-2xl font-bold mb-2">Result</h2>
             <p className="text-muted-foreground mb-6">Tela de feedback após operações críticas (sucesso, erro, acesso negado) usando tokens semânticos success / error / warning.</p>
-            <SectionThemeToggle bare title="Result"><ResultWidget /></SectionThemeToggle>
+            <ResultWidget />
           </section>
 
 
@@ -1137,55 +1106,53 @@ function showTab(tabId) {
           <section id="drawer-simples">
             <h2 className="text-2xl font-bold mb-2">Drawer</h2>
             <p className="text-muted-foreground mb-6">Painel lateral simples para edição, detalhes ou formulários secundários sem sair do contexto principal.</p>
-            <SectionThemeToggle bare title="Drawer"><DrawerSimples /></SectionThemeToggle>
+            <DrawerSimples />
           </section>
 
           <Separator />
           <section id="drawer-multi">
             <h2 className="text-2xl font-bold mb-2">Drawer Multi-nível</h2>
             <p className="text-muted-foreground mb-6">Drawers empilhados (push) que preservam a hierarquia em fluxos detalhados de edição sem perder o contexto da camada anterior.</p>
-            <SectionThemeToggle bare title="Drawer Multi-nível"><DrawerMultiNivel /></SectionThemeToggle>
+            <DrawerMultiNivel />
           </section>
 
           <Separator />
           <section id="steps">
             <h2 className="text-2xl font-bold mb-2">Steps (Wizard)</h2>
             <p className="text-muted-foreground mb-6">Etapas numeradas com estados completo / atual / pendente e linha de progresso para fluxos guiados.</p>
-            <SectionThemeToggle bare title="Steps (Wizard)"><StepsWidget /></SectionThemeToggle>
+            <StepsWidget />
           </section>
 
           <Separator />
           <section id="segmented">
             <h2 className="text-2xl font-bold mb-2">Switch</h2>
             <p className="text-muted-foreground mb-6">Toggle compacto para alternar entre poucas opções (períodos, modos de visualização) ou estados binários (on/off).</p>
-            <SectionThemeToggle bare title="Switch">
-              <div className="w-full space-y-6">
-                <SegmentedWidget />
-                <SwitchSimplesWidget />
-                <SwitchDisabledWidget />
-              </div>
-            </SectionThemeToggle>
+            <div className="space-y-6">
+              <SegmentedWidget />
+              <SwitchSimplesWidget />
+              <SwitchDisabledWidget />
+            </div>
           </section>
 
           <Separator />
           <section id="anchor">
             <h2 className="text-2xl font-bold mb-2">Anchor (Scroll Spy)</h2>
             <p className="text-muted-foreground mb-6">Menu lateral de âncoras que destaca a seção visível enquanto o usuário rola a página.</p>
-            <SectionThemeToggle bare title="Anchor (Scroll Spy)"><AnchorWidget /></SectionThemeToggle>
+            <AnchorWidget />
           </section>
 
           <Separator />
           <section id="tabs-geist">
             <h2 className="text-2xl font-bold mb-2">Tabs</h2>
             <p className="text-muted-foreground mb-6">Tabs minimalistas inspiradas no Geist: indicador em barra sob a aba ativa e divisor inferior contínuo, sem fundos coloridos.</p>
-            <SectionThemeToggle bare title="Tabs"><TabsGeistWidget /></SectionThemeToggle>
+            <TabsGeistWidget />
           </section>
 
           <Separator />
           <section id="tour">
             <h2 className="text-2xl font-bold mb-2">Tour</h2>
             <p className="text-muted-foreground mb-6">Onboarding guiado em sequência: overlay escuro com spotlight no elemento alvo e popover com descrição e navegação.</p>
-            <SectionThemeToggle bare title="Tour"><TourWidget /></SectionThemeToggle>
+            <TourWidget />
           </section>
 
 
@@ -1194,56 +1161,56 @@ function showTab(tabId) {
           <section id="upload-preview">
             <h2 className="text-2xl font-bold mb-2">Upload com Preview</h2>
             <p className="text-muted-foreground mb-6">Dropzone de imagens com preview em grid, progresso simulado, contagem e remoção individual.</p>
-            <SectionThemeToggle bare title="Upload com Preview"><UploadComPreview /></SectionThemeToggle>
+            <UploadComPreview />
           </section>
 
           <Separator />
           <section id="calendar">
             <h2 className="text-2xl font-bold mb-2">Calendário</h2>
             <p className="text-muted-foreground mb-6">Componentes de calendário para seleção de data única, intervalo de datas e versão compacta em popover. Localização em <code className="bg-muted px-1 rounded text-sm font-mono">pt-BR</code>.</p>
-            <SectionThemeToggle bare title="Calendário"><CalendarioWidget /></SectionThemeToggle>
+            <CalendarioWidget />
           </section>
 
           <Separator />
           <section id="rate">
             <h2 className="text-2xl font-bold mb-2">Rate (Avaliação)</h2>
             <p className="text-muted-foreground mb-6">Estrelas interativas com hover preview, suporte a meias estrelas e modo somente-leitura. Cor padrão usa o token semântico <code className="bg-muted px-1 rounded text-sm font-mono">warning</code>.</p>
-            <SectionThemeToggle bare title="Rate (Avaliação)"><RateWidget /></SectionThemeToggle>
+            <RateWidget />
           </section>
 
           <Separator />
           <section id="mentions">
             <h2 className="text-2xl font-bold mb-2">Mentions</h2>
             <p className="text-muted-foreground mb-6">Textarea que detecta '@' (menções) ou '#' (tags) e abre sugestões em popover ancorado ao caret.</p>
-            <SectionThemeToggle bare title="Mentions"><MentionsWidget /></SectionThemeToggle>
+            <MentionsWidget />
           </section>
 
           <Separator />
           <section id="cascader">
             <h2 className="text-2xl font-bold mb-2">Cascader</h2>
             <p className="text-muted-foreground mb-6">Drill-down em colunas para navegar categorias hierárquicas (alternativa ao TreeSelect com colunas lado a lado).</p>
-            <SectionThemeToggle bare title="Cascader"><CascaderWidget /></SectionThemeToggle>
+            <CascaderWidget />
           </section>
 
           <Separator />
           <section id="tool-autocomplete">
             <h2 className="text-2xl font-bold mb-2">AutoComplete</h2>
             <p className="text-muted-foreground mb-6">Input com sugestões filtradas em popover, navegação por teclado (↑ ↓ Enter Esc) e highlight do trecho buscado.</p>
-            <SectionThemeToggle bare title="AutoComplete"><AutoCompleteWidget /></SectionThemeToggle>
+            <AutoCompleteWidget />
           </section>
 
           <Separator />
           <section id="tool-treeselect">
             <h2 className="text-2xl font-bold mb-2">TreeSelect</h2>
             <p className="text-muted-foreground mb-6">Select hierárquico com nodes expansíveis para classes de ativos, taxonomias e categorias aninhadas.</p>
-            <SectionThemeToggle bare title="TreeSelect"><TreeSelectWidget /></SectionThemeToggle>
+            <TreeSelectWidget />
           </section>
 
           <Separator />
           <section id="tool-transfer">
             <h2 className="text-2xl font-bold mb-2">Transfer</h2>
             <p className="text-muted-foreground mb-6">Transferência de itens entre listas (disponíveis ↔ selecionados) com checkboxes, busca e ações em massa.</p>
-            <SectionThemeToggle bare title="Transfer"><TransferWidget /></SectionThemeToggle>
+            <TransferWidget />
           </section>
 
           <Separator />
@@ -1255,7 +1222,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Default"
                 description="Checkbox controlado com estado de marcado/desmarcado."
-                code={`import { Checkbox } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [checked, setChecked] = useState(false);\n  return (\n    <Checkbox checked={checked} onChange={(): void => setChecked((b) => !b)}>\n      Option 1\n    </Checkbox>\n  );\n}`}
+                code={checkboxGeistSrc}
                 htmlCode={checkboxHtml}
               >
                 <CheckboxDefault />
@@ -1264,7 +1231,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Disabled"
                 description="Estados desabilitados: padrão, marcado e indeterminado."
-                code={`import { Checkbox } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-4 flex-initial">\n      <Checkbox disabled>Disabled</Checkbox>\n      <Checkbox checked disabled>\n        Disabled Checked\n      </Checkbox>\n      <Checkbox disabled indeterminate>\n        Disabled Indeterminate\n      </Checkbox>\n    </div>\n  );\n}`}
+                code={checkboxGeistSrc}
                 htmlCode={checkboxHtml}
               >
                 <CheckboxDisabled />
@@ -1281,7 +1248,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Radio (escolha única)"
                 description="Grupo de cartões com seleção única usando type='radio'."
-                code={`'use client';\nimport { ChoiceboxGroup } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [value, setValue] = useState('trial');\n  return (\n    <ChoiceboxGroup\n      direction="row"\n      label="select a plan"\n      onChange={setValue}\n      type="radio"\n      value={value}\n    >\n      <ChoiceboxGroup.Item description="Free for two weeks" title="Pro Trial" value="trial" />\n      <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n    </ChoiceboxGroup>\n  );\n}`}
+                code={choiceboxGeistSrc}
                 htmlCode={choiceboxHtml}
               >
                 <ChoiceboxRadio />
@@ -1290,7 +1257,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Checkbox (múltipla escolha)"
                 description="Grupo de cartões permitindo seleção múltipla usando type='checkbox'."
-                code={`'use client';\nimport { ChoiceboxGroup } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [value, setValue] = useState([] as string[]);\n  return (\n    <ChoiceboxGroup\n      direction="row"\n      label="select a plan"\n      onChange={setValue}\n      type="checkbox"\n      value={value}\n    >\n      <ChoiceboxGroup.Item description="Free for two weeks" title="Pro Trial" value="trial" />\n      <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n    </ChoiceboxGroup>\n  );\n}`}
+                code={choiceboxGeistSrc}
                 htmlCode={choiceboxHtml}
               >
                 <ChoiceboxCheckbox />
@@ -1299,7 +1266,7 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Disabled"
                 description="Grupo inteiro desabilitado e item individual desabilitado."
-                code={`'use client';\nimport { ChoiceboxGroup } from 'geist/components';\nimport { useState, type JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  const [value, setValue] = useState('');\n  const [value2, setValue2] = useState([] as string[]);\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-6 flex-initial">\n      <ChoiceboxGroup direction="row" disabled label="Choicebox group disabled" onChange={setValue} showLabel type="radio" value={value}>\n        <ChoiceboxGroup.Item description="Free for two weeks" title="Pro Trial" value="trial" />\n        <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n      </ChoiceboxGroup>\n      <ChoiceboxGroup direction="row" label="Single input disabled" onChange={setValue2} showLabel type="checkbox" value={value2}>\n        <ChoiceboxGroup.Item description="Free for two weeks" disabled title="Pro Trial" value="trial" />\n        <ChoiceboxGroup.Item description="Get started now" title="Pro" value="pro" />\n      </ChoiceboxGroup>\n    </div>\n  );\n}`}
+                code={choiceboxGeistSrc}
                 htmlCode={choiceboxHtml}
               >
                 <ChoiceboxDisabled />
@@ -1314,54 +1281,52 @@ function showTab(tabId) {
           <section id="statistic">
             <h2 className="text-2xl font-bold mb-2">Statistic (KPIs)</h2>
             <p className="text-muted-foreground mb-6">Cards numéricos com contagem progressiva animada, prefixos/sufixos e tendência (up/down) em tokens semânticos.</p>
-            <SectionThemeToggle bare title="Statistic (KPIs)"><StatisticWidget /></SectionThemeToggle>
+            <StatisticWidget />
           </section>
 
           <Separator />
           <section id="timeline">
             <h2 className="text-2xl font-bold mb-2">Timeline</h2>
             <p className="text-muted-foreground mb-6">Linha do tempo vertical com estados semânticos (concluído, ativo, pendente, erro) para histórico e jornada do usuário.</p>
-            <SectionThemeToggle bare title="Timeline"><TimelineWidget /></SectionThemeToggle>
+            <TimelineWidget />
           </section>
 
           <Separator />
           <section id="tree">
             <h2 className="text-2xl font-bold mb-2">Tree</h2>
             <p className="text-muted-foreground mb-6">Árvore expansível com ícones de pasta/arquivo para explorar estruturas hierárquicas profundas.</p>
-            <SectionThemeToggle bare title="Tree"><TreeWidget /></SectionThemeToggle>
+            <TreeWidget />
           </section>
 
           <Separator />
           <section id="descriptions">
             <h2 className="text-2xl font-bold mb-2">Descriptions</h2>
             <p className="text-muted-foreground mb-6">Lista de propriedades chave/valor em grid responsivo. Padrão para páginas de detalhe (perfil, pedido, fatura).</p>
-            <SectionThemeToggle bare title="Descriptions"><DescriptionsWidget /></SectionThemeToggle>
+            <DescriptionsWidget />
           </section>
 
           <Separator />
           <section id="tabela">
             <h2 className="text-2xl font-bold mb-2">Tabela</h2>
             <p className="text-muted-foreground mb-6">Tabela enxuta inspirada no Geist: cabeçalho discreto em caixa alta, zebra sutil nas linhas e última coluna alinhada à direita.</p>
-            <SectionThemeToggle bare title="Tabela">
-              <div className="w-full space-y-6">
-                <TabelaWidget />
-                <TabelaBorderedWidget />
-              </div>
-            </SectionThemeToggle>
+            <div className="space-y-6">
+              <TabelaWidget />
+              <TabelaBorderedWidget />
+            </div>
           </section>
 
           <Separator />
           <section id="progress-geist">
             <h2 className="text-2xl font-bold mb-2">Progress Bar</h2>
             <p className="text-muted-foreground mb-6">Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido e cantos totalmente arredondados.</p>
-            <SectionThemeToggle bare title="Progress Bar"><ProgressGeistWidget /></SectionThemeToggle>
+            <ProgressGeistWidget />
           </section>
 
           <Separator />
           <section id="watermark">
             <h2 className="text-2xl font-bold mb-2">Watermark (Marca d'água)</h2>
             <p className="text-muted-foreground mb-6">Texto repetido em diagonal sobre conteúdo sensível (relatórios, dashboards internos), gerado via canvas em data URL.</p>
-            <SectionThemeToggle bare title="Watermark (Marca d'água)"><WatermarkWidget /></SectionThemeToggle>
+            <WatermarkWidget />
           </section>
 
           <Separator />
@@ -1372,7 +1337,7 @@ function showTab(tabId) {
               em linha única, ou vertical à esquerda/direita do gráfico).
             </p>
             <div className="space-y-10">
-              <SectionThemeToggle bare title="Gráfico Donut (Pizza)" description="Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais." code={graficoPizzaSrc} selfDocumented><GraficoPizza /></SectionThemeToggle>
+              <SectionThemeToggle bare title="Gráfico Donut (Pizza)" description="Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais." code={graficoPizzaSrc} selfDocumented aiFood={false}><GraficoPizza /></SectionThemeToggle>
               <SectionThemeToggle bare title="Gráfico Donut com Legendas" description="Variações de posição da legenda: horizontal abaixo, em linha única e vertical lateral ao gráfico. Mesmas cores e regras do donut padrão." code={graficoPizzaLegendasSrc} selfDocumented><GraficoPizzaLegendas /></SectionThemeToggle>
             </div>
           </section>
@@ -1475,7 +1440,11 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Default"
                 description="Capa padrão: seção superior colorida + área inferior branca com título e sulco de lombada."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return <Book title="The user experience of the Frontend Cloud" />;\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroDefault() {
+  return <Livro title="The user experience of the Frontend Cloud" />;
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroDefaultHtml}
               >
                 <LivroDefault />
@@ -1484,7 +1453,16 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Variants"
                 description="simple remove o sulco da lombada; stripe adiciona uma faixa horizontal decorativa."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book\n        title="The user experience of the Frontend Cloud"\n        variant="simple"\n        width={196}\n      />\n      <Book\n        title="The user experience of the Frontend Cloud"\n        variant="stripe"\n        width={196}\n      />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroVariants() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">
+      <Livro title="The user experience of the Frontend Cloud" variant="simple" width={196} />
+      <Livro title="The user experience of the Frontend Cloud" variant="stripe" width={196} />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroVariantsHtml}
               >
                 <LivroVariants />
@@ -1493,7 +1471,17 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Custom color"
                 description="Cores via color. Ao definir textColor, a capa inteira usa a cor de destaque — ideal para capas monocromáticas."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book\n        color="#9D2127"\n        title="How Vercel improves your website's search engine ranking"\n      />\n      <Book\n        color="#7DC1C1"\n        textColor="white"\n        title="Design Engineering at Vercel"\n        variant="simple"\n      />\n      <Book color="#FED954" title="The user experience of the Frontend Cloud" />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroCustomColor() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro color="#9D2127" title="How Vercel improves your website's search engine ranking" />
+      <Livro color="#7DC1C1" textColor="white" title="Design Engineering at Vercel" variant="simple" />
+      <Livro color="#FED954" title="The user experience of the Frontend Cloud" />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroCustomHtml}
               >
                 <LivroCustomColor />
@@ -1502,7 +1490,19 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Icon"
                 description="Ícone ou logo exibido na seção superior colorida via prop icon."
-                code={`import { Book } from 'geist/components';\nimport { LogoIconVercel, LogoIconNext, LogoIconReact } from '@vercel/geistcn-assets/logos';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book icon={<LogoIconVercel />} title="Vercel Platform Guide" />\n      <Book icon={<LogoIconNext />} title="Next.js Documentation" />\n      <Book icon={<LogoIconReact />} title="React Essentials" />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+// IconBarChart, IconOpenBook e IconCoin são SVGs internos de Livro.tsx —
+// a prop \`icon\` aceita qualquer ReactNode (ex.: ícones lucide-react).
+export function LivroIcone() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro icon={<IconBarChart size={40} />} title="Fundamentos de Finanças" />
+      <Livro icon={<IconOpenBook size={40} />} title="Guia Completo de Investimentos" />
+      <Livro icon={<IconCoin size={40} />} title="Renda Fixa na Prática" />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroIconHtml}
               >
                 <LivroIcone />
@@ -1511,7 +1511,18 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Illustration"
                 description="Ilustração decorativa que preenche a seção superior via prop illustration."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\nimport Lines from './lines';\nimport Icon from './icon';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-stretch justify-start gap-8 flex-initial">\n      <Book\n        illustration={<Lines />}\n        title="The user experience of the Frontend Cloud"\n      />\n      <Book\n        illustration={<Icon />}\n        title="The user experience of the Frontend Cloud"\n        variant="simple"\n      />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+// IllustrationLines e IllustrationDots são SVGs internos de Livro.tsx —
+// a prop \`illustration\` aceita qualquer ReactNode.
+export function LivroIlustrado() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro illustration={<IllustrationLines />} title="The user experience of the Frontend Cloud" />
+      <Livro illustration={<IllustrationDots />} title="The user experience of the Frontend Cloud" variant="simple" />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroIllustrationHtml}
               >
                 <LivroIlustrado />
@@ -1520,7 +1531,24 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Textured"
                 description="textured aplica uma textura de pontos sobre a capa sólida. Combine com textColor para controlar a cor do título."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-col items-stretch justify-start gap-12 flex-initial">\n      <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n        <Book color="#7DC1C1" textured title="Design Engineering at Vercel" />\n        <Book color="#9D2127" textured title="Design Engineering at Vercel" />\n        <Book color="#FED954" textured title="Design Engineering at Vercel" />\n      </div>\n      <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n        <Book color="#7DC1C1" textColor="white" textured title="Design Engineering at Vercel" variant="simple" />\n        <Book color="#9D2127" textColor="#ece4db" textured title="Design Engineering at Vercel" variant="simple" />\n        <Book color="#FED954" textColor="#9d3b05" textured title="Design Engineering at Vercel" variant="simple" />\n      </div>\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroTexturado() {
+  return (
+    <div className="flex flex-col gap-8 flex-initial">
+      <div className="flex flex-row items-baseline justify-start gap-8 flex-wrap">
+        <Livro color="#7DC1C1" textured title="Design Engineering at Vercel" />
+        <Livro color="#9D2127" textured title="Design Engineering at Vercel" />
+        <Livro color="#FED954" textured title="Design Engineering at Vercel" />
+      </div>
+      <div className="flex flex-row items-baseline justify-start gap-8 flex-wrap">
+        <Livro color="#7DC1C1" textColor="white" textured title="Design Engineering at Vercel" variant="simple" />
+        <Livro color="#9D2127" textColor="#ece4db" textured title="Design Engineering at Vercel" variant="simple" />
+        <Livro color="#FED954" textColor="#9d3b05" textured title="Design Engineering at Vercel" variant="simple" />
+      </div>
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroTexturedHtml}
               >
                 <LivroTexturado />
@@ -1529,7 +1557,17 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Sizes"
                 description="Largura customizável via prop width (pixels). A altura é calculada automaticamente (ratio 1:1.32)."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial">\n      <Book title="The user experience of the Frontend Cloud" width={300} />\n      <Book title="The user experience of the Frontend Cloud" width={200} />\n      <Book title="The user experience of the Frontend Cloud" width={150} />\n    </div>\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroTamanhos() {
+  return (
+    <div className="flex flex-row items-baseline justify-start gap-8 flex-initial flex-wrap">
+      <Livro title="The user experience of the Frontend Cloud" width={300} />
+      <Livro title="The user experience of the Frontend Cloud" width={200} />
+      <Livro title="The user experience of the Frontend Cloud" width={150} />
+    </div>
+  );
+}`}
                 htmlCode={livroBaseHtml + "\n<!-- width={300} -->\n<div class=\"lv\" style=\"--w:300px;\">...</div>\n<!-- width={200} -->\n<div class=\"lv\" style=\"--w:200px;\">...</div>\n<!-- width={150} -->\n<div class=\"lv\" style=\"--w:150px;\">...</div>"}
               >
                 <LivroTamanhos />
@@ -1538,7 +1576,11 @@ function showTab(tabId) {
               <ComponentShowcase
                 title="Responsive"
                 description="Largura responsiva com objeto { sm, md } por breakpoint."
-                code={`import { Book } from 'geist/components';\nimport type { JSX } from 'react';\n\nexport function Component(): JSX.Element {\n  return (\n    <Book\n      title="The user experience of the Frontend Cloud"\n      width={{ sm: 150, md: 196 }}\n    />\n  );\n}`}
+                code={`import { Livro } from "@/components/widgets/Livro";
+
+export function LivroResponsivo() {
+  return <Livro title="The user experience of the Frontend Cloud" width={{ sm: 150, md: 196 }} />;
+}`}
                 htmlCode={livroBaseHtml + "\n" + livroResponsivoHtml}
               >
                 <LivroResponsivo />

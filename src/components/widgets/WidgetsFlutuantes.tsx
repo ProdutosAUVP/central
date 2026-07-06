@@ -1,3 +1,8 @@
+// snippet-mirror-skip — esta página de documentação usa TRÊS CodeBlocks
+// segmentados (comportamento do popup, widget WhatsApp e flutuante
+// secundário), cada um 1:1 com o exemplo que ilustra. O verificador de
+// espelhamento lê apenas o primeiro CodeBlock e o compararia contra os
+// textos da página inteira, gerando falso positivo.
 import React, { useState, useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";

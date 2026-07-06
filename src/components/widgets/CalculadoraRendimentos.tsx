@@ -277,21 +277,69 @@ export function CalculadoraRendimentos() {
             label: "React",
             language: "tsx",
             code: `// Calculadora de Rendimentos — React
-const [initialPos, setInitialPos] = useState(232);
-const [monthlyPos, setMonthlyPos] = useState(387);
-const [years, setYears] = useState(5);
+// Sliders logarítmicos: cobrem R$ 1 mil → R$ 10 mi mantendo precisão.
+function logMapInitial(pos: number): number {
+  const minv = Math.log(1000);           // R$ 1 mil
+  const maxv = Math.log(10_000_000);     // R$ 10 mi
+  return smartRound(Math.exp(minv + ((maxv - minv) / 1000) * pos));
+}
 
-const initialInvestment = logMapInitial(initialPos);
-const monthlyContribution = logMapMonthly(monthlyPos);
-const annualRate = ANNUAL_RATES_BY_YEAR[years] ?? 0.12;
-const monthlyRate = Math.pow(1 + annualRate, 1/12) - 1;
+function logMapMonthly(pos: number): number {
+  if (pos === 0) return 0;
+  const minv = Math.log(50);             // R$ 50
+  const maxv = Math.log(500_000);        // R$ 500 mil
+  return smartRound(Math.exp(minv + ((maxv - minv) / 999) * (pos - 1)));
+}
 
-// FV = P × (1+r)^n + PMT × [((1+r)^n - 1) / r] × (1+r)
-const fvInitial = initialInvestment * Math.pow(1 + monthlyRate, years * 12);
-const fvMonthly = pmt * ((Math.pow(1 + monthlyRate, n) - 1) / monthlyRate) * (1 + monthlyRate);
+export function CalculadoraRendimentos() {
+  const [initialPos, setInitialPos] = useState(232);
+  const [monthlyPos, setMonthlyPos] = useState(387);
+  const [years, setYears] = useState(5);
 
-<InvestmentSlider label="Seu investimento inicial" value={initialPos}
-  displayValue={fmtCurrency(initialInvestment)} onChange={setInitialPos} />`
+  const initialInvestment = logMapInitial(initialPos);
+  const monthlyContribution = logMapMonthly(monthlyPos);
+  const annualRate = ANNUAL_RATES_BY_YEAR[years] ?? 0.12;
+  const monthlyRate = Math.pow(1 + annualRate, 1 / 12) - 1;
+  const n = years * 12;
+
+  // FV = P × (1+r)^n + PMT × [((1+r)^n − 1) / r] × (1+r)
+  const finalValue =
+    initialInvestment * Math.pow(1 + monthlyRate, n) +
+    futureValueAnnuity(monthlyContribution, monthlyRate, n);
+
+  return (
+    <div className="space-y-6">
+      <InvestmentSlider label="Seu investimento inicial" value={initialPos}
+        displayValue={fmtCurrency(initialInvestment)} min={0} max={1000}
+        onChange={setInitialPos} leftLabel="R$ 1 mil" rightLabel="R$ 10 mi" />
+      <InvestmentSlider label="Aporte mensal adicional" value={monthlyPos}
+        displayValue={fmtCurrency(monthlyContribution)} min={0} max={1000}
+        onChange={setMonthlyPos} leftLabel="R$ 0" rightLabel="R$ 500 mil" />
+      <InvestmentSlider label="Anos que você investe" value={years}
+        displayValue={\`\${years} ano\${years > 1 ? "s" : ""}\`} min={1} max={9}
+        onChange={setYears} leftLabel="1 ano" rightLabel="9 anos" />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-muted/50 p-4 rounded-xl items-end">
+        <div className="text-center">
+          <p className="text-sm font-medium text-muted-foreground">
+            Valor estimado com uma carteira diversificada¹
+          </p>
+          <span className="text-[clamp(1.5rem,6vw,2.5rem)] font-semibold" style={{ color: "hsl(var(--accent))" }}>
+            {fmtCurrency(finalValue, true)}
+          </span>
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-medium text-muted-foreground">
+            Valor estimado na poupança²
+          </p>
+          <span className="text-[clamp(1.5rem,6vw,2.5rem)] font-semibold text-destructive scale-[0.8]">
+            {fmtCurrency(savingsValue, true)}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}`
           },
           {
             label: "HTML / CSS / JS",
@@ -308,25 +356,47 @@ const fvMonthly = pmt * ((Math.pow(1 + monthlyRate, n) - 1) / monthlyRate) * (1 
 
     <label>Anos que você investe</label>
     <input type="range" id="yearsSlider" min="1" max="9" value="5" />
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; background:#f5f5f5; padding:1rem; border-radius:0.75rem; margin-top:1.5rem; text-align:center;">
+      <div>
+        <p style="font-size:14px; color:#6b7280;">Valor estimado com uma carteira diversificada¹</p>
+        <span id="result" style="font-size:2.25rem; font-weight:600; color:#023619;">R$ 0,00</span>
+      </div>
+      <div>
+        <p style="font-size:14px; color:#6b7280;">Valor estimado na poupança²</p>
+        <span id="savings" style="font-size:1.8rem; font-weight:600; color:#dc2626;">R$ 0,00</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
   const RATES = {1:0.2287, 2:0.1311, 3:0.1766, 4:0.1508, 5:0.103, 6:0.0865, 7:0.1056, 8:0.109, 9:0.1228};
+  const SAVINGS_MONTHLY = 0.005 + 0.0009; // 0,5% a.m. + TR estimada
 
-  function logMap(pos, min, max) {
-    const minv = Math.log(min), maxv = Math.log(max);
+  // Mesmos mapeamentos do React — function logMapInitial(pos: number): number
+  function logMapInitial(pos) {
+    const minv = Math.log(1000), maxv = Math.log(10000000);
     return Math.exp(minv + ((maxv - minv) / 1000) * pos);
+  }
+  // function logMapMonthly(pos: number): number
+  function logMapMonthly(pos) {
+    if (pos == 0) return 0;
+    const minv = Math.log(50), maxv = Math.log(500000);
+    return Math.exp(minv + ((maxv - minv) / 999) * (pos - 1));
   }
 
   function calculate() {
-    const initial = logMap(initialSlider.value, 1000, 10000000);
-    const monthly = monthlySlider.value == 0 ? 0 : logMap(monthlySlider.value, 50, 500000);
+    const initial = logMapInitial(initialSlider.value);
+    const monthly = logMapMonthly(monthlySlider.value);
     const years = Number(yearsSlider.value);
     const rate = Math.pow(1 + RATES[years], 1/12) - 1;
     const n = years * 12;
+    const fmt = (v) => v.toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
     const fv = initial * Math.pow(1+rate, n) + monthly * ((Math.pow(1+rate,n)-1)/rate) * (1+rate);
-    document.getElementById("result").textContent = fv.toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
+    const sv = initial * Math.pow(1+SAVINGS_MONTHLY, n) + monthly * ((Math.pow(1+SAVINGS_MONTHLY,n)-1)/SAVINGS_MONTHLY) * (1+SAVINGS_MONTHLY);
+    document.getElementById("result").textContent = fmt(fv);
+    document.getElementById("savings").textContent = fmt(sv);
   }
 
   document.querySelectorAll("input[type=range]").forEach(el => el.addEventListener("input", calculate));

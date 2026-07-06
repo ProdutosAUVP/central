@@ -222,3 +222,40 @@
     items.forEach(el => c.append(el));
   }
 </script>
+
+<!-- Formulário de nova pergunta (espelha o estado "Nova Pergunta" do widget) -->
+<div class="pco-form">
+  <textarea placeholder="Descreva sua dúvida com detalhes..."></textarea>
+  <div class="pco-form-footer">
+    <p>Suporta Markdown básico</p>
+    <div>
+      <button class="pco-cancel">Cancelar</button>
+      <button class="pco-publish">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Regras da Comunidade (espelha o painel informativo do widget) -->
+<div class="pco-rules">
+  <h4>Regras da Comunidade</h4>
+  <ul>
+    <li>Perguntas vinculadas ao <strong>contexto da aula</strong> são priorizadas</li>
+    <li>Instrutores têm badge <strong>"Instrutor"</strong> com destaque visual</li>
+    <li>Sistema de <strong>votos</strong> para elevar as melhores respostas</li>
+    <li><strong>Notificação</strong> via e-mail quando alguém responde sua dúvida</li>
+    <li>Moderação automática com filtro de <strong>spam e links externos</strong></li>
+  </ul>
+</div>
+
+<style>
+  .pco-form { border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem; margin-top: 1.5rem; }
+  .pco-form textarea { width: 100%; min-height: 80px; border: 1px solid #e5e5e5; border-radius: 8px; padding: 0.75rem; font: 400 14px 'Roboto'; resize: vertical; }
+  .pco-form-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+  .pco-form-footer p { font: 400 10px 'Roboto'; color: #6b7280; margin: 0; }
+  .pco-cancel { background: none; border: none; color: #6b7280; font: 400 12px 'Roboto'; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+  .pco-publish { background: #023619; color: #fff; border: none; font: 700 12px 'Anek Latin'; text-transform: uppercase; padding: 6px 16px; border-radius: 8px; cursor: pointer; }
+  .pco-rules { background: rgba(2,54,25,0.05); border: 1px solid rgba(2,54,25,0.2); border-radius: 12px; padding: 1.25rem; margin-top: 1.5rem; }
+  .pco-rules h4 { font-family: 'Anek Latin', sans-serif; font-size: 15px; font-weight: 700; margin: 0 0 0.75rem; }
+  .pco-rules ul { margin: 0; padding-left: 1.25rem; font-size: 14px; color: #374151; }
+  .pco-rules li { margin-bottom: 0.5rem; }
+</style>

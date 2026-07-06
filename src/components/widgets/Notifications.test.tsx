@@ -1,6 +1,20 @@
+import React from "react";
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, fireEvent, act, within, waitFor } from "@testing-library/react";
 import { Notifications } from "./Notifications";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { BrandProvider } from "@/contexts/BrandContext";
+import { ViewProvider } from "@/contexts/ViewContext";
+
+// ComponentShowcase (interno ao widget) consome os três contextos.
+const wrap = (ui: React.ReactElement) =>
+  render(
+    <ThemeProvider>
+      <BrandProvider>
+        <ViewProvider>{ui}</ViewProvider>
+      </BrandProvider>
+    </ThemeProvider>
+  );
 
 /**
  * Garante que as notificações reagem corretamente ao toggle local de
@@ -42,14 +56,14 @@ describe("Notifications — alternância de tema claro/escuro", () => {
   }
 
   it("começa em tema claro: wrapper das notificações não tem classe .dark", () => {
-    const { container } = render(<Notifications />);
+    const { container } = wrap(<Notifications />);
     const stack = getFixedStack(container);
     const wrapper = stack.parentElement!;
     expect(wrapper.classList.contains("dark")).toBe(false);
   });
 
   it("dispara as 4 notificações e cada uma renderiza com seu título semântico", () => {
-    render(<Notifications />);
+    wrap(<Notifications />);
     act(() => {
       pushAll();
     });
@@ -59,7 +73,7 @@ describe("Notifications — alternância de tema claro/escuro", () => {
   });
 
   it("ao ativar o tema escuro, o wrapper das notificações ganha a classe .dark", async () => {
-    const { container } = render(<Notifications />);
+    const { container } = wrap(<Notifications />);
 
     act(() => {
       pushAll();
@@ -87,7 +101,7 @@ describe("Notifications — alternância de tema claro/escuro", () => {
   });
 
   it("alterna escuro → claro e remove a classe .dark do wrapper", async () => {
-    const { container } = render(<Notifications />);
+    const { container } = wrap(<Notifications />);
 
     act(() => {
       pushAll();
@@ -119,7 +133,7 @@ describe("Notifications — alternância de tema claro/escuro", () => {
   });
 
   it("cada card mantém seu ícone de cor semântica (text-success/info/warning/error)", async () => {
-    const { container } = render(<Notifications />);
+    const { container } = wrap(<Notifications />);
     act(() => {
       pushAll();
     });

@@ -22,4 +22,12 @@ export default defineConfig(({ mode: _mode }: { mode: string }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  test: {
+    environment: "jsdom",
+    globals: true, // necessário para o auto-cleanup do Testing Library
+    setupFiles: ["src/test/setup.ts"],
+    // archive/ guarda a iteração anterior do projeto (inativa, fora do build)
+    // — seus testes não devem rodar na suíte principal.
+    exclude: ["node_modules/**", "archive/**"],
+  },
 }));
