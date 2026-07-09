@@ -78,7 +78,7 @@ const isDark = useIsDark(triggerRef);
           <button onclick="document.getElementById('pop').style.display='none'"
             style="padding:6px 12px; background:transparent; border:none; cursor:pointer; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:12px;">Cancelar</button>
           <button onclick="alert('Excluído!'); document.getElementById('pop').style.display='none'"
-            style="padding:6px 12px; background:#ef4444; color:#fff; border:none; border-radius:8px; cursor:pointer; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:12px;">Excluir</button>
+            style="padding:6px 12px; background:#e11414; color:#fff; border:none; border-radius:8px; cursor:pointer; font-family:'Sora'; font-weight:700; text-transform:uppercase; font-size:12px;">Excluir</button>
         </div>
       </div>
     </div>

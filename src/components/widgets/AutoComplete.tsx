@@ -183,7 +183,7 @@ const onKey = (e: React.KeyboardEvent) => {
     background:hsl(var(--accent, 155 93% 11%) / 0.1);
     color:hsl(var(--accent, 155 93% 11%));
   }
-  .ac-list mark { background:hsl(var(--warning, 38 92% 50%) / 0.3); color:inherit; border-radius:2px; padding:0 2px; }
+  .ac-list mark { background:hsl(var(--warning, 35 95% 42%) / 0.3); color:inherit; border-radius:2px; padding:0 2px; }
   .ac-selected { font-size:12px; color:hsl(var(--muted-foreground, 110 10% 40%)); margin-top:8px; font-family:monospace; }
 </style>
 

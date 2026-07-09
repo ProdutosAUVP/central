@@ -994,8 +994,8 @@ import { ArrowRight } from "lucide-react";
   .btn-link:hover { text-decoration:underline; }
 
   /* Destrutivo */
-  .btn-destructive { background:#ef4444; color:#fff; border-color:#ef4444; }
-  .btn-destructive:hover { background:rgba(239,68,68,0.9); }
+  .btn-destructive { background:#e11414; color:#fff; border-color:#e11414; }
+  .btn-destructive:hover { background:rgba(225,20,20,0.9); }
 </style>
 
 <button class="btn btn-default">PADRÃO</button>

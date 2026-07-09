@@ -9,21 +9,24 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        /* Estados "vazados" (hover revela a borda) usam os tokens *-emphasis:
+           a cor da marca legível como texto sobre o fundo do tema ativo —
+           na Escola clara o dourado puro sobre branco dá só 1.69:1. */
         default:
-          "bg-primary text-primary-foreground border border-primary hover:bg-transparent hover:text-primary hover:border-primary",
+          "bg-primary text-primary-foreground border border-primary hover:bg-transparent hover:text-primary-emphasis hover:border-primary-emphasis",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground border border-secondary hover:bg-transparent hover:text-secondary hover:border-secondary dark:bg-transparent dark:text-foreground dark:border-foreground dark:hover:bg-foreground dark:hover:text-background dark:hover:border-foreground",
+          "bg-secondary text-secondary-foreground border border-secondary hover:bg-transparent hover:text-secondary-emphasis hover:border-secondary-emphasis dark:bg-transparent dark:text-foreground dark:border-foreground dark:hover:bg-foreground dark:hover:text-background dark:hover:border-foreground",
         ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary-emphasis underline-offset-4 hover:underline",
         /** CTA estilo LP — bordas retas, transição de fundo */
-        cta: "bg-[hsl(var(--cta))] text-[hsl(var(--cta-foreground))] border border-transparent hover:bg-transparent hover:text-[hsl(var(--cta))] hover:border-[hsl(var(--cta))] uppercase tracking-wider text-sm",
+        cta: "bg-cta text-cta-foreground border border-transparent hover:bg-transparent hover:text-cta-emphasis hover:border-cta-emphasis uppercase tracking-wider text-sm",
         /** CTA invertido para fundos escuros — hover mantém fundo claro com leve atenuação para preservar contraste */
         "cta-inverted":
-          "bg-[hsl(0_0%_98%)] text-[hsl(var(--brand-dark))] border border-[hsl(var(--brand-dark))] hover:bg-[hsl(0_0%_88%)] hover:border-[hsl(var(--brand-dark))] hover:text-[hsl(var(--brand-dark))] dark:bg-[hsl(0_0%_98%)] dark:border-[hsl(0_0%_98%)] dark:text-[hsl(var(--cta-foreground))] dark:hover:bg-[hsl(0_0%_88%)] dark:hover:border-[hsl(0_0%_88%)] dark:hover:text-[hsl(var(--cta-foreground))] uppercase tracking-wider text-sm",
+          "bg-[hsl(0_0%_98%)] text-cta-emphasis border border-cta-emphasis hover:bg-[hsl(0_0%_88%)] hover:border-cta-emphasis hover:text-cta-emphasis dark:bg-[hsl(0_0%_98%)] dark:border-[hsl(0_0%_98%)] dark:text-cta-foreground dark:hover:bg-[hsl(0_0%_88%)] dark:hover:border-[hsl(0_0%_88%)] dark:hover:text-cta-foreground uppercase tracking-wider text-sm",
       },
       size: {
         default: "h-10 px-5 py-2 text-sm",
