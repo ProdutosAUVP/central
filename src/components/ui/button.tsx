@@ -24,9 +24,11 @@ const buttonVariants = cva(
         link: "text-primary-emphasis underline-offset-4 hover:underline",
         /** CTA estilo LP — bordas retas, transição de fundo */
         cta: "bg-cta text-cta-foreground border border-transparent hover:bg-transparent hover:text-cta-emphasis hover:border-cta-emphasis uppercase tracking-wider text-sm",
-        /** CTA invertido para fundos escuros — hover mantém fundo claro com leve atenuação para preservar contraste */
+        /** CTA invertido para fundos escuros — claro: fundo branco com leve
+         * atenuação no hover; escuro: fundo verde-acento da marca (#5A8770 no
+         * Capital, dourado na Escola) com texto quase-preto e hover clareado. */
         "cta-inverted":
-          "bg-[hsl(0_0%_98%)] text-cta-emphasis border border-cta-emphasis hover:bg-[hsl(0_0%_88%)] hover:border-cta-emphasis hover:text-cta-emphasis dark:bg-[hsl(0_0%_98%)] dark:border-[hsl(0_0%_98%)] dark:text-cta-foreground dark:hover:bg-[hsl(0_0%_88%)] dark:hover:border-[hsl(0_0%_88%)] dark:hover:text-cta-foreground uppercase tracking-wider text-sm",
+          "bg-[hsl(0_0%_98%)] text-cta-emphasis border border-cta-emphasis hover:bg-[hsl(0_0%_88%)] hover:border-cta-emphasis hover:text-cta-emphasis dark:bg-brand dark:border-brand dark:text-brand-foreground dark:hover:bg-brand-hover dark:hover:border-brand-hover dark:hover:text-brand-foreground uppercase tracking-wider text-sm",
       },
       size: {
         default: "h-10 px-5 py-2 text-sm",

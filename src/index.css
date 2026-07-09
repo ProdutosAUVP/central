@@ -232,9 +232,10 @@
     --muted: 0 0% 10%;
     --muted-foreground: 0 0% 70%;
 
-    /* Acento clareado: texto 0 0% 8% sobre 145 20% 44% dava 4.46:1. */
-    --accent: 145 22% 47%;
-    --accent-foreground: 0 0% 8%;
+    /* Verde acento canônico #5A8770; texto 0 0% 5% dá 4.73:1
+       (0 0% 8% ficava em 4.46:1). */
+    --accent: 145 20% 44%;
+    --accent-foreground: 0 0% 5%;
 
     /* No escuro os status seguem o padrão "cor clara + texto quase-preto";
        branco sobre 0 75% 55% dava 4.35:1. */
@@ -254,10 +255,10 @@
     --input: 0 0% 14%;
     --ring: 145 20% 50%;
 
-    /* Brand verde — acento pontual. Alinhado ao --accent: texto quase-preto,
+    /* Brand verde — acento pontual (#5A8770). Texto quase-preto (0 0% 5%),
        pois branco sobre o verde médio não alcança 4.5:1. */
-    --brand: 145 22% 47%;
-    --brand-foreground: 0 0% 8%;
+    --brand: 145 20% 44%;
+    --brand-foreground: 0 0% 5%;
     --brand-dark: 0 0% 0%;
     --brand-hover: 145 20% 54%;
     --brand-gradient-from: 145 25% 54%;

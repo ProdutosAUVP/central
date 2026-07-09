@@ -971,8 +971,9 @@ import { ArrowRight } from "lucide-react";
   .btn-cta { background:#023619; color:#fff; }
   .btn-cta:hover { background:transparent; color:#023619; border-color:#023619; }
 
-  /* CTA Invertido (para fundos escuros) — hover atenua o fundo claro */
-  .btn-cta-inverted { background:#fafafa; color:#011F0E; border-color:#011F0E; }
+  /* CTA Invertido (para fundos escuros) — hover atenua o fundo claro.
+     No tema escuro: fundo verde-acento #5A8770, texto quase-preto #0D0D0D. */
+  .btn-cta-inverted { background:#fafafa; color:#023619; border-color:#023619; }
   .btn-cta-inverted:hover { background:#e0e0e0; }
 
   /* Secundário */
@@ -1051,7 +1052,7 @@ import { ArrowRight } from "lucide-react";
                 code={`<div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg">
   <Button variant="cta-inverted" size="lg">Começar Agora</Button>
 </div>`}
-                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fafafa; color:#011F0E; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; font-size:14px; border:1px solid #fafafa; cursor:pointer;">COMEÇAR AGORA</button>\n</div>\n<!-- Hover: background #e0e0e0 (atenuação leve, mantém contraste) -->`}>
+                htmlCode={`<div style="background:#023619; padding:2rem; border-radius:0.5rem;">\n  <button style="background:#fafafa; color:#023619; padding:1rem 2rem; border-radius:5px; font-family:'Sora'; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; font-size:14px; border:1px solid #fafafa; cursor:pointer;">COMEÇAR AGORA</button>\n</div>\n<!-- Hover: background #e0e0e0 (atenuação leve, mantém contraste) -->\n<!-- Tema escuro: background #5A8770, texto #0D0D0D, hover clareia p/ #74a18c -->`}>
                 <div className="bg-[hsl(155_93%_11%)] dark:bg-[hsl(0_0%_18%)] p-8 rounded-lg flex items-center gap-4 w-full">
                   <Button variant="cta-inverted" size="lg">Começar Agora</Button>
                 </div>
