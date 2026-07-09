@@ -1,7 +1,11 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
+  // Variante custom em vez de ["class"]: os previews do Design System forçam
+  // tema claro localmente (wrapper .light) mesmo sob html.dark. Com ["class"]
+  // (seletor `.dark &`) os utilitários dark: continuavam ativos dentro desses
+  // previews. O :not(...) desliga dark: em qualquer subtree .light.
+  darkMode: ["variant", "&:is(.dark *):not(:is(.light, .light *))"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -27,10 +31,17 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          emphasis: "hsl(var(--primary-emphasis))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          emphasis: "hsl(var(--secondary-emphasis))",
+        },
+        cta: {
+          DEFAULT: "hsl(var(--cta))",
+          foreground: "hsl(var(--cta-foreground))",
+          emphasis: "hsl(var(--cta-emphasis))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

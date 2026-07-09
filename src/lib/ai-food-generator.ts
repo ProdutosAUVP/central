@@ -14,7 +14,7 @@ DESIGN SYSTEM — AUVP CAPITAL
 IDENTIDADE
 Assessoria de investimentos institucional, séria, sóbria, técnica.
 Referência estética: Bloomberg + JP Morgan + finança bancária moderna.
-❌ NUNCA: glassmorphism, gradientes coloridos, emojis decorativos, estética startup colorida.
+❌ NUNCA: liquid glass, gradientes coloridos, emojis decorativos, estética startup colorida.
 
 PALETA OFICIAL (use SOMENTE estas cores)
 • Verde Institucional: #023619  → primária, botões, títulos
@@ -53,7 +53,7 @@ CARDS
 • Fundo branco   → card #F2F2F2
 • Fundo #F2F2F2  → card #FFF
 • Fundo preto    → card #1B1B1B
-❌ PROIBIDO: backdrop-blur, glassmorphism, transparências translúcidas
+❌ PROIBIDO: backdrop-blur, liquid glass, transparências translúcidas
 
 LAYOUT E RITMO VERTICAL
 • Sections alternam: #FFF → #F2F2F2 → #FFF → #000 → #FFF
@@ -181,7 +181,7 @@ CHECKLIST ANTES DE ENTREGAR
 □ Gaps e espaçamentos múltiplos de 15px
 □ Responsivo mobile/desktop testado
 □ Acessibilidade: aria-label nos ícones, focus-visible ring, contraste ≥ 4.5:1
-□ Capital: sem glassmorphism, sem gradientes coloridos, botões com border-radius 5px
+□ Capital: sem liquid glass, sem gradientes coloridos, botões com border-radius 5px
 □ Escola LP: cards translúcidos (backdrop-blur 24px), gradiente radial no fundo
 □ Escola Ferramentas: botões rounded-[5px], slider thumb dourado
 □ Plataforma: vídeo sempre bg-black, aula ativa com border-l-4 amarela`;

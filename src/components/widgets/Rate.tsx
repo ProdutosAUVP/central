@@ -143,7 +143,7 @@ const [v1, setV1] = useState(3);
   .rate-star:hover { transform:scale(1.1); }
   .rate-star svg { width:100%; height:100%; }
   .rate-star .empty { color:hsl(var(--muted-foreground, 110 10% 40%) / 0.4); }
-  .rate-star .fill { position:absolute; inset:0; overflow:hidden; color:hsl(var(--warning, 38 92% 50%)); }
+  .rate-star .fill { position:absolute; inset:0; overflow:hidden; color:hsl(var(--warning, 35 95% 42%)); }
   .rate-val { font-family:monospace; font-size:14px; color:hsl(var(--muted-foreground, 110 10% 40%)); margin-left:12px; }
 </style>
 
@@ -190,7 +190,7 @@ const [v1, setV1] = useState(3);
   .rate-half .rate-star { position:relative; width:32px; height:32px; cursor:pointer; transition:transform .15s; }
   .rate-half .rate-star:hover { transform:scale(1.1); }
   .rate-half .empty { color:hsl(var(--muted-foreground, 110 10% 40%) / 0.4); display:block; width:100%; height:100%; }
-  .rate-half .fill { position:absolute; inset:0; overflow:hidden; color:hsl(var(--warning, 38 92% 50%)); }
+  .rate-half .fill { position:absolute; inset:0; overflow:hidden; color:hsl(var(--warning, 35 95% 42%)); }
   .rate-half svg { width:100%; height:100%; }
 </style>
 
@@ -252,7 +252,7 @@ const [v1, setV1] = useState(3);
   .rate-ro .star { position:relative; width:var(--s, 24px); height:var(--s, 24px); }
   .rate-ro .star svg { width:100%; height:100%; }
   .rate-ro .empty { color:hsl(var(--muted-foreground, 110 10% 40%) / 0.4); }
-  .rate-ro .fill { position:absolute; inset:0; overflow:hidden; color:hsl(var(--warning, 38 92% 50%)); }
+  .rate-ro .fill { position:absolute; inset:0; overflow:hidden; color:hsl(var(--warning, 35 95% 42%)); }
   .rate-sm { --s:16px; }
   .rate-md { --s:24px; }
   .rate-lg { --s:32px; }

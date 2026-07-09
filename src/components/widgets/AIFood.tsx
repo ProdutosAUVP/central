@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useBrand } from "@/contexts/BrandContext";
 import { useSystemView, viewLabels } from "@/contexts/ViewContext";
-import { Copy, Check, Bot, Sparkles, Code2, Layers } from "lucide-react";
+import { Copy, Check, Bot, Sparkles, Code2, Layers, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // ─── Master Prompts — 100% standalone, sem dependência externa ────────────────
@@ -16,7 +16,7 @@ const masterPrompts = {
 A AUVP Capital é uma assessoria de investimentos institucional, séria, sóbria e técnica.
 Referência estética: Bloomberg + JP Morgan + finança bancária moderna.
 Tom: direto, com autoridade técnica. Sem promessas de enriquecimento.
-❌ NUNCA: glassmorphism, gradientes coloridos, emojis decorativos, estética startup colorida.
+❌ NUNCA: liquid glass, gradientes coloridos, emojis decorativos, estética startup colorida.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 1. PALETA OFICIAL (use SOMENTE estas cores)
@@ -74,7 +74,7 @@ Estados do botão:
 • Fundo #F2F2F2  → card bg #FFF
 • Fundo preto    → card bg #1B1B1B
 • Border opcional: 1px solid rgba(0,0,0,0.06) em fundos claros
-❌ PROIBIDO: backdrop-blur, glassmorphism, transparências translúcidas
+❌ PROIBIDO: backdrop-blur, liquid glass, transparências translúcidas
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 5. LAYOUT E RITMO VERTICAL
@@ -902,31 +902,37 @@ export function AIFood() {
 
           <div className="grid sm:grid-cols-2 gap-3">
             {[
-              { label: "Botões", desc: "Primário, Outline, Ghost, Destrutivo — todos os estados (hover, active, focus, disabled, loading)" },
-              { label: "Cards & Containers", desc: "Variantes de fundo claro e escuro, hover com sombra, bordas e padding" },
-              { label: "Calculadoras", desc: "Container, inputs, sliders, caixa de resultado — 8 estados da ferramenta" },
-              { label: "Grade Curricular", desc: "Tabs pill, carrossel mobile, estados de módulo (aberto, fechado, ativo)" },
-              { label: "Tabela de Preços", desc: "Toggle individual/pacote, badge de desconto, plano em destaque" },
-              { label: "Video Player", desc: "7 estados: idle, loading, playing, paused, buffering, error, concluído" },
-              { label: "Playlist de Aulas", desc: "Estados: concluída, em andamento, disponível, bloqueada" },
-              { label: "Jornada do Herói", desc: "Timeline interativa com glow, progresso e estados de etapa" },
-              { label: "Notificações/Toasts", desc: "Success, warning, info, error — auto-dismiss 4s, ações inline" },
-              { label: "Steps / Wizard", desc: "Etapas: pendente, atual, concluída, com erro" },
-              { label: "Statistic / KPI", desc: "Valor principal, delta positivo/negativo, loading skeleton" },
-              { label: "Widgets Flutuantes", desc: "WhatsApp com pulse, balão de texto, animações de float" },
+              { label: "Botões", href: "#buttons", desc: "Primário, Outline, Ghost, Destrutivo — todos os estados (hover, active, focus, disabled, loading)" },
+              { label: "Cards & Containers", href: "#cards-containers", desc: "Variantes de fundo claro e escuro, hover com sombra, bordas e padding" },
+              { label: "Calculadoras", href: "#tool-calc", desc: "Container, inputs, sliders, caixa de resultado — 8 estados da ferramenta" },
+              { label: "Grade Curricular", href: "#grade", desc: "Tabs pill, carrossel mobile, estados de módulo (aberto, fechado, ativo)" },
+              { label: "Tabela de Preços", href: "#pricing", desc: "Toggle individual/pacote, badge de desconto, plano em destaque" },
+              { label: "Video Player", href: "#plat-player", desc: "7 estados: idle, loading, playing, paused, buffering, error, concluído" },
+              { label: "Playlist de Aulas", href: "#plat-playlist", desc: "Estados: concluída, em andamento, disponível, bloqueada" },
+              { label: "Jornada do Herói", href: "#journey", desc: "Timeline interativa com glow, progresso e estados de etapa" },
+              { label: "Notificações/Toasts", href: "#notifications", desc: "Success, warning, info, error — auto-dismiss 4s, ações inline" },
+              { label: "Steps / Wizard", href: "#steps", desc: "Etapas: pendente, atual, concluída, com erro" },
+              { label: "Statistic / KPI", href: "#statistic", desc: "Valor principal, delta positivo/negativo, loading skeleton" },
+              { label: "Widgets Flutuantes", href: "#floaters", desc: "WhatsApp com pulse, balão de texto, animações de float" },
             ].map((item) => (
-              <div key={item.label} className="rounded-lg border bg-card p-4 flex items-start gap-3">
+              <a
+                key={item.label}
+                href={item.href}
+                aria-label={`Ir para ${item.label} no Design System`}
+                className="group rounded-lg border bg-card p-4 flex items-start gap-3 transition-all duration-200 hover:border-accent/60 hover:shadow-sm hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
                 <Bot className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold font-anek text-foreground">{item.label}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold font-anek text-foreground group-hover:underline underline-offset-2">{item.label}</p>
                   <p className="text-xs text-muted-foreground font-roboto mt-0.5 leading-relaxed">{item.desc}</p>
                 </div>
-              </div>
+                <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
             ))}
           </div>
 
           <p className="text-xs text-muted-foreground font-roboto text-center pt-2">
-            Navegue até qualquer componente acima e clique no botão{" "}
+            As caixas acima levam direto ao componente no Design System. Lá, clique no botão{" "}
             <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-border bg-background text-foreground font-bold text-[10px] uppercase tracking-wider">
               <Bot className="h-3 w-3" /> AI-Food
             </span>{" "}

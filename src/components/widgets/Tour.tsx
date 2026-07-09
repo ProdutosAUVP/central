@@ -158,7 +158,7 @@ const close = () => setStep(-1);
   .tour-pills span { height:12px; border-radius:9999px; }
   .tour-pill-1 { width:48px; background:hsl(var(--primary, 155 93% 11%)); }
   .tour-pill-2 { width:32px; background:hsl(var(--success, 142 71% 45%)); }
-  .tour-pill-3 { width:24px; background:hsl(var(--warning, 38 92% 50%)); }
+  .tour-pill-3 { width:24px; background:hsl(var(--warning, 35 95% 42%)); }
   .tour-overlay {
     position:absolute; inset:0; z-index:40; border-radius:12px; pointer-events:none;
     background:rgba(0,0,0,0.6);

@@ -149,7 +149,7 @@ function Stat({ icon: Icon, label, value, prefix, suffix, trend, decimals = 0 })
     margin-top:8px; padding:2px 8px; border-radius:4px;
   }
   .stat-trend.up { background:hsl(var(--success, 142 71% 45%) / 0.15); color:hsl(var(--success, 142 71% 45%)); }
-  .stat-trend.down { background:hsl(var(--destructive, 0 84% 60%) / 0.15); color:hsl(var(--destructive, 0 84% 60%)); }
+  .stat-trend.down { background:hsl(var(--destructive, 0 84% 48%) / 0.15); color:hsl(var(--destructive, 0 84% 48%)); }
   .stat-trend svg { width:12px; height:12px; }
 </style>
 
