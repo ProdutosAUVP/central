@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useTheme } from "@/contexts/ThemeContext";
 
 import { ComponentShowcase } from "@/components/design-system/ComponentShowcase";
 import { SectionThemeToggle } from "@/components/design-system/SectionThemeToggle";
@@ -153,34 +152,13 @@ import { WatermarkWidget } from "@/components/widgets/Watermark";
 import { sections, categoryLabels, type SectionDefWithKeywords } from "@/data/designSystemSections";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SearchButton } from "@/components/SearchButton";
-
-function hslToRgb(h: number, s: number, l: number): [number, number, number] {
-  s /= 100; l /= 100;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => { const k = (n + h / 30) % 12; return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1); };
-  return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
-}
-
-function rgbToHex(r: number, g: number, b: number) {
-  return `#${[r, g, b].map(v => v.toString(16).padStart(2, "0")).join("")}`.toUpperCase();
-}
+import { useCssVarColor } from "@/hooks/use-css-var-color";
 
 function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fgVar: string }) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [hex, setHex] = useState("");
-  const [rgb, setRgb] = useState("");
-  const { theme } = useTheme();
-
-  React.useEffect(() => {
-    if (!ref.current) return;
-    const raw = getComputedStyle(ref.current).getPropertyValue(`--${cssVar}`).trim();
-    const parts = raw.replace(/%/g, "").split(/\s+/).map(Number);
-    if (parts.length === 3 && !parts.some(isNaN)) {
-      const [r, g, b] = hslToRgb(parts[0], parts[1], parts[2]);
-      setHex(rgbToHex(r, g, b));
-      setRgb(`${r}, ${g}, ${b}`);
-    }
-  }, [cssVar, theme]);
+  const color = useCssVarColor(ref, cssVar);
+  const hex = color?.hex ?? "";
+  const rgb = color?.rgb ?? "";
 
   const [copied, setCopied] = useState(false);
   const copyHex = () => {
