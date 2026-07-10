@@ -1,6 +1,7 @@
 import React from "react";
 import { CodeBlock } from "@/components/ui/code-block";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { useCssVarColor } from "@/hooks/use-css-var-color";
 
 type Swatch = { token: string; name: string };
 
@@ -31,23 +32,7 @@ const divergent: Swatch[] = [
 
 function MiniSwatch({ token, name }: Swatch) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [hex, setHex] = React.useState("");
-
-  React.useEffect(() => {
-    if (!ref.current) return;
-    const raw = getComputedStyle(ref.current).getPropertyValue(`--${token}`).trim();
-    const parts = raw.replace(/%/g, "").split(/\s+/).map(Number);
-    if (parts.length === 3 && !parts.some(isNaN)) {
-      const [h, s, l] = parts;
-      const a = (s / 100) * Math.min(l / 100, 1 - l / 100);
-      const f = (n: number) => {
-        const k = (n + h / 30) % 12;
-        const c = l / 100 - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
-        return Math.round(255 * c).toString(16).padStart(2, "0");
-      };
-      setHex(`#${f(0)}${f(8)}${f(4)}`.toUpperCase());
-    }
-  }, [token]);
+  const hex = useCssVarColor(ref, token)?.hex ?? "";
 
   return (
     <div ref={ref} className="space-y-1.5">
