@@ -8,7 +8,7 @@ import { olhoBranco } from "@/assets/olhos";
 import { teamPhotos } from "@/assets/team";
 import {
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
-  Search, Monitor, PenTool, BarChart2, Settings, Heart, ChevronRight, ChevronDown, User, X,
+  Search, Monitor, PenTool, Settings, Heart, ChevronRight, ChevronDown, User, X,
   Headphones, Video, TrendingUp, Cpu, Wallet, Megaphone, Scale,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -91,58 +91,58 @@ const orgPeople: Record<string, OrgPerson> = {
     responsibilities: ["Estratégia de relacionamento com membros", "Mapeamento da jornada do cliente", "Monitoramento de NPS", "Projetos especiais de CX"],
   },
   debora: {
-    id: "debora", name: "Debora Sanders", role: "Analista de CX Sr. II",
+    id: "debora", name: "Debora Sanders", role: "Analista de CX Sênior II",
     initials: "DS", color: "cx", level: "Sênior", rank: 3,
-    description: "Placeholder: Analista sênior de CX, referência no time em pesquisa de usuário e análise de experiência.",
-    responsibilities: ["Pesquisa de usuário (quali e quanti)", "Análise de jornada e touchpoints", "Benchmarking de CX", "Mentoria do time de CX"],
+    description: "Analista de CX Sênior, responsável por conectar a voz do cliente às decisões estratégicas por meio de pesquisas e análises de jornada, apoiando a evolução contínua dos produtos.",
+    responsibilities: ["Pesquisa com usuários (qualitativa e quantitativa)", "Análise de jornadas e touchpoints", "Mapeamento de oportunidades de experiência", "Benchmarking de CX", "Apoio estratégico às decisões de produto"],
   },
   daniel: {
     id: "daniel", name: "Daniel Machado", role: "Coordenador de produto",
     initials: "DM", color: "coordinator", level: "Coordenador", rank: 2,
-    description: "Placeholder: Coordena as iniciativas de produto, liderando cinco verticais independentes de atuação no dia a dia.",
-    responsibilities: ["Gestão de backlog e roadmap", "Coordenação de squads", "Acompanhamento de entregas", "Rituais de produto"],
+    description: "Líder de Produto responsável pela gestão estratégica e operacional da área, garantindo a eficiência, a qualidade e o alinhamento entre negócio e tecnologia.",
+    responsibilities: ["Priorização de iniciativas", "Coordenação de equipes multidisciplinares", "Governança e acompanhamento de indicadores", "Gestão de pessoas", "Alinhamento entre negócio, tecnologia e operação"],
   },
   ariadne: {
     id: "ariadne", name: "Ariadne Carneiro", role: "Gerente de produto",
     initials: "AC", color: "product-senior", level: "Gerente", rank: 3,
-    description: "Placeholder: Gerente de produto responsável por roadmap, priorização e entrega de valor para os membros.",
-    responsibilities: ["Definição de roadmap", "Priorização de features", "Gestão de OKRs", "Alinhamento com stakeholders"],
+    description: "Responsável pelo ciclo completo de produto, da identificação de oportunidades à entrega e mensuração de impacto.",
+    responsibilities: ["Estratégia, roadmap e priorização baseada em evidências", "Discovery contínuo", "Ponte entre design, engenharia e stakeholders", "Diagnóstico de problemas e acompanhamento de métricas de impacto"],
   },
   armando: {
     id: "armando", name: "Armando Neto", role: "Designer de Produto Pl. I",
     initials: "AN", color: "product-pleno", level: "Pleno", rank: 4,
-    description: "Placeholder: Designer de produto pleno, responsável por interfaces digitais e protótipos de alta fidelidade.",
-    responsibilities: ["UI/UX Design", "Prototipação e wireframes", "Design system", "Colaboração em pesquisas"],
+    description: "Designer de produto pleno, responsável por interfaces digitais e protótipos de alta fidelidade.",
+    responsibilities: ["Design Gráfico", "UI/UX Design", "Prototipação e wireframes", "Design system", "Colaboração em pesquisas"],
   },
   eria: {
-    id: "eria", name: "Éria Alencar", role: "Designer de Produto Pl. I",
-    initials: "EA", color: "product-pleno", level: "Pleno", rank: 4,
-    description: "Placeholder: Designer de produto pleno com foco em design visual e experiência do usuário.",
-    responsibilities: ["Visual design e identidade", "UX research", "Motion e micro-interações", "Assets para marketing"],
+    id: "eria", name: "Éria Cunha", role: "Designer de Produto Pl. I",
+    initials: "EC", color: "product-pleno", level: "Pleno", rank: 4,
+    description: "Designer de produto pleno responsável por visual design, UI/UX e produtos físicos.",
+    responsibilities: ["Branding e identidade", "UI/UX design", "Produtos físicos", "Materiais digitais"],
   },
   mateus: {
     id: "mateus", name: "Mateus Graff", role: "Redator / Roteirista Pl. I",
     initials: "MG", color: "product-pleno", level: "Pleno", rank: 4,
-    description: "Placeholder: Redator de produto pleno, responsável por conteúdo estratégico e copywriting.",
-    responsibilities: ["Copywriting de produto", "Apostilas e materiais educativos", "Roteiros audiovisuais", "Revisão editorial"],
+    description: "Redator e roteirista, responsável por conteúdo estratégico e copywriting.",
+    responsibilities: ["Copywriting de produto", "Comunicação corporativa e institucional", "Materiais educativos", "Roteiros", "Revisão editorial"],
   },
   jeniffer: {
     id: "jeniffer", name: "Jeniffer Nascimento", role: "Analista de Produto Pl. I",
     initials: "JN", color: "product-pleno", level: "Pleno", rank: 4,
-    description: "Placeholder: Analista de produto pleno, focada em análise de dados, requisitos e documentação.",
-    responsibilities: ["Análise de dados e métricas", "Levantamento de requisitos", "Documentação de produto", "Suporte ao gerente"],
+    description: "Analista de produto pleno, focada em análise de dados, requisitos e divulgação.",
+    responsibilities: ["Análise de dados e métricas", "Levantamento de requisitos", "Documentação de produto", "Desenvolvimento de materiais", "Estratégia de divulgação de produto", "Redação publicitária", "Revisão de materiais didáticos"],
   },
   elane: {
     id: "elane", name: "Elane Rodrigues", role: "Analista de Produto Jr. I",
     initials: "ER", color: "product-junior", level: "Júnior", rank: 5,
-    description: "Placeholder: Analista de produto júnior, apoia nas análises e pesquisas do time.",
-    responsibilities: ["Pesquisa e coleta de dados", "Análise de métricas básicas", "Apoio ao PM e analistas", "Documentação operacional"],
+    description: "Analista de Produto Júnior com foco em CX, apoiando o desenvolvimento de produtos digitais e a evolução da experiência do usuário.",
+    responsibilities: ["Gestão e refinamento de backlog", "Histórias de usuário e critérios de aceite", "Discovery, pesquisa e benchmarking", "Mapeamento de jornadas e fluxos", "Homologação e melhoria contínua"],
   },
   ana: {
     id: "ana", name: "Ana Beatriz Melo", role: "Assistente de Produto",
     initials: "AB", color: "product-junior", level: "Júnior", rank: 5,
-    description: "Placeholder: Assistente de produto, apoia diversas frentes do time com organização e execução.",
-    responsibilities: ["Suporte operacional ao time", "Pesquisa assistida", "Organização de processos", "Comunicação interna"],
+    description: "Viabiliza a execução da estratégia por meio da organização da operação, integração entre áreas e suporte analítico às iniciativas do time.",
+    responsibilities: ["Suporte operacional ao time de Produto", "Organização e melhoria de processos internos", "Análise de dados, métricas e apoio à tomada de decisão", "Comunicação e alinhamento entre áreas", "Produção de copy e conteúdos para o produto", "Apoio à documentação e padronização de processos internos"],
   },
   hiago: {
     id: "hiago", name: "Hiago Felipe Sousa", role: "Assistente de Produto",
@@ -838,13 +838,12 @@ function OrbitNetwork() {
 }
 
 const dayToDay = [
-  { icon: Search, title: "Pesquisa & Análise de dados", tagline: "Mestres em decifrar comportamentos.", desc: "Precisa de ajuda com o Typeform ou quer entender o que um dashboard está dizendo? Realizamos pesquisas quantitativas e qualitativas com leads, membros (e até piratas!) para mapear dores e gerar insights reais.", quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"] },
-  { icon: Monitor, title: "Plataformas & Tecnologia", tagline: "Sua ideia funcionando sem bugs.", desc: "Encontrou um erro na plataforma de aulas ou em algum de nossos sites? Nós sabemos como construir e ajustar cada detalhe técnico.", quemChamar: ["Elane", "Hiago", "Armando", "Éria", "Mateus", "Ana Beatriz"] },
-  { icon: Palette, title: "Design (Físico & Digital)", tagline: "Identidade visual e experiência tangível.", desc: "Da estética impecável da AUVP em mídias digitais e OOH, aos produtos que nossos membros amam usar. Se você precisa de cores, logos da AUVP, fotos do Raul, elementos visuais ou quer criar brindes, como meias e bonés a kits exclusivos, este é o lugar.", quemChamar: ["Armando", "Éria"] },
-  { icon: PenTool, title: "Copy & Redação", tagline: "Estratégia em cada palavra.", desc: "De apostilas, roteiros de vídeo e mapas mentais a este texto que você lê agora. Quer revisar uma copy, um playbook ou criar materiais institucionais com narrativa estratégica? Nossa redação está pronta para ajudar.", quemChamar: ["Jeniffer", "Mateus", "Ana"] },
-  { icon: BarChart2, title: "Monitoramento de mercado & CX", tagline: "Encantamento levado a sério.", desc: "Quem é nosso público e o que ele busca? Analisamos o mercado para sugerir melhorias e garantir que o CX seja mais do que uma sigla, criando conexões que encantam de verdade.", quemChamar: ["Beatriz Henriques", "Debora"] },
+  { icon: Search, title: "Pesquisa & Análise de dados", tagline: "Lemos os números para entender as pessoas.", desc: "Travou no Typeform ou não sabe como ler os números de um dashboard? Nós traduzimos os dados. Fazemos pesquisas com leads, membros e com os próprios piratas para encontrar os problemas reais e guiar os próximos passos do produto.", quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"] },
+  { icon: Monitor, title: "Plataformas & Tecnologia", tagline: "A engenharia por trás do produto.", desc: "Encontrou algum erro na plataforma de aulas ou em algum de nossos sites? Nós sabemos como construir e ajustar cada detalhe técnico.", quemChamar: ["Elane", "Hiago", "Armando", "Éria", "Mateus", "Ana Beatriz"] },
+  { icon: Palette, title: "Design (Físico & Digital)", tagline: "Identidade visual e experiência tangível.", desc: "Cuidamos da nossa marca de ponta a ponta, do digital aos materiais físicos que os membros recebem. Se você precisa das logos oficiais, fotos do Raul, paleta de cores ou quer desenvolver novos kits e brindes (como meias e bonés), nós garantimos que o visual saia com a qualidade que a AUVP exige.", quemChamar: ["Armando", "Éria"] },
+  { icon: PenTool, title: "Copy & Redação", tagline: "Estratégia em cada palavra.", desc: "De apostilas, roteiros e mapas mentais até este texto que você está lendo. Se você precisa criar ou revisar um playbook e garantir que o material não tenha jargões de marketing ou cara de inteligência artificial, nossos redatores estão prontos para ajudar.", quemChamar: ["Jeniffer", "Mateus", "Ana"] },
   { icon: Settings, title: "Produtividade & Gestão", tagline: "Fazemos projetos rodarem.", desc: "Planilhas, ClickUp, fluxos de trabalho e priorização. Se o desafio é gestão de tempo, de pessoas ou aumentar a eficiência do time, somos especialistas em transformar caos em projetos executados.", quemChamar: ["Beatriz Henriques", "Daniel", "Ariadne"] },
-  { icon: Heart, title: "Relacionamento com membros", tagline: "Cuidando da nossa comunidade de ponta a ponta.", desc: "Seja mediando grupos de WhatsApp ou encontrando a resposta ideal para aquele membro que quer crescer conosco. Atuamos diretamente na linha de frente para garantir a melhor convivência.", quemChamar: ["Beatriz Henriques", "Debora"] },
+  { icon: Heart, title: "CX & relacionamento com membros", tagline: "Ouvimos o mercado e cuidamos de cada membro.", desc: "Nós mapeamos o mercado e ouvimos quem consome o nosso conteúdo para aplicar melhorias práticas. Da análise de dados à mediação dos grupos de WhatsApp, nosso papel é garantir que o convívio e a experiência do membro mantenham o padrão da AUVP.", quemChamar: ["Beatriz Henriques", "Debora"] },
 ];
 
 // ─── Section helpers ──────────────────────────────────────────────────────────
@@ -928,14 +927,15 @@ export default function TimePage() {
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28">
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-7xl font-bold font-anek text-foreground leading-[1.05] mb-6">
-              Conheça o <span className="text-primary">time</span>
+              Nossa <span className="text-primary">tripulação</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground font-roboto leading-relaxed max-w-2xl">
-              Formamos um time multidisciplinar, que navega entre{" "}
+              Aqui a excelência é o mínimo. Juntamos especialistas em{" "}
               <span className="font-semibold text-foreground">design</span>,{" "}
-              <span className="font-semibold text-foreground">redação</span>,{" "}
-              <span className="font-semibold text-foreground">gestão de projetos</span> e,
-              é claro, <span className="font-semibold text-foreground">dados</span>.
+              <span className="font-semibold text-foreground">copy</span>,{" "}
+              <span className="font-semibold text-foreground">gestão</span> e{" "}
+              <span className="font-semibold text-foreground">dados</span> com um único foco:
+              manter o padrão de qualidade da maior escola de investimentos do país.
             </p>
           </div>
         </div>
@@ -1007,10 +1007,11 @@ export default function TimePage() {
         <Section className="relative rounded-3xl border bg-muted/40 dark:bg-muted/20 px-6 py-10 md:px-10 md:py-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
             <div className="lg:flex-1">
-              <SectionTitle>A rede que nos conecta</SectionTitle>
+              <SectionTitle>Nossa estrutura</SectionTitle>
               <p className="text-muted-foreground font-roboto max-w-md mb-10 lg:mb-0">
-                Trabalhamos em parceria com todas as áreas da AUVP para garantir que produto e negócio andem juntos.
-                Passe o mouse ou clique em cada área para saber mais.
+                O produto não existe no vácuo. Trabalhamos lado a lado com todas as áreas da empresa para
+                garantir que a qualidade da nossa entrega acompanhe o tamanho do negócio. Passe o mouse ou
+                clique em cada área abaixo para entender a nossa estrutura.
               </p>
             </div>
             <OrbitNetwork />
@@ -1018,8 +1019,8 @@ export default function TimePage() {
         </Section>
 
         <Section>
-          <SectionTitle>O que fazemos no dia a dia</SectionTitle>
-          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Conheça a atuação de cada especialista e saiba exatamente a quem recorrer para resolver seus desafios.</p>
+          <SectionTitle>Nossa rotina na prática</SectionTitle>
+          <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Veja a especialidade de cada membro do time de produtos. Saiba exatamente qual pirata procurar quando precisar destravar uma demanda.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {dayToDay.map((item, i) => {
               const Icon = item.icon;
