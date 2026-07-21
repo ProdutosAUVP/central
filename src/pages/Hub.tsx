@@ -89,7 +89,7 @@ interface ProdutoDigital {
 
 const produtos: ProdutoDigital[] = [
   { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://auvp.com.br/" },
   { name: "AUVP Analítica", desc: "Análise de investimentos", slug: "analitica", href: "https://analitica.auvp.com.br/" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://auvpagro.com.br/" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
@@ -102,6 +102,107 @@ const produtos: ProdutoDigital[] = [
 function produtoUrl(p: ProdutoDigital): string {
   if (!p.href) return "em breve";
   return p.href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+}
+
+/** Velocidade constante do scroll do preview (px/s) — cadenciada, igual em todos os cards. */
+const LP_SCROLL_SPEED = 45;
+
+function ProdutoCard({ p }: { p: ProdutoDigital }) {
+  const shot = p.slug ? lpScreenshots[p.slug] : undefined;
+  const imgRef = useRef<HTMLImageElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+  const [scroll, setScroll] = useState({ dist: 0, dur: 0 });
+  const reducedMotion = useReducedMotion();
+
+  /* A duração é derivada da distância real a rolar (altura renderizada da
+     imagem menos a janela), então páginas longas e curtas rolam na MESMA
+     velocidade — mudam só o tempo total. */
+  const measure = useCallback(() => {
+    const img = imgRef.current;
+    const frame = frameRef.current;
+    if (!img || !frame) return;
+    const dist = Math.max(img.clientHeight - frame.clientHeight, 0);
+    setScroll({ dist, dur: dist / LP_SCROLL_SPEED });
+  }, []);
+
+  const scrolling = hovered && !reducedMotion;
+
+  const card = (
+    <div
+      onMouseEnter={() => { measure(); setHovered(true); }}
+      onMouseLeave={() => setHovered(false)}
+      className={cn(
+        "group relative overflow-hidden rounded-2xl border bg-card flex flex-col h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
+        p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
+      )}
+    >
+      {/* Janela de "navegador" (estilo Windows) com preview da LP — no hover, a página rola em velocidade constante */}
+      <div className="border-b">
+        <div className="flex items-center gap-2 pl-2.5 pr-3 py-2 bg-muted/60 border-b">
+          <span className="flex-1 min-w-0 truncate rounded-md bg-background/80 border px-2 py-0.5 text-[9px] font-roboto text-muted-foreground">
+            {produtoUrl(p)}
+          </span>
+          <span className="flex items-center gap-2 text-muted-foreground shrink-0">
+            <Minus className="h-2.5 w-2.5" strokeWidth={2.5} />
+            <Square className="h-2 w-2" strokeWidth={2.5} />
+            <X className="h-2.5 w-2.5" strokeWidth={2.5} />
+          </span>
+        </div>
+        <div ref={frameRef} className="relative h-40 sm:h-44 overflow-hidden bg-muted/40">
+          {shot ? (
+            <img
+              ref={imgRef}
+              src={shot}
+              alt={`Página de ${p.name}`}
+              loading="lazy"
+              onLoad={measure}
+              className="w-full h-auto will-change-transform"
+              style={{
+                transform: scrolling ? `translateY(-${scroll.dist}px)` : "translateY(0)",
+                transition: scrolling
+                  ? `transform ${scroll.dur}s linear`
+                  : "transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+            />
+          ) : (
+            <div className="relative h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-transparent">
+              <span
+                className="absolute h-20 w-20 rounded-full border border-primary/25"
+                style={{ animation: "auvp-globe-ping 3s ease-out infinite" }}
+              />
+              <Globe
+                className={cn("h-12 w-12 text-muted-foreground/30", p.soon && "grayscale")}
+                strokeWidth={1.25}
+                style={{ animation: "auvp-globe-float 5s ease-in-out infinite" }}
+              />
+            </div>
+          )}
+          {shot && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card/80 to-transparent" />
+          )}
+        </div>
+      </div>
+      {/* Conteúdo */}
+      <div className="p-3.5 flex items-center gap-2 flex-1">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
+            {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
+          </div>
+          <p className="text-xs text-muted-foreground font-roboto leading-snug mt-0.5">{p.desc}</p>
+        </div>
+        {!p.soon && (
+          <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 sm:group-hover:text-primary transition-colors duration-300" />
+        )}
+      </div>
+    </div>
+  );
+
+  if (p.soon) {
+    return <div aria-disabled="true" className="cursor-default">{card}</div>;
+  }
+  return <a href={p.href} target="_blank" rel="noopener noreferrer">{card}</a>;
 }
 
 interface DocLink {
@@ -132,13 +233,27 @@ const portfolio = [
   { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
 ];
 
-/** Cards do carrossel do Mural de Novidades — derivados das novidades mais recentes. */
-const muralNovidades = novidadesMensais[0].items.map((item) => ({
-  titulo: item.titulo,
-  descricao: item.descricao,
-}));
+interface MuralCard {
+  titulo: string;
+  descricao: string;
+  /** Link externo da novidade — cards sem link levam para /novidades. */
+  link?: string;
+  /** Imagem do card. Enquanto não há artes próprias, usa screenshots das LPs como placeholder. */
+  img: string;
+}
 
-function MuralNovidadesCarousel({ items }: { items: { titulo: string; descricao: string }[] }) {
+/** Cards do carrossel do Mural de Novidades — derivados das novidades mais recentes. */
+const muralNovidades: MuralCard[] = novidadesMensais[0].items.map((item, i) => {
+  const shots = Object.values(lpScreenshots);
+  return {
+    titulo: item.titulo,
+    descricao: item.descricao,
+    link: item.link,
+    img: shots[i % shots.length],
+  };
+});
+
+function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const reducedMotion = useReducedMotion();
@@ -152,23 +267,42 @@ function MuralNovidadesCarousel({ items }: { items: { titulo: string; descricao:
   const go = (dir: 1 | -1) => setIndex((i) => (i + dir + items.length) % items.length);
   const current = items[index];
 
+  /* Altura fixa — o card nunca muda de tamanho entre slides (sem layout shift),
+     e o texto (com clamp) nunca alcança as setas nem os indicadores. */
+  const inner = (
+    <div className="flex flex-col sm:flex-row h-[340px] sm:h-60">
+      <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 border-b sm:border-b-0 sm:border-r shrink-0 overflow-hidden">
+        <img
+          src={current.img}
+          alt=""
+          className="h-full w-full object-cover object-top transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
+        />
+      </div>
+      <div className="flex-1 min-w-0 px-12 pb-9 pt-4 sm:py-6 sm:pl-8 sm:pr-16 flex flex-col justify-center gap-2 overflow-hidden">
+        <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2 sm:group-hover:text-primary transition-colors duration-300">{current.titulo}</p>
+        <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3 sm:line-clamp-4">{current.descricao}</p>
+      </div>
+    </div>
+  );
+
   return (
     <div
-      className="relative rounded-2xl border bg-card overflow-hidden"
+      className="group relative rounded-2xl border bg-card overflow-hidden transition-[border-color,box-shadow] duration-300 ease-apple sm:hover:border-primary/30 sm:hover:shadow-xl"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Altura fixa — o card nunca muda de tamanho entre slides (sem layout shift),
-          e o texto (com clamp) nunca alcança as setas nem os indicadores. */}
-      <div className="flex flex-col sm:flex-row h-[340px] sm:h-60">
-        <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 flex items-center justify-center border-b sm:border-b-0 sm:border-r shrink-0">
-          <ImageIcon className="h-10 w-10 text-muted-foreground/30" strokeWidth={1.5} />
-        </div>
-        <div className="flex-1 min-w-0 px-12 pb-9 pt-4 sm:py-6 sm:pl-8 sm:pr-16 flex flex-col justify-center gap-2 overflow-hidden">
-          <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2">{current.titulo}</p>
-          <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3 sm:line-clamp-4">{current.descricao}</p>
-        </div>
-      </div>
+      {/* Todo o card é clicável — novidades com link externo abrem em nova aba;
+          as demais levam ao mural completo. Setas e indicadores são irmãos do
+          link (posicionados por cima), então cliques neles não navegam. */}
+      {current.link ? (
+        <a href={current.link} target="_blank" rel="noopener noreferrer" className="block" aria-label={current.titulo}>
+          {inner}
+        </a>
+      ) : (
+        <Link to="/novidades" className="block" aria-label={current.titulo}>
+          {inner}
+        </Link>
+      )}
       {items.length > 1 && (
         <>
           <button
@@ -790,65 +924,9 @@ export default function Hub() {
           <section>
             <SectionHeader icon={BarChart3} title="Produtos Digitais" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              {produtos.map((p, i) => {
-                const shot = p.slug ? lpScreenshots[p.slug] : undefined;
-                const card = (
-                  <div className={cn(
-                    "group relative overflow-hidden rounded-2xl border bg-card flex flex-col h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
-                    p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
-                  )}>
-                    {/* Janela de "navegador" (estilo Windows) com preview da LP — no hover, a página rola lentamente */}
-                    <div className="border-b">
-                      <div className="flex items-center gap-2 pl-2.5 pr-3 py-2 bg-muted/60 border-b">
-                        <span className="flex-1 min-w-0 truncate rounded-md bg-background/80 border px-2 py-0.5 text-[9px] font-roboto text-muted-foreground">
-                          {produtoUrl(p)}
-                        </span>
-                        <span className="flex items-center gap-2 text-muted-foreground shrink-0">
-                          <Minus className="h-2.5 w-2.5" strokeWidth={2.5} />
-                          <Square className="h-2 w-2" strokeWidth={2.5} />
-                          <X className="h-2.5 w-2.5" strokeWidth={2.5} />
-                        </span>
-                      </div>
-                      <div className="relative h-40 sm:h-44 overflow-hidden bg-muted/40">
-                        {shot ? (
-                          <img
-                            src={shot}
-                            alt={`Página de ${p.name}`}
-                            loading="lazy"
-                            className="w-full h-auto will-change-transform transition-transform duration-700 ease-out sm:motion-safe:group-hover:duration-[20000ms] sm:motion-safe:group-hover:ease-linear sm:motion-safe:group-hover:translate-y-[calc(11rem_-_100%)]"
-                          />
-                        ) : (
-                          <div className="h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-transparent">
-                            <Globe className={cn("h-12 w-12 text-muted-foreground/25", p.soon && "grayscale")} strokeWidth={1.25} />
-                          </div>
-                        )}
-                        {shot && (
-                          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card/80 to-transparent" />
-                        )}
-                      </div>
-                    </div>
-                    {/* Conteúdo */}
-                    <div className="p-3.5 flex items-center gap-2 flex-1">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
-                          {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
-                        </div>
-                        <p className="text-xs text-muted-foreground font-roboto leading-snug mt-0.5">{p.desc}</p>
-                      </div>
-                      {!p.soon && (
-                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 sm:group-hover:text-primary transition-colors duration-300" />
-                      )}
-                    </div>
-                  </div>
-                );
-                if (p.soon) {
-                  return <div key={i} aria-disabled="true" className="cursor-default">{card}</div>;
-                }
-                return (
-                  <a key={i} href={p.href} target="_blank" rel="noopener noreferrer">{card}</a>
-                );
-              })}
+              {produtos.map((p, i) => (
+                <ProdutoCard key={i} p={p} />
+              ))}
             </div>
           </section>
         </Reveal>
