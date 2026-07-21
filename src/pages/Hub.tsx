@@ -4,7 +4,8 @@ import {
   BookOpen, Palette, Volume2, Users, User, ExternalLink,
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
-  FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download
+  FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
+  Globe, Minus, Square, X
 } from "lucide-react";
 import { teamPhotos } from "@/assets/team";
 import { lpScreenshots } from "@/assets/lps";
@@ -89,18 +90,18 @@ interface ProdutoDigital {
 const produtos: ProdutoDigital[] = [
   { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
   { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
-  { name: "AUVP Analítica", desc: "Análise de investimentos", href: "https://produtosauvp.github.io/projetodelta/#auvp-analitica" },
-  { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://produtosauvp.github.io/projetodelta/#auvp-agro" },
+  { name: "AUVP Analítica", desc: "Análise de investimentos", slug: "analitica", href: "https://analitica.auvp.com.br/" },
+  { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://auvpagro.com.br/" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
   { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
   { name: "AUVP Seguros", desc: "Produtos de seguro", slug: "seguros", href: "https://auvpcapital.com.br/seguros/" },
   { name: "AUVP Experience", desc: "Experiências premium", soon: true },
 ];
 
-/** Hostname exibido na barra de "navegador" do card de produto digital. */
-function produtoDominio(p: ProdutoDigital): string {
+/** URL completa (sem protocolo) exibida na barra de "navegador" do card de produto digital. */
+function produtoUrl(p: ProdutoDigital): string {
   if (!p.href) return "em breve";
-  try { return new URL(p.href).hostname.replace(/^www\./, ""); } catch { return ""; }
+  return p.href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 }
 
 interface DocLink {
@@ -157,13 +158,15 @@ function MuralNovidadesCarousel({ items }: { items: { titulo: string; descricao:
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="flex flex-col sm:flex-row">
-        <div className="sm:w-2/5 aspect-[16/9] sm:aspect-auto bg-muted/50 flex items-center justify-center border-b sm:border-b-0 sm:border-r shrink-0">
+      {/* Altura fixa — o card nunca muda de tamanho entre slides (sem layout shift),
+          e o texto (com clamp) nunca alcança as setas nem os indicadores. */}
+      <div className="flex flex-col sm:flex-row h-[340px] sm:h-60">
+        <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 flex items-center justify-center border-b sm:border-b-0 sm:border-r shrink-0">
           <ImageIcon className="h-10 w-10 text-muted-foreground/30" strokeWidth={1.5} />
         </div>
-        <div className="flex-1 min-w-0 p-5 sm:p-8 flex flex-col justify-center gap-2">
-          <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight">{current.titulo}</p>
-          <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3">{current.descricao}</p>
+        <div className="flex-1 min-w-0 px-12 pb-9 pt-4 sm:py-6 sm:pl-8 sm:pr-16 flex flex-col justify-center gap-2 overflow-hidden">
+          <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2">{current.titulo}</p>
+          <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3 sm:line-clamp-4">{current.descricao}</p>
         </div>
       </div>
       {items.length > 1 && (
@@ -789,20 +792,21 @@ export default function Hub() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {produtos.map((p, i) => {
                 const shot = p.slug ? lpScreenshots[p.slug] : undefined;
-                const productInitial = p.name.split(" ")[1]?.[0] ?? p.name[0];
                 const card = (
                   <div className={cn(
                     "group relative overflow-hidden rounded-2xl border bg-card flex flex-col h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
                     p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
                   )}>
-                    {/* Janela de "navegador" com preview da LP — no hover, a página rola lentamente */}
+                    {/* Janela de "navegador" (estilo Windows) com preview da LP — no hover, a página rola lentamente */}
                     <div className="border-b">
-                      <div className="flex items-center gap-1.5 px-3 py-2 bg-muted/60 border-b">
-                        <span className="h-2 w-2 rounded-full bg-[#FF5F57]" />
-                        <span className="h-2 w-2 rounded-full bg-[#FEBC2E]" />
-                        <span className="h-2 w-2 rounded-full bg-[#28C840]" />
-                        <span className="ml-1.5 flex-1 min-w-0 truncate rounded-md bg-background/80 border px-2 py-0.5 text-[9px] font-roboto text-muted-foreground text-center">
-                          {produtoDominio(p)}
+                      <div className="flex items-center gap-2 pl-2.5 pr-3 py-2 bg-muted/60 border-b">
+                        <span className="flex-1 min-w-0 truncate rounded-md bg-background/80 border px-2 py-0.5 text-[9px] font-roboto text-muted-foreground">
+                          {produtoUrl(p)}
+                        </span>
+                        <span className="flex items-center gap-2 text-muted-foreground shrink-0">
+                          <Minus className="h-2.5 w-2.5" strokeWidth={2.5} />
+                          <Square className="h-2 w-2" strokeWidth={2.5} />
+                          <X className="h-2.5 w-2.5" strokeWidth={2.5} />
                         </span>
                       </div>
                       <div className="relative h-40 sm:h-44 overflow-hidden bg-muted/40">
@@ -811,11 +815,11 @@ export default function Hub() {
                             src={shot}
                             alt={`Página de ${p.name}`}
                             loading="lazy"
-                            className="w-full h-auto will-change-transform transition-transform duration-700 ease-out sm:motion-safe:group-hover:duration-[7000ms] sm:motion-safe:group-hover:ease-linear sm:motion-safe:group-hover:translate-y-[calc(11rem_-_100%)]"
+                            className="w-full h-auto will-change-transform transition-transform duration-700 ease-out sm:motion-safe:group-hover:duration-[20000ms] sm:motion-safe:group-hover:ease-linear sm:motion-safe:group-hover:translate-y-[calc(11rem_-_100%)]"
                           />
                         ) : (
                           <div className="h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-transparent">
-                            <span className={cn("text-5xl font-bold font-anek text-muted-foreground/25 select-none", p.soon && "grayscale")}>{productInitial}</span>
+                            <Globe className={cn("h-12 w-12 text-muted-foreground/25", p.soon && "grayscale")} strokeWidth={1.25} />
                           </div>
                         )}
                         {shot && (
@@ -1021,18 +1025,16 @@ export default function Hub() {
 
         {/* FAQ */}
         <Reveal>
-          <section className="flex flex-col items-center">
-            <div className="w-full max-w-2xl">
-              <SectionHeader icon={MessageSquare} title="Perguntas Frequentes" />
-              <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, i) => (
-                  <AccordionItem key={i} value={`faq-${i}`}>
-                    <AccordionTrigger className="text-sm font-medium font-roboto text-left">{faq.q}</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground font-roboto">{faq.a}</AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+          <section>
+            <SectionHeader icon={MessageSquare} title="Perguntas Frequentes" />
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, i) => (
+                <AccordionItem key={i} value={`faq-${i}`}>
+                  <AccordionTrigger className="text-sm font-medium font-roboto text-left">{faq.q}</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground font-roboto">{faq.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </section>
         </Reveal>
     </PageShell>
