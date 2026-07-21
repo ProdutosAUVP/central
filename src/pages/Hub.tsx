@@ -7,6 +7,7 @@ import {
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download
 } from "lucide-react";
 import { teamPhotos } from "@/assets/team";
+import { lpScreenshots } from "@/assets/lps";
 import { cn } from "@/lib/utils";
 import {
   Accordion,
@@ -77,6 +78,8 @@ const accessLinks: AccessLink[] = [
 interface ProdutoDigital {
   name: string;
   desc: string;
+  /** Chave em `lpScreenshots` — produtos sem screenshot caem no placeholder. */
+  slug?: string;
   /** Seção do Guia de Vendas ou LP própria do produto. */
   href?: string;
   /** Ainda sem link publicado — cartão fica com aspecto inativo. */
@@ -84,15 +87,21 @@ interface ProdutoDigital {
 }
 
 const produtos: ProdutoDigital[] = [
-  { name: "AUVP Capital", desc: "Plataforma de investimentos", href: "https://auvpcapital.com.br/" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
+  { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
   { name: "AUVP Analítica", desc: "Análise de investimentos", href: "https://produtosauvp.github.io/projetodelta/#auvp-analitica" },
-  { name: "AUVP Agro", desc: "Produtos do agronegócio", href: "https://produtosauvp.github.io/projetodelta/#auvp-agro" },
-  { name: "AUVP Câmbio", desc: "Operações de câmbio", href: "https://auvpcapital.com.br/cambio/" },
-  { name: "AUVP Crédito", desc: "Soluções de crédito", href: "https://auvpcapital.com.br/credito/" },
-  { name: "AUVP Seguros", desc: "Produtos de seguro", href: "https://auvpcapital.com.br/seguros/" },
+  { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://produtosauvp.github.io/projetodelta/#auvp-agro" },
+  { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
+  { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
+  { name: "AUVP Seguros", desc: "Produtos de seguro", slug: "seguros", href: "https://auvpcapital.com.br/seguros/" },
   { name: "AUVP Experience", desc: "Experiências premium", soon: true },
 ];
+
+/** Hostname exibido na barra de "navegador" do card de produto digital. */
+function produtoDominio(p: ProdutoDigital): string {
+  if (!p.href) return "em breve";
+  try { return new URL(p.href).hostname.replace(/^www\./, ""); } catch { return ""; }
+}
 
 interface DocLink {
   label: string;
@@ -121,6 +130,76 @@ const portfolio = [
   { nome: "Ecobag AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Sacola de algodão cru com silk do olho AUVP.", img: "" },
   { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
 ];
+
+/** Cards do carrossel do Mural de Novidades — derivados das novidades mais recentes. */
+const muralNovidades = novidadesMensais[0].items.map((item) => ({
+  titulo: item.titulo,
+  descricao: item.descricao,
+}));
+
+function MuralNovidadesCarousel({ items }: { items: { titulo: string; descricao: string }[] }) {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (items.length <= 1 || reducedMotion || paused) return;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % items.length), 6000);
+    return () => clearInterval(timer);
+  }, [items.length, reducedMotion, paused]);
+
+  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + items.length) % items.length);
+  const current = items[index];
+
+  return (
+    <div
+      className="relative rounded-2xl border bg-card overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex flex-col sm:flex-row">
+        <div className="sm:w-2/5 aspect-[16/9] sm:aspect-auto bg-muted/50 flex items-center justify-center border-b sm:border-b-0 sm:border-r shrink-0">
+          <ImageIcon className="h-10 w-10 text-muted-foreground/30" strokeWidth={1.5} />
+        </div>
+        <div className="flex-1 min-w-0 p-5 sm:p-8 flex flex-col justify-center gap-2">
+          <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight">{current.titulo}</p>
+          <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3">{current.descricao}</p>
+        </div>
+      </div>
+      {items.length > 1 && (
+        <>
+          <button
+            onClick={() => go(-1)}
+            aria-label="Novidade anterior"
+            className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-background/80 backdrop-blur border sm:hover:bg-background transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => go(1)}
+            aria-label="Próxima novidade"
+            className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-background/80 backdrop-blur border sm:hover:bg-background transition-colors"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
+            {items.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                aria-label={`Ir para novidade ${i + 1}`}
+                className={cn(
+                  "h-1.5 rounded-full transition-all duration-300",
+                  i === index ? "w-5 bg-primary" : "w-1.5 bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 const MESES_PT = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const DIAS_PT  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
@@ -698,9 +777,122 @@ export default function Hub() {
         {/* Mural de Novidades */}
         <Reveal>
           <section>
+            <SectionHeader icon={Newspaper} title="Mural de Novidades" />
+            <MuralNovidadesCarousel items={muralNovidades} />
+          </section>
+        </Reveal>
+
+        {/* Produtos */}
+        <Reveal>
+          <section>
+            <SectionHeader icon={BarChart3} title="Produtos Digitais" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {produtos.map((p, i) => {
+                const shot = p.slug ? lpScreenshots[p.slug] : undefined;
+                const productInitial = p.name.split(" ")[1]?.[0] ?? p.name[0];
+                const card = (
+                  <div className={cn(
+                    "group relative overflow-hidden rounded-2xl border bg-card flex flex-col h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
+                    p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
+                  )}>
+                    {/* Janela de "navegador" com preview da LP — no hover, a página rola lentamente */}
+                    <div className="border-b">
+                      <div className="flex items-center gap-1.5 px-3 py-2 bg-muted/60 border-b">
+                        <span className="h-2 w-2 rounded-full bg-[#FF5F57]" />
+                        <span className="h-2 w-2 rounded-full bg-[#FEBC2E]" />
+                        <span className="h-2 w-2 rounded-full bg-[#28C840]" />
+                        <span className="ml-1.5 flex-1 min-w-0 truncate rounded-md bg-background/80 border px-2 py-0.5 text-[9px] font-roboto text-muted-foreground text-center">
+                          {produtoDominio(p)}
+                        </span>
+                      </div>
+                      <div className="relative h-40 sm:h-44 overflow-hidden bg-muted/40">
+                        {shot ? (
+                          <img
+                            src={shot}
+                            alt={`Página de ${p.name}`}
+                            loading="lazy"
+                            className="w-full h-auto will-change-transform transition-transform duration-700 ease-out sm:motion-safe:group-hover:duration-[7000ms] sm:motion-safe:group-hover:ease-linear sm:motion-safe:group-hover:translate-y-[calc(11rem_-_100%)]"
+                          />
+                        ) : (
+                          <div className="h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-transparent">
+                            <span className={cn("text-5xl font-bold font-anek text-muted-foreground/25 select-none", p.soon && "grayscale")}>{productInitial}</span>
+                          </div>
+                        )}
+                        {shot && (
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card/80 to-transparent" />
+                        )}
+                      </div>
+                    </div>
+                    {/* Conteúdo */}
+                    <div className="p-3.5 flex items-center gap-2 flex-1">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
+                          {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
+                        </div>
+                        <p className="text-xs text-muted-foreground font-roboto leading-snug mt-0.5">{p.desc}</p>
+                      </div>
+                      {!p.soon && (
+                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 sm:group-hover:text-primary transition-colors duration-300" />
+                      )}
+                    </div>
+                  </div>
+                );
+                if (p.soon) {
+                  return <div key={i} aria-disabled="true" className="cursor-default">{card}</div>;
+                }
+                return (
+                  <a key={i} href={p.href} target="_blank" rel="noopener noreferrer">{card}</a>
+                );
+              })}
+            </div>
+          </section>
+        </Reveal>
+
+        {/* Portfólio */}
+        <Reveal>
+          <section>
+            <SectionHeader
+              icon={ImageIcon}
+              title="Portfólio de Produtos Físicos"
+              action={portfolio.length > 4 && (
+                <button
+                  onClick={() => setPortfolioExpanded(e => !e)}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
+                >
+                  {portfolioExpanded ? "Ver menos" : "Ver mais"} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300 ease-apple", portfolioExpanded && "rotate-90")} />
+                </button>
+              )}
+            />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {portfolioVisible.map((item, i) => (
+                <div key={i} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
+                  <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
+                    {item.img ? (
+                      <img src={item.img} alt={item.nome} className="w-full h-full object-cover transition-transform duration-500 ease-apple sm:group-hover:scale-105" />
+                    ) : (
+                      <>
+                        <ImageIcon className="h-8 w-8 text-muted-foreground/40 transition-transform duration-300 ease-apple sm:group-hover:scale-110 sm:group-hover:text-primary/40" />
+                        <span className="text-[10px] text-muted-foreground font-roboto">Adicionar foto</span>
+                      </>
+                    )}
+                  </div>
+                  <div className="p-3 flex flex-col gap-1">
+                    <p className="font-semibold font-anek text-foreground text-sm leading-snug">{item.nome}</p>
+                    <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </Reveal>
+
+        {/* Atualizações da Escola */}
+        <Reveal>
+          <section>
             <SectionHeader
               icon={Newspaper}
-              title="Mural de Novidades"
+              title="Atualizações da Escola"
               action={
                 <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
                   Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
@@ -762,86 +954,6 @@ export default function Hub() {
                 </AccordionItem>
               ))}
             </Accordion>
-          </section>
-        </Reveal>
-
-        {/* Produtos */}
-        <Reveal>
-          <section>
-            <SectionHeader icon={BarChart3} title="Produtos Digitais" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-              {produtos.map((p, i) => {
-                const productInitial = p.name.split(" ")[1]?.[0] ?? p.name[0];
-                const card = (
-                  <div className={cn(
-                    "group relative overflow-hidden rounded-2xl border bg-card flex items-stretch min-h-[88px] sm:min-h-[100px] transition-[transform,box-shadow,border-color] duration-300 ease-apple",
-                    p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
-                  )}>
-                    {/* Image / placeholder */}
-                    <div className="w-24 sm:w-32 shrink-0 border-r bg-muted/40 flex items-center justify-center overflow-hidden">
-                      <span className={cn("text-3xl font-bold font-anek text-muted-foreground/25 select-none", p.soon && "grayscale")}>{productInitial}</span>
-                    </div>
-                    {/* Content */}
-                    <div className="flex flex-col justify-center gap-1.5 p-3 flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
-                        {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
-                      </div>
-                      <p className="text-xs text-muted-foreground font-roboto leading-snug">{p.desc}</p>
-                    </div>
-                    {!p.soon && (
-                      <div className="pr-3 flex items-center shrink-0">
-                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-                      </div>
-                    )}
-                  </div>
-                );
-                if (p.soon) {
-                  return <div key={i} aria-disabled="true" className="cursor-default">{card}</div>;
-                }
-                return (
-                  <a key={i} href={p.href} target="_blank" rel="noopener noreferrer">{card}</a>
-                );
-              })}
-            </div>
-          </section>
-        </Reveal>
-
-        {/* Portfólio */}
-        <Reveal>
-          <section>
-            <SectionHeader
-              icon={ImageIcon}
-              title="Portfólio de Produtos Físicos"
-              action={portfolio.length > 4 && (
-                <button
-                  onClick={() => setPortfolioExpanded(e => !e)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
-                >
-                  {portfolioExpanded ? "Ver menos" : "Ver mais"} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300 ease-apple", portfolioExpanded && "rotate-90")} />
-                </button>
-              )}
-            />
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {portfolioVisible.map((item, i) => (
-                <div key={i} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
-                  <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
-                    {item.img ? (
-                      <img src={item.img} alt={item.nome} className="w-full h-full object-cover transition-transform duration-500 ease-apple sm:group-hover:scale-105" />
-                    ) : (
-                      <>
-                        <ImageIcon className="h-8 w-8 text-muted-foreground/40 transition-transform duration-300 ease-apple sm:group-hover:scale-110 sm:group-hover:text-primary/40" />
-                        <span className="text-[10px] text-muted-foreground font-roboto">Adicionar foto</span>
-                      </>
-                    )}
-                  </div>
-                  <div className="p-3 flex flex-col gap-1">
-                    <p className="font-semibold font-anek text-foreground text-sm leading-snug">{item.nome}</p>
-                    <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </section>
         </Reveal>
 
