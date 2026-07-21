@@ -122,6 +122,76 @@ const portfolio = [
   { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
 ];
 
+/** Cards do carrossel do Mural de Novidades — derivados das novidades mais recentes. */
+const muralNovidades = novidadesMensais[0].items.map((item) => ({
+  titulo: item.titulo,
+  descricao: item.descricao,
+}));
+
+function MuralNovidadesCarousel({ items }: { items: { titulo: string; descricao: string }[] }) {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (items.length <= 1 || reducedMotion || paused) return;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % items.length), 6000);
+    return () => clearInterval(timer);
+  }, [items.length, reducedMotion, paused]);
+
+  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + items.length) % items.length);
+  const current = items[index];
+
+  return (
+    <div
+      className="relative rounded-2xl border bg-card overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex flex-col sm:flex-row">
+        <div className="sm:w-2/5 aspect-[16/9] sm:aspect-auto bg-muted/50 flex items-center justify-center border-b sm:border-b-0 sm:border-r shrink-0">
+          <ImageIcon className="h-10 w-10 text-muted-foreground/30" strokeWidth={1.5} />
+        </div>
+        <div className="flex-1 min-w-0 p-5 sm:p-8 flex flex-col justify-center gap-2">
+          <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight">{current.titulo}</p>
+          <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3">{current.descricao}</p>
+        </div>
+      </div>
+      {items.length > 1 && (
+        <>
+          <button
+            onClick={() => go(-1)}
+            aria-label="Novidade anterior"
+            className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-background/80 backdrop-blur border sm:hover:bg-background transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => go(1)}
+            aria-label="Próxima novidade"
+            className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-background/80 backdrop-blur border sm:hover:bg-background transition-colors"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
+            {items.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                aria-label={`Ir para novidade ${i + 1}`}
+                className={cn(
+                  "h-1.5 rounded-full transition-all duration-300",
+                  i === index ? "w-5 bg-primary" : "w-1.5 bg-muted-foreground/30"
+                )}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 const MESES_PT = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const DIAS_PT  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 
@@ -698,70 +768,8 @@ export default function Hub() {
         {/* Mural de Novidades */}
         <Reveal>
           <section>
-            <SectionHeader
-              icon={Newspaper}
-              title="Mural de Novidades"
-              action={
-                <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
-                  Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
-                </Link>
-              }
-            />
-            <Accordion type="single" collapsible className="space-y-2">
-              {novidadesMensais.map((n, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`mes-${i}`}
-                  className="rounded-2xl border bg-card overflow-hidden group"
-                >
-                  <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
-                    <div className="flex items-center gap-3 text-left flex-1 min-w-0">
-                      <div className="flex flex-col h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 leading-none">
-                        <span className="text-[8px] font-bold font-roboto uppercase tracking-wider mt-1.5">mês</span>
-                        <span className="text-base font-extrabold font-anek leading-none">{mesNumero(n.mes)}</span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="font-bold font-anek text-foreground text-sm leading-tight">{n.mes} {n.ano}</p>
-                          <span className="text-[10px] font-roboto text-muted-foreground">{n.items.length} atualizações</span>
-                        </div>
-                        {/* Preview rotativo — visível apenas quando colapsado */}
-                        <div className="group-data-[state=open]:hidden mt-0.5">
-                          <RotatingPreview items={n.items.map(item => `${item.emoji} ${item.titulo}`)} />
-                        </div>
-                      </div>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="px-5 pb-6 pt-4 space-y-5">
-                      {n.intro && (
-                        <p className="text-sm font-roboto text-muted-foreground leading-relaxed">{n.intro}</p>
-                      )}
-                      <div className="space-y-5">
-                        {n.items.map((item, j) => (
-                          <NovidadeCard key={j} item={item} />
-                        ))}
-                      </div>
-                      {n.spoiler.length > 0 && (
-                        <div className="pt-4 border-t">
-                          <p className="text-[10px] font-bold font-roboto uppercase tracking-wider text-muted-foreground mb-3">
-                            🚀 O que vem por aí
-                          </p>
-                          <ul className="space-y-1.5">
-                            {n.spoiler.map((s, k) => (
-                              <li key={k} className="text-xs font-roboto text-muted-foreground">{s}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {n.rodape && (
-                        <p className="text-xs font-roboto text-muted-foreground italic border-t pt-4">{n.rodape}</p>
-                      )}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <SectionHeader icon={Newspaper} title="Mural de Novidades" />
+            <MuralNovidadesCarousel items={muralNovidades} />
           </section>
         </Reveal>
 
@@ -842,6 +850,76 @@ export default function Hub() {
                 </div>
               ))}
             </div>
+          </section>
+        </Reveal>
+
+        {/* Atualizações da Escola */}
+        <Reveal>
+          <section>
+            <SectionHeader
+              icon={Newspaper}
+              title="Atualizações da Escola"
+              action={
+                <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
+                  Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+                </Link>
+              }
+            />
+            <Accordion type="single" collapsible className="space-y-2">
+              {novidadesMensais.map((n, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`mes-${i}`}
+                  className="rounded-2xl border bg-card overflow-hidden group"
+                >
+                  <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
+                    <div className="flex items-center gap-3 text-left flex-1 min-w-0">
+                      <div className="flex flex-col h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 leading-none">
+                        <span className="text-[8px] font-bold font-roboto uppercase tracking-wider mt-1.5">mês</span>
+                        <span className="text-base font-extrabold font-anek leading-none">{mesNumero(n.mes)}</span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold font-anek text-foreground text-sm leading-tight">{n.mes} {n.ano}</p>
+                          <span className="text-[10px] font-roboto text-muted-foreground">{n.items.length} atualizações</span>
+                        </div>
+                        {/* Preview rotativo — visível apenas quando colapsado */}
+                        <div className="group-data-[state=open]:hidden mt-0.5">
+                          <RotatingPreview items={n.items.map(item => `${item.emoji} ${item.titulo}`)} />
+                        </div>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="px-5 pb-6 pt-4 space-y-5">
+                      {n.intro && (
+                        <p className="text-sm font-roboto text-muted-foreground leading-relaxed">{n.intro}</p>
+                      )}
+                      <div className="space-y-5">
+                        {n.items.map((item, j) => (
+                          <NovidadeCard key={j} item={item} />
+                        ))}
+                      </div>
+                      {n.spoiler.length > 0 && (
+                        <div className="pt-4 border-t">
+                          <p className="text-[10px] font-bold font-roboto uppercase tracking-wider text-muted-foreground mb-3">
+                            🚀 O que vem por aí
+                          </p>
+                          <ul className="space-y-1.5">
+                            {n.spoiler.map((s, k) => (
+                              <li key={k} className="text-xs font-roboto text-muted-foreground">{s}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {n.rodape && (
+                        <p className="text-xs font-roboto text-muted-foreground italic border-t pt-4">{n.rodape}</p>
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </section>
         </Reveal>
 

@@ -115,8 +115,8 @@ const orgPeople: Record<string, OrgPerson> = {
     responsibilities: ["Design Gráfico", "UI/UX Design", "Prototipação e wireframes", "Design system", "Colaboração em pesquisas"],
   },
   eria: {
-    id: "eria", name: "Éria Cunha", role: "Designer de Produto Pl. I",
-    initials: "EC", color: "product-pleno", level: "Pleno", rank: 4,
+    id: "eria", name: "Éria Alencar", role: "Designer de Produto Pl. I",
+    initials: "EA", color: "product-pleno", level: "Pleno", rank: 4,
     description: "Designer de produto pleno responsável por visual design, UI/UX e produtos físicos.",
     responsibilities: ["Branding e identidade", "UI/UX design", "Produtos físicos", "Materiais digitais"],
   },
