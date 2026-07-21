@@ -6,6 +6,7 @@
  */
 import capital from "./lps/capital.webp?url";
 import escola from "./lps/escola.webp?url";
+import analitica from "./lps/analitica.webp?url";
 import agro from "./lps/agro.webp?url";
 import cambio from "./lps/cambio.webp?url";
 import credito from "./lps/credito.webp?url";
@@ -14,6 +15,7 @@ import seguros from "./lps/seguros.webp?url";
 export const lpScreenshots: Record<string, string> = {
   capital,
   escola,
+  analitica,
   agro,
   cambio,
   credito,
