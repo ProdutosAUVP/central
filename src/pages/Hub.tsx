@@ -7,6 +7,7 @@ import {
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download
 } from "lucide-react";
 import { teamPhotos } from "@/assets/team";
+import { lpScreenshots } from "@/assets/lps";
 import { cn } from "@/lib/utils";
 import {
   Accordion,
@@ -77,6 +78,8 @@ const accessLinks: AccessLink[] = [
 interface ProdutoDigital {
   name: string;
   desc: string;
+  /** Chave em `lpScreenshots` — produtos sem screenshot caem no placeholder. */
+  slug?: string;
   /** Seção do Guia de Vendas ou LP própria do produto. */
   href?: string;
   /** Ainda sem link publicado — cartão fica com aspecto inativo. */
@@ -84,15 +87,21 @@ interface ProdutoDigital {
 }
 
 const produtos: ProdutoDigital[] = [
-  { name: "AUVP Capital", desc: "Plataforma de investimentos", href: "https://auvpcapital.com.br/" },
-  { name: "AUVP Escola", desc: "Plataforma de educação financeira", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
+  { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
+  { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://produtosauvp.github.io/projetodelta/#auvp-escola" },
   { name: "AUVP Analítica", desc: "Análise de investimentos", href: "https://produtosauvp.github.io/projetodelta/#auvp-analitica" },
-  { name: "AUVP Agro", desc: "Produtos do agronegócio", href: "https://produtosauvp.github.io/projetodelta/#auvp-agro" },
-  { name: "AUVP Câmbio", desc: "Operações de câmbio", href: "https://auvpcapital.com.br/cambio/" },
-  { name: "AUVP Crédito", desc: "Soluções de crédito", href: "https://auvpcapital.com.br/credito/" },
-  { name: "AUVP Seguros", desc: "Produtos de seguro", href: "https://auvpcapital.com.br/seguros/" },
+  { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://produtosauvp.github.io/projetodelta/#auvp-agro" },
+  { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
+  { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
+  { name: "AUVP Seguros", desc: "Produtos de seguro", slug: "seguros", href: "https://auvpcapital.com.br/seguros/" },
   { name: "AUVP Experience", desc: "Experiências premium", soon: true },
 ];
+
+/** Hostname exibido na barra de "navegador" do card de produto digital. */
+function produtoDominio(p: ProdutoDigital): string {
+  if (!p.href) return "em breve";
+  try { return new URL(p.href).hostname.replace(/^www\./, ""); } catch { return ""; }
+}
 
 interface DocLink {
   label: string;
@@ -777,31 +786,56 @@ export default function Hub() {
         <Reveal>
           <section>
             <SectionHeader icon={BarChart3} title="Produtos Digitais" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {produtos.map((p, i) => {
+                const shot = p.slug ? lpScreenshots[p.slug] : undefined;
                 const productInitial = p.name.split(" ")[1]?.[0] ?? p.name[0];
                 const card = (
                   <div className={cn(
-                    "group relative overflow-hidden rounded-2xl border bg-card flex items-stretch min-h-[88px] sm:min-h-[100px] transition-[transform,box-shadow,border-color] duration-300 ease-apple",
+                    "group relative overflow-hidden rounded-2xl border bg-card flex flex-col h-full transition-[transform,box-shadow,border-color] duration-300 ease-apple",
                     p.soon ? "opacity-75" : "sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30 cursor-pointer"
                   )}>
-                    {/* Image / placeholder */}
-                    <div className="w-24 sm:w-32 shrink-0 border-r bg-muted/40 flex items-center justify-center overflow-hidden">
-                      <span className={cn("text-3xl font-bold font-anek text-muted-foreground/25 select-none", p.soon && "grayscale")}>{productInitial}</span>
-                    </div>
-                    {/* Content */}
-                    <div className="flex flex-col justify-center gap-1.5 p-3 flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
-                        {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
+                    {/* Janela de "navegador" com preview da LP — no hover, a página rola lentamente */}
+                    <div className="border-b">
+                      <div className="flex items-center gap-1.5 px-3 py-2 bg-muted/60 border-b">
+                        <span className="h-2 w-2 rounded-full bg-[#FF5F57]" />
+                        <span className="h-2 w-2 rounded-full bg-[#FEBC2E]" />
+                        <span className="h-2 w-2 rounded-full bg-[#28C840]" />
+                        <span className="ml-1.5 flex-1 min-w-0 truncate rounded-md bg-background/80 border px-2 py-0.5 text-[9px] font-roboto text-muted-foreground text-center">
+                          {produtoDominio(p)}
+                        </span>
                       </div>
-                      <p className="text-xs text-muted-foreground font-roboto leading-snug">{p.desc}</p>
-                    </div>
-                    {!p.soon && (
-                      <div className="pr-3 flex items-center shrink-0">
-                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                      <div className="relative h-40 sm:h-44 overflow-hidden bg-muted/40">
+                        {shot ? (
+                          <img
+                            src={shot}
+                            alt={`Página de ${p.name}`}
+                            loading="lazy"
+                            className="w-full h-auto will-change-transform transition-transform duration-700 ease-out sm:motion-safe:group-hover:duration-[7000ms] sm:motion-safe:group-hover:ease-linear sm:motion-safe:group-hover:translate-y-[calc(11rem_-_100%)]"
+                          />
+                        ) : (
+                          <div className="h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-transparent">
+                            <span className={cn("text-5xl font-bold font-anek text-muted-foreground/25 select-none", p.soon && "grayscale")}>{productInitial}</span>
+                          </div>
+                        )}
+                        {shot && (
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card/80 to-transparent" />
+                        )}
                       </div>
-                    )}
+                    </div>
+                    {/* Conteúdo */}
+                    <div className="p-3.5 flex items-center gap-2 flex-1">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-semibold font-anek text-foreground text-sm leading-snug">{p.name}</p>
+                          {p.soon && <Tag tone="neutral" className="text-[9px] shrink-0">Em breve</Tag>}
+                        </div>
+                        <p className="text-xs text-muted-foreground font-roboto leading-snug mt-0.5">{p.desc}</p>
+                      </div>
+                      {!p.soon && (
+                        <ExternalLink className="h-3.5 w-3.5 text-muted-foreground shrink-0 sm:group-hover:text-primary transition-colors duration-300" />
+                      )}
+                    </div>
                   </div>
                 );
                 if (p.soon) {
