@@ -545,6 +545,14 @@
   100% { opacity: 0; transform: translateY(-10px) scale(0.85); }
 }
 
+/* Carrossel do Mural de Novidades (Hub) — progresso do autoplay no
+   indicador ativo. O avanço do slide é disparado pelo onAnimationEnd
+   desta animação, mantendo barra e troca sempre sincronizadas. */
+@keyframes mural-progress {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
 /* Timeline scrollbar (Trilha Horizontal) */
 .timeline-scrollbar::-webkit-scrollbar { height: 4px; }
 .timeline-scrollbar::-webkit-scrollbar-track {

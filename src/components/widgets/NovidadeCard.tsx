@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronRight } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NovidadeItem } from "@/data/novidades";
 
@@ -18,9 +18,11 @@ export function NovidadeCard({ item }: { item: NovidadeItem }) {
   const temResultados = Boolean(item.resultados && item.resultados.length > 0);
 
   return (
-    <div className="flex gap-3">
-      <span className="text-base leading-none shrink-0 mt-0.5">{item.emoji}</span>
-      <div className="flex-1 min-w-0 space-y-2.5">
+    <div className="group/nc flex gap-3.5 rounded-xl border bg-card p-4 transition-[border-color,box-shadow] duration-300 ease-apple sm:hover:border-primary/30 sm:hover:shadow-md">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-base leading-none">
+        {item.emoji}
+      </span>
+      <div className="flex-1 min-w-0 space-y-3">
         <div>
           <p className="font-bold font-anek text-foreground text-sm mb-1 leading-snug">{item.titulo}</p>
           <p className="text-xs font-roboto text-muted-foreground leading-relaxed">{item.descricao}</p>
@@ -29,12 +31,12 @@ export function NovidadeCard({ item }: { item: NovidadeItem }) {
         {temAntesDepois && (
           <div
             className={cn(
-              "grid gap-3 rounded-lg border bg-muted/30 p-3",
-              item.antes && item.depois ? "sm:grid-cols-2" : "grid-cols-1"
+              "grid gap-px overflow-hidden rounded-lg border bg-border",
+              item.antes && item.depois && "sm:grid-cols-2"
             )}
           >
             {item.antes && (
-              <div>
+              <div className="bg-muted/40 p-3">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground font-roboto mb-1">
                   Antes
                 </p>
@@ -42,7 +44,7 @@ export function NovidadeCard({ item }: { item: NovidadeItem }) {
               </div>
             )}
             {item.depois && (
-              <div className={cn(item.antes && "sm:border-l sm:pl-3 border-border")}>
+              <div className="bg-primary/5 p-3">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-primary font-roboto mb-1">
                   Como ficou
                 </p>
@@ -60,7 +62,7 @@ export function NovidadeCard({ item }: { item: NovidadeItem }) {
             <ul className="space-y-1">
               {item.resultados!.map((r, k) => (
                 <li key={k} className="flex gap-2 text-xs font-roboto text-muted-foreground">
-                  <span className="text-primary shrink-0 mt-0.5">•</span>
+                  <Check className="h-3.5 w-3.5 text-primary shrink-0 mt-px" strokeWidth={3} />
                   <span>{r}</span>
                 </li>
               ))}
@@ -73,9 +75,10 @@ export function NovidadeCard({ item }: { item: NovidadeItem }) {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs font-semibold font-roboto text-primary hover:underline"
+            className="inline-flex items-center gap-1 text-xs font-semibold font-roboto text-primary sm:hover:underline"
           >
-            Ver mais <ChevronRight className="h-3 w-3" />
+            Ver mais{" "}
+            <ChevronRight className="h-3 w-3 transition-transform duration-300 ease-apple sm:group-hover/nc:translate-x-0.5" />
           </a>
         )}
       </div>
