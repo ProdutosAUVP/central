@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
-  Globe, Minus, Square, X, Sparkles
+  Globe, Minus, Square, X
 } from "lucide-react";
 import { teamPhotos } from "@/assets/team";
 import { lpScreenshots } from "@/assets/lps";
@@ -297,8 +297,8 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
                   />
                 </div>
                 <div className="flex-1 min-w-0 px-5 pb-5 pt-4 sm:py-6 sm:px-8 flex flex-col justify-center gap-2.5 overflow-hidden">
-                  <span className="self-start inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold font-roboto uppercase tracking-wider text-primary">
-                    <Sparkles className="h-3 w-3" /> {muralMesLabel}
+                  <span className="self-start rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold font-roboto uppercase tracking-wider text-primary">
+                    {muralMesLabel}
                   </span>
                   <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2 sm:group-hover:text-primary transition-colors duration-300">{item.titulo}</p>
                   <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3">{item.descricao}</p>
