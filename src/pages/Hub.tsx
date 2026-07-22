@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
-  Globe, Minus, Square, X
+  Globe, Minus, Square, X, Sparkles
 } from "lucide-react";
 import { teamPhotos } from "@/assets/team";
 import { lpScreenshots } from "@/assets/lps";
@@ -234,6 +234,7 @@ const portfolio = [
 ];
 
 interface MuralCard {
+  emoji: string;
   titulo: string;
   descricao: string;
   /** Link externo da novidade — cards sem link levam para /novidades. */
@@ -242,10 +243,14 @@ interface MuralCard {
   img: string;
 }
 
+/** Rótulo da edição exibida no carrossel — sempre o mês mais recente. */
+const muralMesLabel = `${novidadesMensais[0].mes} ${novidadesMensais[0].ano}`;
+
 /** Cards do carrossel do Mural de Novidades — derivados das novidades mais recentes. */
 const muralNovidades: MuralCard[] = novidadesMensais[0].items.map((item, i) => {
   const shots = Object.values(lpScreenshots);
   return {
+    emoji: item.emoji,
     titulo: item.titulo,
     descricao: item.descricao,
     link: item.link,
@@ -258,51 +263,89 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
   const [paused, setPaused] = useState(false);
   const reducedMotion = useReducedMotion();
 
-  useEffect(() => {
-    if (items.length <= 1 || reducedMotion || paused) return;
-    const timer = setInterval(() => setIndex((i) => (i + 1) % items.length), 6000);
-    return () => clearInterval(timer);
-  }, [items.length, reducedMotion, paused]);
-
   const go = (dir: 1 | -1) => setIndex((i) => (i + dir + items.length) % items.length);
-  const current = items[index];
 
-  /* Altura fixa — o card nunca muda de tamanho entre slides (sem layout shift),
-     e o texto (com clamp) nunca alcança as setas nem os indicadores. */
-  const inner = (
-    <div className="flex flex-col sm:flex-row h-[340px] sm:h-60">
-      <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 border-b sm:border-b-0 sm:border-r shrink-0 overflow-hidden">
-        <img
-          src={current.img}
-          alt=""
-          className="h-full w-full object-cover object-top transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
-        />
-      </div>
-      <div className="flex-1 min-w-0 px-12 pb-9 pt-4 sm:py-6 sm:pl-8 sm:pr-16 flex flex-col justify-center gap-2 overflow-hidden">
-        <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2 sm:group-hover:text-primary transition-colors duration-300">{current.titulo}</p>
-        <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3 sm:line-clamp-4">{current.descricao}</p>
-      </div>
-    </div>
-  );
+  /* O autoplay é dirigido pela barra de progresso do indicador ativo
+     (onAnimationEnd → próximo slide): barra e troca de slide nunca
+     dessincronizam, e pausar a animação pausa o avanço no mesmo ponto.
+     Com prefers-reduced-motion a animação global vira ~0ms e dispararia
+     onAnimationEnd em loop — nesse caso a barra nem é renderizada. */
+  const autoplay = items.length > 1 && !reducedMotion;
 
   return (
     <div
       className="group relative rounded-2xl border bg-card overflow-hidden transition-[border-color,box-shadow] duration-300 ease-apple sm:hover:border-primary/30 sm:hover:shadow-xl"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
     >
-      {/* Todo o card é clicável — novidades com link externo abrem em nova aba;
-          as demais levam ao mural completo. Setas e indicadores são irmãos do
-          link (posicionados por cima), então cliques neles não navegam. */}
-      {current.link ? (
-        <a href={current.link} target="_blank" rel="noopener noreferrer" className="block" aria-label={current.titulo}>
-          {inner}
-        </a>
-      ) : (
-        <Link to="/novidades" className="block" aria-label={current.titulo}>
-          {inner}
-        </Link>
-      )}
+      {/* Slides empilhados com crossfade. Altura fixa — o card nunca muda de
+          tamanho entre slides (sem layout shift), e o texto (com clamp) nunca
+          alcança as setas nem os indicadores. Cada slide é clicável —
+          novidades com link externo abrem em nova aba; as demais levam ao
+          mural completo. Setas e indicadores são irmãos dos links
+          (posicionados por cima), então cliques neles não navegam. */}
+      <div className="relative h-[360px] sm:h-64">
+        {items.map((item, i) => {
+          const ativo = i === index;
+          const slide = (
+            <div className="flex h-full flex-col sm:flex-row">
+              <div className="relative h-36 sm:h-full sm:w-2/5 bg-muted/50 border-b sm:border-b-0 sm:border-r shrink-0 overflow-hidden">
+                <img
+                  src={item.img}
+                  alt=""
+                  className="h-full w-full object-cover object-top transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
+                />
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                <span className="absolute bottom-2.5 left-2.5 flex h-9 w-9 items-center justify-center rounded-lg border bg-background/90 backdrop-blur text-lg leading-none shadow-sm">
+                  {item.emoji}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0 px-12 pb-9 pt-4 sm:py-6 sm:pl-8 sm:pr-16 flex flex-col justify-center gap-2.5 overflow-hidden">
+                <span className="self-start inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold font-roboto uppercase tracking-wider text-primary">
+                  <Sparkles className="h-3 w-3" /> {muralMesLabel}
+                </span>
+                <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2 sm:group-hover:text-primary transition-colors duration-300">{item.titulo}</p>
+                <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3">{item.descricao}</p>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold font-roboto text-primary">
+                  {item.link ? "Ver novidade" : "Ver no mural"}
+                  <ChevronRight className="h-3 w-3 transition-transform duration-300 ease-apple sm:group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </div>
+          );
+          const slideClasses = cn(
+            "absolute inset-0 transition-opacity duration-500 ease-apple",
+            ativo ? "opacity-100" : "opacity-0 pointer-events-none"
+          );
+          return item.link ? (
+            <a
+              key={i}
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={slideClasses}
+              aria-label={item.titulo}
+              aria-hidden={!ativo}
+              tabIndex={ativo ? 0 : -1}
+            >
+              {slide}
+            </a>
+          ) : (
+            <Link
+              key={i}
+              to="/novidades"
+              className={slideClasses}
+              aria-label={item.titulo}
+              aria-hidden={!ativo}
+              tabIndex={ativo ? 0 : -1}
+            >
+              {slide}
+            </Link>
+          );
+        })}
+      </div>
       {items.length > 1 && (
         <>
           <button
@@ -326,10 +369,22 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
                 onClick={() => setIndex(i)}
                 aria-label={`Ir para novidade ${i + 1}`}
                 className={cn(
-                  "h-1.5 rounded-full transition-all duration-300",
-                  i === index ? "w-5 bg-primary" : "w-1.5 bg-muted-foreground/30"
+                  "relative h-1.5 overflow-hidden rounded-full transition-all duration-300",
+                  i === index ? "w-6 bg-primary/20" : "w-1.5 bg-muted-foreground/30 sm:hover:bg-muted-foreground/50"
                 )}
-              />
+              >
+                {i === index &&
+                  (autoplay ? (
+                    <span
+                      key={index}
+                      onAnimationEnd={() => go(1)}
+                      className="absolute inset-y-0 left-0 rounded-full bg-primary"
+                      style={{ animation: "mural-progress 6s linear forwards", animationPlayState: paused ? "paused" : "running" }}
+                    />
+                  ) : (
+                    <span className="absolute inset-0 rounded-full bg-primary" />
+                  ))}
+              </button>
             ))}
           </div>
         </>
@@ -914,7 +969,15 @@ export default function Hub() {
         {/* Mural de Novidades */}
         <Reveal>
           <section>
-            <SectionHeader icon={Newspaper} title="Mural de Novidades" />
+            <SectionHeader
+              icon={Newspaper}
+              title="Mural de Novidades"
+              action={
+                <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
+                  Ver mural completo <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+                </Link>
+              }
+            />
             <MuralNovidadesCarousel items={muralNovidades} />
           </section>
         </Reveal>
