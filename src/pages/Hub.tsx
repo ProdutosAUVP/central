@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
-  Globe, Minus, Square, X
+  Globe, Minus, Square, X, Layers
 } from "lucide-react";
 import { teamPhotos } from "@/assets/team";
 import { lpScreenshots } from "@/assets/lps";
@@ -70,6 +70,7 @@ const accessLinks: AccessLink[] = [
   { label: "Design System", desc: "Componentes e tokens", icon: Palette, to: "/design-system", internal: true, gradient: "from-violet-500 to-purple-600" },
   { label: "Tom e Voz", desc: "Guia de comunicação", icon: Volume2, to: "/tom-e-voz", internal: true, gradient: "from-sky-500 to-blue-600" },
   { label: "Time de Produto", desc: "Organograma e pilares", icon: Users, to: "/time", internal: true, gradient: "from-fuchsia-500 to-pink-600" },
+  { label: "Nossas Soluções", desc: "Guia dos produtos AUVP", icon: Layers, to: "/solucoes", internal: true, gradient: "from-amber-500 to-yellow-600" },
   { label: "Figma", desc: "Arquivos de design", icon: FigmaIcon, href: "https://figma.com", internal: false, gradient: "from-orange-500 to-red-500" },
   { label: "GitHub", desc: "Repositórios", icon: GitHubIcon, href: "https://github.com/produtosauvp", internal: false, gradient: "from-slate-600 to-slate-800" },
   { label: "Notion", desc: "Documentações", icon: NotionIcon, internal: false, soon: true, gradient: "from-neutral-600 to-neutral-800" },
@@ -81,7 +82,7 @@ interface ProdutoDigital {
   desc: string;
   /** Chave em `lpScreenshots` — produtos sem screenshot caem no placeholder. */
   slug?: string;
-  /** Seção do Guia de Vendas ou LP própria do produto. */
+  /** Seção de Nossas Soluções ou LP própria do produto. */
   href?: string;
   /** Ainda sem link publicado — cartão fica com aspecto inativo. */
   soon?: boolean;

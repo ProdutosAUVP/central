@@ -15,6 +15,7 @@ import RoadmapPage from "./pages/RoadmapPage";
 import NovidadesPage from "./pages/NovidadesPage";
 import DesignSystem from "./pages/DesignSystem";
 import TomEVozPage from "./pages/TomEVozPage";
+import SolucoesPage from "./pages/SolucoesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => (
                 <Route path="/novidades" element={<NovidadesPage />} />
                 <Route path="/design-system" element={<DesignSystem />} />
                 <Route path="/tom-e-voz" element={<TomEVozPage />} />
+                <Route path="/solucoes" element={<SolucoesPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

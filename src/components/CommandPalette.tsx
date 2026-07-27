@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home, Users, Palette, Volume2, Map, Newspaper,
-  ExternalLink, Sun, Moon, CalendarDays, User,
+  ExternalLink, Sun, Moon, CalendarDays, User, Layers,
 } from "lucide-react";
 import { CatIcon } from "@phosphor-icons/react";
 import {
@@ -15,6 +15,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { sections, categoryLabels } from "@/data/designSystemSections";
+import { solucoesSections } from "@/data/solucoes";
 import { teamMembers } from "@/data/time";
 import { gerarIcs } from "@/data/eventos";
 import { tomEVozSections, tomEVozGroupLabels, TOM_E_VOZ_AUTH_KEY, TOM_E_VOZ_UNLOCKED_EVENT } from "@/data/tomEVozSections";
@@ -29,12 +30,12 @@ const paginas = [
   { label: "Nosso Time", path: "/time", icon: Users, keywords: "time organograma pessoas equipe" },
   { label: "Design System", path: "/design-system", icon: Palette, keywords: "componentes tokens cores tipografia" },
   { label: "Manual de Tom e Voz", path: "/tom-e-voz", icon: Volume2, keywords: "comunicação escrita linguagem voz" },
+  { label: "Nossas Soluções", path: "/solucoes", icon: Layers, keywords: "produtos soluções guia vendas escola sempre pro analítica internacional agro conta" },
   { label: "Roadmap", path: "/roadmap", icon: Map, keywords: "roadmap entregas trimestre planejamento" },
   { label: "Mural de Novidades", path: "/novidades", icon: Newspaper, keywords: "novidades atualizações mural mensal" },
 ];
 
 const linksExternos = [
-  { label: "Guia de Vendas", href: "https://produtosauvp.github.io/projetodelta/" },
   { label: "Código de Ética", href: "https://produtosauvp.github.io/etica/" },
 ];
 
@@ -121,6 +122,24 @@ export function CommandPalette() {
                 <Icon className="mr-2 shrink-0" />
                 <span className="flex-1">{s.label}</span>
                 <span className="text-xs text-muted-foreground">{categoryLabels[s.category]}</span>
+              </CommandItem>
+            );
+          })}
+        </CommandGroup>
+
+        <CommandSeparator />
+        <CommandGroup heading="Nossas Soluções">
+          {solucoesSections.map((s) => {
+            const Icon = s.icon;
+            return (
+              <CommandItem
+                key={s.id}
+                value={`${s.label} soluções produto auvp ${s.anchors.map((a) => a.label).join(" ")}`}
+                onSelect={() => run(() => goToSection("/solucoes", s.id))}
+              >
+                <Icon className="mr-2 shrink-0" />
+                <span className="flex-1">{s.label}</span>
+                <span className="text-xs text-muted-foreground">Nossas Soluções</span>
               </CommandItem>
             );
           })}
