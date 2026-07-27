@@ -26,6 +26,8 @@ interface PageShellProps {
   mainClassName?: string;
   /** Ações extras no header, antes do ThemeToggle. */
   headerActions?: React.ReactNode;
+  /** Faixa de largura total renderizada entre o header e o <main> (ex.: PageHero). */
+  hero?: React.ReactNode;
   /** Props extras aplicadas ao wrapper raiz (ex.: handlers do spotlight). */
   rootProps?: React.HTMLAttributes<HTMLDivElement>;
 }
@@ -36,6 +38,7 @@ export function PageShell({
   footer = "Central AUVP — Time de Produto",
   mainClassName,
   headerActions,
+  hero,
   rootProps,
 }: PageShellProps) {
   return (
@@ -50,6 +53,8 @@ export function PageShell({
           </div>
         </div>
       </header>
+
+      {hero}
 
       <main className={cn("flex-1 mx-auto w-full px-4 md:px-8", widths[width], mainClassName)}>
         {children}

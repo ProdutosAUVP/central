@@ -348,6 +348,52 @@ function DemoVideo({ src, className }: { src: string; className?: string }) {
   );
 }
 
+/**
+ * Botão flutuante de exportação — segue a anatomia documentada em
+ * "Widgets Flutuantes" do Design System: botão circular sólido de 64px
+ * com ícone, hover scale e balão opcional no hover. Fica no canto
+ * inferior ESQUERDO da tela (espelhado em relação ao exemplo do DS);
+ * um segundo flutuante nesse canto deve ser empilhado com gap mínimo
+ * de 30px, conforme a regra do Design System.
+ */
+function ExportFloater({ onClick }: { onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      className="fixed bottom-5 left-5 z-40 flex flex-col items-start print:hidden"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div
+        className={cn(
+          "bg-white text-gray-900 dark:bg-[#2a2a2a] dark:text-white",
+          "p-3 px-4 rounded-xl rounded-bl-none shadow-lg mb-2.5 ml-2.5",
+          "max-w-[200px] font-anek text-[14px] leading-snug relative border border-border",
+          "transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] origin-bottom-left",
+          hovered
+            ? "opacity-100 visible translate-y-0 scale-100"
+            : "opacity-0 invisible translate-y-2.5 scale-90"
+        )}
+      >
+        <strong>Exportar</strong> o guia completo em PDF
+        <div className="absolute -bottom-1.5 left-2.5 w-0 h-0 border-r-[8px] border-r-transparent border-t-[8px] border-t-white dark:border-t-[#2a2a2a]" />
+      </div>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label="Exportar guia completo em PDF"
+        className={cn(
+          "relative w-16 h-16 rounded-full shadow-lg cursor-pointer flex items-center justify-center",
+          "bg-primary text-primary-foreground",
+          "hover:scale-110 active:scale-95 transition-transform duration-200"
+        )}
+      >
+        <FileDown className="h-7 w-7 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+      </button>
+    </div>
+  );
+}
+
 function ExportButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <div className="flex justify-end border-t border-dashed pt-6 print:hidden">
@@ -442,7 +488,7 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
 
 function SolucoesMobileNav({ activeSection, goTo }: Omit<NavState, "activeAnchor">) {
   return (
-    <div className="md:hidden print:hidden sticky top-14 md:top-16 z-40 -mx-4 md:-mx-8 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+    <div className="md:hidden print:hidden sticky top-14 md:top-16 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <nav
         aria-label="Produtos"
         className="flex gap-1 overflow-x-auto px-4 md:px-8 py-2 timeline-scrollbar"
@@ -580,26 +626,24 @@ export default function SolucoesPage() {
   };
 
   return (
-    <PageShell width="7xl" footer="Nossas Soluções — Produtos AUVP" mainClassName="pb-16">
-      <SolucoesMobileNav activeSection={activeSection} goTo={goTo} />
-
-      {/* Hero da página — faixa própria, separada dos blocos de conteúdo */}
-      <PageHero
-        icon={Layers}
-        badge="Nossas Soluções"
-        title="O ecossistema de produtos AUVP"
-        description="Tudo sobre cada solução da AUVP em um só lugar: para quem é, o que entrega, cronogramas de conteúdo, ferramentas, planos e condições — o material de consulta oficial do time."
-        className={cn(printing && printing !== "all" && "print:hidden")}
-        actions={
-          <button
-            onClick={() => exportPdf()}
-            className="print:hidden inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-anek font-bold uppercase tracking-wide text-primary-foreground hover:opacity-90 transition-opacity"
-          >
-            <FileDown className="h-4 w-4" />
-            Exportar PDF
-          </button>
-        }
-      />
+    <PageShell
+      width="7xl"
+      footer="Nossas Soluções — Produtos AUVP"
+      mainClassName="pb-16"
+      hero={
+        <>
+          <SolucoesMobileNav activeSection={activeSection} goTo={goTo} />
+          <PageHero
+            icon={Layers}
+            title="O ecossistema de produtos AUVP"
+            description="Tudo sobre cada solução da AUVP em um só lugar: para quem é, o que entrega, cronogramas de conteúdo, ferramentas, planos e condições — o material de consulta oficial do time."
+            className={cn(printing && printing !== "all" && "print:hidden")}
+          />
+        </>
+      }
+    >
+      {/* Exportação do guia completo — flutuante no canto inferior esquerdo */}
+      <ExportFloater onClick={() => exportPdf()} />
 
       {/* Conteúdo: sidebar de navegação + seções dos produtos */}
       <div className="flex gap-0 relative">

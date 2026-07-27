@@ -232,14 +232,11 @@ export default function TomEVozPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <PageHero
-          icon={BookOpen}
-          badge="Tom e Voz"
-          title="Manual de Tom e Voz"
-          description="Este é o guia oficial de comunicação da AUVP. Aqui você encontra as diretrizes de voz, tom e linguagem para todas as áreas e produtos da empresa."
-        />
-      </div>
+      <PageHero
+        icon={BookOpen}
+        title="Manual de Tom e Voz"
+        description="Este é o guia oficial de comunicação da AUVP. Aqui você encontra as diretrizes de voz, tom e linguagem para todas as áreas e produtos da empresa."
+      />
 
       <div className="max-w-7xl mx-auto flex gap-0 relative px-4 md:px-8">
         <nav className={sidebarNavClass}>
