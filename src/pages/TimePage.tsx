@@ -61,6 +61,17 @@ const gradients: Record<OrgColor, string> = {
   "product-junior":"from-slate-400 via-slate-500 to-gray-600",
 };
 
+// Outline fino do card de detalhes — acompanha a cor da área da pessoa
+const outlineColors: Record<OrgColor, string> = {
+  ceo:             "border-rose-700 dark:border-rose-400",
+  director:        "border-purple-600 dark:border-purple-400",
+  coordinator:     "border-emerald-600 dark:border-emerald-400",
+  cx:              "border-indigo-600 dark:border-indigo-400",
+  "product-senior":"border-amber-500 dark:border-amber-400",
+  "product-pleno": "border-cyan-500 dark:border-cyan-400",
+  "product-junior":"border-slate-400 dark:border-slate-400",
+};
+
 const levelColors: Record<OrgColor, string> = {
   ceo:             "bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300",
   director:        "bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300",
@@ -394,10 +405,8 @@ function MemberCard({
 function PersonDetails({ id, onClose }: { id: string; onClose: () => void }) {
   const person = orgPeople[id];
   return (
-    <div className="relative rounded-2xl border bg-card shadow-xl overflow-hidden">
-      <div className="flex">
-        <div className={cn("w-1.5 shrink-0 bg-gradient-to-b", gradients[person.color])} />
-        <div className="flex-1 p-5">
+    <div className={cn("relative rounded-2xl border bg-card shadow-xl overflow-hidden", outlineColors[person.color])}>
+      <div className="p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               {/* Photo — real when available, gradient icon fallback */}
@@ -440,7 +449,6 @@ function PersonDetails({ id, onClose }: { id: string; onClose: () => void }) {
               </div>
             ))}
           </div>
-        </div>
       </div>
     </div>
   );
@@ -528,7 +536,7 @@ function PersonPopover({ id, anchorEl, onClose }: { id: string; anchorEl: HTMLEl
     >
       {/* caret pointing toward the anchor */}
       <div
-        className={cn("absolute h-3 w-3 rotate-45 bg-card border-border", pos.side === "right" ? "-left-1.5 border-l border-b" : "-right-1.5 border-r border-t")}
+        className={cn("absolute h-3 w-3 rotate-45 bg-card", outlineColors[orgPeople[id].color], pos.side === "right" ? "-left-1.5 border-l border-b" : "-right-1.5 border-r border-t")}
         style={{ top: pos.caret - 6 }}
       />
       <PersonDetails id={id} onClose={onClose} />

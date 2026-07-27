@@ -109,15 +109,6 @@ export function TomEVoz() {
   return (
     <div className="space-y-0">
 
-      {/* Bem-vindo */}
-      <div className="mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold font-anek mb-3 text-foreground">Manual de Tom e Voz</h1>
-        <p className="text-muted-foreground font-roboto leading-relaxed max-w-3xl">
-          Este é o guia oficial de comunicação da AUVP. Aqui você encontra as diretrizes de voz,
-          tom e linguagem para todas as áreas e produtos da empresa.
-        </p>
-      </div>
-
       {/* ============================================================= */}
       {/*  FUNDAMENTOS                                                   */}
       {/* ============================================================= */}
