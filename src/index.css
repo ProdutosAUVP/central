@@ -623,8 +623,60 @@
 
   .solucoes-lp-scroll { animation: none !important; }
 
+  /* Acentos por produto voltam aos valores de tema claro na impressão
+     (o PDF força fundo branco mesmo com html.dark ativo). */
+  .sol-escola        { --sol-accent: 36 90% 32% !important; }
+  .sol-sempre        { --sol-accent: 152 80% 27% !important; }
+  .sol-pro           { --sol-accent: 268 60% 45% !important; }
+  .sol-analitica     { --sol-accent: 207 90% 36% !important; }
+  .sol-internacional { --sol-accent: 336 75% 40% !important; }
+  .sol-agro          { --sol-accent: 95 65% 27% !important; }
+  .sol-conta         { --sol-accent: 15 80% 38% !important; }
+
   tr, .rounded-xl, .rounded-2xl { break-inside: avoid; }
 }
+
+/* === Nossa estrutura — infográfico isométrico (TimePage) ===
+   rise: entrada escalonada dos cubos; float: flutuação contínua;
+   dash: pulso de energia percorrendo as linhas do chão (o offset -156
+   corresponde à soma do strokeDasharray "14 142"); glow: cintilação do
+   halo do Produto e dos nós da grade. */
+@keyframes estrutura-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes estrutura-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes estrutura-dash {
+  to { stroke-dashoffset: -156; }
+}
+@keyframes estrutura-glow {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
+}
+
+/* === Nossas Soluções — acento de cor por produto ===
+   Cada seção de produto define --sol-accent (HSL sem hsl()), consumido
+   pelos blocos da página via hsl(var(--sol-accent, var(--primary))) —
+   componentes fora das seções continuam no verde primário. Valores
+   verificados para AA (≥4.5:1) como texto/ícone: escuros sobre fundo
+   branco no claro e claros sobre fundo preto no escuro. */
+.sol-escola        { --sol-accent: 36 90% 32%; }   /* dourado   */
+.sol-sempre        { --sol-accent: 152 80% 27%; }  /* esmeralda */
+.sol-pro           { --sol-accent: 268 60% 45%; }  /* violeta   */
+.sol-analitica     { --sol-accent: 207 90% 36%; }  /* azul      */
+.sol-internacional { --sol-accent: 336 75% 40%; }  /* magenta   */
+.sol-agro          { --sol-accent: 95 65% 27%; }   /* oliva     */
+.sol-conta         { --sol-accent: 15 80% 38%; }   /* telha     */
+.dark .sol-escola        { --sol-accent: 42 90% 60%; }
+.dark .sol-sempre        { --sol-accent: 145 55% 55%; }
+.dark .sol-pro           { --sol-accent: 270 65% 72%; }
+.dark .sol-analitica     { --sol-accent: 200 85% 62%; }
+.dark .sol-internacional { --sol-accent: 340 75% 68%; }
+.dark .sol-agro          { --sol-accent: 90 50% 55%; }
+.dark .sol-conta         { --sol-accent: 15 80% 64%; }
 
 /* Timeline scrollbar (Trilha Horizontal) */
 .timeline-scrollbar::-webkit-scrollbar { height: 4px; }

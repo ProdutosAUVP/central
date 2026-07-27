@@ -4,8 +4,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { GlobalNav } from "@/components/GlobalNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SearchButton } from "@/components/SearchButton";
-import { olhoBranco } from "@/assets/olhos";
 import { teamPhotos } from "@/assets/team";
+import { EstruturaIsometrica } from "@/components/widgets/EstruturaIsometrica";
 import {
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
   Search, Monitor, PenTool, Settings, Heart, ChevronRight, ChevronDown, User, X,
@@ -726,124 +726,8 @@ const network = [
   { area: "Jurídico", icon: Scale, desc: "Asseguramos a conformidade com as normas do mercado financeiro e a segurança institucional." },
 ];
 
-// ─── Orbit Network ──────────────────────────────────────────────────────────
-// "A rede que nos conecta": Produto sits at the center while the partner areas
-// orbit around it. The whole ring rotates slowly; each card counter-rotates so
-// its text stays upright. Pauses on hover and respects reduced-motion.
-
-const ORBIT_SIZE = 520; // px — desktop canvas
-const ORBIT_R = 192; // px — orbit radius
-
-function OrbitNetwork() {
-  const center = ORBIT_SIZE / 2;
-  const n = network.length;
-  const angleAt = (i: number) => (i / n) * 360 - 90; // start at top, clockwise
-  const [active, setActive] = useState<number | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
-  const paused = active !== null || hovered !== null;
-
-  return (
-    <>
-      {/* Desktop: orbital visualization */}
-      <div className="hidden lg:block shrink-0">
-        <div className="group relative select-none" style={{ width: ORBIT_SIZE, height: ORBIT_SIZE }}>
-          {/* Rotating system: connector lines + orbiting cards */}
-          <div className={cn("absolute inset-0 animate-orbit motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform", paused && "[animation-play-state:paused]")}>
-            <svg viewBox={`0 0 ${ORBIT_SIZE} ${ORBIT_SIZE}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
-              <circle cx={center} cy={center} r={ORBIT_R} fill="none" stroke="hsl(var(--border))" strokeWidth={1} strokeDasharray="2 7" opacity={0.7} />
-              {network.map((_, i) => {
-                const rad = (angleAt(i) * Math.PI) / 180;
-                return (
-                  <line
-                    key={i}
-                    x1={center}
-                    y1={center}
-                    x2={center + ORBIT_R * Math.cos(rad)}
-                    y2={center + ORBIT_R * Math.sin(rad)}
-                    stroke="hsl(var(--border))"
-                    strokeWidth={1}
-                    opacity={0.45}
-                  />
-                );
-              })}
-            </svg>
-
-            {network.map((item, i) => {
-              const deg = angleAt(i);
-              const Icon = item.icon;
-              const open = active === i || hovered === i;
-              return (
-                <div
-                  key={i}
-                  className="absolute left-1/2 top-1/2"
-                  style={{ transform: `rotate(${deg}deg) translateX(${ORBIT_R}px) rotate(${-deg}deg)`, zIndex: open ? 30 : 10 }}
-                >
-                  {/* zero-size anchor; reverse-spin pivots exactly on the orbit point
-                      to cancel the ring rotation → text stays upright */}
-                  <div className={cn("relative h-0 w-0 animate-orbit-reverse motion-reduce:animate-none group-hover:[animation-play-state:paused] will-change-transform", paused && "[animation-play-state:paused]")}>
-                    <button
-                      type="button"
-                      onMouseEnter={() => setHovered(i)}
-                      onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
-                      onClick={() => setActive((a) => (a === i ? null : i))}
-                      className={cn(
-                        "absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-2xl border bg-card text-left overflow-hidden outline-none transition-[width,height,box-shadow,border-color] duration-300 ease-apple",
-                        open ? "w-[236px] h-[154px] p-4 shadow-2xl border-primary/40" : "w-[158px] h-[68px] p-3 shadow-lg border-border"
-                      )}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
-                          <Icon className="h-4 w-4" />
-                        </span>
-                        <h3 className="font-bold font-anek text-foreground text-sm leading-tight">{item.area}</h3>
-                      </div>
-                      <p className={cn("text-[11px] text-muted-foreground font-roboto leading-snug overflow-hidden transition-all duration-300 ease-apple", open ? "opacity-100 max-h-24 mt-2.5" : "opacity-0 max-h-0 mt-0")}>
-                        {item.desc}
-                      </p>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Center — Produto ball (static), with the AUVP eye */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <div className="absolute inset-0 -z-10 rounded-full bg-primary/30 blur-2xl animate-soft-pulse motion-reduce:animate-none" />
-            <div className="relative h-28 w-28 rounded-full bg-gradient-to-br from-primary to-emerald-700 dark:from-emerald-500 dark:to-emerald-800 shadow-xl ring-4 ring-background flex items-center justify-center">
-              <img src={olhoBranco.url} alt="Produto AUVP" className="h-12 w-12" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile / tablet fallback: Produto on top, areas in a grid */}
-      <div className="lg:hidden">
-        <div className="flex justify-center mb-6">
-          <div className="h-24 w-24 rounded-full bg-gradient-to-br from-primary to-emerald-700 dark:from-emerald-500 dark:to-emerald-800 shadow-lg ring-4 ring-background flex items-center justify-center">
-            <img src={olhoBranco.url} alt="Produto AUVP" className="h-10 w-10" />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {network.map((item, i) => {
-            const Icon = item.icon;
-            return (
-              <div key={i} className="rounded-2xl border bg-card p-5 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-apple hover:shadow-md hover:-translate-y-0.5 hover:border-primary/20">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <h3 className="font-bold font-anek text-foreground text-sm">{item.area}</h3>
-                </div>
-                <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </>
-  );
-}
+// A visualização isométrica de "Nossa estrutura" vive em
+// src/components/widgets/EstruturaIsometrica.tsx e recebe `network` acima.
 
 const dayToDay = [
   { icon: Search, title: "Pesquisa & Análise de dados", tagline: "Lemos os números para entender as pessoas.", desc: "Travou no Typeform ou não sabe como ler os números de um dashboard? Nós traduzimos os dados. Fazemos pesquisas com leads, membros e com os próprios piratas para encontrar os problemas reais e guiar os próximos passos do produto.", quemChamar: ["Ana Beatriz", "Hiago", "Ariadne"] },
@@ -1022,7 +906,7 @@ export default function TimePage() {
                 clique em cada área abaixo para entender a nossa estrutura.
               </p>
             </div>
-            <OrbitNetwork />
+            <EstruturaIsometrica items={network} />
           </div>
         </Section>
 
