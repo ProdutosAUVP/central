@@ -431,7 +431,7 @@ export default function DesignSystemPage() {
                             onClick={() => setBrand(b.id)}
                             className={sidebarItemClass(brand === b.id, "py-1.5")}
                           >
-                            <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
+                            <span className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
                             {b.label}
                           </button>
                         ))}
@@ -509,15 +509,12 @@ export default function DesignSystemPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <PageHero
-          id="intro"
-          icon={Palette}
-          badge="Design System"
-          title="Bem-vindo ao Design System AUVP"
-          description="A referência oficial de tokens visuais, componentes e padrões de interface das marcas AUVP Capital e AUVP Escola. Navegue pela sidebar para explorar cada área."
-        />
-      </div>
+      <PageHero
+        id="intro"
+        icon={Palette}
+        title="Bem-vindo ao Design System AUVP"
+        description="A referência oficial de tokens visuais, componentes e padrões de interface das marcas AUVP Capital e AUVP Escola. Navegue pela sidebar para explorar cada área."
+      />
 
       <div className="max-w-7xl mx-auto flex gap-0 relative px-4 md:px-8">
         {/* Sidebar Nav — Desktop only */}
@@ -545,7 +542,7 @@ export default function DesignSystemPage() {
                     onClick={() => setBrand(b.id)}
                     className={sidebarItemClass(brand === b.id, "py-1.5")}
                   >
-                    <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
+                    <span className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: b.color }} />
                     {b.label}
                   </button>
                 ))}
