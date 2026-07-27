@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/components/PageHero";
-import { teamPhotos } from "@/assets/team";
+import { useTeamPhotos } from "@/contexts/CarecaContext";
 import { EstruturaIsometrica, ProdutoCubeGraphic } from "@/components/widgets/EstruturaIsometrica";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
@@ -195,6 +195,7 @@ function PersonCard({
   cardRef?: (el: HTMLButtonElement | null) => void;
 }) {
   const person = orgPeople[id];
+  const teamPhotos = useTeamPhotos();
   const isActive = activeId === id;
   const { w, avatar } = cardDims[size];
 
@@ -376,6 +377,7 @@ function MemberCard({
   onSelect: (id: string, el: HTMLElement) => void;
 }) {
   const person = orgPeople[id];
+  const teamPhotos = useTeamPhotos();
   return (
     <button
       onClick={(e) => onSelect(id, e.currentTarget)}
@@ -411,6 +413,7 @@ function MemberCard({
 
 function PersonDetails({ id, onClose }: { id: string; onClose: () => void }) {
   const person = orgPeople[id];
+  const teamPhotos = useTeamPhotos();
   return (
     <div className={cn("relative rounded-2xl border bg-card shadow-xl overflow-hidden", outlineColors[person.color])}>
       <div className="p-5">

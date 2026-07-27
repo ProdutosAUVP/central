@@ -7,7 +7,7 @@ import {
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
   Globe, Minus, Square, X, Layers
 } from "lucide-react";
-import { teamPhotos } from "@/assets/team";
+import { useTeamPhotos } from "@/contexts/CarecaContext";
 import { lpScreenshots } from "@/assets/lps";
 import { cn } from "@/lib/utils";
 import {
@@ -571,6 +571,7 @@ const faqs = [
 const EASE_APPLE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 function TeamCarousel() {
+  const teamPhotos = useTeamPhotos();
   const items = [...teamMembers, ...teamMembers];
   const CARD_W = 144;  // w-36
   const GAP    = 12;   // gap-3

@@ -17,6 +17,20 @@ import elane from "./team/elane.jpg?url";
 import ana from "./team/ana.jpg?url";
 import hiago from "./team/hiago.png?url";
 
+import raulCareca from "./team/careca/raul.webp?url";
+import beatrizCareca from "./team/careca/beatriz.webp?url";
+import lilianCareca from "./team/careca/lilian.webp?url";
+import deboraCareca from "./team/careca/debora.webp?url";
+import danielCareca from "./team/careca/daniel.webp?url";
+import ariadneCareca from "./team/careca/ariadne.webp?url";
+import armandoCareca from "./team/careca/armando.webp?url";
+import eriaCareca from "./team/careca/eria.webp?url";
+import mateusCareca from "./team/careca/mateus.webp?url";
+import jenifferCareca from "./team/careca/jeniffer.webp?url";
+import elaneCareca from "./team/careca/elane.webp?url";
+import anaCareca from "./team/careca/ana.webp?url";
+import hiagoCareca from "./team/careca/hiago.webp?url";
+
 export const teamPhotos: Record<string, string> = {
   raul,
   beatriz,
@@ -31,4 +45,24 @@ export const teamPhotos: Record<string, string> = {
   elane,
   ana,
   hiago,
+};
+
+/**
+ * Versões careca das fotos — easter egg do "Modo Careca" (ou modo Ricardo),
+ * ativado pela busca global. Quem não tiver versão careca cai na foto normal.
+ */
+export const teamPhotosCareca: Record<string, string> = {
+  raul: raulCareca,
+  beatriz: beatrizCareca,
+  lilian: lilianCareca,
+  debora: deboraCareca,
+  daniel: danielCareca,
+  ariadne: ariadneCareca,
+  armando: armandoCareca,
+  eria: eriaCareca,
+  mateus: mateusCareca,
+  jeniffer: jenifferCareca,
+  elane: elaneCareca,
+  ana: anaCareca,
+  hiago: hiagoCareca,
 };
