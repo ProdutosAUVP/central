@@ -554,6 +554,19 @@
   100% { opacity: 0; transform: translateY(-10px) scale(0.85); }
 }
 
+/* Easter egg — Modo Careca (ou modo Ricardo): linha de scan que varre a
+   tela de cima a baixo enquanto as fotos do time são trocadas. A duração
+   é controlada pelo componente (SCAN_DURATION_MS em CarecaContext). */
+@keyframes auvp-careca-scan {
+  from { transform: translateY(-4vh); }
+  to   { transform: translateY(108vh); }
+}
+/* Tom de scanner que acende e apaga junto com a varredura */
+@keyframes auvp-careca-tint {
+  0%, 100% { opacity: 0; }
+  15%, 85% { opacity: 1; }
+}
+
 /* Carrossel do Mural de Novidades (Hub) — progresso do autoplay no
    indicador ativo. O avanço do slide é disparado pelo onAnimationEnd
    desta animação, mantendo barra e troca sempre sincronizadas. */
