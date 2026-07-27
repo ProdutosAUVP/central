@@ -60,7 +60,28 @@ const SPECS: Record<string, CubeSpec> = {
 };
 
 const CENTER = { w: 48, h: 52 }; // cubo do Produto
-const CENTER_FILLS = { left: "hsl(216 16% 78%)", right: "hsl(210 22% 88%)", top: "hsl(0 0% 99%)" };
+// Cores do cubo do Produto — tokens no index.css: preto no tema claro,
+// branco no escuro (com olho e rótulo invertidos junto).
+const CENTER_FILLS = {
+  left: "hsl(var(--cubo-produto-left))",
+  right: "hsl(var(--cubo-produto-right))",
+  top: "hsl(var(--cubo-produto-top))",
+};
+const CENTER_TEXT = "hsl(var(--cubo-produto-texto))";
+
+/**
+ * Olho da AUVP na face superior do cubo: branco no tema claro (cubo preto),
+ * preto no escuro (cubo branco). Os dois ficam no DOM e alternam por CSS,
+ * para funcionar também nos previews que forçam um tema localmente.
+ */
+function OlhoTopo() {
+  return (
+    <g transform={`matrix(1 0.5 -1 0.5 0 ${-CENTER.h})`}>
+      <image href={olhoBranco.url} x={-16} y={-16} width={32} height={32} className="dark:hidden" />
+      <image href={olhoPreto.url} x={-16} y={-16} width={32} height={32} className="hidden dark:block" />
+    </g>
+  );
+}
 
 // Período e atraso do ponto de luz de cada linha (índice na ordem de
 // desenho). O brilho de chegada do cubo usa os mesmos valores para
@@ -127,9 +148,7 @@ export function ProdutoCubeGraphic({ className }: { className?: string }) {
       <polygon points={f.left} fill={CENTER_FILLS.left} />
       <polygon points={f.right} fill={CENTER_FILLS.right} />
       <polygon points={f.top} fill={CENTER_FILLS.top} />
-      <g transform={`matrix(1 0.5 -1 0.5 0 ${-CENTER.h})`}>
-        <image href={olhoPreto.url} x={-16} y={-16} width={32} height={32} />
-      </g>
+      <OlhoTopo />
       <text
         transform="matrix(1 -0.5 0 1 24 -12)"
         textAnchor="middle"
@@ -138,7 +157,7 @@ export function ProdutoCubeGraphic({ className }: { className?: string }) {
         letterSpacing={1.5}
         textLength={38}
         lengthAdjust="spacingAndGlyphs"
-        fill="hsl(var(--brand-dark))"
+        fill={CENTER_TEXT}
         className="font-anek"
       >
         PRODUTO
@@ -348,9 +367,7 @@ export function EstruturaIsometrica({
                       <polygon points={centerFaces.right} fill={CENTER_FILLS.right} />
                       <polygon points={centerFaces.top} fill={CENTER_FILLS.top} />
                       {/* olho da AUVP projetado na face superior do cubo */}
-                      <g transform={`matrix(1 0.5 -1 0.5 0 ${-CENTER.h})`}>
-                        <image href={olhoPreto.url} x={-16} y={-16} width={32} height={32} />
-                      </g>
+                      <OlhoTopo />
                       {/* rótulo aplicado na face frontal-direita, acompanhando o plano do cubo */}
                       <text
                         transform="matrix(1 -0.5 0 1 24 -12)"
@@ -360,7 +377,7 @@ export function EstruturaIsometrica({
                         letterSpacing={1.5}
                         textLength={38}
                         lengthAdjust="spacingAndGlyphs"
-                        fill="hsl(var(--brand-dark))"
+                        fill={CENTER_TEXT}
                         className="font-anek"
                       >
                         PRODUTO
