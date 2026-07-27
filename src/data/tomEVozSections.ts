@@ -1,10 +1,10 @@
 import type React from "react";
 import {
-  BookOpen, Megaphone, Users, Heart,
-  Landmark, GraduationCap,
+  BookOpen, GraduationCap,
   Anchor, Sparkles, Mic, Building2, Wheat,
   BarChart3, DollarSign, CreditCard, Shield, Award, Plane,
 } from "lucide-react";
+import { areaIcons } from "@/data/areasEmpresa";
 
 /**
  * Seções do Manual de Tom e Voz — fonte única.
@@ -29,10 +29,11 @@ export const tomEVozSections: TomEVozSection[] = [
   { id: "fundamentos", label: "Fundamentos", icon: BookOpen, group: "introducao" },
   { id: "raul", label: "Voz do Raul", icon: Mic, group: "introducao" },
 
-  { id: "marketing", label: "Marketing", icon: Megaphone, group: "areas" },
-  { id: "comercial", label: "Comercial", icon: Users, group: "areas" },
-  { id: "atendimento", label: "Atendimento", icon: Heart, group: "areas" },
-  { id: "consultoria", label: "Consultoria", icon: Landmark, group: "areas" },
+  // Áreas da empresa usam os ícones canônicos de src/data/areasEmpresa.ts
+  { id: "marketing", label: "Marketing", icon: areaIcons.Marketing, group: "areas" },
+  { id: "comercial", label: "Comercial", icon: areaIcons.Comercial, group: "areas" },
+  { id: "atendimento", label: "Atendimento", icon: areaIcons.Atendimento, group: "areas" },
+  { id: "consultoria", label: "Consultoria", icon: areaIcons.Consultoria, group: "areas" },
   { id: "produto-wealth", label: "AUVP Wealth", icon: Building2, group: "areas" },
   { id: "capital", label: "Capital Humano", icon: Anchor, group: "areas" },
   { id: "produto-cx", label: "Produto e Cx", icon: Sparkles, group: "areas" },

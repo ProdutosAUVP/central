@@ -656,6 +656,19 @@
   0%, 100% { opacity: 0.45; }
   50%      { opacity: 1; }
 }
+/* Pulso de chegada: aplicado ao cubo com o mesmo período do ponto de luz
+   da linha e atraso de um ciclo — o flash acontece no 0% da animação,
+   exatamente quando o ponto alcança a área, e decai em seguida.
+   currentColor carrega a cor da face superior do cubo para o halo. */
+@keyframes estrutura-arrive {
+  0%   { filter: brightness(1.45) drop-shadow(0 0 9px currentColor); }
+  16%  { filter: brightness(1) drop-shadow(0 0 0 transparent); }
+  100% { filter: brightness(1); }
+}
+/* Traçado das linhas cubo → cards na rotina (pathLength=1 normaliza o dash) */
+@keyframes estrutura-draw {
+  to { stroke-dashoffset: 0; }
+}
 
 /* === Nossas Soluções — acento de cor por produto ===
    Cada seção de produto define --sol-accent (HSL sem hsl()), consumido

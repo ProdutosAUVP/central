@@ -1,12 +1,13 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import {
-  Volume2, MessageCircle, Megaphone, Users,
+  Volume2, MessageCircle,
   CheckCircle, XCircle, ArrowRight, Lightbulb, BookOpen,
-  AlertTriangle, Building2, Landmark, GraduationCap, BarChart3,
-  Wheat, DollarSign, CreditCard, Shield, Award, Plane, Heart,
+  AlertTriangle, Building2, GraduationCap, BarChart3,
+  Wheat, DollarSign, CreditCard, Shield, Award, Plane,
   Library, FileText, SlidersHorizontal, Mic, Handshake, Anchor, Sparkles } from
 "lucide-react";
+import { areaIcons } from "@/data/areasEmpresa";
 import * as Data from "./tom-e-voz/TomEVozData";
 import { TomEVozAIFoodInline } from "./tom-e-voz/TomEVozAIFoodInline";
 import bourdainImg from "@/assets/bourdain.jpg";
@@ -247,10 +248,10 @@ export function TomEVoz() {
       </div>
 
       <section id="marketing" className="space-y-6 scroll-mt-24 pb-[60px]">
-        <SectionTitle icon={Megaphone}>Marketing</SectionTitle>
+        <SectionTitle icon={areaIcons.Marketing}>Marketing</SectionTitle>
 
         <CardBox>
-          <SectionTitle icon={Megaphone}>{Data.marketing.personalidade.titulo}</SectionTitle>
+          <SectionTitle icon={areaIcons.Marketing}>{Data.marketing.personalidade.titulo}</SectionTitle>
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <img
               src={bourdainImg}
@@ -291,7 +292,7 @@ export function TomEVoz() {
 
         {/* Canais */}
         <CardBox>
-          <SectionTitle icon={Megaphone}>Gestão de canais</SectionTitle>
+          <SectionTitle icon={areaIcons.Marketing}>Gestão de canais</SectionTitle>
           <P>{Data.canaisData.intro}</P>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             {Data.canaisData.canais.map((c) =>
@@ -328,7 +329,7 @@ export function TomEVoz() {
       {/*  COMERCIAL                                                     */}
       {/* ============================================================= */}
       <section id="comercial" className="space-y-6 scroll-mt-24 pb-[60px]">
-        <SectionTitle icon={Users}>Comercial</SectionTitle>
+        <SectionTitle icon={areaIcons.Comercial}>Comercial</SectionTitle>
 
         <CardBox>
           <SectionTitle icon={Handshake}>{Data.comercial.titulo}</SectionTitle>
@@ -379,10 +380,10 @@ export function TomEVoz() {
       {/*  ATENDIMENTO                                                   */}
       {/* ============================================================= */}
       <section id="atendimento" className="space-y-6 scroll-mt-24 pb-[60px]">
-        <SectionTitle icon={Heart}>Atendimento</SectionTitle>
+        <SectionTitle icon={areaIcons.Atendimento}>Atendimento</SectionTitle>
 
         <CardBox>
-          <SectionTitle icon={Heart}>{Data.atendimento.titulo}</SectionTitle>
+          <SectionTitle icon={areaIcons.Atendimento}>{Data.atendimento.titulo}</SectionTitle>
           {Data.atendimento.paragrafos.map((p, i) => <P key={i}>{p}</P>)}
         </CardBox>
 
@@ -437,10 +438,10 @@ export function TomEVoz() {
       {/*  CONSULTORIA                                                   */}
       {/* ============================================================= */}
       <section id="consultoria" className="space-y-6 scroll-mt-24 pb-[60px]">
-        <SectionTitle icon={Landmark}>Consultoria</SectionTitle>
+        <SectionTitle icon={areaIcons.Consultoria}>Consultoria</SectionTitle>
 
         <CardBox>
-          <SectionTitle icon={Landmark}>{Data.consultoria.titulo}</SectionTitle>
+          <SectionTitle icon={areaIcons.Consultoria}>{Data.consultoria.titulo}</SectionTitle>
           <P>{Data.consultoria.intro}</P>
         </CardBox>
 
