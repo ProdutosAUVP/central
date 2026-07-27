@@ -473,6 +473,15 @@
 .dark .divide-slate-100:not(.light *) > :not([hidden]) ~ :not([hidden]),
 .dark .divide-slate-200:not(.light *) > :not([hidden]) ~ :not([hidden]) { border-color: hsl(var(--border)) !important; }
 
+/* === Superfícies invertidas — trava de contraste ===
+   text-primary dentro de bg-foreground quebra em todos os temas: no claro
+   fica verde-escuro sobre quase-preto e no escuro fica branco sobre branco
+   (foi o caso do cartão "Resolve Aí" em Nossas Soluções). Esta trava herda
+   a cor legível da superfície invertida. Para destacar um cartão, o padrão
+   correto do Design System é o par bg-primary + text-primary-foreground,
+   que passa AA nos quatro temas (Capital/Escola × claro/escuro). */
+.bg-foreground .text-primary { color: hsl(var(--background)) !important; }
+
 /* === Escola (claro) — dourado como texto ===
    O dourado da marca (42 84% 63%) sobre fundo claro dá só 1.69:1 — ilegível.
    text-primary é usado como texto/ícone de destaque em várias páginas; aqui
@@ -551,6 +560,70 @@
 @keyframes mural-progress {
   from { width: 0; }
   to   { width: 100%; }
+}
+
+/* === Nossas Soluções — preview de LP com scroll automático ===
+   Mesma técnica do guia original (Projeto Delta): a imagem é background
+   do quadro de altura fixa e a animação percorre de top a bottom em
+   loop alternado. Dispensa medição de altura via JS. */
+@keyframes solucoes-lp-scroll {
+  0%, 6%    { background-position: top center; }
+  94%, 100% { background-position: bottom center; }
+}
+.solucoes-lp-scroll.is-visible {
+  animation: solucoes-lp-scroll 22s ease-in-out 0.5s infinite alternate;
+}
+
+/* === Nossas Soluções — exportação em PDF (impressão nativa) ===
+   Reproduz o exportToPDF do guia original: esconde o chrome do app,
+   força tema claro e imprime backgrounds. A página controla via estado
+   quais seções ficam visíveis (classe print:hidden por seção) e abre
+   todos os accordions antes de chamar window.print(). */
+@media print {
+  header, footer, nav { display: none !important; }
+  main { max-width: 100% !important; }
+
+  /* Tema claro independente do tema ativo na tela */
+  html, html.dark, html.escola, html.dark.escola {
+    --background: 0 0% 100%;
+    --foreground: 220 15% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 35%;
+    --border: 0 0% 80%;
+    --primary: 155 93% 11%;
+    --primary-foreground: 0 0% 100%;
+    --error: 0 84% 40%;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  video { display: none !important; }
+
+  /* Accordions abertos sem animação (o conteúdo é montado pelo estado
+     de impressão antes do window.print) */
+  .animate-accordion-down, .animate-accordion-up {
+    animation: none !important;
+    height: auto !important;
+  }
+
+  /* Cartões com fundo cheio (bg-primary) viram cartões claros
+     para não gastar tinta nem sumir com o texto claro */
+  .print-flatten {
+    background-color: #fff !important;
+    color: hsl(var(--foreground)) !important;
+    border-color: hsl(var(--border)) !important;
+  }
+  .print-flatten [class*="text-background"],
+  .print-flatten [class*="text-primary-foreground"] { color: hsl(var(--foreground)) !important; }
+
+  .solucoes-lp-scroll { animation: none !important; }
+
+  tr, .rounded-xl, .rounded-2xl { break-inside: avoid; }
 }
 
 /* Timeline scrollbar (Trilha Horizontal) */
