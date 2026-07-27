@@ -5,6 +5,7 @@
  */
 import raul from "./team/raul.jpg?url";
 import beatriz from "./team/beatriz.png?url";
+import lilian from "./team/lilian.jpg?url";
 import debora from "./team/debora.jpeg?url";
 import daniel from "./team/daniel.jpg?url";
 import ariadne from "./team/ariadne.png?url";
@@ -19,6 +20,7 @@ import hiago from "./team/hiago.png?url";
 export const teamPhotos: Record<string, string> = {
   raul,
   beatriz,
+  lilian,
   debora,
   daniel,
   ariadne,

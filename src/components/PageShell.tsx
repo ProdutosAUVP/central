@@ -65,7 +65,7 @@ export function PageShell({
           conteúdo em viewports mais largas que o max-width. */}
       <footer className="border-t py-6">
         <div className={cn("mx-auto px-4 md:px-8", widths[width])}>
-          <p className="text-xs text-muted-foreground font-roboto">
+          <p className="text-xs text-muted-foreground font-roboto text-center">
             {footer} &copy; {new Date().getFullYear()}
           </p>
         </div>
