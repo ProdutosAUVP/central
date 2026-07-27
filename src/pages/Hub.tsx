@@ -73,8 +73,8 @@ const accessLinks: AccessLink[] = [
   { label: "Nossas Soluções", desc: "Guia dos produtos AUVP", icon: Layers, to: "/solucoes", internal: true, gradient: "from-amber-500 to-yellow-600" },
   { label: "Figma", desc: "Arquivos de design", icon: FigmaIcon, href: "https://figma.com", internal: false, gradient: "from-orange-500 to-red-500" },
   { label: "GitHub", desc: "Repositórios", icon: GitHubIcon, href: "https://github.com/produtosauvp", internal: false, gradient: "from-slate-600 to-slate-800" },
-  { label: "Notion", desc: "Documentações", icon: NotionIcon, internal: false, soon: true, gradient: "from-neutral-600 to-neutral-800" },
-  { label: "Analytics", desc: "Métricas de produto", icon: BarChart3, internal: false, soon: true, gradient: "from-emerald-500 to-teal-600 dark:from-[#5A8770] dark:to-[#3d6b57]" },
+  { label: "Notion", desc: "Painel de produto", icon: NotionIcon, href: "https://app.notion.com/p/asupernova/Painel-de-produto-AUVP-Capital-7a710a972415406991fff5d560422fa4", internal: false, gradient: "from-neutral-600 to-neutral-800" },
+  { label: "Comunidade", desc: "Fórum dos membros", icon: MessageSquare, href: "https://comunidade.auvp.com.br/", internal: false, gradient: "from-emerald-500 to-teal-600 dark:from-[#5A8770] dark:to-[#3d6b57]" },
 ];
 
 interface ProdutoDigital {
