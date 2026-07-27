@@ -99,8 +99,15 @@ const orgPeople: Record<string, OrgPerson> = {
   lilian: {
     id: "lilian", name: "Lilian Machado", role: "Especialista em CX",
     initials: "LM", color: "cx", level: "Especialista", rank: 2,
-    description: "Placeholder: Especialista em experiência do cliente, responsável pelo relacionamento, satisfação e fidelização dos membros.",
-    responsibilities: ["Estratégia de relacionamento com membros", "Mapeamento da jornada do cliente", "Monitoramento de NPS", "Projetos especiais de CX"],
+    description: "Especialista em experiência do cliente, responsável pela gestão da jornada, retenção e fidelização dos membros — conectando áreas e indicadores como NPS, CSAT e churn para evoluir a experiência de ponta a ponta.",
+    responsibilities: [
+      "Gestão da jornada do cliente",
+      "Estratégias de retenção e fidelização",
+      "Desenvolvimento e acompanhamento de processos e indicadores tais como NPS, CSAT e churn",
+      "Treinamento e capacitação do time em boas práticas de relacionamento",
+      "Desenho e implantação de ações e projetos para evolução do Health Score dos clientes",
+      "Integração entre áreas para aprimorar a experiência do cliente",
+    ],
   },
   debora: {
     id: "debora", name: "Debora Sanders", role: "Analista de CX Sênior II",
