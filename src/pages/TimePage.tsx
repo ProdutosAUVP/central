@@ -763,57 +763,29 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">{children}</h2>;
 }
 
-// ─── Voo do cubo do Produto (desktop) ────────────────────────────────────────
-// Clicar no cubo central de "Nossa estrutura" o faz flutuar até o centro da
-// tela, descer até "Nossa rotina na prática" (a página rola com o cubo fixo
-// no centro, criando a descida) e pousar entre os cards, que se afastam para
-// os lados. No fim, linhas de energia ligam o cubo a cada card. Clicar no
-// cubo ancorado (ou na vaga tracejada da cena) desfaz tudo no caminho inverso.
+// ─── Voo do cubo do Produto, conduzido pelo scroll (telas largas) ────────────
+// Entre "Nossa estrutura" e "Nossa rotina na prática" o cubo central é
+// dirigido pelo scroll: ao rolar para baixo ele sai da cena, cruza o centro
+// da tela e pousa entre os cards da rotina — que se afastam para os lados
+// SIMULTANEAMENTE, no mesmo progresso. Rolar para cima reverte tudo, ponto a
+// ponto, até o cubo voltar ao lugar original. Clicar no cubo apenas rola a
+// página suavemente (o scroll conduz a animação). Quando o cubo ancora,
+// linhas de energia se traçam até cada card.
+//
+// A interação exige largura real (≥ INTERACTION_MIN_W): os cards invadem as
+// margens fora do container e por isso telas de notebook ficam de fora.
 
-const DOCK_W = 160; // largura do cubo em voo/ancorado (px)
-const DOCK_H = Math.round(DOCK_W * (112 / 108)); // proporção do viewBox do cubo
-
-/* Afastamento lateral dos cards: invade as margens da página (fora do
-   container max-w-7xl) mas nunca estoura o viewport — o clamp segura o
-   deslocamento no padding lateral em telas justas. Strings completas para
-   o JIT do Tailwind. */
-const SPREAD_LEFT = "lg:-translate-x-[clamp(2rem,(100vw-80rem)/2+4rem,6rem)]";
-const SPREAD_RIGHT = "lg:translate-x-[clamp(2rem,(100vw-80rem)/2+4rem,6rem)]";
-
+const INTERACTION_MIN_W = 1536; // px — margem suficiente p/ os cards saírem da página
+const SPREAD_PX = 96;           // afastamento máximo de cada coluna de cards
+const DOCK_W = 160;             // largura do cubo em voo/ancorado (px)
+const DOCK_H = Math.round(DOCK_W * (116 / 128)); // proporção do viewBox do cubo
 const FLY_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
-const nextFrame = () =>
-  new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
 
-/** Espera o smooth-scroll assentar (posição estável por ~3 leituras). */
-const waitScrollSettle = () =>
-  new Promise<void>((resolve) => {
-    let last = window.scrollY;
-    let stable = 0;
-    const iv = window.setInterval(() => {
-      if (Math.abs(window.scrollY - last) < 1) {
-        if (++stable >= 3) { window.clearInterval(iv); resolve(); }
-      } else {
-        stable = 0;
-        last = window.scrollY;
-      }
-    }, 70);
-  });
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 /** transform que centra o overlay (DOCK_W×DOCK_H) no ponto (x, y) da tela */
 const tf = (x: number, y: number, s: number) =>
   `translate(${x - DOCK_W / 2}px, ${y - DOCK_H / 2}px) scale(${s})`;
-
-function animateTransform(el: HTMLElement, from: string, to: string, duration: number) {
-  el.style.transform = from;
-  const anim = el.animate([{ transform: from }, { transform: to }], {
-    duration,
-    easing: FLY_EASE,
-    fill: "forwards",
-  });
-  return anim.finished
-    .then(() => { el.style.transform = to; anim.cancel(); })
-    .catch(() => { el.style.transform = to; });
-}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -833,99 +805,98 @@ export default function TimePage() {
     setShowOrgHint(false);
   }, []);
 
-  // ── Voo do cubo do Produto ──
+  // ── Voo do cubo do Produto, conduzido pelo scroll ──
   const reducedMotion = useReducedMotion();
-  const [produtoAway, setProdutoAway] = useState(false);   // saiu da cena isométrica
-  const [produtoDocked, setProdutoDocked] = useState(false); // ancorado na rotina
-  const [flyStyle, setFlyStyle] = useState<string | null>(null); // transform do overlay
+  const [ativo, setAtivo] = useState(false); // largura suficiente e sem reduced-motion
+  const [fase, setFase] = useState<"cena" | "voo" | "ancorado">("cena");
   const flyRef = useRef<HTMLDivElement>(null);
   const gridWrapRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const sceneAnchorRef = useRef<SVGGElement | null>(null);
-  const busyRef = useRef(false);
+  const rafRef = useRef(0);
   const [linhas, setLinhas] = useState<{ cx: number; cy: number; pts: { x: number; y: number }[] } | null>(null);
 
-  const devolverProduto = useCallback(async () => {
-    if (busyRef.current) return;
-    busyRef.current = true;
-    if (reducedMotion) {
-      setProdutoDocked(false);
-      setProdutoAway(false);
-      busyRef.current = false;
-      return;
-    }
-    const d = dockRef.current?.getBoundingClientRect();
-    setProdutoDocked(false); // cards voltam e as linhas somem junto
-    if (!d) {
-      setProdutoAway(false);
-      busyRef.current = false;
-      return;
-    }
-    const startT = tf(d.left + d.width / 2, d.top + d.height / 2, 1);
-    setFlyStyle(startT);
-    await nextFrame();
-    const el = flyRef.current;
-    if (el) {
-      const centerT = tf(window.innerWidth / 2, window.innerHeight / 2, 1.05);
-      await animateTransform(el, startT, centerT, 600);
-      sceneAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      await waitScrollSettle();
-      const s = sceneAnchorRef.current?.getBoundingClientRect();
-      if (s) {
-        await animateTransform(el, centerT, tf(s.left + s.width / 2, s.top + s.height / 2, s.width / DOCK_W), 700);
-      }
-      setProdutoAway(false); // o cubo da cena volta em fade enquanto o overlay some
-      await el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" }).finished.catch(() => {});
-    } else {
-      setProdutoAway(false);
-    }
-    setFlyStyle(null);
-    busyRef.current = false;
+  useEffect(() => {
+    const check = () => setAtivo(window.innerWidth >= INTERACTION_MIN_W && !reducedMotion);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, [reducedMotion]);
 
-  const enviarProduto = useCallback(async (rect: DOMRect) => {
-    if (busyRef.current) return;
-    // clique na vaga tracejada (cubo ausente) = trazer de volta
-    if (produtoAway || produtoDocked) { devolverProduto(); return; }
-    busyRef.current = true;
-    if (reducedMotion) {
-      setProdutoAway(true);
-      setProdutoDocked(true);
-      dockRef.current?.scrollIntoView({ block: "center" });
-      busyRef.current = false;
-      return;
-    }
-    const startT = tf(rect.left + rect.width / 2, rect.top + rect.height / 2, rect.width / DOCK_W);
-    setFlyStyle(startT);
-    setProdutoAway(true);
-    await nextFrame();
-    const el = flyRef.current;
-    if (!el || !dockRef.current) {
-      setProdutoAway(false);
-      setFlyStyle(null);
-      busyRef.current = false;
-      return;
-    }
-    // 1) flutua até o centro da tela…
-    const centerT = tf(window.innerWidth / 2, window.innerHeight / 2, 1.05);
-    await animateTransform(el, startT, centerT, 700);
-    // 2) …desce até a rotina: a página rola com o cubo fixo no centro
-    dockRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    await waitScrollSettle();
-    // 3) pousa no vão central entre os cards
-    const t = dockRef.current.getBoundingClientRect();
-    await animateTransform(el, centerT, tf(t.left + t.width / 2, t.top + t.height / 2, 1), 750);
-    setProdutoDocked(true);
-    await nextFrame();
-    setFlyStyle(null);
-    busyRef.current = false;
-  }, [produtoAway, produtoDocked, reducedMotion, devolverProduto]);
+  /** Um passo da animação: progresso = posição do scroll entre as âncoras.
+      Cards e cubo avançam juntos, no mesmo eased — afastamento simultâneo. */
+  const updateVoo = useCallback(() => {
+    const scene = sceneAnchorRef.current;
+    const dock = dockRef.current;
+    if (!scene || !dock) return;
+    const s = scene.getBoundingClientRect();
+    const d = dock.getBoundingClientRect();
+    const sc = s.top + s.height / 2;
+    const span = d.top + d.height / 2 - sc; // distância fixa entre as âncoras na página
+    const raw = span > 0 ? (window.innerHeight / 2 - sc) / span : 0;
+    // pequenas zonas mortas nas pontas para o cubo assentar com folga
+    const p = Math.min(1, Math.max(0, (raw - 0.06) / 0.88));
+    const eased = easeInOutCubic(p);
 
-  // Mede as linhas cubo → cards depois que o afastamento dos cards termina
-  // ("no fim das animações simultâneas"). Remede em resize.
+    cardRefs.current.forEach((el, i) => {
+      if (!el) return;
+      el.style.transform = eased > 0 ? `translateX(${(i % 2 === 0 ? -1 : 1) * SPREAD_PX * eased}px)` : "";
+    });
+
+    setFase(p <= 0 ? "cena" : p >= 1 ? "ancorado" : "voo");
+
+    const el = flyRef.current;
+    if (el && p > 0 && p < 1) {
+      const sx = s.left + s.width / 2;
+      const sy = s.top + s.height / 2;
+      const dx = d.left + d.width / 2;
+      const dy = d.top + d.height / 2;
+      const x = sx + (dx - sx) * eased;
+      // leve arco: o cubo sobe um pouco ao cruzar o meio do caminho
+      const y = sy + (dy - sy) * eased - Math.sin(Math.PI * eased) * 28;
+      const s0 = s.width / DOCK_W;
+      el.style.transform = tf(x, y, s0 + (1 - s0) * eased);
+    }
+  }, []);
+
   useEffect(() => {
-    if (!produtoDocked) { setLinhas(null); return; }
+    if (!ativo) {
+      setFase("cena");
+      cardRefs.current.forEach((el) => { if (el) el.style.transform = ""; });
+      return;
+    }
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(updateVoo);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, [ativo, updateVoo]);
+
+  // Posiciona o overlay antes do primeiro paint quando a fase vira "voo"
+  useLayoutEffect(() => {
+    if (fase === "voo") updateVoo();
+  }, [fase, updateVoo]);
+
+  // O clique apenas rola a página — o scroll conduz (e pode reverter) o voo.
+  const irParaRotina = useCallback(() => {
+    dockRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
+  const voltarParaCena = useCallback(() => {
+    sceneAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
+
+  // Linhas cubo → cards: medidas assim que o cubo ancora (os cards já estão
+  // na posição final, movidos no mesmo progresso do cubo). Remede em resize.
+  useEffect(() => {
+    if (fase !== "ancorado") { setLinhas(null); return; }
     let alive = true;
     const medir = () => {
       const wrap = gridWrapRef.current;
@@ -942,29 +913,14 @@ export default function TimePage() {
         .filter((p): p is { x: number; y: number } => p !== null);
       if (alive) setLinhas({ cx: dr.left + dr.width / 2 - w.left, cy: dr.top + dr.height / 2 - w.top, pts });
     };
-    const timer = window.setTimeout(medir, 780);
+    const timer = window.setTimeout(medir, 60);
     window.addEventListener("resize", medir);
     return () => {
       alive = false;
       window.clearTimeout(timer);
       window.removeEventListener("resize", medir);
     };
-  }, [produtoDocked]);
-
-  // Interação exclusiva de desktop: desfaz tudo se a tela encolher além do lg.
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
-    const onChange = () => {
-      if (mq.matches) {
-        setProdutoDocked(false);
-        setProdutoAway(false);
-        setFlyStyle(null);
-        busyRef.current = false;
-      }
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+  }, [fase]);
 
   useEffect(() => {
     const el = orgToggleRef.current;
@@ -1096,8 +1052,8 @@ export default function TimePage() {
             </div>
             <EstruturaIsometrica
               items={network}
-              produtoAusente={produtoAway}
-              onProdutoClick={enviarProduto}
+              produtoAusente={ativo && fase !== "cena"}
+              onProdutoClick={ativo ? (fase === "cena" ? irParaRotina : voltarParaCena) : undefined}
               produtoAnchorRef={(el) => { sceneAnchorRef.current = el; }}
             />
           </div>
@@ -1108,7 +1064,7 @@ export default function TimePage() {
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Veja a especialidade de cada membro do time de produtos. Saiba exatamente qual pirata procurar quando precisar destravar uma demanda.</p>
           <div ref={gridWrapRef} className="relative">
             {/* Linhas de energia cubo → cards (aparecem no fim do afastamento) */}
-            {produtoDocked && linhas && (
+            {fase === "ancorado" && linhas && (
               <svg className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible lg:block" aria-hidden="true">
                 {linhas.pts.map((p, i) => {
                   const d = `M ${linhas.cx} ${linhas.cy} L ${p.x} ${p.y}`;
@@ -1147,13 +1103,10 @@ export default function TimePage() {
                   <div
                     key={i}
                     ref={(el) => { cardRefs.current[i] = el; }}
-                    className={cn(
-                      "transition-transform duration-700 ease-apple will-change-transform",
-                      orphan && "md:col-span-2",
-                      /* cubo ancorado: cards abrem caminho — esquerda p/ esquerda,
-                         direita p/ direita, invadindo as margens da página */
-                      produtoDocked && (i % 2 === 0 ? SPREAD_LEFT : SPREAD_RIGHT)
-                    )}
+                    /* O afastamento lateral é aplicado por frame em updateVoo(),
+                       no mesmo progresso do cubo — sem transition, para o
+                       movimento acompanhar o scroll com precisão. */
+                    className={cn("will-change-transform", orphan && "md:col-span-2")}
                   >
                     <div className="h-full rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform flex flex-col gap-4">
                       <div className="flex items-start gap-4">
@@ -1183,12 +1136,12 @@ export default function TimePage() {
               className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
               style={{ width: DOCK_W, height: DOCK_H }}
             />
-            {produtoDocked && (
+            {fase === "ancorado" && (
               <button
                 type="button"
-                onClick={devolverProduto}
+                onClick={voltarParaCena}
                 aria-label="Devolver o cubo do Produto para a estrutura"
-                className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 cursor-pointer outline-none transition-transform duration-300 ease-apple hover:scale-[1.04] lg:block"
+                className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer outline-none transition-transform duration-300 ease-apple hover:scale-[1.04]"
                 style={{ width: DOCK_W, height: DOCK_H }}
               >
                 <ProdutoCubeGraphic className="h-full w-full" />
@@ -1222,13 +1175,14 @@ export default function TimePage() {
 
       {/* Cubo do Produto em voo — overlay fixo, fora de qualquer ancestral com
           transform (as Sections usam translate no reveal, o que quebraria o
-          position: fixed). Some assim que o cubo pousa ou retorna. */}
-      {flyStyle !== null && (
+          position: fixed). O transform é posicionado por updateVoo() a cada
+          frame de scroll; o useLayoutEffect garante a posição antes do paint. */}
+      {ativo && fase === "voo" && (
         <div
           ref={flyRef}
           aria-hidden="true"
           className="pointer-events-none fixed left-0 top-0 z-40 will-change-transform"
-          style={{ width: DOCK_W, height: DOCK_H, transform: flyStyle }}
+          style={{ width: DOCK_W, height: DOCK_H }}
         >
           <ProdutoCubeGraphic className="h-full w-full" />
         </div>

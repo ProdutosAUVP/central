@@ -657,12 +657,13 @@
   50%      { opacity: 1; }
 }
 /* Pulso de chegada: aplicado ao cubo com o mesmo período do ponto de luz
-   da linha e atraso de um ciclo — o flash acontece no 0% da animação,
-   exatamente quando o ponto alcança a área, e decai em seguida.
+   da linha e atraso de um ciclo — o brilho acende no 0% da animação,
+   exatamente quando o ponto alcança a área, e se dissolve devagar ao longo
+   de quase metade do ciclo. Intencionalmente sutil (brilho +8%, halo curto);
    currentColor carrega a cor da face superior do cubo para o halo. */
 @keyframes estrutura-arrive {
-  0%   { filter: brightness(1.45) drop-shadow(0 0 9px currentColor); }
-  16%  { filter: brightness(1) drop-shadow(0 0 0 transparent); }
+  0%   { filter: brightness(1.08) drop-shadow(0 0 4px currentColor); }
+  45%  { filter: brightness(1) drop-shadow(0 0 0 transparent); }
   100% { filter: brightness(1); }
 }
 /* Traçado das linhas cubo → cards na rotina (pathLength=1 normaliza o dash) */

@@ -120,7 +120,9 @@ function useInView(threshold = 0.25) {
 export function ProdutoCubeGraphic({ className }: { className?: string }) {
   const f = cubeFaces(0, 0, CENTER.w, CENTER.h);
   return (
-    <svg viewBox="-54 -80 108 112" className={className} aria-hidden="true">
+    // viewBox mais largo que o cubo (±64) para a sombra difusa nunca ser
+    // cortada nas laterais; overflow visível cobre o blur que ainda escapar.
+    <svg viewBox="-64 -80 128 116" className={className} style={{ overflow: "visible" }} aria-hidden="true">
       <ellipse cx={0} cy={6} rx={CENTER.w * 1.15} ry={CENTER.w * 0.42} fill="hsl(0 0% 0% / 0.22)" style={{ filter: "blur(4px)" }} />
       <polygon points={f.left} fill={CENTER_FILLS.left} />
       <polygon points={f.right} fill={CENTER_FILLS.right} />
@@ -154,9 +156,9 @@ export function EstruturaIsometrica({
   items: AreaEstrutura[];
   /** true enquanto o cubo do Produto está "emprestado" à seção seguinte. */
   produtoAusente?: boolean;
-  /** Clique no cubo central (desktop) — recebe o rect na tela para o voo. */
-  onProdutoClick?: (rect: DOMRect) => void;
-  /** Expõe o elemento do cubo central para o pouso do voo de retorno. */
+  /** Clique no cubo central (telas largas) — rola a página; o scroll conduz o voo. */
+  onProdutoClick?: () => void;
+  /** Expõe o elemento do cubo central — âncora de posição do voo por scroll. */
   produtoAnchorRef?: (el: SVGGElement | null) => void;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -330,17 +332,13 @@ export function EstruturaIsometrica({
                         onProdutoClick && "cursor-pointer outline-none transition-transform duration-300 ease-apple hover:scale-105"
                       )}
                       style={onProdutoClick ? { transformBox: "fill-box", transformOrigin: "center" } : undefined}
-                      onClick={
-                        onProdutoClick
-                          ? (e) => onProdutoClick((e.currentTarget as SVGGElement).getBoundingClientRect())
-                          : undefined
-                      }
+                      onClick={onProdutoClick ? () => onProdutoClick() : undefined}
                       onKeyDown={
                         onProdutoClick
                           ? (e) => {
                               if (e.key === "Enter" || e.key === " ") {
                                 e.preventDefault();
-                                onProdutoClick((e.currentTarget as SVGGElement).getBoundingClientRect());
+                                onProdutoClick();
                               }
                             }
                           : undefined
