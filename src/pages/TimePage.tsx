@@ -1015,8 +1015,10 @@ export default function TimePage() {
             </>
           }
           /* Respiro extra embaixo: os cards do time sobem com margem negativa
-             e flutuam sobre a dobra do hero — sem isso encostariam no texto. */
-          className="pb-20 md:pb-28"
+             e flutuam sobre a dobra do hero — sem isso encostariam no texto.
+             Só este padding controla a distância até os cards; a sobreposição
+             sobre a dobra depende da margem negativa deles, não daqui. */
+          className="pb-8 md:pb-14"
         />
       }
     >
