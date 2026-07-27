@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PageShell } from "@/components/PageShell";
+import { PageHero } from "@/components/PageHero";
+import { sidebarNavClass } from "@/components/sidebarNav";
 import { Tag } from "@/components/widgets/Tag";
 import {
   Accordion,
@@ -375,11 +377,10 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
   const [manualOpen, setManualOpen] = useState<Record<string, boolean>>({});
 
   return (
-    <aside className="hidden lg:block w-60 shrink-0 print:hidden">
-      <nav
-        aria-label="Produtos"
-        className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-1 timeline-scrollbar"
-      >
+    <nav
+      aria-label="Produtos"
+      className={cn(sidebarNavClass, "print:hidden space-y-1 timeline-scrollbar")}
+    >
         {solucoesSections.map((section) => {
           const Icon = section.icon;
           const isActive = activeSection === section.id;
@@ -435,14 +436,13 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
             </div>
           );
         })}
-      </nav>
-    </aside>
+    </nav>
   );
 }
 
 function SolucoesMobileNav({ activeSection, goTo }: Omit<NavState, "activeAnchor">) {
   return (
-    <div className="lg:hidden print:hidden sticky top-14 md:top-16 z-40 -mx-4 md:-mx-8 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+    <div className="md:hidden print:hidden sticky top-14 md:top-16 z-40 -mx-4 md:-mx-8 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <nav
         aria-label="Produtos"
         className="flex gap-1 overflow-x-auto px-4 md:px-8 py-2 timeline-scrollbar"
@@ -494,9 +494,22 @@ export default function SolucoesPage() {
     return () => clearTimeout(timer);
   }, [location.hash]);
 
+  // Trava o scrollspy durante a navegação programática (clique no menu),
+  // evitando que o highlight pisque em seções intermediárias — mesma
+  // funcionalidade do Design System e do Tom e Voz.
+  const isNavigatingRef = useRef(false);
+  const navTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (navTimerRef.current) window.clearTimeout(navTimerRef.current);
+    };
+  }, []);
+
   // Scrollspy: produto ativo + subseção ativa dentro dele.
   useEffect(() => {
     const onScroll = () => {
+      if (isNavigatingRef.current) return;
       let current = solucoesSections[0].id;
       for (const section of solucoesSections) {
         const el = document.getElementById(section.id);
@@ -538,7 +551,32 @@ export default function SolucoesPage() {
     printing && printing !== "all" && printing !== id ? "print:hidden" : undefined;
 
   const goTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // Marca imediatamente o destino como ativo e trava o scrollspy até a
+    // animação terminar (delay proporcional à distância percorrida).
+    isNavigatingRef.current = true;
+    const section = solucoesSections.find((s) => s.id === id);
+    if (section) {
+      setActiveSection(id);
+      setActiveAnchor(null);
+    } else {
+      const parent = solucoesSections.find((s) => s.anchors.some((a) => a.id === id));
+      if (parent) {
+        setActiveSection(parent.id);
+        setActiveAnchor(id);
+      }
+    }
+
+    const targetTop = el.getBoundingClientRect().top + window.scrollY;
+    const releaseDelay = Math.min(1600, Math.max(750, Math.abs(window.scrollY - targetTop) * 0.9));
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (navTimerRef.current) window.clearTimeout(navTimerRef.current);
+    navTimerRef.current = window.setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, releaseDelay);
   };
 
   return (
@@ -546,26 +584,13 @@ export default function SolucoesPage() {
       <SolucoesMobileNav activeSection={activeSection} goTo={goTo} />
 
       {/* Hero da página — faixa própria, separada dos blocos de conteúdo */}
-      <div
-        className={cn(
-          "-mx-4 md:-mx-8 border-b bg-muted/30 px-4 md:px-8 py-10 md:py-14",
-          printing && printing !== "all" && "print:hidden"
-        )}
-      >
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold font-roboto uppercase tracking-wider mb-4">
-          <Layers className="h-3.5 w-3.5" /> Nossas Soluções
-        </div>
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold font-anek text-foreground mb-3">
-              O ecossistema de produtos AUVP
-            </h1>
-            <p className="text-muted-foreground font-roboto max-w-2xl">
-              Tudo sobre cada solução da AUVP em um só lugar: para quem é, o que entrega,
-              cronogramas de conteúdo, ferramentas, planos e condições — o material de
-              consulta oficial do time.
-            </p>
-          </div>
+      <PageHero
+        icon={Layers}
+        badge="Nossas Soluções"
+        title="O ecossistema de produtos AUVP"
+        description="Tudo sobre cada solução da AUVP em um só lugar: para quem é, o que entrega, cronogramas de conteúdo, ferramentas, planos e condições — o material de consulta oficial do time."
+        className={cn(printing && printing !== "all" && "print:hidden")}
+        actions={
           <button
             onClick={() => exportPdf()}
             className="print:hidden inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-anek font-bold uppercase tracking-wide text-primary-foreground hover:opacity-90 transition-opacity"
@@ -573,14 +598,14 @@ export default function SolucoesPage() {
             <FileDown className="h-4 w-4" />
             Exportar PDF
           </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Conteúdo: sidebar de navegação + seções dos produtos */}
-      <div className="flex items-start gap-10 pt-10">
+      <div className="flex gap-0 relative">
         <SolucoesSidebar activeSection={activeSection} activeAnchor={activeAnchor} goTo={goTo} />
 
-        <div className="flex-1 min-w-0 space-y-24">
+        <div className="flex-1 py-8 pl-0 md:pl-8 min-w-0 space-y-24">
 
         {/* ==================== AUVP ESCOLA ==================== */}
         <section id="auvp-escola" className={cn("scroll-mt-32 space-y-16", printHide("auvp-escola"))}>

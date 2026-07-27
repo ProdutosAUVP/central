@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { TomEVoz } from "@/components/widgets/TomEVoz";
 import { GlobalNav } from "@/components/GlobalNav";
 import { useBrand } from "@/contexts/BrandContext";
-import { useTheme } from "@/contexts/ThemeContext";
-import { BookOpen, Menu, Lock, Eye, EyeOff, Sun, Moon } from "lucide-react";
+import { BookOpen, Menu, Lock, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { olhoBranco } from "@/assets/olhos";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SearchButton } from "@/components/SearchButton";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { PageHero } from "@/components/PageHero";
+import { sidebarNavClass, sidebarGroupLabelClass, sidebarItemClass } from "@/components/sidebarNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { tomEVozGroups, tomEVozSections, TOM_E_VOZ_AUTH_KEY, TOM_E_VOZ_UNLOCKED_EVENT } from "@/data/tomEVozSections";
@@ -25,26 +27,16 @@ function SidebarNav({
   scrollToSection: (id: string) => void;
 }) {
   return (
-    <>
+    <div className="space-y-1">
       {tomEVozGroups.map((group, gi) => (
-        <div key={gi}>
-          {gi > 0 && <div className="my-3 border-b border-border" />}
-          {group.label && (
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-2">
-              {group.label}
-            </p>
-          )}
-          <ul className="space-y-0.5">
+        <div key={gi} className={cn(gi > 0 && "mt-4")}>
+          {group.label && <p className={sidebarGroupLabelClass}>{group.label}</p>}
+          <ul className="space-y-0.5 mt-1">
             {group.items.map(({ id, label, icon: Icon }) => (
               <li key={id}>
                 <button
                   onClick={() => scrollToSection(id)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left leading-tight",
-                    activeSection === id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  )}
+                  className={sidebarItemClass(activeSection === id)}
                 >
                   <Icon className="h-4 w-4 shrink-0" />
                   {label}
@@ -54,13 +46,12 @@ function SidebarNav({
           </ul>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 
 export default function TomEVozPage() {
   const { brand, setBrand } = useBrand();
-  const { theme, setTheme } = useTheme();
   const [previousBrand] = useState(brand);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("fundamentos");
@@ -92,9 +83,16 @@ export default function TomEVozPage() {
     };
   }, []);
 
+  // Trava o scroll-spy durante a navegação programática (clique no menu),
+  // evitando que o highlight pisque em seções intermediárias — mesma
+  // funcionalidade do Design System.
+  const isNavigatingRef = useRef(false);
+  const navTimerRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (!isAuthenticated) return;
     const handleScroll = () => {
+      if (isNavigatingRef.current) return;
       const headerOffset = 100;
       let currentId = allSectionIds[0];
 
@@ -117,14 +115,32 @@ export default function TomEVozPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    return () => {
+      if (navTimerRef.current) window.clearTimeout(navTimerRef.current);
+    };
+  }, []);
+
   const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
     setMobileMenuOpen(false);
     const el = document.getElementById(sectionId);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    if (!el) return;
+
+    isNavigatingRef.current = true;
+    setActiveSection(sectionId);
+
+    const targetTop = el.getBoundingClientRect().top + window.scrollY - 80;
+    const maxTop = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const top = Math.min(Math.max(targetTop, 0), maxTop);
+    const releaseDelay = Math.min(1600, Math.max(750, Math.abs(window.scrollY - top) * 0.9));
+
+    window.scrollTo({ top, behavior: "smooth" });
+
+    if (navTimerRef.current) window.clearTimeout(navTimerRef.current);
+    navTimerRef.current = window.setTimeout(() => {
+      isNavigatingRef.current = false;
+      setActiveSection(sectionId);
+    }, releaseDelay);
   };
 
   if (!isAuthenticated) {
@@ -181,8 +197,7 @@ export default function TomEVozPage() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
-          <GlobalNav />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3 md:gap-4">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden h-8 w-8">
@@ -207,24 +222,31 @@ export default function TomEVozPage() {
                 </nav>
               </SheetContent>
             </Sheet>
+
+            <GlobalNav />
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
             <SearchButton />
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="h-8 w-8 md:h-9 md:w-9 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              aria-label={theme === "dark" ? "Mudar para modo claro" : "Mudar para modo escuro"}
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
+            <ThemeToggle />
           </div>
         </div>
       </header>
 
-      <div className="container flex gap-0 relative px-4 md:px-8">
-        <nav className="sticky top-16 h-[calc(100vh-4rem)] w-56 shrink-0 border-r py-[30px] pr-[15px] overflow-y-auto hidden md:block">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <PageHero
+          icon={BookOpen}
+          badge="Tom e Voz"
+          title="Manual de Tom e Voz"
+          description="Este é o guia oficial de comunicação da AUVP. Aqui você encontra as diretrizes de voz, tom e linguagem para todas as áreas e produtos da empresa."
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto flex gap-0 relative px-4 md:px-8">
+        <nav className={sidebarNavClass}>
           <SidebarNav activeSection={activeSection} scrollToSection={scrollToSection} />
         </nav>
 
-        <main className="flex-1 py-[60px] pl-0 md:pl-[45px] min-w-0 overflow-hidden max-w-4xl">
+        <main className="flex-1 py-8 pl-0 md:pl-8 min-w-0 overflow-hidden max-w-4xl">
           <TomEVoz />
         </main>
       </div>

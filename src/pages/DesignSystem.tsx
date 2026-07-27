@@ -12,7 +12,6 @@ import { Icones } from "@/components/widgets/Icones";
 import { PaletaDataViz } from "@/components/widgets/PaletaDataViz";
 import { GraficoPizza } from "@/components/widgets/GraficoPizza";
 import { GraficoPizzaLegendas } from "@/components/widgets/GraficoPizzaLegendas";
-import { Introducao } from "@/components/widgets/Introducao";
 import { LayoutEspacamento } from "@/components/widgets/LayoutEspacamento";
 import { ContagemRegressiva } from "@/components/widgets/ContagemRegressiva";
 import { TooltipsPopups } from "@/components/widgets/TooltipsPopups";
@@ -150,6 +149,8 @@ import { TourWidget } from "@/components/widgets/Tour";
 import { WatermarkWidget } from "@/components/widgets/Watermark";
 
 import { sections, categoryLabels, type SectionDefWithKeywords } from "@/data/designSystemSections";
+import { PageHero } from "@/components/PageHero";
+import { sidebarNavClass, sidebarGroupLabelClass, sidebarItemClass } from "@/components/sidebarNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SearchButton } from "@/components/SearchButton";
 import { useCssVarColor } from "@/hooks/use-css-var-color";
@@ -428,14 +429,9 @@ export default function DesignSystemPage() {
                             onMouseEnter={() => handleBrandPreview(b.id)}
                             onMouseLeave={handleBrandRevert}
                             onClick={() => setBrand(b.id)}
-                            className={cn(
-                              "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
-                              brand === b.id
-                                ? "bg-primary text-primary-foreground"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                            )}
+                            className={sidebarItemClass(brand === b.id, "py-1.5")}
                           >
-                            <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: brand === b.id ? "currentColor" : b.color }} />
+                            <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
                             {b.label}
                           </button>
                         ))}
@@ -483,12 +479,7 @@ export default function DesignSystemPage() {
                                         setMobileMenuOpen(false);
                                         setTimeout(() => goToSection(id), 250);
                                       }}
-                                      className={cn(
-                                        "w-full flex items-center gap-3 pl-6 pr-3 py-2 rounded-md text-sm font-medium text-left leading-tight transition-colors duration-150",
-                                        activeSection === id
-                                          ? "bg-primary text-primary-foreground"
-                                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                                      )}
+                                      className={sidebarItemClass(activeSection === id, "pl-6")}
                                     >
                                        <Icon className="h-4 w-4 shrink-0" />
                                       <span className="flex-1 text-left">{label}</span>
@@ -518,9 +509,19 @@ export default function DesignSystemPage() {
         </div>
       </header>
 
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <PageHero
+          id="intro"
+          icon={Palette}
+          badge="Design System"
+          title="Bem-vindo ao Design System AUVP"
+          description="A referência oficial de tokens visuais, componentes e padrões de interface das marcas AUVP Capital e AUVP Escola. Navegue pela sidebar para explorar cada área."
+        />
+      </div>
+
       <div className="max-w-7xl mx-auto flex gap-0 relative px-4 md:px-8">
         {/* Sidebar Nav — Desktop only */}
-        <nav className="sticky top-16 h-[calc(100vh-4rem)] w-56 shrink-0 border-r py-6 pr-4 overflow-y-auto hidden md:block">
+        <nav className={sidebarNavClass}>
           {/* Seletor de produto */}
           <div className="px-2 pb-3 mb-3 border-b">
             <button
@@ -542,14 +543,9 @@ export default function DesignSystemPage() {
                     onMouseEnter={() => handleBrandPreview(b.id)}
                     onMouseLeave={handleBrandRevert}
                     onClick={() => setBrand(b.id)}
-                    className={cn(
-                      "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm font-medium text-left transition-colors duration-150",
-                      brand === b.id
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                    )}
+                    className={sidebarItemClass(brand === b.id, "py-1.5")}
                   >
-                    <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: brand === b.id ? "currentColor" : b.color }} />
+                    <span className="h-3 w-3 rounded-[3px] shrink-0" style={{ backgroundColor: b.color }} />
                     {b.label}
                   </button>
                 ))}
@@ -594,12 +590,7 @@ export default function DesignSystemPage() {
                             <button
                               data-nav-id={id}
                               onClick={() => goToSection(id)}
-                              className={cn(
-                                "w-full flex items-center gap-3 pl-6 pr-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 text-left leading-tight",
-                                activeSection === id
-                                  ? "bg-primary text-primary-foreground"
-                                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                              )}
+                              className={sidebarItemClass(activeSection === id, "pl-6")}
                             >
                               <Icon className="h-4 w-4 shrink-0" />
                               <span className="flex-1 text-left">{label}</span>
@@ -619,12 +610,9 @@ export default function DesignSystemPage() {
         </nav>
 
         {/* Main content */}
-        <main className="flex-1 py-6 md:py-8 pl-0 md:pl-8 space-y-12 md:space-y-16 min-w-0 overflow-hidden">
+        <main className="flex-1 py-8 pl-0 md:pl-8 space-y-12 md:space-y-16 min-w-0 overflow-hidden">
 
           {/* ===== GERAL ===== */}
-          <section id="intro"><Introducao /></section>
-
-          <Separator />
           <section id="marca">
             <h2 className="text-2xl font-bold mb-2">Marca & Logos</h2>
             <p className="text-muted-foreground mb-6">Repositório oficial das aplicações da marca. Utilize sempre os arquivos originais sem distorções.</p>
