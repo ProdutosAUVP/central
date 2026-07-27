@@ -40,7 +40,63 @@ export const mesNumero = (mes: string) => MES_NUMERO[mes.trim().toLowerCase()] ?
 
 export const novidadesMensais: NovidadeMensal[] = [
   {
-    mes: "Maio", ano: 2025,
+    mes: "Junho", ano: 2026,
+    intro: "Olá pessoal, como estamos? Neste mês de junho tivemos Copa do Mundo, festa junina e, como de costume: uma série de novidades e atualizações na AUVP. Então, bora conferir o que a Equipe AUVP fez nesse mês?",
+    items: [
+      {
+        emoji: "📊",
+        titulo: "AUVP Escola COMPLETAMENTE regravada",
+        descricao: "A gente sempre acompanha os feedbacks de vocês e sabemos que manter o conteúdo atualizado é essencial para a experiência de aprendizagem. Por isso, revisamos a estrutura da AUVP Escola e neste mês concluímos a regravação integral de todas as aulas do treinamento — conteúdo 100% atualizado para facilitar a rotina de estudos e manter a qualidade de sempre nas nossas entregas.",
+        antes: "Aulas gravadas em versões anteriores, com o conteúdo internacional concentrado em uma única aula de Stocks.",
+        depois: "Treinamento inteiro regravado: Stocks dividida em 4 partes com análise setorial (P1 a P4), nova aula de Renda Fixa Internacional e módulo 7 repaginado.",
+        resultados: [
+          "Módulo 6: a antiga aula 06 sobre Stocks (Ações Americanas) agora está dividida em 4 partes mais detalhadas e focadas na análise setorial (P1, P2, P3 e P4)",
+          "Módulo 6: nova aula 07 sobre Renda Fixa Internacional",
+          "Módulo 7: nova versão com o conteúdo 100% repaginado",
+          "Os e-books atualizados dos módulos 6 e 7 chegam em breve — os vídeos já estão liberados",
+        ],
+        link: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6772ad0d1fe057e9530659d2Unit",
+      },
+      {
+        emoji: "📓",
+        titulo: "Cadernos de exercício em todos os módulos",
+        descricao: "Para quem sentia falta de colocar o conhecimento em prática, lançamos Cadernos de Exercícios antes de todas as avaliações na plataforma da Escola. A ideia é simples: deixar o aprendizado mais dinâmico. Com atividades ligadas diretamente ao que é passado nas aulas, fica muito mais fácil assimilar os conceitos e fixar o conteúdo ao longo da jornada.",
+        antes: "As avaliações vinham logo após as aulas, sem um material de prática entre elas.",
+        depois: "Caderno de exercícios disponível antes da avaliação de cada módulo, do M1 ao M6.",
+        link: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6a3d845094f35e363d0cbd26Unit",
+      },
+      {
+        emoji: "🟢",
+        titulo: "Badge da Camisa BR + AUVP",
+        descricao: "Entramos com tudo no clima da Copa do Mundo e liberamos uma nova badge exclusiva na Comunidade para todos que conseguiram adquirir o Manto da AUVP. Para garantir a badge no seu perfil, é só postar uma foto vestindo a camisa no tópico oficial que criamos para isso.",
+        link: "https://comunidade.auvp.com.br/topic/44214-badge-sele%C3%A7%C3%A3o-auvp/",
+      },
+      {
+        emoji: "📊",
+        titulo: "Comparador de ETFs e análises em vídeo na Analítica (exclusivo para assinantes)",
+        descricao: "A AUVP Analítica lançou mais uma funcionalidade para facilitar a vida de quem investe ou tem interesse em investir em ETFs: um comparador exclusivo que permite colocar os ativos lado a lado e analisá-los com base em diferentes indicadores financeiros. Além disso, liberamos novos vídeos de análise com os Analistas da AUVP Capital focados em FIIs e ETFs, para quem quer investir com fundamento e adquirir ainda mais conhecimento técnico.",
+        antes: "Analisar ETFs exigia abrir um ativo de cada vez e cruzar os indicadores manualmente.",
+        depois: "Comparador coloca os ETFs lado a lado por indicador, com novos vídeos de análise de FIIs e ETFs pelo time de analistas.",
+        link: "https://analitica.auvp.com.br/etfs/comparar",
+      },
+      {
+        emoji: "🎥",
+        titulo: "Giro da Bolsa Itinerante em SP",
+        descricao: "Neste mês, o Giro da Bolsa Itinerante fez sua terceira parada na cidade de São Paulo. Quem estava presente acompanhou de perto a gravação do programa semanal do canal Investidor Sardinha, ao vivo e sem censura — e ainda teve uma galera que esticou a experiência conosco no after depois do evento. Poder sair de trás das telas e trocar ideia olho no olho com vocês não tem preço: são esses momentos que provam que a AUVP é bem mais do que uma escola de investimentos, é uma comunidade viva.",
+        link: "https://www.youtube.com/watch?v=EMU2chjddxI&t=217s",
+      },
+    ],
+    spoiler: [
+      "🖥️ Novo HUB (Minha AUVP) — lançamento marcado para o dia 09 de julho!",
+      "🗣️ Nova plataforma para sistema de indicações da AUVP (em fase de reformulação)",
+      "📈 Módulo de Análise de indicadores AUVP Sempre (exclusivo para assinantes)",
+      "📚 Novo Módulo 1 na AUVP Escola (em processo de criação)",
+      "📱 SuperApp da AUVP (projeto centralizado ganhando forma)",
+    ],
+    rodape: "E com isso, bora para julho! Caso tenham mais sugestões ou ideias, podem mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
+  },
+  {
+    mes: "Maio", ano: 2026,
     intro: "Fala galerinha, como estamos? Maio acabou de terminar e, como de costume, a Equipe AUVP trabalhou firme pra atualizar nossos produtos e lançar novidades muuito requisitadas e especiais para vocês. Então, sem mais enrolação, bora conferir o que rolou por aqui durante o mês?",
     items: [
       { emoji: "🏛️", titulo: "Lançamento do treinamento completo para CPA da AUVP Pro", descricao: "A AUVP Pro entrou oficialmente em uma nova fase. Reformulamos completamente a nossa experiência de aprendizado para entregar materiais mais completos e ajudar você a estudar com foco e confiança.", resultados: ["Aulas repaginadas com explicações diretas e objetivas", "Simulados comentados para você treinar na prática", "Estrutura otimizada para se encaixar na sua rotina de estudos"] },
@@ -54,7 +110,7 @@ export const novidadesMensais: NovidadeMensal[] = [
     rodape: "E com isso, bora para junho! Caso tenham mais sugestões ou ideias, podem mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
   },
   {
-    mes: "Abril", ano: 2025,
+    mes: "Abril", ano: 2026,
     intro: "E aí pessoal, tudo joia? No mês de abril todo mundo que trabalha na AUVP se reuniu para o evento interno mais especial do ano, com mais de 200 piratas indo até o Rio de Janeiro. Rolou até presente pra quem encontrasse a gente nos aeroportos 😂 Depois de 3 dias de muita união, boas festas e o mar carioca, voltamos com ainda mais gás para entregar novidades exclusivas para vocês.",
     items: [
       { emoji: "🦁", titulo: "Atualizações no Módulo de Imposto de Renda", descricao: "O radar da Receita mudou alguns pontos em 2026. O módulo bônus de IR da AUVP Escola já está com todas as novas obrigatoriedades detalhadas, tudo para você não cair nas garras do Leão!", antes: "Módulo bônus de IR ainda refletia as regras dos anos anteriores.", depois: "Todas as novas obrigatoriedades de 2026 já detalhadas no módulo." },
@@ -68,7 +124,7 @@ export const novidadesMensais: NovidadeMensal[] = [
     rodape: "Como sempre, feedbacks são muito bem-vindos. Tudo isso é pra deixar a AUVP cada vez melhor, mais clara pra vocês e mais forte como escola. Bora para maio!!",
   },
   {
-    mes: "Março", ano: 2025,
+    mes: "Março", ano: 2026,
     intro: "Fala pessoal, tudo bem? Março acabou de terminar e, nesse mês que pareceu não ter fim, tivemos várias atualizações e novidades especiais para vocês. Bora conferir tudo o que a Equipe AUVP trabalhou nesse mês?",
     items: [
       { emoji: "📌", titulo: "Atualização de módulo 6: nova aula 6.5 sobre REITs", descricao: "O módulo 6 já possui 6 aulas atualizadas, da 6.1 a 6.4 (dividida em três partes). A nova 6.5 explica todas as pormenoridades dos REITs para te dar um panorama completo sobre o investimento internacional." },
@@ -83,7 +139,7 @@ export const novidadesMensais: NovidadeMensal[] = [
     rodape: "E com isso, bora para abril! Caso tenham mais sugestões ou ideias, podem mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
   },
   {
-    mes: "Fevereiro", ano: 2025,
+    mes: "Fevereiro", ano: 2026,
     intro: "O mês de fevereiro foi mais curto, mas continuamos trabalhando em novidades exclusivas para vocês. Vem ver tudo o que temos de novidade!",
     items: [
       { emoji: "💷", titulo: "Atualização no módulo 6: 3 novas aulas sobre ETFs internacionais", descricao: "Dividimos a aula em 3 partes para te dar um panorama completo. Exploramos como esses fundos podem ser uma das formas mais simples de acessar o mercado internacional, incluindo ações, renda fixa, REITs e commodities." },
@@ -97,7 +153,7 @@ export const novidadesMensais: NovidadeMensal[] = [
     rodape: "Bora pra março! E se tiverem mais sugestões ou ideias, é só mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
   },
   {
-    mes: "Janeiro", ano: 2025,
+    mes: "Janeiro", ano: 2026,
     intro: "Oi, pessoas! Tudo bem? Janeiro passou voando, e por aqui atuamos em algumas novidades bem interessantes para vocês. Bora lá? Listei tudo o que foi atualizado na plataforma e também dar um spoiler do que vem por aí.",
     items: [
       { emoji: "📌", titulo: "Atualização de módulo: nova aula 6.3 já está disponível", descricao: "O módulo 6 já possui 3 aulas atualizadas, da 6.1 a 6.3! A 6.3 conta com um panorama geral sobre a diferença do mercado americano em comparação com o brasileiro. Em fevereiro, mais atualizações." },

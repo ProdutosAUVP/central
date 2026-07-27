@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { GlobalNav } from "@/components/GlobalNav";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { SearchButton } from "@/components/SearchButton";
+import { PageShell } from "@/components/PageShell";
+import { PageHero } from "@/components/PageHero";
 import { teamPhotos } from "@/assets/team";
 import { EstruturaIsometrica, ProdutoCubeGraphic } from "@/components/widgets/EstruturaIsometrica";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -789,10 +788,51 @@ const DOCK_H = Math.round(DOCK_W * (116 / 128)); // proporção do viewBox do cu
 const FLY_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+/** Curva da rolagem por clique — pontas bem mais lentas que a cúbica. */
+const easeInOutQuint = (t: number) => (t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2);
 
 /** transform que centra o overlay (DOCK_W×DOCK_H) no ponto (x, y) da tela */
 const tf = (x: number, y: number, s: number) =>
   `translate(${x - DOCK_W / 2}px, ${y - DOCK_H / 2}px) scale(${s})`;
+
+/**
+ * Rolagem suave com curva própria: centraliza `el` no viewport com
+ * ease-in-out (lenta no início e no fim) e duração proporcional à
+ * distância. O scrollIntoView nativo é rápido demais e não dá controle
+ * sobre a curva. Retorna uma função de cancelamento; rolar manualmente
+ * (wheel/touch) também interrompe a animação.
+ */
+function smoothScrollToCenter(el: Element): () => void {
+  const rect = el.getBoundingClientRect();
+  const start = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const target = Math.max(0, Math.min(start + rect.top + rect.height / 2 - window.innerHeight / 2, max));
+  const dist = target - start;
+  if (Math.abs(dist) < 2) return () => {};
+
+  const duration = Math.min(3400, Math.max(2200, Math.abs(dist) * 1.9));
+  const t0 = performance.now();
+  let raf = 0;
+  let cancelled = false;
+  const cancel = () => {
+    cancelled = true;
+    cancelAnimationFrame(raf);
+    window.removeEventListener("wheel", cancel);
+    window.removeEventListener("touchstart", cancel);
+  };
+  window.addEventListener("wheel", cancel, { passive: true });
+  window.addEventListener("touchstart", cancel, { passive: true });
+
+  const step = (now: number) => {
+    if (cancelled) return;
+    const t = Math.min(1, (now - t0) / duration);
+    window.scrollTo(0, start + dist * easeInOutQuint(t));
+    if (t < 1) raf = requestAnimationFrame(step);
+    else cancel();
+  };
+  raf = requestAnimationFrame(step);
+  return cancel;
+}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -893,12 +933,18 @@ export default function TimePage() {
   }, [fase, updateVoo]);
 
   // O clique apenas rola a página — o scroll conduz (e pode reverter) o voo.
-  const irParaRotina = useCallback(() => {
-    dockRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  // A rolagem usa curva própria (ease-in-out, lenta nas pontas) porque o
+  // scrollIntoView nativo é rápido demais e não permite ajustar a curva.
+  const cancelScrollRef = useRef<() => void>(() => {});
+  const rolarAte = useCallback((el: Element | null) => {
+    if (!el) return;
+    cancelScrollRef.current();
+    cancelScrollRef.current = smoothScrollToCenter(el);
   }, []);
-  const voltarParaCena = useCallback(() => {
-    sceneAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, []);
+  const irParaRotina = useCallback(() => rolarAte(dockRef.current), [rolarAte]);
+  const voltarParaCena = useCallback(() => rolarAte(sceneAnchorRef.current), [rolarAte]);
+
+  useEffect(() => () => cancelScrollRef.current(), []);
 
   // Linhas cubo → cards: medidas assim que o cubo ancora (os cards já estão
   // na posição final, movidos no mesmo progresso do cubo). Remede em resize.
@@ -951,40 +997,31 @@ export default function TimePage() {
   }, [dismissOrgHint]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8">
-          <GlobalNav />
-          <div className="flex items-center gap-2 shrink-0">
-            <SearchButton />
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
-
-      <div
-        className="relative border-b overflow-hidden"
-        style={{ backgroundImage: "radial-gradient(circle at 20% 50%, hsl(155 93% 11% / 0.06) 0%, transparent 60%), radial-gradient(circle at 80% 20%, hsl(155 93% 11% / 0.04) 0%, transparent 50%)" }}
-      >
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]" style={{ backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-28">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-7xl font-bold font-anek text-foreground leading-[1.05] mb-6">
-              Nossa <span className="text-primary">tripulação</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground font-roboto leading-relaxed max-w-2xl">
+    <PageShell
+      footer="Time de Produto e CX — AUVP"
+      mainClassName="py-16 space-y-24"
+      hero={
+        <PageHero
+          icon={Users}
+          title="Nossa tripulação"
+          description={
+            <>
               Aqui a excelência é o mínimo. Juntamos especialistas em{" "}
               <span className="font-semibold text-foreground">design</span>,{" "}
               <span className="font-semibold text-foreground">copy</span>,{" "}
               <span className="font-semibold text-foreground">gestão</span> e{" "}
               <span className="font-semibold text-foreground">dados</span> com um único foco:
               manter o padrão de qualidade da maior escola de investimentos do país.
-            </p>
-          </div>
-        </div>
-      </div>
+            </>
+          }
+          /* Respiro extra embaixo: os cards do time sobem com margem negativa
+             e flutuam sobre a dobra do hero — sem isso encostariam no texto. */
+          className="pb-20 md:pb-28"
+        />
+      }
+    >
+      <>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-16 space-y-24">
 
         <div
           ref={teamRef}
@@ -1178,28 +1215,23 @@ export default function TimePage() {
           </div>
         </Section>
 
-      </main>
-
-      {/* Cubo do Produto em voo — overlay fixo, fora de qualquer ancestral com
-          transform (as Sections usam translate no reveal, o que quebraria o
-          position: fixed). O transform é posicionado por updateVoo() a cada
-          frame de scroll; o useLayoutEffect garante a posição antes do paint. */}
-      {ativo && fase === "voo" && (
-        <div
-          ref={flyRef}
-          aria-hidden="true"
-          className="pointer-events-none fixed left-0 top-0 z-40 will-change-transform"
-          style={{ width: DOCK_W, height: DOCK_H }}
-        >
-          <ProdutoCubeGraphic className="h-full w-full" />
-        </div>
-      )}
-
-      <footer className="border-t py-6 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-xs text-muted-foreground font-roboto">Time de Produto e CX — AUVP &copy; {new Date().getFullYear()}</p>
-        </div>
-      </footer>
-    </div>
+        {/* Cubo do Produto em voo — overlay fixo, fora de qualquer ancestral
+            com transform (as Sections usam translate no reveal, o que
+            quebraria o position: fixed). O transform é posicionado por
+            updateVoo() a cada frame de scroll; o useLayoutEffect garante a
+            posição antes do paint. O !mt-0 neutraliza o space-y do <main>,
+            que deslocaria o elemento fixo. */}
+        {ativo && fase === "voo" && (
+          <div
+            ref={flyRef}
+            aria-hidden="true"
+            className="pointer-events-none fixed left-0 top-0 z-40 !mt-0 will-change-transform"
+            style={{ width: DOCK_W, height: DOCK_H }}
+          >
+            <ProdutoCubeGraphic className="h-full w-full" />
+          </div>
+        )}
+      </>
+    </PageShell>
   );
 }
