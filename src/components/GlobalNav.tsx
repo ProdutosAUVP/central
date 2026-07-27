@@ -11,14 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Volume2, Palette, ChevronDown, X, Home, Users, ExternalLink } from "lucide-react";
+import { Volume2, Palette, ChevronDown, X, Home, Users, ExternalLink, Layers } from "lucide-react";
 
 const externalLinks = [
-  {
-    id: "guia-vendas",
-    label: "Guia de Vendas",
-    href: "https://produtosauvp.github.io/projetodelta/",
-  },
   {
     id: "codigo-etica",
     label: "Código de Ética",
@@ -54,6 +49,13 @@ const systems = [
     description: "Diretrizes de comunicação verbal da AUVP Capital",
     icon: Volume2,
     path: "/tom-e-voz",
+  },
+  {
+    id: "solucoes",
+    label: "Nossas Soluções",
+    description: "Guia completo dos produtos do ecossistema AUVP",
+    icon: Layers,
+    path: "/solucoes",
   },
 ];
 

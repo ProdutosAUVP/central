@@ -4,7 +4,7 @@ Guia de navegação para IAs. Leia este arquivo antes de explorar o repositório
 
 ## O que é este projeto
 
-SPA React + TypeScript implantada no GitHub Pages (`/central/`). É uma intranet da AUVP Capital com cinco seções principais: Design System, Time, Tom e Voz, Escola e Roadmap.
+SPA React + TypeScript implantada no GitHub Pages (`/central/`). É uma intranet da AUVP Capital com as seções principais: Design System, Time, Tom e Voz, Nossas Soluções (guia dos produtos, ex-Projeto Delta), Escola e Roadmap.
 
 ## Entry points
 
@@ -40,6 +40,7 @@ archive/v2-design-system/ → Iteração anterior do projeto (inativa)
 /design-system  → src/pages/DesignSystem.tsx   (página maior: 1741 linhas)
 /time           → src/pages/TimePage.tsx
 /tom-e-voz      → src/pages/TomEVozPage.tsx
+/solucoes       → src/pages/SolucoesPage.tsx  (Nossas Soluções — dados em src/data/solucoes.ts)
 /escola         → src/pages/EscolaPage.tsx
 /roadmap        → src/pages/RoadmapPage.tsx
 /novidades      → src/pages/NovidadesPage.tsx
