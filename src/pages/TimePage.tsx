@@ -5,12 +5,13 @@ import { GlobalNav } from "@/components/GlobalNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SearchButton } from "@/components/SearchButton";
 import { teamPhotos } from "@/assets/team";
-import { EstruturaIsometrica } from "@/components/widgets/EstruturaIsometrica";
+import { EstruturaIsometrica, ProdutoCubeGraphic } from "@/components/widgets/EstruturaIsometrica";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
   Search, Monitor, PenTool, Settings, Heart, ChevronRight, ChevronDown, User, X,
-  Headphones, Video, TrendingUp, Cpu, Wallet, Megaphone, Scale,
 } from "lucide-react";
+import { areaIcons } from "@/data/areasEmpresa";
 import { cn } from "@/lib/utils";
 
 function useReveal(threshold = 0.1) {
@@ -715,15 +716,17 @@ const pillars = [
   { icon: Lightbulb, title: "Marketing de produto", desc: "Cuidamos da divulgação estratégica com domínio de ferramentas como sites e comunicação ativa na comunidade para agregar ainda mais valor." },
 ];
 
+// Ícones vêm da fonte única de áreas da empresa (src/data/areasEmpresa.ts)
+// para manter a iconografia consistente com o Tom e Voz e demais seções.
 const network = [
-  { area: "Atendimento", icon: Headphones, desc: "Escutamos as dores dos membros para aprimorar constantemente os produtos do ecossistema." },
-  { area: "Consultoria", icon: Users, desc: "Executamos estratégias de relacionamento para aumentar a proximidade do investidor com a marca." },
-  { area: "Audiovisual", icon: Video, desc: "Acompanhamos a criação e captação de perto para entregar o melhor conteúdo de finanças do país." },
-  { area: "Vendas", icon: TrendingUp, desc: "Analisamos métricas de conversão para garantir o crescimento sustentável da base e a retenção." },
-  { area: "Tecnologia", icon: Cpu, desc: "Atuamos no desenvolvimento de plataformas focadas na experiência e usabilidade do usuário." },
-  { area: "Financeiro", icon: Wallet, desc: "Fazemos a gestão de custos focada na eficiência operacional e na solidez do negócio." },
-  { area: "Marketing", icon: Megaphone, desc: "Criamos estratégias de aquisição baseadas em autoridade, educação e transparência." },
-  { area: "Jurídico", icon: Scale, desc: "Asseguramos a conformidade com as normas do mercado financeiro e a segurança institucional." },
+  { area: "Atendimento", icon: areaIcons.Atendimento, desc: "Escutamos as dores dos membros para aprimorar constantemente os produtos do ecossistema." },
+  { area: "Consultoria", icon: areaIcons.Consultoria, desc: "Executamos estratégias de relacionamento para aumentar a proximidade do investidor com a marca." },
+  { area: "Audiovisual", icon: areaIcons.Audiovisual, desc: "Acompanhamos a criação e captação de perto para entregar o melhor conteúdo de finanças do país." },
+  { area: "Vendas", icon: areaIcons.Vendas, desc: "Analisamos métricas de conversão para garantir o crescimento sustentável da base e a retenção." },
+  { area: "Tecnologia", icon: areaIcons.Tecnologia, desc: "Atuamos no desenvolvimento de plataformas focadas na experiência e usabilidade do usuário." },
+  { area: "Financeiro", icon: areaIcons.Financeiro, desc: "Fazemos a gestão de custos focada na eficiência operacional e na solidez do negócio." },
+  { area: "Marketing", icon: areaIcons.Marketing, desc: "Criamos estratégias de aquisição baseadas em autoridade, educação e transparência." },
+  { area: "Jurídico", icon: areaIcons.Jurídico, desc: "Asseguramos a conformidade com as normas do mercado financeiro e a segurança institucional." },
 ];
 
 // A visualização isométrica de "Nossa estrutura" vive em
@@ -760,6 +763,58 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">{children}</h2>;
 }
 
+// ─── Voo do cubo do Produto (desktop) ────────────────────────────────────────
+// Clicar no cubo central de "Nossa estrutura" o faz flutuar até o centro da
+// tela, descer até "Nossa rotina na prática" (a página rola com o cubo fixo
+// no centro, criando a descida) e pousar entre os cards, que se afastam para
+// os lados. No fim, linhas de energia ligam o cubo a cada card. Clicar no
+// cubo ancorado (ou na vaga tracejada da cena) desfaz tudo no caminho inverso.
+
+const DOCK_W = 160; // largura do cubo em voo/ancorado (px)
+const DOCK_H = Math.round(DOCK_W * (112 / 108)); // proporção do viewBox do cubo
+
+/* Afastamento lateral dos cards: invade as margens da página (fora do
+   container max-w-7xl) mas nunca estoura o viewport — o clamp segura o
+   deslocamento no padding lateral em telas justas. Strings completas para
+   o JIT do Tailwind. */
+const SPREAD_LEFT = "lg:-translate-x-[clamp(2rem,(100vw-80rem)/2+4rem,6rem)]";
+const SPREAD_RIGHT = "lg:translate-x-[clamp(2rem,(100vw-80rem)/2+4rem,6rem)]";
+
+const FLY_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+const nextFrame = () =>
+  new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+
+/** Espera o smooth-scroll assentar (posição estável por ~3 leituras). */
+const waitScrollSettle = () =>
+  new Promise<void>((resolve) => {
+    let last = window.scrollY;
+    let stable = 0;
+    const iv = window.setInterval(() => {
+      if (Math.abs(window.scrollY - last) < 1) {
+        if (++stable >= 3) { window.clearInterval(iv); resolve(); }
+      } else {
+        stable = 0;
+        last = window.scrollY;
+      }
+    }, 70);
+  });
+
+/** transform que centra o overlay (DOCK_W×DOCK_H) no ponto (x, y) da tela */
+const tf = (x: number, y: number, s: number) =>
+  `translate(${x - DOCK_W / 2}px, ${y - DOCK_H / 2}px) scale(${s})`;
+
+function animateTransform(el: HTMLElement, from: string, to: string, duration: number) {
+  el.style.transform = from;
+  const anim = el.animate([{ transform: from }, { transform: to }], {
+    duration,
+    easing: FLY_EASE,
+    fill: "forwards",
+  });
+  return anim.finished
+    .then(() => { el.style.transform = to; anim.cancel(); })
+    .catch(() => { el.style.transform = to; });
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TimePage() {
@@ -776,6 +831,139 @@ export default function TimePage() {
 
   const dismissOrgHint = useCallback(() => {
     setShowOrgHint(false);
+  }, []);
+
+  // ── Voo do cubo do Produto ──
+  const reducedMotion = useReducedMotion();
+  const [produtoAway, setProdutoAway] = useState(false);   // saiu da cena isométrica
+  const [produtoDocked, setProdutoDocked] = useState(false); // ancorado na rotina
+  const [flyStyle, setFlyStyle] = useState<string | null>(null); // transform do overlay
+  const flyRef = useRef<HTMLDivElement>(null);
+  const gridWrapRef = useRef<HTMLDivElement>(null);
+  const dockRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sceneAnchorRef = useRef<SVGGElement | null>(null);
+  const busyRef = useRef(false);
+  const [linhas, setLinhas] = useState<{ cx: number; cy: number; pts: { x: number; y: number }[] } | null>(null);
+
+  const devolverProduto = useCallback(async () => {
+    if (busyRef.current) return;
+    busyRef.current = true;
+    if (reducedMotion) {
+      setProdutoDocked(false);
+      setProdutoAway(false);
+      busyRef.current = false;
+      return;
+    }
+    const d = dockRef.current?.getBoundingClientRect();
+    setProdutoDocked(false); // cards voltam e as linhas somem junto
+    if (!d) {
+      setProdutoAway(false);
+      busyRef.current = false;
+      return;
+    }
+    const startT = tf(d.left + d.width / 2, d.top + d.height / 2, 1);
+    setFlyStyle(startT);
+    await nextFrame();
+    const el = flyRef.current;
+    if (el) {
+      const centerT = tf(window.innerWidth / 2, window.innerHeight / 2, 1.05);
+      await animateTransform(el, startT, centerT, 600);
+      sceneAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      await waitScrollSettle();
+      const s = sceneAnchorRef.current?.getBoundingClientRect();
+      if (s) {
+        await animateTransform(el, centerT, tf(s.left + s.width / 2, s.top + s.height / 2, s.width / DOCK_W), 700);
+      }
+      setProdutoAway(false); // o cubo da cena volta em fade enquanto o overlay some
+      await el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" }).finished.catch(() => {});
+    } else {
+      setProdutoAway(false);
+    }
+    setFlyStyle(null);
+    busyRef.current = false;
+  }, [reducedMotion]);
+
+  const enviarProduto = useCallback(async (rect: DOMRect) => {
+    if (busyRef.current) return;
+    // clique na vaga tracejada (cubo ausente) = trazer de volta
+    if (produtoAway || produtoDocked) { devolverProduto(); return; }
+    busyRef.current = true;
+    if (reducedMotion) {
+      setProdutoAway(true);
+      setProdutoDocked(true);
+      dockRef.current?.scrollIntoView({ block: "center" });
+      busyRef.current = false;
+      return;
+    }
+    const startT = tf(rect.left + rect.width / 2, rect.top + rect.height / 2, rect.width / DOCK_W);
+    setFlyStyle(startT);
+    setProdutoAway(true);
+    await nextFrame();
+    const el = flyRef.current;
+    if (!el || !dockRef.current) {
+      setProdutoAway(false);
+      setFlyStyle(null);
+      busyRef.current = false;
+      return;
+    }
+    // 1) flutua até o centro da tela…
+    const centerT = tf(window.innerWidth / 2, window.innerHeight / 2, 1.05);
+    await animateTransform(el, startT, centerT, 700);
+    // 2) …desce até a rotina: a página rola com o cubo fixo no centro
+    dockRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    await waitScrollSettle();
+    // 3) pousa no vão central entre os cards
+    const t = dockRef.current.getBoundingClientRect();
+    await animateTransform(el, centerT, tf(t.left + t.width / 2, t.top + t.height / 2, 1), 750);
+    setProdutoDocked(true);
+    await nextFrame();
+    setFlyStyle(null);
+    busyRef.current = false;
+  }, [produtoAway, produtoDocked, reducedMotion, devolverProduto]);
+
+  // Mede as linhas cubo → cards depois que o afastamento dos cards termina
+  // ("no fim das animações simultâneas"). Remede em resize.
+  useEffect(() => {
+    if (!produtoDocked) { setLinhas(null); return; }
+    let alive = true;
+    const medir = () => {
+      const wrap = gridWrapRef.current;
+      const dock = dockRef.current;
+      if (!wrap || !dock) return;
+      const w = wrap.getBoundingClientRect();
+      const dr = dock.getBoundingClientRect();
+      const pts = cardRefs.current
+        .map((el, i) => {
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { x: (i % 2 === 0 ? r.right : r.left) - w.left, y: r.top + r.height / 2 - w.top };
+        })
+        .filter((p): p is { x: number; y: number } => p !== null);
+      if (alive) setLinhas({ cx: dr.left + dr.width / 2 - w.left, cy: dr.top + dr.height / 2 - w.top, pts });
+    };
+    const timer = window.setTimeout(medir, 780);
+    window.addEventListener("resize", medir);
+    return () => {
+      alive = false;
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", medir);
+    };
+  }, [produtoDocked]);
+
+  // Interação exclusiva de desktop: desfaz tudo se a tela encolher além do lg.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const onChange = () => {
+      if (mq.matches) {
+        setProdutoDocked(false);
+        setProdutoAway(false);
+        setFlyStyle(null);
+        busyRef.current = false;
+      }
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
   useEffect(() => {
@@ -906,36 +1094,106 @@ export default function TimePage() {
                 clique em cada área abaixo para entender a nossa estrutura.
               </p>
             </div>
-            <EstruturaIsometrica items={network} />
+            <EstruturaIsometrica
+              items={network}
+              produtoAusente={produtoAway}
+              onProdutoClick={enviarProduto}
+              produtoAnchorRef={(el) => { sceneAnchorRef.current = el; }}
+            />
           </div>
         </Section>
 
         <Section>
           <SectionTitle>Nossa rotina na prática</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Veja a especialidade de cada membro do time de produtos. Saiba exatamente qual pirata procurar quando precisar destravar uma demanda.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dayToDay.map((item, i) => {
-              const Icon = item.icon;
-              const orphan = i === dayToDay.length - 1 && dayToDay.length % 2 === 1;
-              return (
-                <div key={i} className={cn("rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform flex flex-col gap-4", orphan && "md:col-span-2")}>
-                  <div className="flex items-start gap-4">
-                    <div className="shrink-0 mt-0.5"><Icon className="h-6 w-6 text-primary" /></div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold font-anek text-foreground leading-tight mb-0.5">{item.title}</h3>
-                      <p className="text-sm font-semibold text-primary font-roboto leading-tight">{item.tagline}</p>
+          <div ref={gridWrapRef} className="relative">
+            {/* Linhas de energia cubo → cards (aparecem no fim do afastamento) */}
+            {produtoDocked && linhas && (
+              <svg className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible lg:block" aria-hidden="true">
+                {linhas.pts.map((p, i) => {
+                  const d = `M ${linhas.cx} ${linhas.cy} L ${p.x} ${p.y}`;
+                  return (
+                    <g key={i}>
+                      <path
+                        d={d}
+                        pathLength={1}
+                        fill="none"
+                        stroke="hsl(var(--foreground) / 0.3)"
+                        strokeWidth={1.2}
+                        strokeDasharray="1"
+                        strokeDashoffset={1}
+                        strokeLinecap="round"
+                        style={{ animation: `estrutura-draw 0.55s ${FLY_EASE} ${i * 0.07}s forwards` }}
+                      />
+                      <circle cx={p.x} cy={p.y} r={2.5} fill="hsl(var(--primary))" className="animate-in fade-in duration-500" style={{ animationDelay: `${0.4 + i * 0.07}s`, animationFillMode: "both" }} />
+                      {!reducedMotion && (
+                        <g>
+                          <animateMotion dur={`${2.6 + (i % 3) * 0.5}s`} begin={`${0.7 + i * 0.35}s`} repeatCount="indefinite" path={d} />
+                          <circle r={3.5} fill="hsl(var(--primary) / 0.25)" />
+                          <circle r={1.6} fill="hsl(var(--primary))" />
+                        </g>
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {dayToDay.map((item, i) => {
+                const Icon = item.icon;
+                const orphan = i === dayToDay.length - 1 && dayToDay.length % 2 === 1;
+                return (
+                  <div
+                    key={i}
+                    ref={(el) => { cardRefs.current[i] = el; }}
+                    className={cn(
+                      "transition-transform duration-700 ease-apple will-change-transform",
+                      orphan && "md:col-span-2",
+                      /* cubo ancorado: cards abrem caminho — esquerda p/ esquerda,
+                         direita p/ direita, invadindo as margens da página */
+                      produtoDocked && (i % 2 === 0 ? SPREAD_LEFT : SPREAD_RIGHT)
+                    )}
+                  >
+                    <div className="h-full rounded-2xl border bg-card p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-300 ease-apple will-change-transform flex flex-col gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="shrink-0 mt-0.5"><Icon className="h-6 w-6 text-primary" /></div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold font-anek text-foreground leading-tight mb-0.5">{item.title}</h3>
+                          <p className="text-sm font-semibold text-primary font-roboto leading-tight">{item.tagline}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
+                      <div className="pt-3 border-t flex items-start gap-2 flex-wrap">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto shrink-0 mt-1.5">Quem chamar:</span>
+                        {item.quemChamar.map((name) => (
+                          <span key={name} className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto">{name}</span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
-                  <div className="pt-3 border-t flex items-start gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto shrink-0 mt-1.5">Quem chamar:</span>
-                    {item.quemChamar.map((name) => (
-                      <span key={name} className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold font-roboto">{name}</span>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+
+            {/* Âncora do pouso + cubo ancorado entre os cards (desktop) */}
+            <div
+              ref={dockRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
+              style={{ width: DOCK_W, height: DOCK_H }}
+            />
+            {produtoDocked && (
+              <button
+                type="button"
+                onClick={devolverProduto}
+                aria-label="Devolver o cubo do Produto para a estrutura"
+                className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 cursor-pointer outline-none transition-transform duration-300 ease-apple hover:scale-[1.04] lg:block"
+                style={{ width: DOCK_W, height: DOCK_H }}
+              >
+                <ProdutoCubeGraphic className="h-full w-full" />
+              </button>
+            )}
           </div>
         </Section>
 
@@ -961,6 +1219,20 @@ export default function TimePage() {
         </Section>
 
       </main>
+
+      {/* Cubo do Produto em voo — overlay fixo, fora de qualquer ancestral com
+          transform (as Sections usam translate no reveal, o que quebraria o
+          position: fixed). Some assim que o cubo pousa ou retorna. */}
+      {flyStyle !== null && (
+        <div
+          ref={flyRef}
+          aria-hidden="true"
+          className="pointer-events-none fixed left-0 top-0 z-40 will-change-transform"
+          style={{ width: DOCK_W, height: DOCK_H, transform: flyStyle }}
+        >
+          <ProdutoCubeGraphic className="h-full w-full" />
+        </div>
+      )}
 
       <footer className="border-t py-6 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">

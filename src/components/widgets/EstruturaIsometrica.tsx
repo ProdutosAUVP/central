@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { olhoBranco } from "@/assets/olhos";
+import { olhoBranco, olhoPreto } from "@/assets/olhos";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 /**
@@ -45,20 +45,27 @@ interface CubeSpec {
   route: [number, number][];    // caminho da linha no chão, a partir do centro
 }
 
-// Layout fixo: 4 cubos grandes nos pontos cardeais da grade e 4 menores nas
-// diagonais de tela, com rotas em L que desviam dos cubos intermediários.
+// Layout fixo: 4 cubos nos pontos cardeais da grade e 4 nas diagonais de
+// tela, com rotas em L que desviam dos cubos intermediários. Os tamanhos
+// variam pouco de propósito — nenhuma área deve parecer menos importante.
 const SPECS: Record<string, CubeSpec> = {
-  Tecnologia:  { g: [-3.5, -3.5], w: 34, h: 40, hsl: [152, 68, 38], anchor: "above", route: [[0, 0], [0, -1.5], [-3.5, -1.5], [-3.5, -3.5]] },
-  Vendas:      { g: [3.5, -3.5],  w: 31, h: 36, hsl: [38, 92, 48],  anchor: "above", route: [[0, 0], [1.5, 0], [1.5, -3.5], [3.5, -3.5]] },
-  Atendimento: { g: [-3.5, 3.5],  w: 31, h: 36, hsl: [205, 78, 46], anchor: "above", route: [[0, 0], [-1.5, 0], [-1.5, 3.5], [-3.5, 3.5]] },
-  Consultoria: { g: [3.5, 3.5],   w: 29, h: 32, hsl: [265, 60, 54], anchor: "below", route: [[0, 0], [0, 1.5], [3.5, 1.5], [3.5, 3.5]] },
-  Marketing:   { g: [0, -3],      w: 22, h: 25, hsl: [15, 78, 50],  anchor: "above", route: [[0, 0], [0, -3]] },
-  Audiovisual: { g: [-3, 0],      w: 18, h: 20, hsl: [330, 70, 52], anchor: "above", route: [[0, 0], [-3, 0]] },
-  Financeiro:  { g: [0, 3],       w: 20, h: 22, hsl: [175, 60, 36], anchor: "below", route: [[0, 0], [0, 3]] },
-  Jurídico:    { g: [3, 0],       w: 16, h: 17, hsl: [220, 26, 46], anchor: "below", route: [[0, 0], [3, 0]] },
+  Tecnologia:  { g: [-3.5, -3.5], w: 31, h: 36, hsl: [152, 68, 38], anchor: "above", route: [[0, 0], [0, -1.5], [-3.5, -1.5], [-3.5, -3.5]] },
+  Vendas:      { g: [3.5, -3.5],  w: 30, h: 35, hsl: [38, 92, 48],  anchor: "above", route: [[0, 0], [1.5, 0], [1.5, -3.5], [3.5, -3.5]] },
+  Atendimento: { g: [-3.5, 3.5],  w: 30, h: 35, hsl: [205, 78, 46], anchor: "above", route: [[0, 0], [-1.5, 0], [-1.5, 3.5], [-3.5, 3.5]] },
+  Consultoria: { g: [3.5, 3.5],   w: 30, h: 34, hsl: [265, 60, 54], anchor: "below", route: [[0, 0], [0, 1.5], [3.5, 1.5], [3.5, 3.5]] },
+  Marketing:   { g: [0, -3.25],   w: 28, h: 32, hsl: [15, 78, 50],  anchor: "above", route: [[0, 0], [0, -3.25]] },
+  Audiovisual: { g: [-3.25, 0],   w: 27, h: 30, hsl: [330, 70, 52], anchor: "above", route: [[0, 0], [-3.25, 0]] },
+  Financeiro:  { g: [0, 3.25],    w: 28, h: 31, hsl: [175, 60, 36], anchor: "below", route: [[0, 0], [0, 3.25]] },
+  Jurídico:    { g: [3.25, 0],    w: 26, h: 29, hsl: [220, 26, 46], anchor: "below", route: [[0, 0], [3.25, 0]] },
 };
 
 const CENTER = { w: 48, h: 52 }; // cubo do Produto
+const CENTER_FILLS = { left: "hsl(216 16% 78%)", right: "hsl(210 22% 88%)", top: "hsl(0 0% 99%)" };
+
+// Período e atraso do ponto de luz de cada linha (índice na ordem de
+// desenho). O brilho de chegada do cubo usa os mesmos valores para
+// pulsar exatamente quando o ponto alcança a área.
+const lineTiming = (i: number) => ({ dur: 2.8 + (i % 4) * 0.45, begin: i * 0.55 });
 
 // Faces de um cubo cuja base (losango inferior) está centrada em (cx, cy)
 function cubeFaces(cx: number, cy: number, w: number, h: number) {
@@ -104,7 +111,54 @@ function useInView(threshold = 0.25) {
   return [ref, visible] as const;
 }
 
-export function EstruturaIsometrica({ items }: { items: AreaEstrutura[] }) {
+/**
+ * Réplica gráfica do cubo do Produto — usada pela interação de voo do
+ * TimePage (overlay em position: fixed e cubo ancorado na seção seguinte).
+ * Mesmo desenho do cubo central da cena: faces, olho da AUVP no topo e
+ * rótulo "PRODUTO" na face frontal.
+ */
+export function ProdutoCubeGraphic({ className }: { className?: string }) {
+  const f = cubeFaces(0, 0, CENTER.w, CENTER.h);
+  return (
+    <svg viewBox="-54 -80 108 112" className={className} aria-hidden="true">
+      <ellipse cx={0} cy={6} rx={CENTER.w * 1.15} ry={CENTER.w * 0.42} fill="hsl(0 0% 0% / 0.22)" style={{ filter: "blur(4px)" }} />
+      <polygon points={f.left} fill={CENTER_FILLS.left} />
+      <polygon points={f.right} fill={CENTER_FILLS.right} />
+      <polygon points={f.top} fill={CENTER_FILLS.top} />
+      <g transform={`matrix(1 0.5 -1 0.5 0 ${-CENTER.h})`}>
+        <image href={olhoPreto.url} x={-16} y={-16} width={32} height={32} />
+      </g>
+      <text
+        transform="matrix(1 -0.5 0 1 24 -12)"
+        textAnchor="middle"
+        fontSize={9.5}
+        fontWeight={800}
+        letterSpacing={1.5}
+        textLength={38}
+        lengthAdjust="spacingAndGlyphs"
+        fill="hsl(var(--brand-dark))"
+        className="font-anek"
+      >
+        PRODUTO
+      </text>
+    </svg>
+  );
+}
+
+export function EstruturaIsometrica({
+  items,
+  produtoAusente = false,
+  onProdutoClick,
+  produtoAnchorRef,
+}: {
+  items: AreaEstrutura[];
+  /** true enquanto o cubo do Produto está "emprestado" à seção seguinte. */
+  produtoAusente?: boolean;
+  /** Clique no cubo central (desktop) — recebe o rect na tela para o voo. */
+  onProdutoClick?: (rect: DOMRect) => void;
+  /** Expõe o elemento do cubo central para o pouso do voo de retorno. */
+  produtoAnchorRef?: (el: SVGGElement | null) => void;
+}) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [sceneRef, inView] = useInView();
@@ -218,7 +272,7 @@ export function EstruturaIsometrica({ items }: { items: AreaEstrutura[] }) {
                   {/* ponto de luz viajando do centro até a área */}
                   {!reducedMotion && (
                     <g>
-                      <animateMotion dur={`${2.8 + (i % 4) * 0.45}s`} begin={`${i * 0.55}s`} repeatCount="indefinite" path={d} />
+                      <animateMotion dur={`${lineTiming(i).dur}s`} begin={`${lineTiming(i).begin}s`} repeatCount="indefinite" path={d} />
                       <circle r={4.5} fill="hsl(var(--primary) / 0.25)" />
                       <circle r={1.9} fill="hsl(var(--primary))" />
                     </g>
@@ -227,12 +281,14 @@ export function EstruturaIsometrica({ items }: { items: AreaEstrutura[] }) {
               );
             })}
 
-            {/* ── Halo luminoso do Produto ── */}
-            <circle
-              cx={0} cy={-30} r={105}
-              fill="url(#estru-glow)"
-              style={{ animation: "estrutura-glow 4s ease-in-out infinite" }}
-            />
+            {/* ── Halo luminoso do Produto (some enquanto o cubo está fora) ── */}
+            {!produtoAusente && (
+              <circle
+                cx={0} cy={-30} r={105}
+                fill="url(#estru-glow)"
+                style={{ animation: "estrutura-glow 4s ease-in-out infinite" }}
+              />
+            )}
 
             {/* ── Cubos das áreas (fundo → frente) + cubo central ── */}
             {(() => {
@@ -241,25 +297,77 @@ export function EstruturaIsometrica({ items }: { items: AreaEstrutura[] }) {
 
               const drawCenter = () => (
                 <g key="produto" style={inView ? { animation: "estrutura-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both" } : { opacity: 0 }}>
-                  <ellipse cx={0} cy={4} rx={CENTER.w * 1.2} ry={CENTER.w * 0.5} fill="hsl(0 0% 0% / 0.22)" filter="url(#estru-blur)" />
-                  <g style={{ animation: "estrutura-float 6s ease-in-out infinite" }}>
-                    <polygon points={centerFaces.left} fill="hsl(216 16% 78%)" />
-                    <polygon points={centerFaces.right} fill="hsl(210 22% 88%)" />
-                    <polygon points={centerFaces.top} fill="hsl(0 0% 99%)" />
-                    {/* rótulo aplicado na face frontal-direita, acompanhando o plano do cubo */}
-                    <text
-                      transform="matrix(1 -0.5 0 1 24 -12)"
-                      textAnchor="middle"
-                      fontSize={9.5}
-                      fontWeight={800}
-                      letterSpacing={1.5}
-                      textLength={38}
-                      lengthAdjust="spacingAndGlyphs"
-                      fill="hsl(var(--brand-dark))"
-                      className="font-anek"
+                  {/* vaga tracejada — marca o lugar do cubo enquanto ele visita a rotina */}
+                  {produtoAusente && (
+                    <polygon
+                      points={`0,${-CENTER.w / 2} ${CENTER.w},0 0,${CENTER.w / 2} ${-CENTER.w},0`}
+                      fill="hsl(var(--foreground) / 0.04)"
+                      stroke="hsl(var(--foreground) / 0.35)"
+                      strokeWidth={1.2}
+                      strokeDasharray="4 5"
+                      strokeLinecap="round"
+                    />
+                  )}
+                  {!produtoAusente && (
+                    <ellipse cx={0} cy={4} rx={CENTER.w * 1.2} ry={CENTER.w * 0.5} fill="hsl(0 0% 0% / 0.22)" filter="url(#estru-blur)" />
+                  )}
+                  <g
+                    className="transition-opacity duration-500 ease-apple"
+                    style={{ animation: "estrutura-float 6s ease-in-out infinite", opacity: produtoAusente ? 0.14 : 1 }}
+                  >
+                    <g
+                      ref={(el) => produtoAnchorRef?.(el)}
+                      role={onProdutoClick ? "button" : undefined}
+                      tabIndex={onProdutoClick ? 0 : undefined}
+                      aria-label={
+                        onProdutoClick
+                          ? produtoAusente
+                            ? "Trazer o cubo do Produto de volta para a estrutura"
+                            : "Levar o cubo do Produto até a seção Nossa rotina na prática"
+                          : undefined
+                      }
+                      className={cn(
+                        onProdutoClick && "cursor-pointer outline-none transition-transform duration-300 ease-apple hover:scale-105"
+                      )}
+                      style={onProdutoClick ? { transformBox: "fill-box", transformOrigin: "center" } : undefined}
+                      onClick={
+                        onProdutoClick
+                          ? (e) => onProdutoClick((e.currentTarget as SVGGElement).getBoundingClientRect())
+                          : undefined
+                      }
+                      onKeyDown={
+                        onProdutoClick
+                          ? (e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                onProdutoClick((e.currentTarget as SVGGElement).getBoundingClientRect());
+                              }
+                            }
+                          : undefined
+                      }
                     >
-                      PRODUTO
-                    </text>
+                      <polygon points={centerFaces.left} fill={CENTER_FILLS.left} />
+                      <polygon points={centerFaces.right} fill={CENTER_FILLS.right} />
+                      <polygon points={centerFaces.top} fill={CENTER_FILLS.top} />
+                      {/* olho da AUVP projetado na face superior do cubo */}
+                      <g transform={`matrix(1 0.5 -1 0.5 0 ${-CENTER.h})`}>
+                        <image href={olhoPreto.url} x={-16} y={-16} width={32} height={32} />
+                      </g>
+                      {/* rótulo aplicado na face frontal-direita, acompanhando o plano do cubo */}
+                      <text
+                        transform="matrix(1 -0.5 0 1 24 -12)"
+                        textAnchor="middle"
+                        fontSize={9.5}
+                        fontWeight={800}
+                        letterSpacing={1.5}
+                        textLength={38}
+                        lengthAdjust="spacingAndGlyphs"
+                        fill="hsl(var(--brand-dark))"
+                        className="font-anek"
+                      >
+                        PRODUTO
+                      </text>
+                    </g>
                   </g>
                 </g>
               );
@@ -272,6 +380,9 @@ export function EstruturaIsometrica({ items }: { items: AreaEstrutura[] }) {
                 const p = iso(spec.g[0], spec.g[1]);
                 const faces = cubeFaces(p.x, p.y, spec.w, spec.h);
                 const fills = faceFills(spec.hsl);
+                const Icon = it.icon;
+                const iconSize = Math.round(spec.w * 0.68);
+                const { dur, begin } = lineTiming(i);
                 const topY = p.y - spec.h - spec.w / 2;
                 const botY = p.y + spec.w / 2;
                 const isOpen = open === it.area;
@@ -302,9 +413,33 @@ export function EstruturaIsometrica({ items }: { items: AreaEstrutura[] }) {
                           className="transition-transform duration-300 ease-apple"
                           style={{ transformBox: "fill-box", transformOrigin: "center", transform: isOpen ? "scale(1.09)" : undefined }}
                         >
-                          <polygon points={faces.left} fill={fills.left} />
-                          <polygon points={faces.right} fill={fills.right} />
-                          <polygon points={faces.top} fill={fills.top} />
+                          {/* Pulso de chegada: mesmo período/atraso do ponto de luz
+                              da linha, deslocado em um ciclo — o cubo brilha no
+                              instante em que a luz alcança a área. */}
+                          <g
+                            style={{
+                              color: fills.top,
+                              ...(!reducedMotion && {
+                                animation: `estrutura-arrive ${dur}s ease-out ${begin + dur}s infinite`,
+                              }),
+                            }}
+                          >
+                            <polygon points={faces.left} fill={fills.left} />
+                            <polygon points={faces.right} fill={fills.right} />
+                            <polygon points={faces.top} fill={fills.top} />
+                            {/* ícone da área projetado na face superior */}
+                            <g transform={`matrix(1 0.5 -1 0.5 ${p.x} ${p.y - spec.h})`}>
+                              <Icon
+                                x={-iconSize / 2}
+                                y={-iconSize / 2}
+                                width={iconSize}
+                                height={iconSize}
+                                color="white"
+                                strokeWidth={2}
+                                opacity={0.95}
+                              />
+                            </g>
+                          </g>
                         </g>
                         {/* rótulo com linha-guia pontilhada, como num infográfico */}
                         {spec.anchor === "above" ? (
