@@ -626,6 +626,27 @@
   tr, .rounded-xl, .rounded-2xl { break-inside: avoid; }
 }
 
+/* === Nossa estrutura — infográfico isométrico (TimePage) ===
+   rise: entrada escalonada dos cubos; float: flutuação contínua;
+   dash: pulso de energia percorrendo as linhas do chão (o offset -156
+   corresponde à soma do strokeDasharray "14 142"); glow: cintilação do
+   halo do Produto e dos nós da grade. */
+@keyframes estrutura-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes estrutura-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes estrutura-dash {
+  to { stroke-dashoffset: -156; }
+}
+@keyframes estrutura-glow {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
+}
+
 /* Timeline scrollbar (Trilha Horizontal) */
 .timeline-scrollbar::-webkit-scrollbar { height: 4px; }
 .timeline-scrollbar::-webkit-scrollbar-track {
