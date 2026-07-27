@@ -39,6 +39,33 @@ import {
 
 const quickInfoIcons = { investimento: TagIcon, site: Globe, acesso: Clock } as const;
 
+/* Cor de acento do produto — herdada da seção via var --sol-accent
+   (classes .sol-* no index.css), com fallback no verde primário. */
+const accentText = "text-[hsl(var(--sol-accent,var(--primary)))]";
+const accentChip = "bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(var(--sol-accent,var(--primary)))]";
+
+/** Classe .sol-* de cada seção de produto (define --sol-accent). */
+const solAccentClass: Record<string, string> = {
+  "auvp-escola": "sol-escola",
+  "auvp-sempre": "sol-sempre",
+  "auvp-pro": "sol-pro",
+  "auvp-analitica": "sol-analitica",
+  "auvp-internacional": "sol-internacional",
+  "auvp-agro": "sol-agro",
+  "auvp-conta": "sol-conta",
+};
+
+/** Acento por linha da tabela-resumo, na mesma ordem visual dos produtos. */
+const resumoAccentClass: Record<string, string> = {
+  "AUVP Escola": "sol-escola",
+  "AUVP Sempre": "sol-sempre",
+  "AUVP PRO": "sol-pro",
+  "AUVP Analítica": "sol-analitica",
+  "AUVP Internacional": "sol-internacional",
+  "AUVP Agro": "sol-agro",
+  "AUVP Capital (Conta e Cartão)": "sol-conta",
+};
+
 function QuickInfoBar({ items, className }: { items: QuickInfo[]; className?: string }) {
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
@@ -49,13 +76,13 @@ function QuickInfoBar({ items, className }: { items: QuickInfo[]; className?: st
             key={i}
             className="inline-flex items-center gap-2 rounded-lg border bg-muted/40 px-3 py-2 text-sm font-roboto text-foreground"
           >
-            <Icon className="h-4 w-4 shrink-0 text-primary" />
+            <Icon className={cn("h-4 w-4 shrink-0", accentText)} />
             {item.href ? (
               <a
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline underline-offset-2 hover:text-primary transition-colors"
+                className="underline underline-offset-2 hover:text-[hsl(var(--sol-accent,var(--primary)))] transition-colors"
               >
                 {item.texto}
               </a>
@@ -71,7 +98,7 @@ function QuickInfoBar({ items, className }: { items: QuickInfo[]; className?: st
 
 function ParaQuemE({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-r-xl border border-l-4 border-l-primary bg-card p-5 shadow-sm">
+    <div className="rounded-r-xl border border-l-4 border-l-[hsl(var(--sol-accent,var(--primary)))] bg-card p-5 shadow-sm">
       <p className="text-sm md:text-base text-muted-foreground font-roboto leading-relaxed">
         <strong className="text-foreground font-semibold">Para quem é:</strong> {children}
       </p>
@@ -98,7 +125,7 @@ function ObsBanner({ children, className }: { children: React.ReactNode; classNa
 function BlocoTitle({ icon: Icon, children, as: As = "h3" }: { icon: React.ElementType; children: React.ReactNode; as?: "h2" | "h3" | "h4" }) {
   return (
     <As className="flex items-center gap-3 text-xl md:text-2xl font-bold font-anek text-foreground mb-4">
-      <Icon className="h-6 w-6 shrink-0 text-primary" />
+      <Icon className={cn("h-6 w-6 shrink-0", accentText)} />
       {children}
     </As>
   );
@@ -111,7 +138,7 @@ function FeatureList({ items, cols = 1 }: { items: FeatureItem[]; cols?: 1 | 2 }
         const Icon = f.icon;
         return (
           <li key={i} className="flex items-start gap-4 rounded-xl border bg-card p-5">
-            <Icon className="h-5 w-5 shrink-0 mt-0.5 text-primary" />
+            <Icon className={cn("h-5 w-5 shrink-0 mt-0.5", accentText)} />
             <p className="text-sm text-muted-foreground font-roboto leading-relaxed">
               {f.destaque && <strong className="text-foreground font-semibold">{f.destaque} </strong>}
               {f.texto}
@@ -131,7 +158,7 @@ function InfoCardGrid({ cards, cols }: { cards: InfoCard[]; cols: 3 | 4 }) {
         return (
           <div
             key={i}
-            className="group rounded-xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-lg sm:hover:border-primary/30"
+            className="group rounded-xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-lg sm:hover:border-[hsl(var(--sol-accent,var(--primary))/0.35)]"
           >
             {card.img && (
               <img
@@ -143,7 +170,7 @@ function InfoCardGrid({ cards, cols }: { cards: InfoCard[]; cols: 3 | 4 }) {
             )}
             <div className="p-5 flex flex-col gap-2 flex-1">
               {Icon && (
-                <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg", accentChip)}>
                   <Icon className="h-5 w-5" />
                 </span>
               )}
@@ -171,7 +198,7 @@ function ClassTable({ aulas }: { aulas: Aula[] }) {
         <tbody>
           {aulas.map((aula, i) => (
             <tr key={i} className="border-t">
-              <td className="px-4 py-2.5 whitespace-nowrap font-semibold text-primary">{aula.num}</td>
+              <td className={cn("px-4 py-2.5 whitespace-nowrap font-semibold", accentText)}>{aula.num}</td>
               <td className="px-4 py-2.5 text-foreground">{aula.titulo}</td>
               <td className="px-4 py-2.5 text-right text-muted-foreground whitespace-nowrap">{aula.duracao}</td>
             </tr>
@@ -193,7 +220,7 @@ function ModuloList({ modulos, idPrefix, expandAll }: { modulos: Modulo[]; idPre
           <AccordionItem
             key={i}
             value={`${idPrefix}-${i}`}
-            className="rounded-xl border bg-card overflow-hidden data-[state=open]:border-primary/30 transition-colors"
+            className="rounded-xl border bg-card overflow-hidden data-[state=open]:border-[hsl(var(--sol-accent,var(--primary))/0.35)] transition-colors"
           >
             <AccordionTrigger className="px-5 py-4 hover:no-underline gap-4 text-left">
               <div className="flex flex-col md:flex-row md:items-center gap-4 flex-1 min-w-0">
@@ -255,7 +282,7 @@ function CronogramaTable({ colunas, linhas }: { colunas: string[]; linhas: strin
         <tbody>
           {linhas.map((linha, i) => (
             <tr key={i} className="border-t">
-              <td className="px-4 py-2.5 whitespace-nowrap font-semibold text-primary">{linha[0]}</td>
+              <td className={cn("px-4 py-2.5 whitespace-nowrap font-semibold", accentText)}>{linha[0]}</td>
               <td className="px-4 py-2.5 text-foreground w-full">{linha[1]}</td>
               <td className="px-4 py-2.5 text-right text-muted-foreground">{linha[2]}</td>
             </tr>
@@ -318,7 +345,7 @@ function ProdutoHero({ badge, titulo, img, info, paraQuemE, children }: ProdutoH
       <LpPreview src={img} alt={titulo} />
       <div className="flex flex-col justify-center gap-4">
         <div>
-          <Tag tone="primary" className="mb-3">{badge}</Tag>
+          <Tag tone="primary" className={cn("mb-3", accentChip)}>{badge}</Tag>
           <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground">{titulo}</h2>
         </div>
         <QuickInfoBar items={info} />
@@ -399,7 +426,10 @@ function ExportButton({ onClick, children }: { onClick: () => void; children: Re
     <div className="flex justify-end border-t border-dashed pt-6 print:hidden">
       <button
         onClick={onClick}
-        className="inline-flex items-center gap-2 rounded-lg border-2 border-primary/50 px-4 py-2 text-sm font-anek font-bold uppercase tracking-wide text-primary hover:bg-primary/10 transition-colors"
+        className={cn(
+          "inline-flex items-center gap-2 rounded-lg border-2 border-[hsl(var(--sol-accent,var(--primary))/0.5)] px-4 py-2 text-sm font-anek font-bold uppercase tracking-wide hover:bg-[hsl(var(--sol-accent,var(--primary))/0.1)] transition-colors",
+          accentText
+        )}
       >
         <FileDown className="h-4 w-4" />
         {children}
@@ -432,11 +462,11 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
           const isActive = activeSection === section.id;
           const isOpen = manualOpen[section.id] ?? isActive;
           return (
-            <div key={section.id}>
+            <div key={section.id} className={solAccentClass[section.id]}>
               <div
                 className={cn(
                   "flex items-center rounded-lg transition-colors",
-                  isActive ? "bg-muted" : "hover:bg-muted/60"
+                  isActive ? "bg-[hsl(var(--sol-accent,var(--primary))/0.1)]" : "hover:bg-muted/60"
                 )}
               >
                 <button
@@ -446,7 +476,7 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
                     isActive ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <Icon className="h-4 w-4 shrink-0" />
+                  <Icon className={cn("h-4 w-4 shrink-0", accentText)} />
                   {section.label}
                 </button>
                 {section.anchors.length > 0 && (
@@ -461,7 +491,7 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
                 )}
               </div>
               {isOpen && section.anchors.length > 0 && (
-                <ul className="mt-1 mb-2 ml-[1.15rem] border-l pl-3 space-y-0.5">
+                <ul className="mt-1 mb-2 ml-[1.15rem] border-l border-l-[hsl(var(--sol-accent,var(--primary))/0.3)] pl-3 space-y-0.5">
                   {section.anchors.map((anchor) => (
                     <li key={anchor.id}>
                       <button
@@ -469,7 +499,7 @@ function SolucoesSidebar({ activeSection, activeAnchor, goTo }: NavState) {
                         className={cn(
                           "block w-full rounded-md px-2 py-1.5 text-left text-[13px] font-roboto transition-colors",
                           activeAnchor === anchor.id
-                            ? "bg-muted font-medium text-foreground"
+                            ? "bg-[hsl(var(--sol-accent,var(--primary))/0.1)] font-medium text-foreground"
                             : "text-muted-foreground hover:text-foreground"
                         )}
                       >
@@ -502,12 +532,13 @@ function SolucoesMobileNav({ activeSection, goTo }: Omit<NavState, "activeAnchor
               onClick={() => goTo(section.id)}
               className={cn(
                 "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-anek border transition-colors",
+                solAccentClass[section.id],
                 isActive
                   ? "bg-foreground text-background border-foreground"
                   : "bg-background text-muted-foreground border-transparent hover:text-foreground hover:bg-muted"
               )}
             >
-              <Icon className="h-3.5 w-3.5" />
+              <Icon className={cn("h-3.5 w-3.5", !isActive && accentText)} />
               {section.label}
             </button>
           );
@@ -652,7 +683,7 @@ export default function SolucoesPage() {
         <div className="flex-1 py-8 pl-0 md:pl-8 min-w-0 space-y-24">
 
         {/* ==================== AUVP ESCOLA ==================== */}
-        <section id="auvp-escola" className={cn("scroll-mt-32 space-y-16", printHide("auvp-escola"))}>
+        <section id="auvp-escola" className={cn("sol-escola scroll-mt-32 space-y-16", printHide("auvp-escola"))}>
           <ProdutoHero
             badge={escolaHero.badge}
             titulo="AUVP Escola"
@@ -673,7 +704,7 @@ export default function SolucoesPage() {
             </p>
             <FeatureList items={escolaFeatures} />
             <p className="inline-flex items-center gap-2 rounded-lg border bg-muted/40 px-3 py-2 text-sm font-roboto text-foreground">
-              <Clock className="h-4 w-4 shrink-0 text-primary" />
+              <Clock className="h-4 w-4 shrink-0 text-[hsl(var(--sol-accent,var(--primary)))]" />
               <strong className="font-semibold">{escolaDuracao}</strong>
             </p>
           </div>
@@ -704,7 +735,7 @@ export default function SolucoesPage() {
                   href="https://loja.investidorsardinha.com.br/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-primary underline underline-offset-2"
+                  className="font-semibold text-[hsl(var(--sol-accent,var(--primary)))] underline underline-offset-2"
                 >
                   clique aqui
                 </a>.
@@ -713,7 +744,7 @@ export default function SolucoesPage() {
           </div>
 
           <div id="escola-garantia" className="scroll-mt-32">
-            <div className="flex flex-col sm:flex-row items-center gap-6 rounded-xl border border-t-4 border-t-primary bg-card p-6 md:p-8">
+            <div className="flex flex-col sm:flex-row items-center gap-6 rounded-xl border border-t-4 border-t-[hsl(var(--sol-accent,var(--primary)))] bg-card p-6 md:p-8">
               <img
                 src={escolaGarantia.selo}
                 alt="Selo Aprendizado Garantido"
@@ -733,7 +764,7 @@ export default function SolucoesPage() {
         </section>
 
         {/* ==================== AUVP SEMPRE ==================== */}
-        <section id="auvp-sempre" className={cn("scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-sempre"))}>
+        <section id="auvp-sempre" className={cn("sol-sempre scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-sempre"))}>
           <ProdutoHero
             badge={sempreHero.badge}
             titulo="AUVP Sempre"
@@ -770,7 +801,7 @@ export default function SolucoesPage() {
         </section>
 
         {/* ==================== AUVP PRO ==================== */}
-        <section id="auvp-pro" className={cn("scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-pro"))}>
+        <section id="auvp-pro" className={cn("sol-pro scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-pro"))}>
           <ProdutoHero
             badge={proHero.badge}
             titulo="AUVP PRO"
@@ -800,7 +831,7 @@ export default function SolucoesPage() {
         </section>
 
         {/* ==================== AUVP ANALÍTICA ==================== */}
-        <section id="auvp-analitica" className={cn("scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-analitica"))}>
+        <section id="auvp-analitica" className={cn("sol-analitica scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-analitica"))}>
           <ProdutoHero
             badge={analiticaHero.badge}
             titulo="AUVP Analítica"
@@ -822,7 +853,7 @@ export default function SolucoesPage() {
         </section>
 
         {/* ==================== AUVP INTERNACIONAL ==================== */}
-        <section id="auvp-internacional" className={cn("scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-internacional"))}>
+        <section id="auvp-internacional" className={cn("sol-internacional scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-internacional"))}>
           <ProdutoHero
             badge={internacionalHero.badge}
             titulo="AUVP Internacional"
@@ -850,7 +881,7 @@ export default function SolucoesPage() {
             </p>
             <FeatureList items={internacionalFeatures} cols={2} />
             <p className="inline-flex items-center gap-2 rounded-lg border bg-muted/40 px-3 py-2 text-sm font-roboto text-foreground">
-              <Clock className="h-4 w-4 shrink-0 text-primary" />
+              <Clock className="h-4 w-4 shrink-0 text-[hsl(var(--sol-accent,var(--primary)))]" />
               <strong className="font-semibold">{internacionalHero.duracao}</strong>
             </p>
           </div>
@@ -865,7 +896,7 @@ export default function SolucoesPage() {
         </section>
 
         {/* ==================== AUVP AGRO ==================== */}
-        <section id="auvp-agro" className={cn("scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-agro"))}>
+        <section id="auvp-agro" className={cn("sol-agro scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-agro"))}>
           <ProdutoHero
             badge={agroHero.badge}
             titulo="AUVP Agro"
@@ -890,7 +921,7 @@ export default function SolucoesPage() {
         </section>
 
         {/* ==================== CONTA AUVP ==================== */}
-        <section id="auvp-conta" className={cn("scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-conta"))}>
+        <section id="auvp-conta" className={cn("sol-conta scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-conta"))}>
           <ProdutoHero
             badge={contaHero.badge}
             titulo="Conta AUVP"
@@ -915,7 +946,7 @@ export default function SolucoesPage() {
                           key={i}
                           className="flex items-center gap-3 rounded-lg border bg-card px-4 py-3 text-sm text-muted-foreground font-roboto"
                         >
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                          <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--sol-accent,var(--primary)))] shrink-0" />
                           {item}
                         </li>
                       ))}
@@ -950,7 +981,7 @@ export default function SolucoesPage() {
                   <p
                     className={cn(
                       "text-xs font-bold font-anek uppercase tracking-wider mb-4",
-                      plano.destaque ? "text-primary-foreground" : "text-primary"
+                      plano.destaque ? "text-primary-foreground" : "text-[hsl(var(--sol-accent,var(--primary)))]"
                     )}
                   >
                     {plano.tag}
@@ -968,7 +999,7 @@ export default function SolucoesPage() {
                     <p
                       className={cn(
                         "text-xl font-bold font-anek",
-                        plano.destaque ? "text-primary-foreground" : "text-primary"
+                        plano.destaque ? "text-primary-foreground" : "text-[hsl(var(--sol-accent,var(--primary)))]"
                       )}
                     >
                       {plano.taxa}
@@ -990,7 +1021,7 @@ export default function SolucoesPage() {
                 href="https://auvpcapital.com.br/planos/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-anek font-bold text-primary underline underline-offset-4"
+                className="inline-flex items-center gap-1.5 font-anek font-bold text-[hsl(var(--sol-accent,var(--primary)))] underline underline-offset-4"
               >
                 Clique aqui e conheça os planos da AUVP Capital
                 <ExternalLink className="h-4 w-4" />
@@ -1046,7 +1077,7 @@ export default function SolucoesPage() {
                     const Icon = card.icon!;
                     return (
                       <div key={card.titulo} className="flex items-start gap-4 rounded-xl border bg-card p-6 flex-1">
-                        <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(var(--sol-accent,var(--primary)))] shrink-0">
                           <Icon className="h-5 w-5" />
                         </span>
                         <div>
@@ -1058,7 +1089,7 @@ export default function SolucoesPage() {
                   })}
                 </div>
                 <div className="rounded-xl border bg-card p-6 flex flex-col items-center text-center gap-4 print:hidden">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(var(--sol-accent,var(--primary)))]">
                     <VideoIcon className="h-5 w-5" />
                   </span>
                   <p className="font-bold font-anek text-foreground">Demonstração no App BTG</p>
@@ -1095,8 +1126,8 @@ export default function SolucoesPage() {
               </thead>
               <tbody>
                 {resumoProdutos.map((p) => (
-                  <tr key={p.produto} className="border-t align-top hover:bg-muted/30 transition-colors">
-                    <td className="px-5 py-4 font-anek font-bold text-primary whitespace-nowrap">{p.produto}</td>
+                  <tr key={p.produto} className={cn("border-t align-top hover:bg-muted/30 transition-colors", resumoAccentClass[p.produto])}>
+                    <td className="px-5 py-4 font-anek font-bold text-[hsl(var(--sol-accent,var(--primary)))] whitespace-nowrap">{p.produto}</td>
                     <td className="px-5 py-4 text-foreground">{p.investimento}</td>
                     <td className="px-5 py-4 text-muted-foreground leading-relaxed">{p.paraQuemE}</td>
                     <td className="px-5 py-4 text-muted-foreground">{p.duracao}</td>
@@ -1105,7 +1136,7 @@ export default function SolucoesPage() {
                         href={p.site.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 font-semibold text-primary underline underline-offset-2"
+                        className="inline-flex items-center gap-1 font-semibold text-[hsl(var(--sol-accent,var(--primary)))] underline underline-offset-2"
                       >
                         {p.site.label}
                         <ExternalLink className="h-3 w-3" />
@@ -1240,7 +1271,7 @@ function CartaoModulosAccordion({ expandAll }: { expandAll: boolean }) {
             <ul className="space-y-2">
               {mod.itens.map((item, i) => (
                 <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground font-roboto leading-relaxed">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--sol-accent,var(--primary)))] shrink-0 mt-1.5" />
                   {item}
                 </li>
               ))}
