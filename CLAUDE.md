@@ -26,10 +26,13 @@ src/components/GlobalNav.tsx → Navegação global responsiva
 src/contexts/       → ThemeContext, BrandContext, ViewContext
 src/assets/team/    → Fotos dos colaboradores (importadas via Vite ?url)
 src/assets/team.ts  → Exporta as fotos como URLs
+src/assets/produtos-fisicos/ → Fotos dos brindes/produtos físicos (WebP otimizado)
+src/assets/produtosFisicos.ts → Exporta as fotos como URLs (chave = slug)
 src/assets/olhos.ts → Logos SVG
 src/lib/utils.ts    → cn() e publicUrl()
 public/             → Assets estáticos (SVGs dos logos, 404.html)
 docs/fotos-originais/ → Fotos originais em alta resolução (não usadas no build)
+docs/fotos-originais/produtos-fisicos/ → Fotos originais (sem tratamento) dos produtos físicos
 archive/v2-design-system/ → Iteração anterior do projeto (inativa)
 ```
 
@@ -66,6 +69,8 @@ Sem isso, o path quebra no GitHub Pages (base `/central/`).
 
 **Fotos do time** — importar de `src/assets/team.ts`, nunca diretamente da pasta. O arquivo mapeia nomes para URLs via Vite `?url`.
 
+**Produtos físicos** — o catálogo do Hub vem de `src/data/produtosFisicos.ts`; as fotos vêm de `src/assets/produtosFisicos.ts` (mesma ideia do time). Para trocar uma foto por uma versão tratada, basta substituir o `.webp` em `src/assets/produtos-fisicos/` mantendo o slug. Os originais ficam em `docs/fotos-originais/produtos-fisicos/` e não entram no build.
+
 ## Como adicionar uma nova página
 
 1. Criar `src/pages/NovaPagina.tsx`
@@ -94,5 +99,5 @@ Deploy automático: push em `main` → GitHub Actions → GitHub Pages.
 
 ## O que NÃO está no build
 
-- `docs/fotos-originais/` — fotos de alta resolução do time (master, não usadas no app)
+- `docs/fotos-originais/` — fotos de alta resolução do time e dos produtos físicos (master, não usadas no app)
 - `archive/v2-design-system/` — projeto Lovable.dev anterior (inativo)

@@ -23,6 +23,12 @@ import { baixarAgendaIcs } from "@/components/CommandPalette";
 import { novidadesMensais, mesNumero } from "@/data/novidades";
 import { eventos, proximosEventos, type Evento } from "@/data/eventos";
 import { teamMembers } from "@/data/time";
+import {
+  produtosFisicos,
+  categoriasProdutosFisicos,
+  categoriaTone,
+  type CategoriaProdutoFisico,
+} from "@/data/produtosFisicos";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 function FigmaIcon({ className }: { className?: string }) {
@@ -223,16 +229,8 @@ const docs: DocLink[] = [
   { label: "Padrões de API e Integrações", icon: Settings, soon: true },
 ];
 
-const portfolio = [
-  { nome: "Kit de Onboarding", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Caderno, caneta e carta de boas-vindas entregues no primeiro dia.", img: "" },
-  { nome: "Camiseta AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Camiseta preta com bordado do olho dourado da AUVP.", img: "" },
-  { nome: "Caneca Sardinha", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Caneca de porcelana com design exclusivo para o time.", img: "" },
-  { nome: "Cartão de Visitas", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Cartão premium com verniz localizado e dados de contato.", img: "" },
-  { nome: "Banner de Evento", tag: "Evento", tagColor: "bg-purple-100 text-purple-800", desc: "Banner retrátil 100×200 cm usado nos eventos e workshops.", img: "" },
-  { nome: "Pasta Corporativa", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Pasta A4 com impressão da marca e bolso interno.", img: "" },
-  { nome: "Ecobag AUVP", tag: "Brinde", tagColor: "bg-blue-100 text-blue-800", desc: "Sacola de algodão cru com silk do olho AUVP.", img: "" },
-  { nome: "Planner Sardinha", tag: "Material Impresso", tagColor: "bg-emerald-100 text-emerald-800 dark:bg-[#5A8770]/15 dark:text-[#5A8770]", desc: "Planner anual exclusivo com seções de metas e OKRs.", img: "" },
-];
+/** Quantos produtos físicos aparecem antes de clicar em "Ver mais". */
+const PORTFOLIO_PREVIEW = 8;
 
 interface MuralCard {
   titulo: string;
@@ -841,7 +839,11 @@ export default function Hub() {
     "Boa noite, time 🌙";
   const proximoEvento = proximosEventos(1)[0];
   const [portfolioExpanded, setPortfolioExpanded] = useState(false);
-  const portfolioVisible = portfolioExpanded ? portfolio : portfolio.slice(0, 4);
+  const [portfolioCategoria, setPortfolioCategoria] = useState<CategoriaProdutoFisico | "Todos">("Todos");
+  const portfolioFiltrado = portfolioCategoria === "Todos"
+    ? produtosFisicos
+    : produtosFisicos.filter((p) => p.categoria === portfolioCategoria);
+  const portfolioVisible = portfolioExpanded ? portfolioFiltrado : portfolioFiltrado.slice(0, PORTFOLIO_PREVIEW);
 
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -998,21 +1000,42 @@ export default function Hub() {
             <SectionHeader
               icon={ImageIcon}
               title="Portfólio de Produtos Físicos"
-              action={portfolio.length > 4 && (
+              action={portfolioFiltrado.length > PORTFOLIO_PREVIEW && (
                 <button
                   onClick={() => setPortfolioExpanded(e => !e)}
                   className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
                 >
-                  {portfolioExpanded ? "Ver menos" : "Ver mais"} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300 ease-apple", portfolioExpanded && "rotate-90")} />
+                  {portfolioExpanded ? "Ver menos" : `Ver todos (${portfolioFiltrado.length})`} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300 ease-apple", portfolioExpanded && "rotate-90")} />
                 </button>
               )}
             />
+            <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
+              Brindes, kits e materiais de marca que o time planeja, desenha e produz. As fotos
+              são do acervo interno e ainda não passaram por tratamento de estúdio.
+            </p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {(["Todos", ...categoriasProdutosFisicos] as const).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => { setPortfolioCategoria(cat); setPortfolioExpanded(false); }}
+                  aria-pressed={portfolioCategoria === cat}
+                  className={cn(
+                    "px-3 py-1 rounded-full text-xs font-semibold font-roboto border transition-colors",
+                    portfolioCategoria === cat
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-background text-foreground border-border hover:bg-muted"
+                  )}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {portfolioVisible.map((item, i) => (
-                <div key={i} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
+              {portfolioVisible.map((item) => (
+                <div key={item.slug} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
                   <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
                     {item.img ? (
-                      <img src={item.img} alt={item.nome} className="w-full h-full object-cover transition-transform duration-500 ease-apple sm:group-hover:scale-105" />
+                      <img src={item.img} alt={item.nome} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 ease-apple sm:group-hover:scale-105" />
                     ) : (
                       <>
                         <ImageIcon className="h-8 w-8 text-muted-foreground/40 transition-transform duration-300 ease-apple sm:group-hover:scale-110 sm:group-hover:text-primary/40" />
@@ -1020,7 +1043,8 @@ export default function Hub() {
                       </>
                     )}
                   </div>
-                  <div className="p-3 flex flex-col gap-1">
+                  <div className="p-3 flex flex-col items-start gap-1.5">
+                    <Tag tone={categoriaTone[item.categoria]} className="text-[9px]">{item.categoria}</Tag>
                     <p className="font-semibold font-anek text-foreground text-sm leading-snug">{item.nome}</p>
                     <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
                   </div>
