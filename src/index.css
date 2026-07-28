@@ -649,6 +649,27 @@
   tr, .rounded-xl, .rounded-2xl { break-inside: avoid; }
 }
 
+/* === Nossa estrutura — cubo do Produto ===
+   No tema claro o cubo é preto (com olho e rótulo em branco) para
+   destacar-se do fundo claro da seção; no escuro ele é o cubo branco
+   luminoso. As três faces mantêm o sombreado isométrico: topo mais
+   claro que a direita, que é mais clara que a esquerda.
+   O seletor .light repete os valores claros para os previews que forçam
+   tema claro sob html.dark. */
+:root,
+.light {
+  --cubo-produto-top: 0 0% 13%;
+  --cubo-produto-right: 0 0% 8%;
+  --cubo-produto-left: 0 0% 3%;
+  --cubo-produto-texto: 0 0% 100%;
+}
+.dark {
+  --cubo-produto-top: 0 0% 99%;
+  --cubo-produto-right: 210 22% 88%;
+  --cubo-produto-left: 216 16% 78%;
+  --cubo-produto-texto: 110 78% 9%;
+}
+
 /* === Nossa estrutura — infográfico isométrico (TimePage) ===
    rise: entrada escalonada dos cubos; float: flutuação contínua;
    dash: pulso de energia percorrendo as linhas do chão (o offset -156
