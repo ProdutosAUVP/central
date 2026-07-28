@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home, Users, Palette, Volume2, Map, Newspaper,
-  ExternalLink, Sun, Moon, CalendarDays, User, Layers, ScanFace,
+  ExternalLink, Sun, Moon, CalendarDays, User, Layers,
 } from "lucide-react";
 import { CatIcon } from "@phosphor-icons/react";
 import {
@@ -21,7 +21,6 @@ import { gerarIcs } from "@/data/eventos";
 import { tomEVozSections, tomEVozGroupLabels, TOM_E_VOZ_AUTH_KEY, TOM_E_VOZ_UNLOCKED_EVENT } from "@/data/tomEVozSections";
 import { TRIGGER_CAT_EVENT } from "@/components/EasterEgg";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useCareca } from "@/contexts/CarecaContext";
 
 /** Evento global disparado pelo botão de busca do header. */
 export const OPEN_PALETTE_EVENT = "auvp:open-palette";
@@ -52,13 +51,11 @@ export function baixarAgendaIcs() {
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
   const [tomEVozUnlocked, setTomEVozUnlocked] = useState(
     () => sessionStorage.getItem(TOM_E_VOZ_AUTH_KEY) === "true"
   );
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
-  const { careca, toggleCareca } = useCareca();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -95,18 +92,8 @@ export function CommandPalette() {
   };
 
   return (
-    <CommandDialog
-      open={open}
-      onOpenChange={(o) => {
-        setOpen(o);
-        if (!o) setQuery("");
-      }}
-    >
-      <CommandInput
-        placeholder="Buscar páginas, componentes, pessoas…"
-        value={query}
-        onValueChange={setQuery}
-      />
+    <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandInput placeholder="Buscar páginas, componentes, pessoas…" />
       <CommandList className="max-h-[420px]">
         <CommandEmpty>Nada encontrado. Tente outro termo.</CommandEmpty>
 
@@ -225,22 +212,6 @@ export function CommandPalette() {
             <CatIcon size={32} className="mr-2 shrink-0" style={{ width: 32, height: 32 }} />
             Jorginho
           </CommandItem>
-          {/* Easter egg — o Modo Careca só existe pra quem busca por ele:
-              fica fora da lista inicial e só entra quando algo é digitado. */}
-          {query.trim() !== "" && (
-            <CommandItem
-              className="group"
-              value="modo careca ricardo cabelo raspar easter egg"
-              onSelect={() => run(toggleCareca)}
-            >
-              <ScanFace className="mr-2 shrink-0" />
-              <span className="flex-1">{careca ? "Desativar Modo Careca" : "Modo Careca"}</span>
-              {/* Dica revelada no hover (ou navegando com o teclado) */}
-              <span className="text-xs italic text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-data-[selected=true]:opacity-100">
-                ou modo Ricardo
-              </span>
-            </CommandItem>
-          )}
         </CommandGroup>
       </CommandList>
     </CommandDialog>
