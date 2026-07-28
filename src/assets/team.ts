@@ -48,8 +48,9 @@ export const teamPhotos: Record<string, string> = {
 };
 
 /**
- * Versões careca das fotos — easter egg do "Modo Careca" (ou modo Ricardo),
- * ativado pela busca global. Quem não tiver versão careca cai na foto normal.
+ * Versões careca das fotos — easter egg do "Modo Megabrain" (ou modo
+ * Ricardo), ativado digitando "megabrain" em qualquer página. Quem não
+ * tiver versão careca cai na foto normal.
  */
 export const teamPhotosCareca: Record<string, string> = {
   raul: raulCareca,

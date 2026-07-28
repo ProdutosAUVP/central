@@ -1,12 +1,12 @@
 import { useCareca, SCAN_DURATION_MS } from "@/contexts/CarecaContext";
 
 /**
- * Overlay do "Modo Careca": uma linha de scan varre a tela de cima a baixo
- * enquanto as fotos dos colaboradores são trocadas no meio da varredura —
- * como se o scanner estivesse "raspando" o cabelo de todo mundo.
+ * Overlay do "Modo Megabrain": uma linha de scan varre a tela de cima a
+ * baixo enquanto as fotos dos colaboradores são trocadas no meio da
+ * varredura — como se o scanner estivesse "raspando" o cabelo de todo mundo.
  */
 export function CarecaScanEffect() {
-  const { scanning } = useCareca();
+  const { scanning, activating } = useCareca();
 
   if (!scanning) return null;
 
@@ -18,6 +18,19 @@ export function CarecaScanEffect() {
     >
       {/* Leve tom esverdeado de "scanner" sobre a tela inteira */}
       <div className="absolute inset-0 bg-emerald-400/[0.07]" />
+
+      {/* Rótulo do modo — mantém viva a piada do "ou modo Ricardo" */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-1 rounded-2xl bg-black/60 px-8 py-4 text-center backdrop-blur-sm">
+          <p
+            className="font-mono text-lg font-bold uppercase tracking-[0.35em] text-emerald-300"
+            style={{ textShadow: "0 0 12px rgba(52, 211, 153, 0.8)" }}
+          >
+            Megabrain {activating ? "ativado" : "desativado"}
+          </p>
+          <p className="font-mono text-xs italic text-emerald-300/80">ou modo Ricardo</p>
+        </div>
+      </div>
 
       {/* Linha de scan com rastro — varre do topo até embaixo */}
       <div

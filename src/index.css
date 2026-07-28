@@ -554,7 +554,7 @@
   100% { opacity: 0; transform: translateY(-10px) scale(0.85); }
 }
 
-/* Easter egg — Modo Careca (ou modo Ricardo): linha de scan que varre a
+/* Easter egg — Modo Megabrain (ou modo Ricardo): linha de scan que varre a
    tela de cima a baixo enquanto as fotos do time são trocadas. A duração
    é controlada pelo componente (SCAN_DURATION_MS em CarecaContext). */
 @keyframes auvp-careca-scan {
