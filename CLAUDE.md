@@ -23,14 +23,18 @@ src/pages/          → Uma página por rota (Hub, DesignSystem, TimePage, etc.)
 src/components/ui/  → Componentes base shadcn/ui — NÃO editar diretamente
 src/components/widgets/ → Componentes customizados AUVP
 src/components/GlobalNav.tsx → Navegação global responsiva
-src/contexts/       → ThemeContext, BrandContext, ViewContext
+src/components/TeamPhoto.tsx → Âncora única das fotos de colaborador
+src/components/ProdutosFisicos.tsx → Card e filtro de categorias dos produtos físicos
+src/contexts/       → ThemeContext, BrandContext, ViewContext, CarecaContext
 src/assets/team/    → Fotos dos colaboradores (importadas via Vite ?url)
+src/assets/team/careca/ → Versões careca (Modo Megabrain), mesmo enquadramento
 src/assets/team.ts  → Exporta as fotos como URLs
 src/assets/produtos-fisicos/ → Fotos dos brindes/produtos físicos (WebP otimizado)
 src/assets/produtosFisicos.ts → Exporta as fotos como URLs (chave = slug)
 src/assets/olhos.ts → Logos SVG
 src/lib/utils.ts    → cn() e publicUrl()
 public/             → Assets estáticos (SVGs dos logos, 404.html)
+PRODUTOS FÍSICOS TRATADOS/ → Mockups tratados dos produtos físicos (fonte do catálogo)
 docs/fotos-originais/ → Fotos originais em alta resolução (não usadas no build)
 docs/fotos-originais/produtos-fisicos/ → Fotos originais (sem tratamento) dos produtos físicos
 archive/v2-design-system/ → Iteração anterior do projeto (inativa)
@@ -47,6 +51,7 @@ archive/v2-design-system/ → Iteração anterior do projeto (inativa)
 /escola         → src/pages/EscolaPage.tsx
 /roadmap        → src/pages/RoadmapPage.tsx
 /novidades      → src/pages/NovidadesPage.tsx
+/produtos-fisicos → src/pages/ProdutosFisicosPage.tsx  (catálogo completo — dados em src/data/produtosFisicos.ts)
 *               → src/pages/NotFound.tsx
 ```
 
@@ -67,15 +72,25 @@ Sem isso, o path quebra no GitHub Pages (base `/central/`).
 
 **Marca** — `BrandContext` alterna entre `capital` e `escola`. A classe é aplicada no `<html>`. Componentes na pasta `widgets/` podem ter variantes por marca.
 
-**Fotos do time** — importar de `src/assets/team.ts`, nunca diretamente da pasta. O arquivo mapeia nomes para URLs via Vite `?url`.
+**Fotos do time** — sempre renderizar com `<TeamPhoto id="raul" alt="…" />` (`src/components/TeamPhoto.tsx`). É a âncora única: garante o mesmo enquadramento (`object-cover object-top`) em todos os ambientes e faz o Modo Megabrain trocar a foto em todos eles ao mesmo tempo. Não importe `teamPhotos`/`teamPhotosCareca` (nem uma foto solta de `src/assets/`) direto numa tela — foto fora da âncora fica inconsistente entre os modos.
 
-**Produtos físicos** — o catálogo do Hub vem de `src/data/produtosFisicos.ts`; as fotos vêm de `src/assets/produtosFisicos.ts` (mesma ideia do time). Para trocar uma foto por uma versão tratada, basta substituir o `.webp` em `src/assets/produtos-fisicos/` mantendo o slug. Os originais ficam em `docs/fotos-originais/produtos-fisicos/` e não entram no build.
+As URLs em si continuam vindo de `src/assets/team.ts` (normal) e `src/assets/team/careca/` (Megabrain). Ao adicionar uma foto nova, gere a versão careca no **mesmo enquadramento e mesmo tamanho** (640×640) da original.
+
+**Produtos físicos** — o catálogo vem de `src/data/produtosFisicos.ts` e espelha a pasta `PRODUTOS FÍSICOS TRATADOS/`: cada item tem um mockup tratado correspondente. As fotos são exportadas por `src/assets/produtosFisicos.ts` (mesma ideia do time). Para incluir um produto:
+
+1. adicione o mockup tratado em `PRODUTOS FÍSICOS TRATADOS/`;
+2. gere o WebP quadrado (900×900, fundo do estúdio estendido até fechar o quadrado) em `src/assets/produtos-fisicos/<slug>.webp`;
+3. registre o item no `catalogo` de `src/data/produtosFisicos.ts` com o mesmo slug.
+
+Os quatro primeiros itens do catálogo são os destaques exibidos no Hub (`PRODUTOS_FISICOS_DESTAQUE`); o resto aparece em `/produtos-fisicos`. Card e filtro de categorias são compartilhados via `src/components/ProdutosFisicos.tsx`. Os originais sem tratamento ficam em `docs/fotos-originais/produtos-fisicos/` e não entram no build.
 
 ## Como adicionar uma nova página
 
 1. Criar `src/pages/NovaPagina.tsx`
 2. Importar e registrar rota em `src/App.tsx`
-3. Adicionar link em `src/components/GlobalNav.tsx`
+3. Adicionar link em `src/components/GlobalNav.tsx` (sistemas principais) ou só em
+   `src/components/CommandPalette.tsx` (sub-páginas do Hub, como `/novidades` e
+   `/produtos-fisicos`)
 
 ## Como adicionar um widget ao Design System
 
@@ -100,4 +115,5 @@ Deploy automático: push em `main` → GitHub Actions → GitHub Pages.
 ## O que NÃO está no build
 
 - `docs/fotos-originais/` — fotos de alta resolução do time e dos produtos físicos (master, não usadas no app)
+- `PRODUTOS FÍSICOS TRATADOS/` — mockups tratados em PNG (master do catálogo; o app usa os WebP derivados)
 - `archive/v2-design-system/` — projeto Lovable.dev anterior (inativo)

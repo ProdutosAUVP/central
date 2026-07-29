@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home, Users, Palette, Volume2, Map, Newspaper,
-  ExternalLink, Sun, Moon, CalendarDays, User, Layers,
+  ExternalLink, Sun, Moon, CalendarDays, User, Layers, Package,
 } from "lucide-react";
 import { CatIcon } from "@phosphor-icons/react";
 import {
@@ -33,6 +33,7 @@ const paginas = [
   { label: "Nossas Soluções", path: "/solucoes", icon: Layers, keywords: "produtos soluções guia vendas escola sempre pro analítica internacional agro conta" },
   { label: "Roadmap", path: "/roadmap", icon: Map, keywords: "roadmap entregas trimestre planejamento" },
   { label: "Mural de Novidades", path: "/novidades", icon: Newspaper, keywords: "novidades atualizações mural mensal" },
+  { label: "Produtos Físicos", path: "/produtos-fisicos", icon: Package, keywords: "brindes produtos físicos portfólio caneca garrafa boné meia ecobag catálogo" },
 ];
 
 const linksExternos = [

@@ -7,7 +7,7 @@ import {
   FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
   Globe, Minus, Square, X, Layers
 } from "lucide-react";
-import { useTeamPhotos } from "@/contexts/CarecaContext";
+import { TeamPhoto } from "@/components/TeamPhoto";
 import { lpScreenshots } from "@/assets/lps";
 import { cn } from "@/lib/utils";
 import {
@@ -23,12 +23,8 @@ import { baixarAgendaIcs } from "@/components/CommandPalette";
 import { novidadesMensais, mesNumero } from "@/data/novidades";
 import { eventos, proximosEventos, type Evento } from "@/data/eventos";
 import { teamMembers } from "@/data/time";
-import {
-  produtosFisicos,
-  categoriasProdutosFisicos,
-  categoriaTone,
-  type CategoriaProdutoFisico,
-} from "@/data/produtosFisicos";
+import { produtosFisicos, PRODUTOS_FISICOS_DESTAQUE } from "@/data/produtosFisicos";
+import { ProdutoFisicoCard } from "@/components/ProdutosFisicos";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 function FigmaIcon({ className }: { className?: string }) {
@@ -229,8 +225,8 @@ const docs: DocLink[] = [
   { label: "Padrões de API e Integrações", icon: Settings, soon: true },
 ];
 
-/** Quantos produtos físicos aparecem antes de clicar em "Ver mais". */
-const PORTFOLIO_PREVIEW = 8;
+/** Destaques do portfólio no Hub — o catálogo completo mora em /produtos-fisicos. */
+const portfolioDestaques = produtosFisicos.slice(0, PRODUTOS_FISICOS_DESTAQUE);
 
 interface MuralCard {
   titulo: string;
@@ -569,7 +565,6 @@ const faqs = [
 const EASE_APPLE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 function TeamCarousel() {
-  const teamPhotos = useTeamPhotos();
   const items = [...teamMembers, ...teamMembers];
   const CARD_W = 144;  // w-36
   const GAP    = 12;   // gap-3
@@ -645,15 +640,12 @@ function TeamCarousel() {
                 className="rounded-2xl border bg-card overflow-hidden shadow-md"
               >
                 <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
-                  {teamPhotos[member.id] ? (
-                    <img
-                      src={teamPhotos[member.id]}
-                      alt={member.name}
-                      className="absolute inset-0 h-full w-full object-cover object-top"
-                    />
-                  ) : (
-                    <User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />
-                  )}
+                  <TeamPhoto
+                    id={member.id}
+                    alt={member.name}
+                    className="absolute inset-0 h-full w-full"
+                    fallback={<User className="h-8 w-8 text-primary/30" strokeWidth={1.5} />}
+                  />
                 </div>
               </div>
               {/* Texto — fora do elemento escalado, sempre estático */}
@@ -838,13 +830,6 @@ export default function Hub() {
     hora < 18 ? "Boa tarde, time 🌤️" :
     "Boa noite, time 🌙";
   const proximoEvento = proximosEventos(1)[0];
-  const [portfolioExpanded, setPortfolioExpanded] = useState(false);
-  const [portfolioCategoria, setPortfolioCategoria] = useState<CategoriaProdutoFisico | "Todos">("Todos");
-  const portfolioFiltrado = portfolioCategoria === "Todos"
-    ? produtosFisicos
-    : produtosFisicos.filter((p) => p.categoria === portfolioCategoria);
-  const portfolioVisible = portfolioExpanded ? portfolioFiltrado : portfolioFiltrado.slice(0, PORTFOLIO_PREVIEW);
-
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (spotlightRef.current) {
@@ -1000,55 +985,22 @@ export default function Hub() {
             <SectionHeader
               icon={ImageIcon}
               title="Portfólio de Produtos Físicos"
-              action={portfolioFiltrado.length > PORTFOLIO_PREVIEW && (
-                <button
-                  onClick={() => setPortfolioExpanded(e => !e)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
+              action={
+                <Link
+                  to="/produtos-fisicos"
+                  className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
                 >
-                  {portfolioExpanded ? "Ver menos" : `Ver todos (${portfolioFiltrado.length})`} <ChevronRight className={cn("h-3.5 w-3.5 transition-transform duration-300 ease-apple", portfolioExpanded && "rotate-90")} />
-                </button>
-              )}
+                  Ver todos ({produtosFisicos.length}) <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+                </Link>
+              }
             />
             <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
-              Brindes, kits e materiais de marca que o time planeja, desenha e produz. As fotos
-              são do acervo interno e ainda não passaram por tratamento de estúdio.
+              Brindes, kits e materiais de marca que o time planeja, desenha e produz.
+              Abaixo, os quatro destaques — o catálogo completo fica na página de Produtos Físicos.
             </p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {(["Todos", ...categoriasProdutosFisicos] as const).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => { setPortfolioCategoria(cat); setPortfolioExpanded(false); }}
-                  aria-pressed={portfolioCategoria === cat}
-                  className={cn(
-                    "px-3 py-1 rounded-full text-xs font-semibold font-roboto border transition-colors",
-                    portfolioCategoria === cat
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-background text-foreground border-border hover:bg-muted"
-                  )}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {portfolioVisible.map((item) => (
-                <div key={item.slug} className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
-                  <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
-                    {item.img ? (
-                      <img src={item.img} alt={item.nome} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 ease-apple sm:group-hover:scale-105" />
-                    ) : (
-                      <>
-                        <ImageIcon className="h-8 w-8 text-muted-foreground/40 transition-transform duration-300 ease-apple sm:group-hover:scale-110 sm:group-hover:text-primary/40" />
-                        <span className="text-[10px] text-muted-foreground font-roboto">Adicionar foto</span>
-                      </>
-                    )}
-                  </div>
-                  <div className="p-3 flex flex-col items-start gap-1.5">
-                    <Tag tone={categoriaTone[item.categoria]} className="text-[9px]">{item.categoria}</Tag>
-                    <p className="font-semibold font-anek text-foreground text-sm leading-snug">{item.nome}</p>
-                    <p className="text-xs text-muted-foreground font-roboto leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
+              {portfolioDestaques.map((item) => (
+                <ProdutoFisicoCard key={item.slug} item={item} />
               ))}
             </div>
           </section>
