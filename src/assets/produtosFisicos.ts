@@ -1,9 +1,9 @@
 /**
  * Fotos dos produtos físicos AUVP (brindes, kits e materiais de marca).
- * Versões otimizadas (WebP, quadrado de 900px) geradas a partir dos mockups
- * tratados em `PRODUTOS FÍSICOS TRATADOS/`, com o fundo do estúdio estendido
- * até fechar o quadrado — assim todos os cards do catálogo têm o mesmo
- * enquadramento. As chaves correspondem ao `slug` de cada item em
+ * Versões otimizadas (WebP, 900×1200 — 3:4, a proporção nativa dos mockups)
+ * geradas a partir dos mockups tratados em `PRODUTOS FÍSICOS TRATADOS/`.
+ * Todas têm o mesmo formato para que a foto preencha o card inteiro, sem
+ * faixa de fundo sobrando. As chaves correspondem ao `slug` de cada item em
  * `src/data/produtosFisicos.ts`.
  */
 import agendaAuvp from "./produtos-fisicos/agenda-auvp.webp?url";

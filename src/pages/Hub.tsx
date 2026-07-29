@@ -982,18 +982,7 @@ export default function Hub() {
         {/* Portfólio */}
         <Reveal>
           <section>
-            <SectionHeader
-              icon={ImageIcon}
-              title="Portfólio de Produtos Físicos"
-              action={
-                <Link
-                  to="/produtos-fisicos"
-                  className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
-                >
-                  Ver todos ({produtosFisicos.length}) <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
-                </Link>
-              }
-            />
+            <SectionHeader icon={ImageIcon} title="Portfólio de Produtos Físicos" />
             <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
               Brindes, kits e materiais de marca que o time planeja, desenha e produz.
               Abaixo, os quatro destaques — o catálogo completo fica na página de Produtos Físicos.
@@ -1003,27 +992,32 @@ export default function Hub() {
                 <ProdutoFisicoCard key={item.slug} item={item} />
               ))}
             </div>
+            <div className="flex justify-center mt-5">
+              <Link
+                to="/produtos-fisicos"
+                className="group inline-flex items-center gap-2 rounded-full border bg-card px-5 py-2.5 text-xs font-semibold font-roboto text-foreground transition-[border-color,color,box-shadow] duration-300 ease-apple sm:hover:border-primary/40 sm:hover:text-primary sm:hover:shadow-sm"
+              >
+                Ver todos os {produtosFisicos.length} produtos
+                <ChevronRight className="h-3.5 w-3.5 shrink-0 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+              </Link>
+            </div>
           </section>
         </Reveal>
 
         {/* Atualizações da Escola */}
         <Reveal>
           <section>
-            <SectionHeader
-              icon={Newspaper}
-              title="Atualizações da Escola"
-              action={
-                <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
-                  Ver mais <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
-                </Link>
-              }
-            />
-            <Accordion type="single" collapsible className="space-y-2">
+            <SectionHeader icon={Newspaper} title="Atualizações da Escola" />
+            {/* Duas colunas no desktop; `items-start` evita que um item aberto
+                estique o vizinho da mesma linha. */}
+            <Accordion type="single" collapsible className="grid gap-2 sm:grid-cols-2 items-start">
               {novidadesMensais.map((n, i) => (
                 <AccordionItem
                   key={i}
                   value={`mes-${i}`}
-                  className="rounded-2xl border bg-card overflow-hidden group"
+                  /* Aberto, o mês ocupa a linha inteira: o conteúdo é longo e,
+                     em meia coluna, deixaria a coluna vizinha vazia. */
+                  className="rounded-2xl border bg-card overflow-hidden group data-[state=open]:sm:col-span-2"
                 >
                   <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
                     <div className="flex items-center gap-3 text-left flex-1 min-w-0">
