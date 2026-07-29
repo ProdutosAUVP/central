@@ -28,6 +28,12 @@ interface PageShellProps {
   headerActions?: React.ReactNode;
   /** Faixa de largura total renderizada entre o header e o <main> (ex.: PageHero). */
   hero?: React.ReactNode;
+  /**
+   * Camada fixa que cobre a página inteira (ex.: o spotlight do Hub).
+   * Fica fora do <main> de propósito: dentro dele, um elemento `fixed` ainda
+   * contaria como filho para o `space-y-*` e empurraria o primeiro card.
+   */
+  overlay?: React.ReactNode;
   /** Props extras aplicadas ao wrapper raiz (ex.: handlers do spotlight). */
   rootProps?: React.HTMLAttributes<HTMLDivElement>;
 }
@@ -39,10 +45,12 @@ export function PageShell({
   mainClassName,
   headerActions,
   hero,
+  overlay,
   rootProps,
 }: PageShellProps) {
   return (
     <div {...rootProps} className={cn("min-h-screen bg-background flex flex-col", rootProps?.className)}>
+      {overlay}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-7xl mx-auto flex h-14 md:h-16 items-center justify-between px-4 md:px-8 gap-2">
           <GlobalNav />
