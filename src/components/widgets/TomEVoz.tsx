@@ -11,7 +11,7 @@ import { areaIcons } from "@/data/areasEmpresa";
 import * as Data from "./tom-e-voz/TomEVozData";
 import { TomEVozAIFoodInline } from "./tom-e-voz/TomEVozAIFoodInline";
 import bourdainImg from "@/assets/bourdain.jpg";
-import raulImg from "@/assets/raul.webp";
+import { TeamPhoto } from "@/components/TeamPhoto";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers de renderização                                            */
@@ -176,11 +176,13 @@ export function TomEVoz() {
         <CardBox>
           <SectionTitle icon={Mic}>{Data.vozRaulSena.titulo}</SectionTitle>
           <div className="flex flex-col md:flex-row gap-6 items-center">
-            <img
-              src={raulImg}
+            {/* Mesma foto (e mesmo enquadramento) do Raul usada no resto da
+                Central — inclusive na versão do Modo Megabrain. */}
+            <TeamPhoto
+              id="raul"
               alt="Raul Sena — fundador da AUVP"
-              className="w-full md:w-48 lg:w-56 rounded-xl object-cover aspect-[1/1] shrink-0" />
-            
+              className="w-full md:w-48 lg:w-56 rounded-xl aspect-[1/1] shrink-0" />
+
             <div className="flex-1">
               {Data.vozRaulSena.paragrafos.slice(0, 2).map((p, i) => <P key={i}>{p}</P>)}
             </div>

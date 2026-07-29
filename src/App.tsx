@@ -19,6 +19,7 @@ import NovidadesPage from "./pages/NovidadesPage";
 import DesignSystem from "./pages/DesignSystem";
 import TomEVozPage from "./pages/TomEVozPage";
 import SolucoesPage from "./pages/SolucoesPage";
+import ProdutosFisicosPage from "./pages/ProdutosFisicosPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,7 @@ const App = () => (
                 <Route path="/design-system" element={<DesignSystem />} />
                 <Route path="/tom-e-voz" element={<TomEVozPage />} />
                 <Route path="/solucoes" element={<SolucoesPage />} />
+                <Route path="/produtos-fisicos" element={<ProdutosFisicosPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
