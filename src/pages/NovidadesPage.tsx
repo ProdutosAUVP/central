@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUp, CalendarDays, Newspaper, Rocket, Sparkles } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
+import { PageHero } from "@/components/PageHero";
+import { VoltarParaCentral } from "@/components/VoltarParaCentral";
 import { NovidadeCard } from "@/components/widgets/NovidadeCard";
 import { novidadesMensais, mesNumero, type NovidadeMensal } from "@/data/novidades";
 import { cn } from "@/lib/utils";
@@ -93,33 +95,26 @@ export default function NovidadesPage() {
   const mesAtivo = useScrollSpy(mesIds);
 
   return (
-    <PageShell width="4xl" footer="Novidades — Time de Produto AUVP" mainClassName="py-8 md:py-12 space-y-6">
+    <PageShell
+      width="4xl"
+      footer="Novidades — Time de Produto AUVP"
+      mainClassName="py-8 md:py-12 space-y-6"
+      hero={
+        <PageHero
+          id="topo"
+          icon={Newspaper}
+          title="Mural de Novidades"
+          description="Tudo o que a Equipe AUVP entregou, mês a mês — atualizações, lançamentos e os spoilers do que vem por aí."
+          actions={<VoltarParaCentral />}
+        />
+      }
+    >
 
-      {/* Hero */}
-      <section id="topo" className="relative overflow-hidden rounded-3xl border bg-card">
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-28 -right-20 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute -bottom-36 -left-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-          <Newspaper className="absolute -right-8 -bottom-10 h-52 w-52 -rotate-12 text-primary/5" />
-        </div>
-        <div className="relative px-6 py-10 md:px-10 md:py-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold font-roboto uppercase tracking-wider mb-4">
-            <Newspaper className="h-3.5 w-3.5" /> Novidades
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold font-anek text-foreground mb-3">
-            Mural de Novidades
-          </h1>
-          <p className="text-muted-foreground font-roboto max-w-2xl leading-relaxed">
-            Tudo o que a Equipe AUVP entregou, mês a mês — atualizações, lançamentos e os spoilers do que vem por aí.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
-            <Stat icon={CalendarDays} valor={novidadesMensais.length} rotulo="meses de entregas" />
-            <Stat icon={Sparkles} valor={totalAtualizacoes} rotulo="atualizações publicadas" />
-            <Stat icon={Rocket} valor={spoilersNoRadar} rotulo="spoilers no radar" />
-          </div>
-        </div>
-      </section>
+      <div className="flex flex-wrap gap-x-10 gap-y-4">
+        <Stat icon={CalendarDays} valor={novidadesMensais.length} rotulo="meses de entregas" />
+        <Stat icon={Sparkles} valor={totalAtualizacoes} rotulo="atualizações publicadas" />
+        <Stat icon={Rocket} valor={spoilersNoRadar} rotulo="spoilers no radar" />
+      </div>
 
       {/* Navegação por mês — sticky logo abaixo do header global */}
       <nav
@@ -225,14 +220,15 @@ export default function NovidadesPage() {
         ))}
       </div>
 
-      {/* Voltar ao topo */}
-      <div className="flex justify-center pt-2">
+      {/* Voltar ao topo e para a Central */}
+      <div className="flex flex-wrap justify-center gap-2 pt-2">
         <a
           href="#topo"
           className="inline-flex items-center gap-1.5 rounded-full border bg-card px-4 py-2 text-xs font-semibold font-roboto text-muted-foreground transition-colors duration-300 sm:hover:border-primary/40 sm:hover:text-primary"
         >
           <ArrowUp className="h-3.5 w-3.5" /> Voltar ao topo
         </a>
+        <VoltarParaCentral className="bg-card" />
       </div>
 
     </PageShell>

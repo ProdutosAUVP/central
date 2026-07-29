@@ -39,7 +39,9 @@ export function CategoriaBadge({ categoria, className }: { categoria: CategoriaP
 export function ProdutoFisicoCard({ item }: { item: ProdutoFisico }) {
   return (
     <div className="group rounded-2xl border bg-card overflow-hidden flex flex-col transition-[transform,box-shadow,border-color] duration-300 ease-apple sm:hover:-translate-y-1 sm:hover:shadow-xl sm:hover:border-primary/30">
-      <div className="aspect-square bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
+      {/* 3:4 é a proporção nativa dos mockups tratados — a foto preenche o
+          quadro inteiro, sem faixa de fundo sobrando. */}
+      <div className="aspect-[3/4] bg-muted/50 flex flex-col items-center justify-center gap-2 border-b overflow-hidden">
         {item.img ? (
           <img
             src={item.img}

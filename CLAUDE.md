@@ -25,6 +25,8 @@ src/components/widgets/ → Componentes customizados AUVP
 src/components/GlobalNav.tsx → Navegação global responsiva
 src/components/TeamPhoto.tsx → Âncora única das fotos de colaborador
 src/components/ProdutosFisicos.tsx → Card e filtro de categorias dos produtos físicos
+src/components/PageHero.tsx → Hero padrão de todas as páginas (ícone, título, descrição, ações)
+src/components/VoltarParaCentral.tsx → Atalho de volta ao Hub das sub-páginas
 src/contexts/       → ThemeContext, BrandContext, ViewContext, CarecaContext
 src/assets/team/    → Fotos dos colaboradores (importadas via Vite ?url)
 src/assets/team/careca/ → Versões careca (Modo Megabrain), mesmo enquadramento
@@ -70,6 +72,8 @@ Sem isso, o path quebra no GitHub Pages (base `/central/`).
 
 **Tema dark/light** — `ThemeContext` aplica a classe `dark` no `<html>` e persiste em `localStorage` como `auvp-theme`. O `index.html` lê isso antes do React montar para evitar flash.
 
+**Hero das páginas** — toda página de conteúdo abre com `<PageHero>` passado pela prop `hero` do `PageShell`. É o que mantém Nosso Time, Design System, Tom e Voz, Nossas Soluções, Novidades e Produtos Físicos com a mesma cara. Sub-páginas do Hub (que não aparecem na navegação global) passam `actions={<VoltarParaCentral />}`.
+
 **Marca** — `BrandContext` alterna entre `capital` e `escola`. A classe é aplicada no `<html>`. Componentes na pasta `widgets/` podem ter variantes por marca.
 
 **Fotos do time** — sempre renderizar com `<TeamPhoto id="raul" alt="…" />` (`src/components/TeamPhoto.tsx`). É a âncora única: garante o mesmo enquadramento (`object-cover object-top`) em todos os ambientes e faz o Modo Megabrain trocar a foto em todos eles ao mesmo tempo. Não importe `teamPhotos`/`teamPhotosCareca` (nem uma foto solta de `src/assets/`) direto numa tela — foto fora da âncora fica inconsistente entre os modos.
@@ -79,7 +83,7 @@ As URLs em si continuam vindo de `src/assets/team.ts` (normal) e `src/assets/tea
 **Produtos físicos** — o catálogo vem de `src/data/produtosFisicos.ts` e espelha a pasta `PRODUTOS FÍSICOS TRATADOS/`: cada item tem um mockup tratado correspondente. As fotos são exportadas por `src/assets/produtosFisicos.ts` (mesma ideia do time). Para incluir um produto:
 
 1. adicione o mockup tratado em `PRODUTOS FÍSICOS TRATADOS/`;
-2. gere o WebP quadrado (900×900, fundo do estúdio estendido até fechar o quadrado) em `src/assets/produtos-fisicos/<slug>.webp`;
+2. gere o WebP em 900×1200 (3:4, recorte `cover` — a foto preenche o card inteiro) em `src/assets/produtos-fisicos/<slug>.webp`;
 3. registre o item no `catalogo` de `src/data/produtosFisicos.ts` com o mesmo slug.
 
 Os quatro primeiros itens do catálogo são os destaques exibidos no Hub (`PRODUTOS_FISICOS_DESTAQUE`); o resto aparece em `/produtos-fisicos`. Card e filtro de categorias são compartilhados via `src/components/ProdutosFisicos.tsx`. Os originais sem tratamento ficam em `docs/fotos-originais/produtos-fisicos/` e não entram no build.
