@@ -842,10 +842,11 @@ export default function Hub() {
 
   return (
     <PageShell
-      mainClassName="py-6 md:py-10 space-y-10 md:space-y-16"
+      /* py = px: o respiro acima do primeiro card é o mesmo das laterais. */
+      mainClassName="py-4 md:py-8 space-y-10 md:space-y-16"
       rootProps={{ onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave }}
+      overlay={<div ref={spotlightRef} className="pointer-events-none fixed inset-0 z-[30]" aria-hidden="true" />}
     >
-      <div ref={spotlightRef} className="pointer-events-none fixed inset-0 z-[30]" aria-hidden="true" />
         {/* Hero + Carousel */}
         <div>
           <Reveal>
