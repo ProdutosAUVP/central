@@ -132,8 +132,12 @@ export function RoadmapTimeline() {
   const progressoX = useMemo(() => xDeHoje(g, hoje, W), [g, hoje, W]);
 
   const ondaPrincipal = useMemo(() => caminhoOnda(g, W), [g, W]);
-  const ondaFundo1 = useMemo(() => caminhoOnda(g, W, 0.45, g.amp * 0.8), [g, W]);
-  const ondaFundo2 = useMemo(() => caminhoOnda(g, W, -0.45, g.amp * 0.9), [g, W]);
+  /* As fitas de fundo são desenhadas um período mais longas que a trilha
+     para que, ao deslizarem esse mesmo período, nunca deixem buraco na
+     ponta direita — o excedente fica fora do viewBox e é cortado. */
+  const periodo = g.stride * 2;
+  const ondaFundo1 = useMemo(() => caminhoOnda(g, W + periodo, 0.45, g.amp * 0.8), [g, W, periodo]);
+  const ondaFundo2 = useMemo(() => caminhoOnda(g, W + periodo, -0.45, g.amp * 0.9), [g, W, periodo]);
 
   /** Régua de períodos sob a trilha — um rótulo por período, na ordem da onda. */
   const regua = useMemo(() => {
@@ -195,28 +199,6 @@ export function RoadmapTimeline() {
           <div className="absolute -left-16 top-4 h-56 w-56 rounded-full bg-[hsl(var(--chart-5)/0.10)] blur-3xl" />
           <div className="absolute right-0 -bottom-16 h-64 w-64 rounded-full bg-[hsl(var(--chart-3)/0.10)] blur-3xl" />
           <div className="absolute left-1/3 -top-10 h-52 w-52 rounded-full bg-primary/10 blur-3xl" />
-          {[
-            { left: "8%",  top: "12%", size: 26, delay: "0s",    dur: "7s",   tone: "--chart-5" },
-            { left: "26%", top: "78%", size: 18, delay: "1.4s",  dur: "9s",   tone: "--chart-3" },
-            { left: "52%", top: "16%", size: 22, delay: "0.7s",  dur: "8s",   tone: "--chart-1" },
-            { left: "71%", top: "72%", size: 30, delay: "2.1s",  dur: "10s",  tone: "--chart-2" },
-            { left: "88%", top: "22%", size: 16, delay: "1.1s",  dur: "7.5s", tone: "--chart-4" },
-          ].map((t, i) => (
-            <span
-              key={i}
-              className="absolute opacity-[0.18]"
-              style={{
-                left: t.left,
-                top: t.top,
-                width: 0,
-                height: 0,
-                borderLeft: `${t.size / 2}px solid transparent`,
-                borderRight: `${t.size / 2}px solid transparent`,
-                borderBottom: `${t.size}px solid hsl(var(${t.tone}))`,
-                animation: reducedMotion ? undefined : `roadmap-flutua ${t.dur} ease-in-out ${t.delay} infinite`,
-              }}
-            />
-          ))}
         </div>
 
         {/* Setas */}
@@ -273,13 +255,24 @@ export function RoadmapTimeline() {
                 </filter>
               </defs>
 
-              {/* Ondas de fundo — dão profundidade de fita, como no mar */}
-              <path d={ondaFundo1} fill="none" stroke="url(#rt-onda)" strokeWidth="14" strokeLinecap="round" opacity="0.10" />
-              <path d={ondaFundo2} fill="none" stroke="url(#rt-onda)" strokeWidth="9"  strokeLinecap="round" opacity="0.14" />
+              {/* Ondas de fundo — correm de leve, como água sob a trilha */}
+              <g
+                className={reducedMotion ? undefined : "roadmap-fita"}
+                style={{ "--periodo": `${periodo}px`, "--dur": "18s" } as React.CSSProperties}
+              >
+                <path d={ondaFundo1} fill="none" stroke="url(#rt-onda)" strokeWidth="14" strokeLinecap="round" opacity="0.10" />
+              </g>
+              <g
+                className={reducedMotion ? undefined : "roadmap-fita"}
+                style={{ "--periodo": `${periodo}px`, "--dur": "11s" } as React.CSSProperties}
+              >
+                <path d={ondaFundo2} fill="none" stroke="url(#rt-onda)" strokeWidth="9" strokeLinecap="round" opacity="0.14" />
+              </g>
 
-              {/* Trecho ainda por vir — pontilhado discreto */}
+              {/* Trecho ainda por vir — pontilhado que caminha para a frente */}
               <path
                 d={ondaPrincipal}
+                className={reducedMotion ? undefined : "roadmap-porvir"}
                 fill="none"
                 stroke="hsl(var(--border))"
                 strokeWidth="3"
@@ -287,10 +280,27 @@ export function RoadmapTimeline() {
                 strokeDasharray="1 12"
               />
 
-              {/* Trecho já percorrido — colorido, com brilho por baixo */}
+              {/* Trecho já percorrido — colorido, com brilho que respira */}
               <g clipPath="url(#rt-feito)">
-                <path d={ondaPrincipal} fill="none" stroke="url(#rt-onda)" strokeWidth="10" strokeLinecap="round" opacity="0.35" filter="url(#rt-glow)" />
+                <path
+                  d={ondaPrincipal}
+                  className={reducedMotion ? undefined : "roadmap-luz"}
+                  fill="none" stroke="url(#rt-onda)" strokeWidth="10" strokeLinecap="round"
+                  opacity="0.35" filter="url(#rt-glow)"
+                />
                 <path d={ondaPrincipal} fill="none" stroke="url(#rt-onda)" strokeWidth="4" strokeLinecap="round" />
+                {/* Conta de luz percorrendo a trilha até o "hoje". Vai em
+                    --primary (verde no claro, dourado no escuro) porque
+                    branco sobre o cartão claro some: a linha só pareceria
+                    falhada em vez de acesa. */}
+                {!reducedMotion && (
+                  <g>
+                    <circle r="15" fill="hsl(var(--primary))" opacity="0.3" filter="url(#rt-glow)" />
+                    <circle r="6" fill="hsl(var(--primary))" />
+                    <circle r="2.2" fill="hsl(var(--primary-foreground))" />
+                    <animateMotion dur="7s" repeatCount="indefinite" path={ondaPrincipal} />
+                  </g>
+                )}
               </g>
 
               {/* Marca do "hoje" sobre a onda */}
@@ -324,13 +334,6 @@ export function RoadmapTimeline() {
                     )}
                   </circle>
                 </g>
-              )}
-
-              {/* Cometa que percorre a trilha já entregue */}
-              {!reducedMotion && progressoX > 0 && (
-                <circle r="4" fill="hsl(var(--primary-foreground))" opacity="0.9" clipPath="url(#rt-feito)">
-                  <animateMotion dur="9s" repeatCount="indefinite" path={ondaPrincipal} />
-                </circle>
               )}
 
               {/* Nós + hastes que ligam cada nó ao seu cartão */}
