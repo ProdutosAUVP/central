@@ -30,7 +30,11 @@ interface Geo {
   gap: number;     // vão entre o nó e o cartão
 }
 
-const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 230, h: 460, cardW: 232, cardH: 140, gap: 32 };
+/* A altura do cartão comporta o pior caso — título em duas linhas mais
+   descrição em duas —, senão o flex espreme o título e corta a linha de
+   baixo pela metade. A altura da faixa acompanha: crista e vale precisam
+   caber um cartão inteiro para cima e para baixo do eixo. */
+const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 250, h: 500, cardW: 232, cardH: 152, gap: 32 };
 const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 224, h: 450, cardW: 186, cardH: 150, gap: 26 };
 
 const nX = (g: Geo, i: number) => g.pad + g.stride * i;
@@ -102,10 +106,13 @@ function MarcoCard({ marco, ativo }: { marco: Marco; ativo: boolean }) {
         <span className="text-lg leading-none shrink-0" aria-hidden="true">{marco.emoji}</span>
         <Tag tone={marco.tone} className="text-[9px] truncate">{marco.periodo}</Tag>
       </div>
-      <p className="font-bold font-anek text-foreground text-[13px] sm:text-sm leading-tight line-clamp-2">
+      {/* shrink-0 nos dois: como o cartão tem altura fixa, sem isso o flex
+          encolhe o bloco de texto abaixo do que ele precisa e a segunda
+          linha sai cortada no meio do glifo. */}
+      <p className="shrink-0 font-bold font-anek text-foreground text-[13px] sm:text-sm leading-tight line-clamp-2">
         {marco.titulo}
       </p>
-      <p className="text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-2">
+      <p className="shrink-0 text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-2">
         {marco.descricao}
       </p>
       <span className={cn("mt-auto inline-flex items-center gap-1 text-[9px] font-bold font-roboto uppercase tracking-wider", cfg.classe)}>
@@ -241,11 +248,14 @@ export function RoadmapTimeline() {
               aria-hidden="true"
             >
               <defs>
+                {/* Rampa sequencial (--chart-seq-*): um verde só, do mais
+                    claro ao mais fechado, aprofundando conforme a trilha
+                    avança. Os degraus 3 a 5 mantêm contraste tanto no tema
+                    claro quanto no escuro — o 1 e o 2 sumiriam no fundo. */}
                 <linearGradient id="rt-onda" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-                  <stop offset="0%"   style={{ stopColor: "hsl(var(--chart-1))" }} />
-                  <stop offset="35%"  style={{ stopColor: "hsl(var(--chart-5))" }} />
-                  <stop offset="70%"  style={{ stopColor: "hsl(var(--chart-3))" }} />
-                  <stop offset="100%" style={{ stopColor: "hsl(var(--chart-2))" }} />
+                  <stop offset="0%"   style={{ stopColor: "hsl(var(--chart-seq-3))" }} />
+                  <stop offset="55%"  style={{ stopColor: "hsl(var(--chart-seq-4))" }} />
+                  <stop offset="100%" style={{ stopColor: "hsl(var(--chart-seq-5))" }} />
                 </linearGradient>
                 <clipPath id="rt-feito">
                   <rect x="0" y="0" width={Math.max(progressoX, 0)} height={g.h} />
