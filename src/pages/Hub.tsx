@@ -4,7 +4,7 @@ import {
   BookOpen, Palette, Volume2, Users, User, ExternalLink,
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
-  FileText, Lightbulb, ImageIcon, CalendarDays, Clock, Download,
+  FileText, Lightbulb, ImageIcon, Map,
   Globe, Minus, Square, X, Layers
 } from "lucide-react";
 import { TeamPhoto } from "@/components/TeamPhoto";
@@ -17,11 +17,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { PageShell } from "@/components/PageShell";
-import { Tag, tagToneClasses } from "@/components/widgets/Tag";
+import { Tag } from "@/components/widgets/Tag";
 import { NovidadeCard } from "@/components/widgets/NovidadeCard";
-import { baixarAgendaIcs } from "@/components/CommandPalette";
+import { RoadmapTimeline } from "@/components/widgets/RoadmapTimeline";
 import { novidadesMensais, mesNumero } from "@/data/novidades";
-import { eventos, proximosEventos, type Evento } from "@/data/eventos";
+import { proximoMarco } from "@/data/roadmapMarcos";
 import { teamMembers } from "@/data/time";
 import { produtosFisicos, PRODUTOS_FISICOS_DESTAQUE } from "@/data/produtosFisicos";
 import { ProdutoFisicoCard } from "@/components/ProdutosFisicos";
@@ -384,175 +384,6 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
   );
 }
 
-const MESES_PT = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-const DIAS_PT  = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
-
-function CalendarioWidget() {
-  const hoje = new Date();
-  const [viewYear,  setViewYear]  = useState(hoje.getFullYear());
-  const [viewMonth, setViewMonth] = useState(hoje.getMonth());
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
-
-  const prevMonth = () => {
-    setSelectedDay(null);
-    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
-    else setViewMonth(m => m - 1);
-  };
-  const nextMonth = () => {
-    setSelectedDay(null);
-    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
-    else setViewMonth(m => m + 1);
-  };
-
-  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-
-  const isToday = (d: number) =>
-    d === hoje.getDate() && viewMonth === hoje.getMonth() && viewYear === hoje.getFullYear();
-
-  const eventsByDay = new Map<number, Evento[]>();
-  eventos.forEach(e => {
-    const [y, m] = e.date.split("-").map(Number);
-    if (y === viewYear && m - 1 === viewMonth) {
-      const day = Number(e.date.split("-")[2]);
-      if (!eventsByDay.has(day)) eventsByDay.set(day, []);
-      eventsByDay.get(day)!.push(e);
-    }
-  });
-
-  const cells: (number | null)[] = [
-    ...Array(firstDay).fill(null),
-    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-  ];
-  while (cells.length % 7 !== 0) cells.push(null);
-
-  const selectedEvents = selectedDay ? (eventsByDay.get(selectedDay) ?? []) : [];
-
-  return (
-    <div className="rounded-2xl border bg-card overflow-hidden">
-      {/* Month navigation */}
-      <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b">
-        <button onClick={prevMonth} className="h-8 w-8 flex items-center justify-center rounded-lg sm:hover:bg-muted transition-colors">
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <span className="font-bold font-anek text-foreground">{MESES_PT[viewMonth]} {viewYear}</span>
-        <button onClick={nextMonth} className="h-8 w-8 flex items-center justify-center rounded-lg sm:hover:bg-muted transition-colors">
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* Day-of-week headers */}
-      <div className="grid grid-cols-7 border-b">
-        {DIAS_PT.map((d, i) => (
-          <div key={d} className={cn("py-2 text-center text-[10px] font-bold text-muted-foreground font-roboto uppercase tracking-wider", i < 6 && "border-r border-border")}>
-            {d}
-          </div>
-        ))}
-      </div>
-
-      {/* Day cells */}
-      <div className="grid grid-cols-7">
-        {cells.map((day, i) => {
-          const dayEvents = day ? (eventsByDay.get(day) ?? []) : [];
-          const isSelected = day !== null && selectedDay === day;
-          const hasEvents = dayEvents.length > 0;
-          return (
-            <div
-              key={i}
-              className={cn(
-                "min-h-[52px] sm:min-h-[88px] border-b flex flex-col p-1 sm:p-1.5 transition-colors duration-150",
-                i % 7 !== 6 && "border-r border-border",
-                day && hasEvents && "cursor-pointer",
-                isSelected && "bg-primary/5",
-                day && hasEvents && !isSelected && "sm:hover:bg-muted/40",
-                !day && "bg-muted/20"
-              )}
-              onClick={() => {
-                if (day && hasEvents) setSelectedDay(isSelected ? null : day);
-              }}
-            >
-              {day !== null && (
-                <>
-                  <div className="flex justify-end">
-                    <span className={cn(
-                      "h-5 w-5 sm:h-6 sm:w-6 flex items-center justify-center rounded-full text-[10px] sm:text-xs font-medium font-roboto",
-                      isToday(day) && "bg-primary text-primary-foreground font-bold",
-                      isSelected && !isToday(day) && "ring-1 ring-primary text-primary",
-                      !isToday(day) && !isSelected && "text-foreground/80"
-                    )}>
-                      {day}
-                    </span>
-                  </div>
-                  {/* Mobile: dots indicating events (tap to see detail) */}
-                  {hasEvents && (
-                    <div className="flex sm:hidden flex-wrap gap-0.5 mt-0.5 px-0.5">
-                      {dayEvents.slice(0, 3).map((_, ei) => (
-                        <span key={ei} className="w-1.5 h-1.5 rounded-full shrink-0 bg-primary/60" />
-                      ))}
-                    </div>
-                  )}
-                  {/* sm+: text chips */}
-                  <div className="hidden sm:flex flex-col gap-0.5 mt-0.5">
-                    {dayEvents.slice(0, 2).map((e, ei) => (
-                      <span
-                        key={ei}
-                        className={cn("text-[9px] font-bold font-roboto px-1.5 py-0.5 rounded truncate leading-tight", tagToneClasses[e.tone])}
-                        title={e.titulo}
-                      >
-                        {e.titulo}
-                      </span>
-                    ))}
-                    {dayEvents.length > 2 && (
-                      <span className="text-[9px] text-muted-foreground font-roboto px-1">+{dayEvents.length - 2}</span>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Detail panel — expands below grid when a day with events is selected */}
-      {selectedDay !== null && selectedEvents.length > 0 && (
-        <div className="border-t px-3 sm:px-5 py-4 space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider font-roboto">
-              {selectedDay} de {MESES_PT[viewMonth]} — {selectedEvents.length} evento{selectedEvents.length !== 1 ? "s" : ""}
-            </p>
-            <button
-              onClick={() => setSelectedDay(null)}
-              className="text-[10px] font-semibold font-roboto text-primary sm:hover:underline"
-            >
-              Fechar
-            </button>
-          </div>
-          {selectedEvents.map((e, i) => (
-            <div key={i} className="flex items-start gap-3 p-4 rounded-xl border bg-background">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2 flex-wrap">
-                  <p className="font-semibold font-anek text-foreground text-sm leading-snug">{e.titulo}</p>
-                  <Tag tone={e.tone} className="text-[9px] shrink-0">{e.tag}</Tag>
-                </div>
-                <div className="mt-1.5 flex items-center gap-3 flex-wrap">
-                  {e.hora && <span className="text-[11px] font-roboto text-muted-foreground">{e.hora}</span>}
-                  {e.responsavel && (
-                    <span className="text-[11px] font-roboto text-muted-foreground flex items-center gap-1.5">
-                      <span className="h-1 w-1 rounded-full bg-muted-foreground inline-block shrink-0" />
-                      {e.responsavel}
-                    </span>
-                  )}
-                </div>
-                {e.descricao && <p className="mt-1.5 text-[11px] text-muted-foreground font-roboto leading-snug">{e.descricao}</p>}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 const faqs = [
   { q: "Como acesso o Design System?", a: "Clique em 'Design System' nos Acessos Rápidos ou use o menu de navegação global no canto superior esquerdo." },
   { q: "O que é o Manual de Tom e Voz?", a: "É o guia de comunicação verbal da AUVP, com diretrizes de linguagem para cada área e produto da empresa." },
@@ -764,53 +595,6 @@ function RotatingPreview({ items }: { items: string[] }) {
   );
 }
 
-const MESES_ABREV = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-
-/** Rótulo amigável para a data de um evento (Hoje / Amanhã / 12 de ago). */
-function labelDataEvento(dateStr: string): string {
-  const [y, m, d] = dateStr.split("-").map(Number);
-  const data = new Date(y, m - 1, d);
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-  const diff = Math.round((data.getTime() - hoje.getTime()) / 86400000);
-  if (diff === 0) return "Hoje";
-  if (diff === 1) return "Amanhã";
-  return `${d} de ${MESES_ABREV[m - 1]}`;
-}
-
-function ProximosEventos() {
-  const lista = proximosEventos(5);
-  return (
-    <aside className="rounded-2xl border bg-card overflow-hidden">
-      <div className="px-4 py-3 border-b flex items-center gap-2">
-        <Clock className="h-4 w-4 text-primary shrink-0" />
-        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground font-roboto">Próximos eventos</p>
-      </div>
-      {lista.length === 0 ? (
-        <p className="px-4 py-6 text-xs text-muted-foreground font-roboto">Nenhum evento futuro na agenda.</p>
-      ) : (
-        <ul className="divide-y">
-          {lista.map((e, i) => (
-            <li key={i} className="px-4 py-3 flex items-start gap-3">
-              <div className="flex flex-col items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary shrink-0 leading-none">
-                <span className="text-sm font-extrabold font-anek leading-none">{Number(e.date.slice(8, 10))}</span>
-                <span className="text-[8px] font-bold font-roboto uppercase tracking-wider mt-0.5">{MESES_ABREV[Number(e.date.slice(5, 7)) - 1]}</span>
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold font-anek text-foreground leading-snug">{e.titulo}</p>
-                <div className="mt-1 flex items-center gap-2 flex-wrap">
-                  <Tag tone={e.tone} className="text-[9px]">{e.tag}</Tag>
-                  {e.hora && <span className="text-[10px] text-muted-foreground font-roboto">{e.hora}</span>}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </aside>
-  );
-}
-
 function SectionHeader({ title, action }: { icon?: React.ElementType; title: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
@@ -829,7 +613,7 @@ export default function Hub() {
     hora < 12 ? "Bom dia, time ☀️" :
     hora < 18 ? "Boa tarde, time 🌤️" :
     "Boa noite, time 🌙";
-  const proximoEvento = proximosEventos(1)[0];
+  const proximo = proximoMarco();
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (spotlightRef.current) {
@@ -865,17 +649,17 @@ export default function Hub() {
                 <p className="text-sm sm:text-lg text-muted-foreground mb-4 max-w-2xl font-roboto leading-relaxed">
                   Encontre ferramentas, documentações, informações sobre nosso time e os sistemas em um único lugar.
                 </p>
-                {proximoEvento && (
+                {proximo && (
                   <button
-                    onClick={() => document.getElementById("calendario")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                    onClick={() => document.getElementById("roadmap")?.scrollIntoView({ behavior: "smooth", block: "start" })}
                     className="group inline-flex items-center gap-2 mb-5 md:mb-7 rounded-full border bg-background/70 backdrop-blur px-3 py-1.5 text-xs font-roboto text-muted-foreground sm:hover:border-primary/40 sm:hover:text-foreground transition-colors max-w-full"
                   >
                     <span className="relative flex h-2 w-2 shrink-0">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                     </span>
-                    <span className="font-bold text-foreground shrink-0">{labelDataEvento(proximoEvento.date)}{proximoEvento.hora ? ` · ${proximoEvento.hora}` : ""}</span>
-                    <span className="truncate">{proximoEvento.titulo}</span>
+                    <span className="font-bold text-foreground shrink-0">Próximo marco · {proximo.periodo}</span>
+                    <span className="truncate">{proximo.emoji} {proximo.titulo}</span>
                     <ChevronRight className="h-3 w-3 shrink-0 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
                   </button>
                 )}
@@ -1111,25 +895,15 @@ export default function Hub() {
           </section>
         </Reveal>
 
-        {/* Calendário */}
+        {/* Roadmap */}
         <Reveal>
-          <section id="calendario">
-            <SectionHeader
-              icon={CalendarDays}
-              title="Calendário"
-              action={
-                <button
-                  onClick={baixarAgendaIcs}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
-                >
-                  <Download className="h-3.5 w-3.5" /> Exportar agenda (.ics)
-                </button>
-              }
-            />
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-3 sm:gap-4 items-start">
-              <CalendarioWidget />
-              <ProximosEventos />
-            </div>
+          <section id="roadmap">
+            <SectionHeader icon={Map} title="A trilha do Time de Produto" />
+            <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
+              O que já entregamos, o que está rolando agora e o que vem por aí.
+              Navegue pela onda com as setas ou clique num marco para ver os detalhes.
+            </p>
+            <RoadmapTimeline />
           </section>
         </Reveal>
 

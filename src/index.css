@@ -587,6 +587,22 @@
   animation: solucoes-lp-scroll 22s ease-in-out 0.5s infinite alternate;
 }
 
+/* === Trilha do Roadmap (Hub) ===
+   Triângulos de cenário que sobem e descem devagar atrás da onda. */
+@keyframes roadmap-flutua {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-14px) rotate(16deg); }
+}
+
+/* Rolagem horizontal sem barra visível (régua de períodos da trilha). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* === Nossas Soluções — exportação em PDF (impressão nativa) ===
    Reproduz o exportToPDF do guia original: esconde o chrome do app,
    força tema claro e imprime backgrounds. A página controla via estado

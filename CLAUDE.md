@@ -25,6 +25,7 @@ src/components/widgets/ → Componentes customizados AUVP
 src/components/GlobalNav.tsx → Navegação global responsiva
 src/components/TeamPhoto.tsx → Âncora única das fotos de colaborador
 src/components/ProdutosFisicos.tsx → Card e filtro de categorias dos produtos físicos
+src/components/widgets/RoadmapTimeline.tsx → Trilha em onda do Hub (dados em src/data/roadmapMarcos.ts)
 src/components/PageHero.tsx → Hero padrão de todas as páginas (ícone, título, descrição, ações)
 src/components/VoltarParaCentral.tsx → Atalho de volta ao Hub das sub-páginas
 src/contexts/       → ThemeContext, BrandContext, ViewContext, CarecaContext
@@ -79,6 +80,8 @@ Sem isso, o path quebra no GitHub Pages (base `/central/`).
 **Fotos do time** — sempre renderizar com `<TeamPhoto id="raul" alt="…" />` (`src/components/TeamPhoto.tsx`). É a âncora única: garante o mesmo enquadramento (`object-cover object-top`) em todos os ambientes e faz o Modo Megabrain trocar a foto em todos eles ao mesmo tempo. Não importe `teamPhotos`/`teamPhotosCareca` (nem uma foto solta de `src/assets/`) direto numa tela — foto fora da âncora fica inconsistente entre os modos.
 
 As URLs em si continuam vindo de `src/assets/team.ts` (normal) e `src/assets/team/careca/` (Megabrain). Ao adicionar uma foto nova, gere a versão careca no **mesmo enquadramento e mesmo tamanho** (640×640) da original.
+
+**Trilha do roadmap (Hub)** — os marcos vêm de `src/data/roadmapMarcos.ts` e ocupam, no Hub, o lugar que antes era do calendário. A maior parte das datas sai das Atualizações da Escola (`src/data/novidades.ts`), que é o registro mês a mês do que foi entregue; marcos sem registro por lá levam `dataAssumida: true` (a estimativa fica no comentário do item e a interface mostra "data aproximada"). A ordem na onda vem do campo `data`, e cada marco cai numa crista (cartão acima) ou num vale (cartão abaixo) conforme o índice — não há posição manual. A agenda de eventos (`src/data/eventos.ts`) continua viva na exportação `.ics` da Command Palette.
 
 **Produtos físicos** — o catálogo vem de `src/data/produtosFisicos.ts` e espelha a pasta `PRODUTOS FÍSICOS TRATADOS/`: cada item tem um mockup tratado correspondente. As fotos são exportadas por `src/assets/produtosFisicos.ts` (mesma ideia do time). Para incluir um produto:
 
