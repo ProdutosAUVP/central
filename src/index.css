@@ -588,10 +588,47 @@
 }
 
 /* === Trilha do Roadmap (Hub) ===
-   Triângulos de cenário que sobem e descem devagar atrás da onda. */
-@keyframes roadmap-flutua {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-14px) rotate(16deg); }
+   As fitas de fundo deslizam exatamente um período da onda e recomeçam.
+   Como a cossenoide se repete a cada período, o salto é invisível: a
+   leitura é de água correndo, sem o caminho mudar de forma nem soltar os
+   nós, que continuam ancorados nas suas posições. O deslocamento vem de
+   --periodo (2 × passo), definido pelo componente conforme a medida. */
+@keyframes roadmap-fluxo {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(var(--periodo) * -1)); }
+}
+.roadmap-fita {
+  animation: roadmap-fluxo var(--dur, 18s) linear infinite;
+}
+
+/* Pontilhado do que ainda vem — caminha para a frente sem pressa.
+   O passo do keyframe é o ciclo do dasharray (1 + 12), então emenda. */
+@keyframes roadmap-porvir {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -13px; }
+}
+.roadmap-porvir {
+  animation: roadmap-porvir 1.8s linear infinite;
+}
+
+/* Respiro do brilho sob o trecho já entregue. */
+@keyframes roadmap-luz {
+  0%, 100% { opacity: 0.22; }
+  50%      { opacity: 0.5; }
+}
+.roadmap-luz {
+  animation: roadmap-luz 4.5s ease-in-out infinite;
+}
+
+/* Luz que percorre a trilha. O traço usa pathLength="1000", então o ciclo
+   do dasharray é sempre 1000 seja qual for o comprimento real da onda —
+   um deslocamento de -1000 equivale a exatamente uma volta completa. */
+@keyframes roadmap-percorre {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -1000; }
+}
+.roadmap-percorre {
+  animation: roadmap-percorre 6s linear infinite;
 }
 
 /* Rolagem horizontal sem barra visível (régua de períodos da trilha). */
