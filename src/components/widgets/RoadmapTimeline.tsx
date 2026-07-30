@@ -280,14 +280,13 @@ export function RoadmapTimeline() {
               aria-hidden="true"
             >
               <defs>
-                {/* Rampa sequencial (--chart-seq-*): um verde só, do mais
-                    claro ao mais fechado, aprofundando conforme a trilha
-                    avança. Os degraus 3 a 5 mantêm contraste tanto no tema
-                    claro quanto no escuro — o 1 e o 2 sumiriam no fundo. */}
+                {/* O gradiente da marca, o mesmo par de tokens por trás do
+                    utilitário .bg-brand-gradient do Design System. Assim a
+                    trilha usa o verde AUVP oficial e acompanha tema e marca
+                    sem repetir valores de cor aqui. */}
                 <linearGradient id="rt-onda" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-                  <stop offset="0%"   style={{ stopColor: "hsl(var(--chart-seq-3))" }} />
-                  <stop offset="55%"  style={{ stopColor: "hsl(var(--chart-seq-4))" }} />
-                  <stop offset="100%" style={{ stopColor: "hsl(var(--chart-seq-5))" }} />
+                  <stop offset="0%"   style={{ stopColor: "hsl(var(--brand-gradient-from))" }} />
+                  <stop offset="100%" style={{ stopColor: "hsl(var(--brand-gradient-to))" }} />
                 </linearGradient>
                 <clipPath id="rt-feito">
                   <rect x="0" y="0" width={Math.max(progressoX, 0)} height={g.h} />
@@ -318,14 +317,14 @@ export function RoadmapTimeline() {
                 />
                 <path d={ondaPrincipal} fill="none" stroke="url(#rt-onda)" strokeWidth="4" strokeLinecap="round" />
                 {/* Conta de luz percorrendo a trilha até o "hoje". Vai em
-                    --primary (verde no claro, dourado no escuro) porque
-                    branco sobre o cartão claro some: a linha só pareceria
-                    falhada em vez de acesa. */}
+                    --brand-foreground, o token feito para ser lido sobre a
+                    cor da marca: branco no tema claro, quase-preto no
+                    escuro. Em --primary ela sumiria, porque no tema claro
+                    é o mesmo verde da linha por baixo. */}
                 {!reducedMotion && (
                   <g>
-                    <circle r="15" fill="hsl(var(--primary))" opacity="0.3" filter="url(#rt-glow)" />
-                    <circle r="6" fill="hsl(var(--primary))" />
-                    <circle r="2.2" fill="hsl(var(--primary-foreground))" />
+                    <circle r="15" fill="hsl(var(--brand-foreground))" opacity="0.35" filter="url(#rt-glow)" />
+                    <circle r="6" fill="hsl(var(--brand-foreground))" />
                     <animateMotion dur="7s" repeatCount="indefinite" path={ondaPrincipal} />
                   </g>
                 )}
