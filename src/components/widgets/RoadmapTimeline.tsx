@@ -132,12 +132,6 @@ export function RoadmapTimeline() {
   const progressoX = useMemo(() => xDeHoje(g, hoje, W), [g, hoje, W]);
 
   const ondaPrincipal = useMemo(() => caminhoOnda(g, W), [g, W]);
-  /* As fitas de fundo são desenhadas um período mais longas que a trilha
-     para que, ao deslizarem esse mesmo período, nunca deixem buraco na
-     ponta direita — o excedente fica fora do viewBox e é cortado. */
-  const periodo = g.stride * 2;
-  const ondaFundo1 = useMemo(() => caminhoOnda(g, W + periodo, 0.45, g.amp * 0.8), [g, W, periodo]);
-  const ondaFundo2 = useMemo(() => caminhoOnda(g, W + periodo, -0.45, g.amp * 0.9), [g, W, periodo]);
 
   /** Régua de períodos sob a trilha — um rótulo por período, na ordem da onda. */
   const regua = useMemo(() => {
@@ -193,11 +187,17 @@ export function RoadmapTimeline() {
     <div className="rounded-3xl border bg-card overflow-hidden">
       {/* ── Faixa da onda ────────────────────────────────────────────── */}
       <div className="relative">
-        {/* Cenário: brilhos e triângulos flutuando ao fundo */}
+        {/* Cenário: a mesma malha de pontos do hero da primeira dobra, para a
+            trilha pertencer ao mesmo fundo do resto do Hub. */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.06] via-transparent to-primary/[0.04]" />
-          <div className="absolute -left-16 top-4 h-56 w-56 rounded-full bg-[hsl(var(--chart-5)/0.10)] blur-3xl" />
-          <div className="absolute right-0 -bottom-16 h-64 w-64 rounded-full bg-[hsl(var(--chart-3)/0.10)] blur-3xl" />
+          <div
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.07]"
+            style={{
+              backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
+              backgroundSize: "22px 22px",
+            }}
+          />
           <div className="absolute left-1/3 -top-10 h-52 w-52 rounded-full bg-primary/10 blur-3xl" />
         </div>
 
@@ -254,20 +254,6 @@ export function RoadmapTimeline() {
                   <feGaussianBlur stdDeviation="7" />
                 </filter>
               </defs>
-
-              {/* Ondas de fundo — correm de leve, como água sob a trilha */}
-              <g
-                className={reducedMotion ? undefined : "roadmap-fita"}
-                style={{ "--periodo": `${periodo}px`, "--dur": "18s" } as React.CSSProperties}
-              >
-                <path d={ondaFundo1} fill="none" stroke="url(#rt-onda)" strokeWidth="14" strokeLinecap="round" opacity="0.10" />
-              </g>
-              <g
-                className={reducedMotion ? undefined : "roadmap-fita"}
-                style={{ "--periodo": `${periodo}px`, "--dur": "11s" } as React.CSSProperties}
-              >
-                <path d={ondaFundo2} fill="none" stroke="url(#rt-onda)" strokeWidth="9" strokeLinecap="round" opacity="0.14" />
-              </g>
 
               {/* Trecho ainda por vir — pontilhado que caminha para a frente */}
               <path

@@ -588,20 +588,7 @@
 }
 
 /* === Trilha do Roadmap (Hub) ===
-   As fitas de fundo deslizam exatamente um período da onda e recomeçam.
-   Como a cossenoide se repete a cada período, o salto é invisível: a
-   leitura é de água correndo, sem o caminho mudar de forma nem soltar os
-   nós, que continuam ancorados nas suas posições. O deslocamento vem de
-   --periodo (2 × passo), definido pelo componente conforme a medida. */
-@keyframes roadmap-fluxo {
-  from { transform: translateX(0); }
-  to   { transform: translateX(calc(var(--periodo) * -1)); }
-}
-.roadmap-fita {
-  animation: roadmap-fluxo var(--dur, 18s) linear infinite;
-}
-
-/* Pontilhado do que ainda vem — caminha para a frente sem pressa.
+   Pontilhado do que ainda vem — caminha para a frente sem pressa.
    O passo do keyframe é o ciclo do dasharray (1 + 12), então emenda. */
 @keyframes roadmap-porvir {
   from { stroke-dashoffset: 0; }
