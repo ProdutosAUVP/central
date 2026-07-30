@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ExternalLink, CheckCircle2, Loader, Sparkles, CalendarClock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Tag } from "@/components/widgets/Tag";
+import { Tag, tagToneClasses } from "@/components/widgets/Tag";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   marcosOrdenados,
@@ -27,15 +27,18 @@ interface Geo {
   h: number;       // altura da faixa
   cardW: number;
   cardH: number;
-  gap: number;     // vão entre o nó e o cartão
+  miniW: number;   // minicartão de data e estado, do lado oposto ao cartão
+  miniH: number;
+  gap: number;     // vão entre o nó e cada um dos dois cartões
 }
 
 /* A altura do cartão comporta o pior caso — título em duas linhas mais
-   descrição em duas —, senão o flex espreme o título e corta a linha de
-   baixo pela metade. A altura da faixa acompanha: crista e vale precisam
-   caber um cartão inteiro para cima e para baixo do eixo. */
-const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 250, h: 500, cardW: 232, cardH: 152, gap: 32 };
-const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 224, h: 450, cardW: 186, cardH: 150, gap: 26 };
+   descrição em três —, senão o flex espreme o texto e corta a última
+   linha pela metade. A altura da faixa acompanha: de cada nó sai um
+   cartão para um lado e o minicartão para o outro, e os dois precisam
+   caber dentro da faixa tanto na crista quanto no vale. */
+const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 258, h: 520, cardW: 232, cardH: 164, miniW: 148, miniH: 58, gap: 32 };
+const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 232, h: 470, cardW: 186, cardH: 156, miniW: 132, miniH: 54, gap: 26 };
 
 const nX = (g: Geo, i: number) => g.pad + g.stride * i;
 const nY = (g: Geo, i: number) => g.mid - g.amp * (i % 2 === 0 ? 1 : -1);
@@ -91,33 +94,62 @@ function xDeHoje(g: Geo, hoje: string, largura: number): number {
 
 function MarcoCard({ marco, ativo }: { marco: Marco; ativo: boolean }) {
   const cfg = statusConfig[marco.status];
-  const Icon = cfg.icon;
+  const Icon = marco.icon;
   return (
     <div
       className={cn(
-        "h-full w-full rounded-2xl border bg-card p-3 sm:p-3.5 text-left flex flex-col gap-1.5 overflow-hidden",
+        "h-full w-full rounded-2xl border bg-card p-3 sm:p-3.5 text-left flex flex-col gap-2 overflow-hidden",
         "transition-[transform,box-shadow,border-color] duration-300 ease-apple",
         ativo
           ? "border-primary/50 shadow-xl -translate-y-0.5"
           : "sm:group-hover:border-primary/30 sm:group-hover:shadow-lg sm:group-hover:-translate-y-0.5"
       )}
     >
-      <div className="flex items-center gap-2">
-        <span className="text-lg leading-none shrink-0" aria-hidden="true">{marco.emoji}</span>
-        <Tag tone={marco.tone} className="text-[9px] truncate">{marco.periodo}</Tag>
-      </div>
+      <span
+        className={cn(
+          "shrink-0 flex items-center justify-center h-8 w-8 rounded-lg",
+          tagToneClasses[marco.tone]
+        )}
+        aria-hidden="true"
+      >
+        <Icon className="h-4 w-4" />
+      </span>
       {/* shrink-0 nos dois: como o cartão tem altura fixa, sem isso o flex
           encolhe o bloco de texto abaixo do que ele precisa e a segunda
           linha sai cortada no meio do glifo. */}
       <p className="shrink-0 font-bold font-anek text-foreground text-[13px] sm:text-sm leading-tight line-clamp-2">
         {marco.titulo}
       </p>
-      <p className="shrink-0 text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-2">
+      <p className="shrink-0 text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-3">
         {marco.descricao}
       </p>
-      <span className={cn("mt-auto inline-flex items-center gap-1 text-[9px] font-bold font-roboto uppercase tracking-wider", cfg.classe)}>
+      {/* O minicartão do lado oposto é decorativo para a árvore de
+          acessibilidade; a data e o estado entram aqui como texto. */}
+      <span className="sr-only">
+        {marco.quando}. {cfg.label}.
+      </span>
+    </div>
+  );
+}
+
+/** Minicartão que fica do lado oposto ao cartão: data e estado do marco. */
+function MarcoMiniCard({ marco, ativo }: { marco: Marco; ativo: boolean }) {
+  const cfg = statusConfig[marco.status];
+  const Icon = cfg.icon;
+  return (
+    <div
+      className={cn(
+        "h-full w-full rounded-xl border bg-card px-2.5 py-2 flex flex-col justify-center gap-1 overflow-hidden",
+        "transition-[border-color,box-shadow] duration-300 ease-apple",
+        ativo ? "border-primary/50 shadow-lg" : "sm:group-hover:border-primary/30"
+      )}
+    >
+      <p className="text-[11px] font-bold font-anek text-foreground leading-tight truncate">
+        {marco.periodo}
+      </p>
+      <span className={cn("inline-flex items-center gap-1 text-[9px] font-bold font-roboto uppercase tracking-wider", cfg.classe)}>
         <Icon className="h-3 w-3 shrink-0" />
-        {cfg.label}
+        <span className="truncate">{cfg.label}</span>
       </span>
     </div>
   );
@@ -332,10 +364,9 @@ export function RoadmapTimeline() {
                 </g>
               )}
 
-              {/* Nós + hastes que ligam cada nó ao seu cartão */}
+              {/* Nós + hastes que ligam cada nó aos seus dois cartões */}
               {marcos.map((m, i) => {
                 const x = nX(g, i), y = nY(g, i);
-                const acima = i % 2 === 0;
                 const feito = m.status === "concluido";
                 const rolando = m.status === "em-andamento";
                 const adiado = m.status === "adiado";
@@ -343,9 +374,15 @@ export function RoadmapTimeline() {
                 const selecionado = i === ativo;
                 return (
                   <g key={m.id}>
+                    {/* Duas hastes: uma para o cartão, outra para o
+                        minicartão do lado oposto. */}
                     <line
-                      x1={x} y1={acima ? y - 11 : y + 11}
-                      x2={x} y2={acima ? y - g.gap : y + g.gap}
+                      x1={x} y1={y - 11} x2={x} y2={y - g.gap}
+                      stroke={selecionado ? "hsl(var(--primary))" : "hsl(var(--border))"}
+                      strokeWidth="2"
+                    />
+                    <line
+                      x1={x} y1={y + 11} x2={x} y2={y + g.gap}
                       stroke={selecionado ? "hsl(var(--primary))" : "hsl(var(--border))"}
                       strokeWidth="2"
                     />
@@ -379,26 +416,41 @@ export function RoadmapTimeline() {
               })}
             </svg>
 
-            {/* Cartões — crista para cima, vale para baixo */}
+            {/* Cartão de um lado, minicartão de data e estado do outro.
+                Crista (índice par) manda o cartão para cima; vale, para
+                baixo. O minicartão sempre vai no lado que sobrou. */}
             {marcos.map((m, i) => {
               const x = nX(g, i), y = nY(g, i);
               const acima = i % 2 === 0;
               return (
-                <button
-                  key={m.id}
-                  onClick={() => irPara(i)}
-                  aria-current={i === ativo ? "true" : undefined}
-                  className="group absolute z-10 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl"
-                  style={{
-                    left: x - g.cardW / 2,
-                    top: acima ? y - g.gap - g.cardH : y + g.gap,
-                    width: g.cardW,
-                    height: g.cardH,
-                    scrollSnapAlign: "center",
-                  }}
-                >
-                  <MarcoCard marco={m} ativo={i === ativo} />
-                </button>
+                <React.Fragment key={m.id}>
+                  <button
+                    onClick={() => irPara(i)}
+                    aria-current={i === ativo ? "true" : undefined}
+                    className="group absolute z-10 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl"
+                    style={{
+                      left: x - g.cardW / 2,
+                      top: acima ? y - g.gap - g.cardH : y + g.gap,
+                      width: g.cardW,
+                      height: g.cardH,
+                      scrollSnapAlign: "center",
+                    }}
+                  >
+                    <MarcoCard marco={m} ativo={i === ativo} />
+                  </button>
+                  <div
+                    aria-hidden="true"
+                    className="absolute z-10"
+                    style={{
+                      left: x - g.miniW / 2,
+                      top: acima ? y + g.gap : y - g.gap - g.miniH,
+                      width: g.miniW,
+                      height: g.miniH,
+                    }}
+                  >
+                    <MarcoMiniCard marco={m} ativo={i === ativo} />
+                  </div>
+                </React.Fragment>
               );
             })}
           </div>
@@ -436,7 +488,12 @@ export function RoadmapTimeline() {
       <div className="border-t px-4 sm:px-6 py-5">
         <div key={marcoAtivo.id} className="animate-in fade-in slide-in-from-bottom-1 duration-300">
           <div className="flex items-start gap-3 flex-wrap">
-            <span className="text-2xl leading-none shrink-0" aria-hidden="true">{marcoAtivo.emoji}</span>
+            <span
+              className={cn("shrink-0 flex items-center justify-center h-10 w-10 rounded-xl", tagToneClasses[marcoAtivo.tone])}
+              aria-hidden="true"
+            >
+              <marcoAtivo.icon className="h-5 w-5" />
+            </span>
             <div className="flex-1 min-w-[200px]">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-bold font-anek text-foreground text-base sm:text-lg leading-tight">

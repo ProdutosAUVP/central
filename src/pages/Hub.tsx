@@ -659,7 +659,8 @@ export default function Hub() {
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                     </span>
                     <span className="font-bold text-foreground shrink-0">Próximo marco · {proximo.periodo}</span>
-                    <span className="truncate">{proximo.emoji} {proximo.titulo}</span>
+                    <proximo.icon className="h-3.5 w-3.5 shrink-0" />
+                    <span className="truncate">{proximo.titulo}</span>
                     <ChevronRight className="h-3 w-3 shrink-0 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
                   </button>
                 )}
