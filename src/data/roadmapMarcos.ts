@@ -10,7 +10,7 @@ import type { TagTone } from "@/components/widgets/Tag";
  * o componente sinaliza a data como aproximada na interface.
  */
 
-export type MarcoStatus = "concluido" | "em-andamento" | "planejado";
+export type MarcoStatus = "concluido" | "em-andamento" | "planejado" | "adiado";
 
 export interface Marco {
   id: string;
@@ -42,13 +42,9 @@ export const marcos: Marco[] = [
     id: "hub-v1",
     emoji: "🖥️",
     titulo: "v1 do Hub",
-    // Sem registro nas Atualizações da Escola: em janeiro de 2026 o Hub já
-    // estava no ar (o spoiler do mês fala em corrigir bugs dele), então a v1
-    // é anterior a 2026. Ancorada no fim de 2025 e rotulada só como "2025".
-    quando: "2025",
-    periodo: "2025",
-    data: "2025-12-01",
-    dataAssumida: true,
+    quando: "22 de outubro de 2025",
+    periodo: "Out/25",
+    data: "2025-10-22",
     status: "concluido",
     tone: "graphite",
     descricao:
@@ -81,23 +77,21 @@ export const marcos: Marco[] = [
     to: "/solucoes",
   },
   {
-    id: "giro-itinerante",
+    id: "giro-bh",
     emoji: "🎥",
-    titulo: "Giro da Bolsa Itinerante",
-    quando: "Durante todo o ano!",
-    periodo: "Ano todo",
-    data: "2026-03-01",
-    status: "em-andamento",
+    titulo: "Giro Itinerante · Belo Horizonte",
+    quando: "Março de 2026",
+    periodo: "Mar",
+    data: "2026-03-15",
+    status: "concluido",
     tone: "brick",
-    continuo: true,
     descricao:
-      "O Giro saiu do estúdio e foi para a estrada: gravação ao vivo, sem censura, com encontro presencial da comunidade em cada cidade.",
+      "A estreia do Giro da Bolsa Itinerante (sem censura): o programa saiu do estúdio e foi gravado ao vivo em BH, com a comunidade na plateia.",
     detalhes: [
-      "Março — estreia em Belo Horizonte, com Baguncinha presencial",
-      "Junho — terceira parada em São Paulo, com after junto dos membros",
-      "Próximos destinos anunciados ao longo do ano — os ingressos esgotam rápido",
+      "Primeira edição do formato itinerante",
+      "Gravação ao vivo do Giro da Bolsa, sem censura",
+      "Baguncinha presencial com os membros depois da gravação",
     ],
-    href: "https://www.youtube.com/watch?v=EMU2chjddxI&t=217s",
   },
   {
     id: "design-system",
@@ -192,6 +186,24 @@ export const marcos: Marco[] = [
     href: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6772ad0d1fe057e9530659d2Unit",
   },
   {
+    id: "giro-sp",
+    emoji: "🎥",
+    titulo: "Giro Itinerante · São Paulo",
+    quando: "Junho de 2026",
+    periodo: "Jun",
+    data: "2026-06-20",
+    status: "concluido",
+    tone: "brick",
+    descricao:
+      "Terceira parada da estrada: gravação ao vivo em São Paulo, com uma galera esticando a noite no after junto do time.",
+    detalhes: [
+      "Terceira parada do Giro Itinerante",
+      "Gravação ao vivo do programa do canal Investidor Sardinha",
+      "After com os membros depois do evento",
+    ],
+    href: "https://www.youtube.com/watch?v=EMU2chjddxI&t=217s",
+  },
+  {
     id: "minha-auvp",
     emoji: "✨",
     titulo: 'Lançamento "Minha AUVP" (Hub V2)',
@@ -210,15 +222,26 @@ export const marcos: Marco[] = [
     ],
   },
   {
+    id: "giro-curitiba",
+    emoji: "🎥",
+    titulo: "Giro Itinerante · Curitiba",
+    // Sem data confirmada — a edição foi adiada. A âncora só posiciona o
+    // marco na trilha (depois de São Paulo); a interface não mostra data.
+    quando: "Adiada — nova data a definir",
+    periodo: "Adiada",
+    data: "2026-07-15",
+    status: "adiado",
+    tone: "neutral",
+    descricao:
+      "A parada de Curitiba foi adiada. O destino segue no mapa do Giro Itinerante — assim que a nova data fechar, ela aparece aqui.",
+  },
+  {
     id: "sistema-indicacao",
     emoji: "🤝",
     titulo: "Sistema de indicação",
-    // Sem data de lançamento registrada. Em junho o programa estava em
-    // reformulação e com termo de aceite em elaboração — estimado para agosto.
     quando: "Agosto de 2026",
     periodo: "Ago",
     data: "2026-08-15",
-    dataAssumida: true,
     status: "planejado",
     tone: "info",
     descricao:

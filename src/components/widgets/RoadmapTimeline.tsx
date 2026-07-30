@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight, ExternalLink, CheckCircle2, Loader, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, CheckCircle2, Loader, Sparkles, CalendarClock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tag } from "@/components/widgets/Tag";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -61,9 +61,10 @@ function useGeometria(): Geo {
 }
 
 const statusConfig: Record<MarcoStatus, { label: string; icon: React.ElementType; classe: string }> = {
-  "concluido":    { label: "Entregue",   icon: CheckCircle2, classe: "text-[hsl(var(--success))]" },
-  "em-andamento": { label: "Rolando",    icon: Loader,       classe: "text-primary" },
-  "planejado":    { label: "Vem por aí", icon: Sparkles,     classe: "text-muted-foreground" },
+  "concluido":    { label: "Entregue",   icon: CheckCircle2,  classe: "text-[hsl(var(--success))]" },
+  "em-andamento": { label: "Rolando",    icon: Loader,        classe: "text-primary" },
+  "planejado":    { label: "Vem por aí", icon: Sparkles,      classe: "text-muted-foreground" },
+  "adiado":       { label: "Adiada",     icon: CalendarClock, classe: "text-[hsl(var(--warning))]" },
 };
 
 /**
@@ -338,6 +339,8 @@ export function RoadmapTimeline() {
                 const acima = i % 2 === 0;
                 const feito = m.status === "concluido";
                 const rolando = m.status === "em-andamento";
+                const adiado = m.status === "adiado";
+                const cheio = feito || rolando;
                 const selecionado = i === ativo;
                 return (
                   <g key={m.id}>
@@ -357,12 +360,19 @@ export function RoadmapTimeline() {
                       </circle>
                     )}
                     <circle cx={x} cy={y} r="11" fill="hsl(var(--card))" />
+                    {/* Adiado: anel tracejado em âmbar — some da trilha cheia
+                        sem sumir do mapa, mesmo estando no trecho já passado. */}
                     <circle
                       cx={x} cy={y} r="9"
-                      fill={feito || rolando ? "hsl(var(--primary))" : "hsl(var(--card))"}
-                      stroke={feito || rolando ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))"}
+                      fill={cheio ? "hsl(var(--primary))" : "hsl(var(--card))"}
+                      stroke={
+                        cheio ? "hsl(var(--primary))"
+                        : adiado ? "hsl(var(--warning))"
+                        : "hsl(var(--muted-foreground))"
+                      }
                       strokeWidth="2.5"
-                      opacity={feito || rolando ? 1 : 0.55}
+                      strokeDasharray={adiado ? "3.5 3" : undefined}
+                      opacity={cheio || adiado ? 1 : 0.55}
                     />
                     {feito && <circle cx={x} cy={y} r="3.2" fill="hsl(var(--primary-foreground))" />}
                   </g>
