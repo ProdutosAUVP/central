@@ -1,3 +1,8 @@
+import type { LucideIcon } from "lucide-react";
+import {
+  Monitor, Library, Video, Palette, MessageSquareQuote, MessagesSquare,
+  Tractor, Clapperboard, Sparkles, Handshake, HeartHandshake, PartyPopper,
+} from "lucide-react";
 import type { TagTone } from "@/components/widgets/Tag";
 
 /**
@@ -14,7 +19,8 @@ export type MarcoStatus = "concluido" | "em-andamento" | "planejado" | "adiado";
 
 export interface Marco {
   id: string;
-  emoji: string;
+  /** Ícone do marco (lucide). Substitui o emoji: escala e herda cor. */
+  icon: LucideIcon;
   titulo: string;
   /** Rótulo completo da data, exibido no cartão (ex.: "Abril de 2026"). */
   quando: string;
@@ -40,7 +46,7 @@ export interface Marco {
 export const marcos: Marco[] = [
   {
     id: "hub-v1",
-    emoji: "🖥️",
+    icon: Monitor,
     titulo: "v1 do Hub",
     quando: "22 de outubro de 2025",
     periodo: "Out/25",
@@ -56,7 +62,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "modulos",
-    emoji: "📚",
+    icon: Library,
     titulo: "Módulos liberados na Escola",
     quando: "Fevereiro a julho de 2026",
     periodo: "Fev–Jul",
@@ -78,7 +84,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "giro-bh",
-    emoji: "🎥",
+    icon: Video,
     titulo: "Giro Itinerante · Belo Horizonte",
     quando: "Março de 2026",
     periodo: "Mar",
@@ -95,7 +101,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "design-system",
-    emoji: "🎨",
+    icon: Palette,
     titulo: "Design System",
     quando: "Abril de 2026",
     periodo: "Abr",
@@ -113,7 +119,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "tom-e-voz",
-    emoji: "🗣️",
+    icon: MessageSquareQuote,
     titulo: "Manual de Tom e Voz",
     quando: "Abril de 2026",
     periodo: "Abr",
@@ -130,7 +136,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "qa-design",
-    emoji: "💬",
+    icon: MessagesSquare,
     titulo: "Q&A de Design",
     // Sem data registrada nas Atualizações da Escola. Estimado para maio,
     // logo depois da publicação do Design System e do Manual de Tom e Voz.
@@ -149,7 +155,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "pro-agro",
-    emoji: "🚜",
+    icon: Tractor,
     titulo: "Lançamento AUVP Pro e AUVP Agro",
     quando: "Maio de 2026",
     periodo: "Mai",
@@ -168,7 +174,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "regravacao-escola",
-    emoji: "🎬",
+    icon: Clapperboard,
     titulo: "Regravação da Escola",
     quando: "Junho de 2026",
     periodo: "Jun",
@@ -187,7 +193,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "giro-sp",
-    emoji: "🎥",
+    icon: Video,
     titulo: "Giro Itinerante · São Paulo",
     quando: "Junho de 2026",
     periodo: "Jun",
@@ -205,7 +211,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "minha-auvp",
-    emoji: "✨",
+    icon: Sparkles,
     titulo: 'Lançamento "Minha AUVP" (Hub V2)',
     quando: "9 de julho de 2026",
     periodo: "Jul",
@@ -223,12 +229,14 @@ export const marcos: Marco[] = [
   },
   {
     id: "giro-curitiba",
-    emoji: "🎥",
+    icon: Video,
     titulo: "Giro Itinerante · Curitiba",
     // Sem data confirmada — a edição foi adiada. A âncora só posiciona o
     // marco na trilha (depois de São Paulo); a interface não mostra data.
+    // O minicartão já mostra o estado "Adiada" ao lado; o rótulo de data
+    // fala da data em si para os dois não repetirem a mesma palavra.
     quando: "Adiada — nova data a definir",
-    periodo: "Adiada",
+    periodo: "Sem data",
     data: "2026-07-15",
     status: "adiado",
     tone: "neutral",
@@ -237,7 +245,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "sistema-indicacao",
-    emoji: "🤝",
+    icon: Handshake,
     titulo: "Sistema de indicação",
     quando: "Agosto de 2026",
     periodo: "Ago",
@@ -254,7 +262,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "encantamento",
-    emoji: "💚",
+    icon: HeartHandshake,
     titulo: "Treinamento de encantamento do cliente",
     // Sem data registrada. Estimado para setembro, depois do sistema de
     // indicação, quando o time de CX assume a nova jornada.
@@ -274,7 +282,7 @@ export const marcos: Marco[] = [
   },
   {
     id: "private-day",
-    emoji: "🪩",
+    icon: PartyPopper,
     titulo: "Private Day",
     quando: "7 e 8 de novembro de 2026",
     periodo: "Nov",
