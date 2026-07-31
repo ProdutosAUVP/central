@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Headphones, Handshake, Video, TrendingUp, Cpu, Wallet, Megaphone, Scale,
+  UsersRound, Truck,
 } from "lucide-react";
 
 /**
@@ -21,4 +22,6 @@ export const areaIcons = {
   Financeiro: Wallet,
   Marketing: Megaphone,
   Jurídico: Scale,
+  "Capital Humano": UsersRound,
+  Logística: Truck,
 } satisfies Record<string, LucideIcon>;

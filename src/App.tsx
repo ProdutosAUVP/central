@@ -11,6 +11,7 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { EasterEgg } from "@/components/EasterEgg";
 import { CarecaScanEffect } from "@/components/CarecaScanEffect";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { ClarityTracker } from "@/components/ClarityTracker";
 import React from "react";
 import Hub from "./pages/Hub";
 import TimePage from "./pages/TimePage";
@@ -66,6 +67,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter basename={import.meta.env.BASE_URL}>
               <ScrollToTop />
+              <ClarityTracker />
               <CommandPalette />
               <EasterEgg />
               <CarecaScanEffect />

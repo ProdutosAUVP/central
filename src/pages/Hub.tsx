@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, Map,
-  Globe, Minus, Square, X, Layers, Brain
+  Globe, Minus, Square, X, Layers, Brain, Info
 } from "lucide-react";
 import { TeamPhoto } from "@/components/TeamPhoto";
 import { lpScreenshots } from "@/assets/lps";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/accordion";
 import { PageShell } from "@/components/PageShell";
 import { Tag } from "@/components/widgets/Tag";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { NovidadeCard } from "@/components/widgets/NovidadeCard";
 import { RoadmapTimeline } from "@/components/widgets/RoadmapTimeline";
 import { novidadesMensais, mesNumero } from "@/data/novidades";
@@ -621,10 +622,33 @@ function RotatingPreview({ items }: { items: string[] }) {
   );
 }
 
-function SectionHeader({ title, action }: { icon?: React.ElementType; title: string; action?: React.ReactNode }) {
+/**
+ * Cabeçalho de dobra. O `info` vira um "i" discreto ao lado do título: a
+ * descrição fica a um hover (ou toque) de distância em vez de ocupar uma
+ * linha fixa embaixo de cada seção.
+ */
+function SectionHeader({ title, info, action }: { icon?: React.ElementType; title: string; info?: React.ReactNode; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
-      <h2 className="text-base sm:text-xl font-bold font-anek text-foreground">{title}</h2>
+      <div className="flex items-center gap-1.5 min-w-0">
+        <h2 className="text-base sm:text-xl font-bold font-anek text-foreground">{title}</h2>
+        {info && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                aria-label={`Sobre a seção ${title}`}
+                className="shrink-0 rounded-full text-muted-foreground/40 transition-colors duration-300 ease-apple hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Info className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" align="start" className="max-w-xs text-xs font-roboto leading-relaxed">
+              {info}
+            </TooltipContent>
+          </Tooltip>
+        )}
+      </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>
   );
@@ -720,7 +744,7 @@ export default function Hub() {
         {/* Acessos Rápidos — agora antes das Novidades */}
         <Reveal className="sm:-mt-32 md:-mt-48">
           <section>
-            <SectionHeader icon={Zap} title="Acessos Rápidos" />
+            <SectionHeader icon={Zap} title="Acessos Rápidos" info="Os links, guias e informações que todo pirata acaba precisando em algum momento." />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
               {accessLinks.map((link, i) => {
                 const Icon = link.icon;
@@ -771,6 +795,7 @@ export default function Hub() {
             <SectionHeader
               icon={Newspaper}
               title="Mural de Novidades"
+              info="Aqui você acompanha o que o time está aprontando: novos sites, melhorias, lançamentos e outras entregas que acabaram de sair do forno."
               action={
                 <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
                   Ver mural completo <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
@@ -781,10 +806,22 @@ export default function Hub() {
           </section>
         </Reveal>
 
+        {/* Roadmap */}
+        <Reveal>
+          <section id="roadmap">
+            <SectionHeader
+              icon={Map}
+              title="A trilha do Time de Produto"
+              info="Quer saber o que já entregamos, o que está em andamento e o que vem por aí? É só navegar pela nossa linha do tempo. Arraste para os lados, use as setas ou clique em um marco para ver os detalhes."
+            />
+            <RoadmapTimeline />
+          </section>
+        </Reveal>
+
         {/* Produtos */}
         <Reveal>
           <section>
-            <SectionHeader icon={BarChart3} title="Soluções Digitais" />
+            <SectionHeader icon={BarChart3} title="Soluções Digitais" info="Conheça os sites, plataformas e experiências digitais que construímos. Da estratégia à copy, do layout ao produto final." />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {(verTodasSolucoes ? produtos : produtos.slice(0, SOLUCOES_VISIVEIS)).map((p, i) => (
                 <ProdutoCard key={i} p={p} />
@@ -810,11 +847,7 @@ export default function Hub() {
         {/* Portfólio */}
         <Reveal>
           <section>
-            <SectionHeader icon={ImageIcon} title="Portfólio de Produtos Físicos" />
-            <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
-              Brindes, kits e materiais de marca que o time planeja, desenha e produz.
-              Abaixo, os quatro destaques — o catálogo completo fica na página de Produtos Físicos.
-            </p>
+            <SectionHeader icon={ImageIcon} title="Portfólio de Produtos Físicos" info="Veja os kits, brindes, materiais impressos e outros produtos físicos que desenvolvemos para levar a experiência AUVP além da tela." />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {portfolioDestaques.map((item) => (
                 <ProdutoFisicoCard key={item.slug} item={item} />
@@ -832,76 +865,10 @@ export default function Hub() {
           </section>
         </Reveal>
 
-        {/* Atualizações da Escola */}
-        <Reveal>
-          <section>
-            <SectionHeader icon={Newspaper} title="Atualizações da Escola" />
-            {/* Duas colunas no desktop; `items-start` evita que um item aberto
-                estique o vizinho da mesma linha. */}
-            <Accordion type="single" collapsible className="grid gap-2 sm:grid-cols-2 items-start">
-              {novidadesMensais.map((n, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`mes-${i}`}
-                  /* Aberto, o mês ocupa a linha inteira: o conteúdo é longo e,
-                     em meia coluna, deixaria a coluna vizinha vazia. */
-                  className="rounded-2xl border bg-card overflow-hidden group data-[state=open]:sm:col-span-2"
-                >
-                  <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors data-[state=open]:border-b [&>svg]:shrink-0">
-                    <div className="flex items-center gap-3 text-left flex-1 min-w-0">
-                      <div className="flex flex-col h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 leading-none">
-                        <span className="text-[8px] font-bold font-roboto uppercase tracking-wider mt-1.5">mês</span>
-                        <span className="text-base font-extrabold font-anek leading-none">{mesNumero(n.mes)}</span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="font-bold font-anek text-foreground text-sm leading-tight">{n.mes} {n.ano}</p>
-                          <span className="text-[10px] font-roboto text-muted-foreground">{n.items.length} atualizações</span>
-                        </div>
-                        {/* Preview rotativo — visível apenas quando colapsado */}
-                        <div className="group-data-[state=open]:hidden mt-0.5">
-                          <RotatingPreview items={n.items.map(item => `${item.emoji} ${item.titulo}`)} />
-                        </div>
-                      </div>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="px-5 pb-6 pt-4 space-y-5">
-                      {n.intro && (
-                        <p className="text-sm font-roboto text-muted-foreground leading-relaxed">{n.intro}</p>
-                      )}
-                      <div className="space-y-5">
-                        {n.items.map((item, j) => (
-                          <NovidadeCard key={j} item={item} />
-                        ))}
-                      </div>
-                      {n.spoiler.length > 0 && (
-                        <div className="pt-4 border-t">
-                          <p className="text-[10px] font-bold font-roboto uppercase tracking-wider text-muted-foreground mb-3">
-                            🚀 O que vem por aí
-                          </p>
-                          <ul className="space-y-1.5">
-                            {n.spoiler.map((s, k) => (
-                              <li key={k} className="text-xs font-roboto text-muted-foreground">{s}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {n.rodape && (
-                        <p className="text-xs font-roboto text-muted-foreground italic border-t pt-4">{n.rodape}</p>
-                      )}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </section>
-        </Reveal>
-
         {/* Docs e Playbooks */}
         <Reveal>
           <section>
-            <SectionHeader icon={FileText} title="Documentações e Playbooks" />
+            <SectionHeader icon={FileText} title="Documentações e Playbooks" info="Os processos, guias e documentações que ajudam o time a trabalhar com mais organização e consistência." />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {docs.map((d, i) => {
                 const Icon = d.icon;
@@ -935,18 +902,6 @@ export default function Hub() {
                 );
               })}
             </div>
-          </section>
-        </Reveal>
-
-        {/* Roadmap */}
-        <Reveal>
-          <section id="roadmap">
-            <SectionHeader icon={Map} title="A trilha do Time de Produto" />
-            <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
-              O que já entregamos, o que está rolando agora e o que vem por aí.
-              Arraste a onda para os lados, use as setas ou clique num marco para ver os detalhes.
-            </p>
-            <RoadmapTimeline />
           </section>
         </Reveal>
 
