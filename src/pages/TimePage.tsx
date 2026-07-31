@@ -748,10 +748,11 @@ const dayToDay = [
 
 // ─── Section helpers ──────────────────────────────────────────────────────────
 
-function Section({ children, className }: { children: React.ReactNode; className?: string }) {
+function Section({ id, children, className }: { id?: string; children: React.ReactNode; className?: string }) {
   const [ref, visible] = useReveal();
   return (
     <div
+      id={id}
       ref={ref}
       className={cn(
         "transition-[opacity,transform] duration-[800ms] ease-apple will-change-transform",
@@ -841,6 +842,18 @@ export default function TimePage() {
   const [selectedMember, setSelectedMember] = useState<{ id: string; el: HTMLElement } | null>(null);
   const orgToggleRef = useRef<HTMLButtonElement>(null);
   const [showOrgHint, setShowOrgHint] = useState(false);
+
+  /* Rolagem para a âncora do hash. O salto nativo do navegador não serve
+     aqui: quando ele acontece, a página ainda está montando e as seções
+     entram com animação de reveal, então o destino ainda não tem altura. */
+  useEffect(() => {
+    const alvo = window.location.hash.slice(1);
+    if (!alvo) return;
+    const t = setTimeout(() => {
+      document.getElementById(alvo)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 350);
+    return () => clearTimeout(t);
+  }, []);
 
   const selectMember = useCallback((id: string, el: HTMLElement) => {
     setSelectedMember((prev) => (prev?.id === id ? null : { id, el }));
@@ -1104,7 +1117,7 @@ export default function TimePage() {
           </div>
         </Section>
 
-        <Section>
+        <Section id="rotina-na-pratica" className="scroll-mt-24">
           <SectionTitle>Nossa rotina na prática</SectionTitle>
           <p className="text-muted-foreground font-roboto mb-10 max-w-xl">Veja a especialidade de cada membro do time de produtos. Saiba exatamente qual pirata procurar quando precisar destravar uma demanda.</p>
           <div ref={gridWrapRef} className="relative">
