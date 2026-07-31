@@ -11,6 +11,7 @@ import agro from "./lps/agro.webp?url";
 import cambio from "./lps/cambio.webp?url";
 import credito from "./lps/credito.webp?url";
 import seguros from "./lps/seguros.webp?url";
+import etfs from "./lps/etfs.webp?url";
 
 export const lpScreenshots: Record<string, string> = {
   capital,
@@ -20,4 +21,5 @@ export const lpScreenshots: Record<string, string> = {
   cambio,
   credito,
   seguros,
+  etfs,
 };
