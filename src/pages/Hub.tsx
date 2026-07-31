@@ -23,7 +23,7 @@ import { RoadmapTimeline } from "@/components/widgets/RoadmapTimeline";
 import { novidadesMensais, mesNumero } from "@/data/novidades";
 import { proximoMarco } from "@/data/roadmapMarcos";
 import { teamMembers } from "@/data/time";
-import { produtosFisicos, PRODUTOS_FISICOS_DESTAQUE } from "@/data/produtosFisicos";
+import { produtosFisicos, produtosFisicosDestaque } from "@/data/produtosFisicos";
 import { ProdutoFisicoCard } from "@/components/ProdutosFisicos";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
@@ -90,17 +90,24 @@ interface ProdutoDigital {
   soon?: boolean;
 }
 
+/* A ordem manda: os seis primeiros são os que ficam visíveis nas duas
+   linhas iniciais; o resto entra atrás do "ver mais". */
 const produtos: ProdutoDigital[] = [
   { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
   { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://auvp.com.br/" },
-  { name: "AUVP Analítica", desc: "Análise de investimentos", slug: "analitica", href: "https://analitica.auvp.com.br/" },
+  { name: "AUVP Sempre", desc: "Assinatura de evolução contínua", href: "https://www.auvp.com.br/auvp-sempre/" },
+  { name: "AUVP ETFs", desc: "Os ETFs próprios da AUVP", slug: "etfs", href: "https://www.auvpetfs.com.br/" },
+  { name: "AUVP Wealth", desc: "Gestão de grandes patrimônios", href: "https://auvpcapital.com.br/wealth/" },
+  { name: "Private Day", desc: "O evento anual da AUVP", href: "https://privateday.auvp.com.br/" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://auvpagro.com.br/" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
   { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
   { name: "AUVP Seguros", desc: "Produtos de seguro", slug: "seguros", href: "https://auvpcapital.com.br/seguros/" },
-  { name: "AUVP ETFs", desc: "Os ETFs próprios da AUVP", slug: "etfs", href: "https://www.auvpetfs.com.br/" },
   { name: "AUVP Experience", desc: "Experiências premium", soon: true },
 ];
+
+/** Quantas soluções aparecem antes do "ver mais" — duas linhas de três. */
+const SOLUCOES_VISIVEIS = 6;
 
 /** URL completa (sem protocolo) exibida na barra de "navegador" do card de produto digital. */
 function produtoUrl(p: ProdutoDigital): string {
@@ -227,7 +234,7 @@ const docs: DocLink[] = [
 ];
 
 /** Destaques do portfólio no Hub — o catálogo completo mora em /produtos-fisicos. */
-const portfolioDestaques = produtosFisicos.slice(0, PRODUTOS_FISICOS_DESTAQUE);
+const portfolioDestaques = produtosFisicosDestaque;
 
 interface MuralCard {
   titulo: string;
@@ -615,6 +622,7 @@ export default function Hub() {
     hora < 18 ? "Boa tarde, time 🌤️" :
     "Boa noite, time 🌙";
   const proximo = proximoMarco();
+  const [verTodasSolucoes, setVerTodasSolucoes] = useState(false);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (spotlightRef.current) {
@@ -757,13 +765,26 @@ export default function Hub() {
         {/* Produtos */}
         <Reveal>
           <section>
-            <SectionHeader icon={BarChart3} title="Produtos Digitais" />
-            {/* Três colunas: com nove produtos, fecha uma grade 3x3 certinha. */}
+            <SectionHeader icon={BarChart3} title="Soluções Digitais" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              {produtos.map((p, i) => (
+              {(verTodasSolucoes ? produtos : produtos.slice(0, SOLUCOES_VISIVEIS)).map((p, i) => (
                 <ProdutoCard key={i} p={p} />
               ))}
             </div>
+            {produtos.length > SOLUCOES_VISIVEIS && (
+              <div className="flex justify-center mt-5">
+                <button
+                  onClick={() => setVerTodasSolucoes((v) => !v)}
+                  aria-expanded={verTodasSolucoes}
+                  className="group inline-flex items-center gap-2 rounded-full border bg-card px-5 py-2.5 text-xs font-semibold font-roboto text-foreground transition-[border-color,color,box-shadow] duration-300 ease-apple sm:hover:border-primary/40 sm:hover:text-primary sm:hover:shadow-sm"
+                >
+                  {verTodasSolucoes
+                    ? "Ver menos"
+                    : `Ver mais ${produtos.length - SOLUCOES_VISIVEIS} soluções`}
+                  <ChevronDown className={cn("h-3.5 w-3.5 shrink-0 transition-transform duration-300 ease-apple", verTodasSolucoes && "rotate-180")} />
+                </button>
+              </div>
+            )}
           </section>
         </Reveal>
 

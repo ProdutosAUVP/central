@@ -4,7 +4,7 @@
  * Quem não tiver foto aqui cai no placeholder padrão.
  */
 import raul from "./team/raul.jpg?url";
-import beatriz from "./team/beatriz.png?url";
+import beatriz from "./team/beatriz.jpg?url";
 import lilian from "./team/lilian.jpg?url";
 import debora from "./team/debora.jpeg?url";
 import daniel from "./team/daniel.jpg?url";

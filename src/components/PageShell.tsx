@@ -76,6 +76,9 @@ export function PageShell({
           <p className="text-xs text-muted-foreground font-roboto text-center">
             {footer} &copy; {new Date().getFullYear()}
           </p>
+          <p className="text-xs text-muted-foreground/80 font-roboto text-center mt-1">
+            Orgulhosamente feito sob o sol escaldante de Goiás ☀️
+          </p>
         </div>
       </footer>
     </div>

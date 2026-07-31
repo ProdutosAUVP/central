@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   Monitor, Library, Video, Palette, MessageSquareQuote, MessagesSquare,
   Tractor, Clapperboard, Sparkles, Handshake, HeartHandshake, PartyPopper,
+  Baby, Smartphone, NotebookPen, CreditCard, School,
 } from "lucide-react";
 import type { TagTone } from "@/components/widgets/Tag";
 
@@ -41,6 +42,9 @@ export interface Marco {
   dataAssumida?: boolean;
   /** Marco que acontece ao longo de vários meses, sem data única. */
   continuo?: boolean;
+  /** Sem data anunciada. A `data` só posiciona o marco na trilha e a
+   *  interface mostra "em breve" no lugar de qualquer data. */
+  semData?: boolean;
 }
 
 export const marcos: Marco[] = [
@@ -295,6 +299,70 @@ export const marcos: Marco[] = [
       "Festa de encerramento com tema Disco Fever",
       "1º lote de ingressos já à venda",
     ],
+  },
+  {
+    id: "educacao-criancas",
+    icon: Baby,
+    titulo: "Educação Financeira para crianças",
+    quando: "Agosto de 2026",
+    periodo: "Ago",
+    data: "2026-08-01",
+    status: "planejado",
+    tone: "amber",
+    descricao:
+      "Uma frente de conteúdo para levar educação financeira ao público infantil, com linguagem e formato próprios para essa faixa.",
+  },
+  {
+    id: "plano-de-aula",
+    icon: NotebookPen,
+    titulo: "Plano de Aula",
+    quando: "Agosto de 2026",
+    periodo: "Ago",
+    data: "2026-08-20",
+    status: "planejado",
+    tone: "blue",
+    descricao:
+      "Material que estrutura a jornada de estudo da Escola em planos de aula, para o aluno saber o que estudar e em que ordem.",
+  },
+  {
+    id: "super-app",
+    icon: Smartphone,
+    titulo: "Super App da AUVP",
+    quando: "Dezembro de 2026",
+    periodo: "Dez",
+    data: "2026-12-01",
+    status: "planejado",
+    tone: "violet",
+    descricao:
+      "O aplicativo que reúne os produtos AUVP num só lugar, construído de forma colaborativa com a comunidade de devs e designers.",
+  },
+  {
+    // Sem data anunciada — a âncora só o mantém no fim da trilha.
+    id: "cartao-auvp",
+    icon: CreditCard,
+    titulo: "Cartão AUVP",
+    quando: "Em breve",
+    periodo: "Em breve",
+    data: "2027-01-01",
+    semData: true,
+    status: "planejado",
+    tone: "graphite",
+    descricao:
+      "O cartão de crédito próprio da AUVP, com benefícios exclusivos para os membros.",
+  },
+  {
+    // Sem data anunciada — a âncora só o mantém no fim da trilha.
+    id: "statera",
+    icon: School,
+    titulo: "Projeto Statera",
+    quando: "Em breve",
+    periodo: "Em breve",
+    data: "2027-01-15",
+    semData: true,
+    status: "planejado",
+    tone: "olive",
+    descricao:
+      "A AUVP nas escolas: levar educação financeira para dentro da sala de aula, como projeto de impacto.",
   },
 ];
 
