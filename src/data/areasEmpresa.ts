@@ -24,4 +24,8 @@ export const areaIcons = {
   Jurídico: Scale,
   "Capital Humano": UsersRound,
   Logística: Truck,
+  /* Comercial e Relacionamento andam juntos em Nossa estrutura: a dupla é
+     tratada como uma área só e herda o ícone canônico do Comercial (o aperto
+     de mão já é da Consultoria — dois ícones iguais confundiriam a cena). */
+  "Comercial & Relacionamento": TrendingUp,
 } satisfies Record<string, LucideIcon>;

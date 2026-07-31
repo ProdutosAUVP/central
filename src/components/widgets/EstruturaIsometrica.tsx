@@ -37,41 +37,74 @@ const PLANE = 5; // grade de -5..5 tiles
 type Anchor = "above" | "below";
 
 interface CubeSpec {
-  g: [number, number];          // posição na grade
+  x: number;                    // posição da base do cubo, em px de tela
+  y: number;
   w: number;                    // meia-largura do cubo (px de tela)
   h: number;                    // altura do cubo
   hsl: [number, number, number];// cor base da área
   anchor: Anchor;               // lado do rótulo/popover
-  route: [number, number][];    // caminho da linha no chão, a partir do centro
 }
 
-// Layout fixo: 4 cubos nos pontos cardeais da grade e 4 nas diagonais de
-// tela, com rotas em L que desviam dos cubos intermediários. Os tamanhos
-// variam pouco de propósito — nenhuma área deve parecer menos importante.
-// São oito vagas: a cena comporta exatamente as oito áreas parceiras.
-const SLOTS: CubeSpec[] = [
-  { g: [-3.5, -3.5], w: 31, h: 36, hsl: [152, 68, 38], anchor: "above", route: [[0, 0], [0, -1.5], [-3.5, -1.5], [-3.5, -3.5]] },
-  { g: [3.5, -3.5],  w: 30, h: 35, hsl: [38, 92, 48],  anchor: "above", route: [[0, 0], [1.5, 0], [1.5, -3.5], [3.5, -3.5]] },
-  { g: [-3.5, 3.5],  w: 30, h: 35, hsl: [205, 78, 46], anchor: "above", route: [[0, 0], [-1.5, 0], [-1.5, 3.5], [-3.5, 3.5]] },
-  { g: [3.5, 3.5],   w: 30, h: 34, hsl: [265, 60, 54], anchor: "below", route: [[0, 0], [0, 1.5], [3.5, 1.5], [3.5, 3.5]] },
-  { g: [0, -3.25],   w: 28, h: 32, hsl: [15, 78, 50],  anchor: "above", route: [[0, 0], [0, -3.25]] },
-  { g: [-3.25, 0],   w: 27, h: 30, hsl: [330, 70, 52], anchor: "above", route: [[0, 0], [-3.25, 0]] },
-  { g: [0, 3.25],    w: 28, h: 31, hsl: [175, 60, 36], anchor: "below", route: [[0, 0], [0, 3.25]] },
-  { g: [3.25, 0],    w: 26, h: 29, hsl: [220, 26, 46], anchor: "below", route: [[0, 0], [3.25, 0]] },
-];
+/**
+ * As áreas ficam num anel em volta do Produto, na elipse achatada 2:1 que a
+ * projeção isométrica pede. O anel é calculado a partir do número de vagas,
+ * e não fixado à mão: acrescentar ou tirar uma área redistribui a cena
+ * inteira sozinha, sem ninguém precisar recalcular coordenada.
+ *
+ * O raio horizontal é generoso de propósito — quem aperta a cena não são os
+ * cubos, são os rótulos, que precisam caber lado a lado sem se tocar.
+ */
+const ANEL = { rx: 216, ry: 84 };
 
-// Vaga preferida de cada área (índice em SLOTS). Serve só para manter cor e
-// lugar estáveis entre renders — área que não estiver aqui ocupa a primeira
-// vaga livre, então renomear uma área nunca a faz sumir da cena.
+/* Uma cor por vaga, na ordem do anel: vizinhos nunca compartilham matiz.
+   Os tamanhos variam pouco de propósito — nenhuma área deve parecer menos
+   importante que a outra. */
+const CORES: [number, number, number][] = [
+  [232, 55, 52],  // índigo
+  [15, 78, 50],   // laranja
+  [38, 92, 48],   // âmbar
+  [220, 26, 46],  // ardósia
+  [265, 60, 54],  // violeta
+  [175, 60, 36],  // verde-azulado
+  [330, 70, 52],  // rosa
+  [205, 78, 46],  // azul
+  [152, 68, 38],  // verde
+];
+const TAMANHOS = [29, 28, 29, 27, 30, 28, 27, 28, 30];
+
+/* Começa no topo (−90°) e segue no sentido horário. */
+const SLOTS: CubeSpec[] = CORES.map((hsl, i) => {
+  const phi = -Math.PI / 2 + (i * 2 * Math.PI) / CORES.length;
+  const y = ANEL.ry * Math.sin(phi);
+  return {
+    x: ANEL.rx * Math.cos(phi),
+    y,
+    w: TAMANHOS[i],
+    h: TAMANHOS[i] + 4,
+    hsl,
+    // Rótulo do lado de fora: acima na metade de trás, abaixo na da frente.
+    anchor: y < 0 ? "above" : "below",
+  };
+});
+
+/**
+ * Vaga preferida de cada área (índice em SLOTS). Serve para manter cor e
+ * lugar estáveis entre renders — área que não estiver aqui ocupa a primeira
+ * vaga livre, então renomear uma área nunca a faz sumir da cena.
+ *
+ * O rótulo mais comprido fica no topo, onde há mais espaço horizontal entre
+ * um cubo e o seguinte.
+ */
 const VAGA_PREFERIDA: Record<string, number> = {
-  Tecnologia: 0,
-  "Capital Humano": 1,
-  Logística: 2,
-  Consultoria: 3,
-  Marketing: 4,
-  Audiovisual: 5,
-  Financeiro: 6,
-  Jurídico: 7,
+  "Comercial & Relacionamento": 0,
+  Marketing: 1,
+  "Capital Humano": 2,
+  Jurídico: 3,
+  Consultoria: 4,
+  Financeiro: 5,
+  Audiovisual: 6,
+  Logística: 7,
+  Tecnologia: 8,
 };
 
 type AreaPosicionada = AreaEstrutura & { spec: CubeSpec };
@@ -148,8 +181,38 @@ const faceFills = ([h, s, l]: [number, number, number]) => ({
   right: hsl(h, s, l),
 });
 
-const routePath = (route: [number, number][]) =>
-  route.map(([gx, gy], i) => { const p = iso(gx, gy); return `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`; }).join(" ");
+/* A linha vai do Produto até a área em reta: num anel de raio único, nenhum
+   cubo fica no caminho de outro, então não há curva a desviar. */
+const routePath = (spec: CubeSpec) => `M 0 0 L ${spec.x} ${spec.y}`;
+
+/** Quantos caracteres cabem numa linha de rótulo sem encostar no vizinho. */
+const LIMITE_ROTULO = 16;
+
+/** Quebra o nome da área no espaço mais próximo do meio — no máximo 2 linhas. */
+function linhasDoRotulo(texto: string): string[] {
+  if (texto.length <= LIMITE_ROTULO) return [texto];
+  const meio = texto.length / 2;
+  let corte = -1;
+  for (let i = 0; i < texto.length; i++) {
+    if (texto[i] !== " ") continue;
+    if (corte < 0 || Math.abs(i - meio) < Math.abs(corte - meio)) corte = i;
+  }
+  if (corte < 0) return [texto];
+  return [texto.slice(0, corte), texto.slice(corte + 1)];
+}
+
+function Rotulo({ x, y, texto }: { x: number; y: number; texto: string }) {
+  const linhas = linhasDoRotulo(texto);
+  return (
+    <text x={x} y={y} textAnchor="middle" fontSize={12.5} fontWeight={700} fill="hsl(var(--foreground))" className="font-anek">
+      {linhas.map((linha, i) => (
+        <tspan key={i} x={x} dy={i === 0 ? 0 : 14}>
+          {linha}
+        </tspan>
+      ))}
+    </text>
+  );
+}
 
 // Pontos fixos da grade que "cintilam" como nós de energia
 const SPARKLES: [number, number][] = [[-2, -2], [2, 1], [-1, 3], [4, -2], [-4, -1], [1, -4], [-2, 4]];
@@ -227,10 +290,9 @@ export function EstruturaIsometrica({
 
   const open = hovered ?? active;
 
-  // Ordena do fundo para a frente (algoritmo do pintor) pela profundidade
-  // gx + gy, para os cubos da frente cobrirem os de trás.
-  const placed = posicionar(items)
-    .sort((a, b) => (a.spec.g[0] + a.spec.g[1]) - (b.spec.g[0] + b.spec.g[1]));
+  // Ordena do fundo para a frente (algoritmo do pintor): quanto mais baixo na
+  // tela, mais perto do observador — o cubo da frente cobre o de trás.
+  const placed = posicionar(items).sort((a, b) => a.spec.y - b.spec.y);
 
   const openItem = open ? placed.find((it) => it.area === open) ?? null : null;
   const openSpec = openItem?.spec ?? null;
@@ -238,11 +300,12 @@ export function EstruturaIsometrica({
   // Posição do popover em % do container (o SVG escala com a largura)
   let popStyle: React.CSSProperties | null = null;
   if (openItem && openSpec) {
-    const p = iso(openSpec.g[0], openSpec.g[1]);
-    const anchorY = openSpec.anchor === "above" ? p.y - openSpec.h - openSpec.w / 2 - 8 : p.y + openSpec.w / 2 + 14;
-    const tx = p.x < -140 ? "-14%" : p.x > 140 ? "-86%" : "-50%";
+    const anchorY = openSpec.anchor === "above"
+      ? openSpec.y - openSpec.h - openSpec.w / 2 - 8
+      : openSpec.y + openSpec.w / 2 + 14;
+    const tx = openSpec.x < -140 ? "-14%" : openSpec.x > 140 ? "-86%" : "-50%";
     popStyle = {
-      left: `${((p.x - VB.x) / VB.w) * 100}%`,
+      left: `${((openSpec.x - VB.x) / VB.w) * 100}%`,
       top: `${((anchorY - VB.y) / VB.h) * 100}%`,
       transform: `translate(${tx}, ${openSpec.anchor === "above" ? "-100%" : "0"})`,
     };
@@ -315,8 +378,7 @@ export function EstruturaIsometrica({
             {/* ── Linhas de conexão animadas (no chão, sob os cubos) ── */}
             {placed.map((it, i) => {
               const spec = it.spec;
-              const d = routePath(spec.route);
-              const bends = spec.route.slice(1, -1).map(([gx, gy]) => iso(gx, gy));
+              const d = routePath(spec);
               return (
                 <g key={it.area}>
                   <path d={d} fill="none" stroke="hsl(var(--foreground) / 0.22)" strokeWidth={1} strokeDasharray="1 5" strokeLinecap="round" />
@@ -326,9 +388,6 @@ export function EstruturaIsometrica({
                     strokeDasharray="14 142" strokeLinecap="round"
                     style={{ animation: `estrutura-dash ${3 + (i % 4) * 0.4}s linear ${i * 0.35}s infinite` }}
                   />
-                  {bends.map((b, j) => (
-                    <circle key={j} cx={b.x} cy={b.y} r={1.7} fill="hsl(var(--foreground) / 0.35)" />
-                  ))}
                   {/* ponto de luz viajando do centro até a área */}
                   {!reducedMotion && (
                     <g>
@@ -428,10 +487,9 @@ export function EstruturaIsometrica({
 
               placed.forEach((it, i) => {
                 const spec = it.spec;
-                const depth = spec.g[0] + spec.g[1];
-                if (!centerDrawn && depth > 0) { nodes.push(drawCenter()); centerDrawn = true; }
+                if (!centerDrawn && spec.y > 0) { nodes.push(drawCenter()); centerDrawn = true; }
 
-                const p = iso(spec.g[0], spec.g[1]);
+                const p = { x: spec.x, y: spec.y };
                 const faces = cubeFaces(p.x, p.y, spec.w, spec.h);
                 const fills = faceFills(spec.hsl);
                 const Icon = it.icon;
@@ -495,20 +553,18 @@ export function EstruturaIsometrica({
                             </g>
                           </g>
                         </g>
-                        {/* rótulo com linha-guia pontilhada, como num infográfico */}
+                        {/* rótulo com linha-guia pontilhada, como num infográfico.
+                            Nome comprido quebra em duas linhas: uma linha só
+                            invadiria o rótulo do cubo vizinho. */}
                         {spec.anchor === "above" ? (
                           <>
                             <line x1={p.x} y1={topY - 5} x2={p.x} y2={topY - 22} stroke="hsl(var(--foreground) / 0.5)" strokeWidth={1.2} strokeDasharray="1 4" strokeLinecap="round" />
-                            <text x={p.x} y={topY - 29} textAnchor="middle" fontSize={12.5} fontWeight={700} fill="hsl(var(--foreground))" className="font-anek">
-                              {it.area}
-                            </text>
+                            <Rotulo x={p.x} y={topY - 29 - (linhasDoRotulo(it.area).length - 1) * 14} texto={it.area} />
                           </>
                         ) : (
                           <>
                             <line x1={p.x} y1={botY + 5} x2={p.x} y2={botY + 20} stroke="hsl(var(--foreground) / 0.5)" strokeWidth={1.2} strokeDasharray="1 4" strokeLinecap="round" />
-                            <text x={p.x} y={botY + 34} textAnchor="middle" fontSize={12.5} fontWeight={700} fill="hsl(var(--foreground))" className="font-anek">
-                              {it.area}
-                            </text>
+                            <Rotulo x={p.x} y={botY + 34} texto={it.area} />
                           </>
                         )}
                       </g>
