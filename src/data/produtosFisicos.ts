@@ -121,8 +121,22 @@ export const produtosFisicos: ProdutoFisico[] = catalogo.map((p) => ({
   img: produtosFisicosFotos[p.slug],
 }));
 
-/** Quantos produtos aparecem em destaque no Hub antes de ir para o catálogo. */
-export const PRODUTOS_FISICOS_DESTAQUE = 4;
+/**
+ * Vitrine do Hub — os quatro produtos escolhidos a dedo para a home.
+ * A seleção é por slug, e não pelos primeiros do catálogo, para reordenar
+ * o catálogo sem mexer sem querer no que aparece na página inicial.
+ */
+export const PRODUTOS_FISICOS_DESTAQUE = [
+  "bourbon-auvp",
+  "meia-sardinha",
+  "bone-capitalismo",
+  "canivete-agro",
+] as const;
+
+/** Os produtos da vitrine, na ordem acima. */
+export const produtosFisicosDestaque = PRODUTOS_FISICOS_DESTAQUE
+  .map((slug) => produtosFisicos.find((p) => p.slug === slug))
+  .filter((p): p is ProdutoFisico => Boolean(p));
 
 /** Categorias na ordem em que aparecem no catálogo — usada nos filtros. */
 export const categoriasProdutosFisicos = Array.from(
