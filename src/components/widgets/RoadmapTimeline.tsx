@@ -226,7 +226,9 @@ export function RoadmapTimeline() {
   const arrasto = useRef<{ x: number; scroll: number; moveu: boolean } | null>(null);
   const engolirClique = useRef(false);
   const [arrastando, setArrastando] = useState(false);
-  const LIMIAR = 4;
+  /* Folga generosa: a mão treme alguns pixels entre apertar e soltar, e
+     tratar isso como arrasto engoliria o clique de quem só quis clicar. */
+  const LIMIAR = 6;
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType !== "mouse" || e.button !== 0) return;
@@ -234,8 +236,6 @@ export function RoadmapTimeline() {
     if (!el) return;
     arrasto.current = { x: e.clientX, scroll: el.scrollLeft, moveu: false };
     engolirClique.current = false;
-    setArrastando(true);
-    el.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
@@ -243,8 +243,16 @@ export function RoadmapTimeline() {
     const el = scrollerRef.current;
     if (!d || !el) return;
     const dx = e.clientX - d.x;
-    if (!d.moveu && Math.abs(dx) > LIMIAR) d.moveu = true;
-    if (d.moveu) el.scrollLeft = d.scroll - dx;
+    if (!d.moveu) {
+      if (Math.abs(dx) <= LIMIAR) return;
+      d.moveu = true;
+      setArrastando(true);
+      /* A captura só entra depois que virou arrasto de verdade. Capturar
+         já no pointerdown redireciona pointerup, mouseup e o click para o
+         scroller — o clique nunca chega ao cartão e a seleção morre. */
+      el.setPointerCapture(e.pointerId);
+    }
+    el.scrollLeft = d.scroll - dx;
   };
 
   const encerrarArrasto = (e: React.PointerEvent) => {
@@ -253,7 +261,8 @@ export function RoadmapTimeline() {
     engolirClique.current = d.moveu;
     arrasto.current = null;
     setArrastando(false);
-    scrollerRef.current?.releasePointerCapture?.(e.pointerId);
+    const el = scrollerRef.current;
+    if (el?.hasPointerCapture?.(e.pointerId)) el.releasePointerCapture(e.pointerId);
   };
 
   const onClickCapture = (e: React.MouseEvent) => {
