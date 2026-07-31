@@ -902,7 +902,7 @@ export default function Hub() {
             <SectionHeader icon={Map} title="A trilha do Time de Produto" />
             <p className="text-sm text-muted-foreground font-roboto -mt-2 mb-4 max-w-2xl">
               O que já entregamos, o que está rolando agora e o que vem por aí.
-              Navegue pela onda com as setas ou clique num marco para ver os detalhes.
+              Arraste a onda para os lados, use as setas ou clique num marco para ver os detalhes.
             </p>
             <RoadmapTimeline />
           </section>

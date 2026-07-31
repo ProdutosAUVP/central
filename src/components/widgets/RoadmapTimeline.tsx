@@ -37,8 +37,8 @@ interface Geo {
    linha pela metade. A altura da faixa acompanha: de cada nó sai um
    cartão para um lado e o minicartão para o outro, e os dois precisam
    caber dentro da faixa tanto na crista quanto no vale. */
-const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 258, h: 520, cardW: 232, cardH: 164, miniW: 148, miniH: 58, gap: 32 };
-const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 232, h: 470, cardW: 186, cardH: 156, miniW: 132, miniH: 54, gap: 26 };
+const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 258, h: 520, cardW: 232, cardH: 164, miniW: 116, miniH: 58, gap: 32 };
+const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 232, h: 470, cardW: 186, cardH: 156, miniW: 110, miniH: 54, gap: 26 };
 
 const nX = (g: Geo, i: number) => g.pad + g.stride * i;
 const nY = (g: Geo, i: number) => g.mid - g.amp * (i % 2 === 0 ? 1 : -1);
@@ -139,15 +139,15 @@ function MarcoMiniCard({ marco, ativo }: { marco: Marco; ativo: boolean }) {
   return (
     <div
       className={cn(
-        "h-full w-full rounded-xl border bg-card px-2.5 py-2 flex flex-col justify-center gap-1 overflow-hidden",
+        "h-full w-full rounded-xl border bg-card px-2 py-2 flex flex-col items-center justify-center gap-1 overflow-hidden text-center",
         "transition-[border-color,box-shadow] duration-300 ease-apple",
         ativo ? "border-primary/50 shadow-lg" : "sm:group-hover:border-primary/30"
       )}
     >
-      <p className="text-[11px] font-bold font-anek text-foreground leading-tight truncate">
+      <p className="max-w-full text-[11px] font-bold font-anek text-foreground leading-tight truncate">
         {marco.periodo}
       </p>
-      <span className={cn("inline-flex items-center gap-1 text-[9px] font-bold font-roboto uppercase tracking-wider", cfg.classe)}>
+      <span className={cn("max-w-full inline-flex items-center justify-center gap-1 text-[9px] font-bold font-roboto uppercase tracking-wide", cfg.classe)}>
         <Icon className="h-3 w-3 shrink-0" />
         <span className="truncate">{cfg.label}</span>
       </span>
@@ -218,6 +218,51 @@ export function RoadmapTimeline() {
     if (e.key === "ArrowLeft")  { e.preventDefault(); irPara(ativo - 1); }
   };
 
+  /* ── Arrastar para navegar ──────────────────────────────────────────
+     Só para mouse: no toque o próprio navegador já rola a faixa, e
+     interceptar o gesto ali só atrapalharia. Um arrasto que passou do
+     limiar engole o clique seguinte, senão soltar o botão em cima de um
+     cartão selecionaria o marco errado no fim do gesto. */
+  const arrasto = useRef<{ x: number; scroll: number; moveu: boolean } | null>(null);
+  const engolirClique = useRef(false);
+  const [arrastando, setArrastando] = useState(false);
+  const LIMIAR = 4;
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    const el = scrollerRef.current;
+    if (!el) return;
+    arrasto.current = { x: e.clientX, scroll: el.scrollLeft, moveu: false };
+    engolirClique.current = false;
+    setArrastando(true);
+    el.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = arrasto.current;
+    const el = scrollerRef.current;
+    if (!d || !el) return;
+    const dx = e.clientX - d.x;
+    if (!d.moveu && Math.abs(dx) > LIMIAR) d.moveu = true;
+    if (d.moveu) el.scrollLeft = d.scroll - dx;
+  };
+
+  const encerrarArrasto = (e: React.PointerEvent) => {
+    const d = arrasto.current;
+    if (!d) return;
+    engolirClique.current = d.moveu;
+    arrasto.current = null;
+    setArrastando(false);
+    scrollerRef.current?.releasePointerCapture?.(e.pointerId);
+  };
+
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (!engolirClique.current) return;
+    engolirClique.current = false;
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const marcoAtivo = marcos[ativo];
   const cfgAtivo = statusConfig[marcoAtivo.status];
   const IconAtivo = cfgAtivo.icon;
@@ -265,11 +310,19 @@ export function RoadmapTimeline() {
         <div
           ref={scrollerRef}
           onKeyDown={onKeyDown}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={encerrarArrasto}
+          onPointerCancel={encerrarArrasto}
+          onClickCapture={onClickCapture}
           tabIndex={0}
           role="group"
           aria-label="Trilha de marcos do Time de Produto"
-          className="relative overflow-x-auto overflow-y-hidden timeline-scrollbar outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-          style={{ scrollSnapType: "x proximity" }}
+          className={cn(
+            "relative overflow-x-auto overflow-y-hidden timeline-scrollbar outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+            arrastando ? "cursor-grabbing select-none" : "sm:cursor-grab"
+          )}
+          style={{ scrollSnapType: arrastando ? "none" : "x proximity" }}
         >
           <div className="relative" style={{ width: W, height: g.h }}>
             <svg
@@ -280,14 +333,13 @@ export function RoadmapTimeline() {
               aria-hidden="true"
             >
               <defs>
-                {/* Rampa sequencial (--chart-seq-*): um verde só, do mais
-                    claro ao mais fechado, aprofundando conforme a trilha
-                    avança. Os degraus 3 a 5 mantêm contraste tanto no tema
-                    claro quanto no escuro — o 1 e o 2 sumiriam no fundo. */}
+                {/* O gradiente da marca, o mesmo par de tokens por trás do
+                    utilitário .bg-brand-gradient do Design System. Assim a
+                    trilha usa o verde AUVP oficial e acompanha tema e marca
+                    sem repetir valores de cor aqui. */}
                 <linearGradient id="rt-onda" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={W} y2="0">
-                  <stop offset="0%"   style={{ stopColor: "hsl(var(--chart-seq-3))" }} />
-                  <stop offset="55%"  style={{ stopColor: "hsl(var(--chart-seq-4))" }} />
-                  <stop offset="100%" style={{ stopColor: "hsl(var(--chart-seq-5))" }} />
+                  <stop offset="0%"   style={{ stopColor: "hsl(var(--brand-gradient-from))" }} />
+                  <stop offset="100%" style={{ stopColor: "hsl(var(--brand-gradient-to))" }} />
                 </linearGradient>
                 <clipPath id="rt-feito">
                   <rect x="0" y="0" width={Math.max(progressoX, 0)} height={g.h} />
@@ -318,14 +370,14 @@ export function RoadmapTimeline() {
                 />
                 <path d={ondaPrincipal} fill="none" stroke="url(#rt-onda)" strokeWidth="4" strokeLinecap="round" />
                 {/* Conta de luz percorrendo a trilha até o "hoje". Vai em
-                    --primary (verde no claro, dourado no escuro) porque
-                    branco sobre o cartão claro some: a linha só pareceria
-                    falhada em vez de acesa. */}
+                    --brand-foreground, o token feito para ser lido sobre a
+                    cor da marca: branco no tema claro, quase-preto no
+                    escuro. Em --primary ela sumiria, porque no tema claro
+                    é o mesmo verde da linha por baixo. */}
                 {!reducedMotion && (
                   <g>
-                    <circle r="15" fill="hsl(var(--primary))" opacity="0.3" filter="url(#rt-glow)" />
-                    <circle r="6" fill="hsl(var(--primary))" />
-                    <circle r="2.2" fill="hsl(var(--primary-foreground))" />
+                    <circle r="15" fill="hsl(var(--brand-foreground))" opacity="0.35" filter="url(#rt-glow)" />
+                    <circle r="6" fill="hsl(var(--brand-foreground))" />
                     <animateMotion dur="7s" repeatCount="indefinite" path={ondaPrincipal} />
                   </g>
                 )}
