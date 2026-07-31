@@ -1,18 +1,29 @@
 /**
  * Microsoft Clarity — carregamento e API tipada.
  *
- * O script só entra se `VITE_CLARITY_PROJECT_ID` estiver definido no build.
- * Sem a variável, tudo aqui vira no-op: assim o ambiente de desenvolvimento
- * e qualquer fork não poluem as métricas de produção, e o app funciona igual
- * com ou sem a ferramenta configurada.
+ * O ID do projeto é público por natureza (vai no HTML de qualquer forma),
+ * então fica versionado aqui: a Central publicada já sobe medindo, sem
+ * depender de ninguém lembrar de configurar um secret. `VITE_CLARITY_PROJECT_ID`
+ * continua valendo como override, para apontar para outro projeto — ou para
+ * ligar a medição fora de produção — sem mexer no fonte.
  *
- * O ID do projeto sai do painel do Clarity (Settings → Overview) e é
- * público por natureza — vai no HTML de qualquer forma. Mesmo assim ele
- * entra por variável de ambiente, e não fixo no código, para trocar de
- * projeto sem mexer no fonte.
+ * Em desenvolvimento e no preview local o Clarity fica de fora: as sessões
+ * de quem está mexendo no código sujariam as métricas de quem usa a Central.
+ * Fora isso, tudo aqui vira no-op quando não há projeto — o app funciona
+ * igual com ou sem a ferramenta.
  */
 
-const PROJECT_ID = import.meta.env.VITE_CLARITY_PROJECT_ID as string | undefined;
+/** Projeto "Central de Produto AUVP" no painel do Clarity. */
+const ID_VERSIONADO = "xv5oww7983";
+
+const ID_DA_VARIAVEL = import.meta.env.VITE_CLARITY_PROJECT_ID as string | undefined;
+
+const emLocalhost =
+  typeof window !== "undefined" &&
+  /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
+
+const PROJECT_ID =
+  ID_DA_VARIAVEL || (import.meta.env.PROD && !emLocalhost ? ID_VERSIONADO : undefined);
 
 /** Chave onde fica o identificador anônimo e estável desta pessoa. */
 const ID_KEY = "auvp-clarity-id";
@@ -101,11 +112,26 @@ export function idAnonimo(): string {
   try {
     const salvo = localStorage.getItem(ID_KEY);
     if (salvo) return salvo;
-    const novo = `pirata-${crypto.randomUUID().slice(0, 8)}`;
+    const novo = `pirata-${sorteio()}`;
     localStorage.setItem(ID_KEY, novo);
     return novo;
   } catch {
-    /* navegação privada ou storage bloqueado: sessão fica sem id fixo */
-    return "sem-storage";
+    /* Navegação privada ou storage bloqueado: o id não persiste, mas ainda
+       precisa ser único — um valor fixo juntaria todo mundo numa identidade
+       só no painel, o que é pior do que não identificar. */
+    return `pirata-${sorteio()}-avulso`;
   }
+}
+
+/** Oito caracteres aleatórios, com as alternativas que cada navegador tem. */
+function sorteio(): string {
+  /* crypto.randomUUID exige contexto seguro (https); getRandomValues não. */
+  if (typeof crypto !== "undefined") {
+    if (typeof crypto.randomUUID === "function") return crypto.randomUUID().slice(0, 8);
+    if (typeof crypto.getRandomValues === "function") {
+      const bytes = crypto.getRandomValues(new Uint8Array(4));
+      return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+    }
+  }
+  return Math.random().toString(16).slice(2, 10).padStart(8, "0");
 }
