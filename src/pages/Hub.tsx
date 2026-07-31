@@ -95,10 +95,10 @@ interface ProdutoDigital {
 const produtos: ProdutoDigital[] = [
   { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
   { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://auvp.com.br/" },
-  { name: "AUVP Sempre", desc: "Assinatura de evolução contínua", href: "https://www.auvp.com.br/auvp-sempre/" },
+  { name: "AUVP Sempre", desc: "Assinatura de evolução contínua", slug: "sempre", href: "https://www.auvp.com.br/auvp-sempre/" },
   { name: "AUVP ETFs", desc: "Os ETFs próprios da AUVP", slug: "etfs", href: "https://www.auvpetfs.com.br/" },
-  { name: "AUVP Wealth", desc: "Gestão de grandes patrimônios", href: "https://auvpcapital.com.br/wealth/" },
-  { name: "Private Day", desc: "O evento anual da AUVP", href: "https://privateday.auvp.com.br/" },
+  { name: "AUVP Wealth", desc: "Gestão de grandes patrimônios", slug: "wealth", href: "https://auvpcapital.com.br/wealth/" },
+  { name: "Private Day", desc: "O evento anual da AUVP", slug: "private-day", href: "https://privateday.auvp.com.br/" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://auvpagro.com.br/" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
   { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
