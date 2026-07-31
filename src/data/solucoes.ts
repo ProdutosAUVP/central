@@ -1,5 +1,5 @@
 import {
-  GraduationCap, RefreshCw, Award, Layers, BarChart3, Globe2, Tractor, Landmark, Table2,
+  GraduationCap, RefreshCw, Award, BarChart3, Globe2, Tractor, Landmark, Table2,
   Sprout, TrendingUp, Umbrella, Video, Headset, BookOpen, Users, CheckCircle2,
   Database, ShieldCheck, ChartPie, Presentation, LineChart, CloudSun, FileText,
   Coins, HandCoins, Percent, Gem, MessageCircle, CreditCard, Sparkles, Crown,
@@ -29,11 +29,14 @@ export interface SolucaoSection {
   anchors: { id: string; label: string }[];
 }
 
+/**
+ * Seções da navegação lateral, na ordem da página.
+ *
+ * A dobra "Tudo começa na escola" (`#ecossistema`) não entra aqui de
+ * propósito: ela fecha a página emendando na tabela-resumo e não precisa de
+ * item próprio no menu. A âncora continua valendo.
+ */
 export const solucoesSections: SolucaoSection[] = [
-  {
-    id: "ecossistema", label: "Ecossistema", icon: Layers,
-    anchors: [],
-  },
   {
     id: "auvp-escola", label: "Escola", icon: GraduationCap,
     anchors: [
@@ -159,14 +162,6 @@ export const ecossistemaEtapas: EcossistemaEtapa[] = [
     ],
   },
 ];
-
-export const ecossistemaCartao = {
-  tag: "Também incluso no ecossistema",
-  titulo: "Cartão de crédito AUVP",
-  desc: "Mastercard Platinum, Black e Ultrablue com todos os benefícios.",
-  destaque: "Os melhores do mercado.",
-  obs: "sujeito a aprovação",
-};
 
 /* ============================================================
    Tipos compartilhados
