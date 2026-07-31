@@ -16,6 +16,21 @@ export interface NovidadeItem {
   depois?: string;
   /** Resultados/entregas concretas da seção. Categoria independente e opcional. */
   resultados?: string[];
+  /** Quem assinou a entrega. Categoria independente e opcional. */
+  envolvidos?: string[];
+  /**
+   * Marca a novidade como destaque do Mural do Hub.
+   *
+   * O carrossel do Hub reúne os destaques de toda a história — não só os do
+   * mês mais recente —, por isso o texto curto do card mora aqui, separado
+   * da copy longa da edição do mês. Campos ausentes caem no item.
+   */
+  destaque?: {
+    titulo?: string;
+    descricao?: string;
+    /** Chave em `lpScreenshots`. Sem imagem, o card usa o painel da marca. */
+    imagem?: string;
+  };
   /** Link externo real. Itens sem link não renderizam CTA. */
   link?: string;
 }
@@ -40,6 +55,51 @@ export const mesNumero = (mes: string) => MES_NUMERO[mes.trim().toLowerCase()] ?
 
 export const novidadesMensais: NovidadeMensal[] = [
   {
+    mes: "Julho", ano: 2026,
+    intro: "Julho foi mês de coisa grande saindo do forno: o Minha AUVP no ar para todo mundo, uma casa nova para os ETFs e dois módulos novos na Escola. Bora ver o que a Equipe AUVP entregou?",
+    items: [
+      {
+        emoji: "🖥️",
+        titulo: "Minha AUVP — Hub 2.0",
+        descricao: "O Minha AUVP (antigo hub de produtos) já está no ar para os membros! Desenvolvemos um visual mais moderno e funcionalidades para facilitar o uso das nossas soluções.",
+        antes: "O Hub reunia os produtos numa interface antiga, pensada quando o catálogo era bem menor.",
+        depois: "Minha AUVP: visual novo e funcionalidades que facilitam o acesso a todas as soluções em um só lugar.",
+        envolvidos: ["Ariadne Carneiro", "Éria Alencar", "Vitor Manoel", "Witor Lomazzi", "Cauê Filipe", "João Lima", "Thiago Langsdorf"],
+        destaque: {},
+      },
+      {
+        emoji: "📊",
+        titulo: "Novo site de ETFs",
+        descricao: "Lançamos uma página oficial para centralizar e dar transparência a todas as informações técnicas, metodologias e composições dos nossos ETFs.",
+        envolvidos: ["Armando Custódio", "Jeniffer Nascimento", "Hiago Felipe"],
+        destaque: { imagem: "etfs" },
+        link: "https://www.auvpetfs.com.br/",
+      },
+      {
+        emoji: "📈",
+        titulo: "Módulo de Indicadores (exclusivo AUVP Sempre)",
+        descricao: "Promessa cumprida! Subimos um novo módulo exclusivo para os assinantes da AUVP Sempre, aprofundando a parte técnica de avaliação de empresas.",
+        envolvidos: ["Matheus Graff", "Douglas Ribeiro", "Maximiliano Carneiro (Max)", "Lucas Magalhães", "Luis Guilherme Borges"],
+        destaque: { titulo: "Módulo de Indicadores", imagem: "sempre" },
+      },
+      {
+        emoji: "📒",
+        titulo: "Módulo AUVP Analítica",
+        descricao: "Liberamos na Escola um módulo completo ensinando o passo a passo para extrair o máximo da nossa ferramenta e todas as suas funcionalidades.",
+        envolvidos: ["Jeniffer Nascimento", "Hemily Borges", "Maximiliano Carneiro (Max)", "Lucas Magalhães", "Luis Guilherme Borges"],
+        destaque: { imagem: "analitica" },
+      },
+    ],
+    spoiler: [
+      "🧒 Educação Financeira para crianças — chega em agosto",
+      "🧑‍🏫 Plano de Aula para professores — também em agosto",
+      "📱 SuperApp da AUVP — previsto para dezembro",
+      "💳 Cartão AUVP com benefícios exclusivos — em breve",
+      "🏫 Projeto Statera (AUVP nas Escolas) — em breve",
+    ],
+    rodape: "E com isso, bora para agosto! Caso tenham mais sugestões ou ideias, podem mandar pra gente. Estamos de olho em tudo o que nos sugerem ;)",
+  },
+  {
     mes: "Junho", ano: 2026,
     intro: "Olá pessoal, como estamos? Neste mês de junho tivemos Copa do Mundo, festa junina e, como de costume: uma série de novidades e atualizações na AUVP. Então, bora conferir o que a Equipe AUVP fez nesse mês?",
     items: [
@@ -55,6 +115,12 @@ export const novidadesMensais: NovidadeMensal[] = [
           "Módulo 7: nova versão com o conteúdo 100% repaginado",
           "Os e-books atualizados dos módulos 6 e 7 chegam em breve — os vídeos já estão liberados",
         ],
+        envolvidos: ["Elane Rodrigues", "Ana Beatriz Melo", "Matheus Graff", "Maximiliano Carneiro (Max)", "Lucas Magalhães", "Luis Guilherme Borges", "Lucas Cassimiro"],
+        destaque: {
+          titulo: "AUVP Escola 100% Regravada",
+          descricao: "Concluímos a regravação integral e a atualização de todo o conteúdo da AUVP Escola. Uma entrega focada em manter o nosso padrão de qualidade e entregar a melhor experiência de estudo possível.",
+          imagem: "escola",
+        },
         link: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6772ad0d1fe057e9530659d2Unit",
       },
       {
@@ -63,6 +129,12 @@ export const novidadesMensais: NovidadeMensal[] = [
         descricao: "Para quem sentia falta de colocar o conhecimento em prática, lançamos Cadernos de Exercícios antes de todas as avaliações na plataforma da Escola. A ideia é simples: deixar o aprendizado mais dinâmico. Com atividades ligadas diretamente ao que é passado nas aulas, fica muito mais fácil assimilar os conceitos e fixar o conteúdo ao longo da jornada.",
         antes: "As avaliações vinham logo após as aulas, sem um material de prática entre elas.",
         depois: "Caderno de exercícios disponível antes da avaliação de cada módulo, do M1 ao M6.",
+        envolvidos: ["Matheus Graff", "Armando Custódio"],
+        destaque: {
+          titulo: "Cadernos de Exercícios na Escola",
+          descricao: "Implementamos atividades práticas antes das avaliações em todos os módulos da AUVP Escola para deixar a jornada de aprendizado dos alunos muito mais dinâmica e facilitar a fixação do conteúdo.",
+          imagem: "escola",
+        },
         link: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6a3d845094f35e363d0cbd26Unit",
       },
       {
@@ -167,3 +239,34 @@ export const novidadesMensais: NovidadeMensal[] = [
     spoiler: ["👝 Consolidador de carteira está em fase de testes", "👾 Correção de bugs no Hub de produtos para liberarmos novidades", "📈 Novo módulo de Indicadores", "📊 Módulo de Valuation e Módulo de análise de setores (exclusivo AUVP Sempre)"],
   },
 ];
+
+/** Uma entrega em destaque no Mural do Hub, já resolvida com o mês de origem. */
+export interface NovidadeDestaque {
+  titulo: string;
+  descricao: string;
+  mes: string;
+  ano: number;
+  envolvidos?: string[];
+  link?: string;
+  /** Chave em `lpScreenshots`; ausente = card com o painel da marca. */
+  imagem?: string;
+}
+
+/**
+ * Destaques do Mural, varridos de toda a história — e não de um mês fixo.
+ * A ordem é a cronológica da fonte (do mais recente para o mais antigo),
+ * então basta marcar `destaque` num item para ele entrar no carrossel do Hub.
+ */
+export const novidadesDestaque: NovidadeDestaque[] = novidadesMensais.flatMap((mes) =>
+  mes.items
+    .filter((item) => item.destaque)
+    .map((item) => ({
+      titulo: item.destaque!.titulo ?? item.titulo,
+      descricao: item.destaque!.descricao ?? item.descricao,
+      mes: mes.mes,
+      ano: mes.ano,
+      envolvidos: item.envolvidos,
+      link: item.link,
+      imagem: item.destaque!.imagem,
+    }))
+);

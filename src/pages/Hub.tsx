@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { TeamPhoto } from "@/components/TeamPhoto";
 import { lpScreenshots } from "@/assets/lps";
-import { cn } from "@/lib/utils";
+import { cn, publicUrl } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -19,9 +19,8 @@ import {
 import { PageShell } from "@/components/PageShell";
 import { Tag } from "@/components/widgets/Tag";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { NovidadeCard } from "@/components/widgets/NovidadeCard";
 import { RoadmapTimeline } from "@/components/widgets/RoadmapTimeline";
-import { novidadesMensais, mesNumero } from "@/data/novidades";
+import { novidadesDestaque } from "@/data/novidades";
 import { proximoMarco } from "@/data/roadmapMarcos";
 import { teamMembers } from "@/data/time";
 import { produtosFisicos, produtosFisicosDestaque } from "@/data/produtosFisicos";
@@ -101,6 +100,7 @@ const produtos: ProdutoDigital[] = [
   { name: "AUVP ETFs", desc: "Os ETFs próprios da AUVP", slug: "etfs", href: "https://www.auvpetfs.com.br/" },
   { name: "AUVP Wealth", desc: "Gestão de grandes patrimônios", slug: "wealth", href: "https://auvpcapital.com.br/wealth/" },
   { name: "Private Day", desc: "O evento anual da AUVP", slug: "private-day", href: "https://privateday.auvp.com.br/" },
+  { name: "Giro da Bolsa Itinerante", desc: "O Giro da Bolsa ao vivo, cidade a cidade", slug: "giro-itinerante", href: "https://auvpcapital.com.br/giro-da-bolsa-itinerante/" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://auvpagro.com.br/" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
   { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
@@ -241,25 +241,29 @@ const portfolioDestaques = produtosFisicosDestaque;
 interface MuralCard {
   titulo: string;
   descricao: string;
+  /** Mês de origem da entrega — cada card traz o seu, não o do mural. */
+  periodo: string;
+  /** Quem assinou a entrega. */
+  envolvidos?: string[];
   /** Link externo da novidade — cards sem link levam para /novidades. */
   link?: string;
-  /** Imagem do card. Enquanto não há artes próprias, usa screenshots das LPs como placeholder. */
-  img: string;
+  /** Arte do card. Sem imagem própria, o slide usa o painel da marca. */
+  img?: string;
 }
 
-/** Rótulo da edição exibida no carrossel — sempre o mês mais recente. */
-const muralMesLabel = `${novidadesMensais[0].mes} ${novidadesMensais[0].ano}`;
-
-/** Cards do carrossel do Mural de Novidades — derivados das novidades mais recentes. */
-const muralNovidades: MuralCard[] = novidadesMensais[0].items.map((item, i) => {
-  const shots = Object.values(lpScreenshots);
-  return {
-    titulo: item.titulo,
-    descricao: item.descricao,
-    link: item.link,
-    img: shots[i % shots.length],
-  };
-});
+/**
+ * Cards do carrossel do Mural — os destaques de toda a história, e não os
+ * itens de um mês fixo. Marcar `destaque` em `src/data/novidades.ts` basta
+ * para uma entrega entrar aqui; o histórico completo fica em /novidades.
+ */
+const muralNovidades: MuralCard[] = novidadesDestaque.map((d) => ({
+  titulo: d.titulo,
+  descricao: d.descricao,
+  periodo: `${d.mes} ${d.ano}`,
+  envolvidos: d.envolvidos,
+  link: d.link,
+  img: d.imagem ? lpScreenshots[d.imagem] : undefined,
+}));
 
 function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
   const [index, setIndex] = useState(0);
@@ -295,18 +299,43 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
             const slide = (
               <div className="flex h-full flex-col sm:flex-row">
                 <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 border-b sm:border-b-0 sm:border-r shrink-0 overflow-hidden">
-                  <img
-                    src={item.img}
-                    alt=""
-                    className="h-full w-full object-cover object-top transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
-                  />
+                  {item.img ? (
+                    <img
+                      src={item.img}
+                      alt=""
+                      className="h-full w-full object-cover object-top transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    /* Entrega ainda sem arte própria: painel da marca em vez
+                       de uma screenshot emprestada de outro produto. */
+                    <div
+                      aria-hidden
+                      className="h-full w-full flex items-center justify-center bg-gradient-to-br from-primary/15 via-primary/5 to-transparent"
+                    >
+                      <img
+                        src={publicUrl("/olho-preto.svg")}
+                        alt=""
+                        className="h-12 w-12 opacity-70 transition-transform duration-500 ease-apple sm:group-hover:scale-[1.06] dark:hidden"
+                      />
+                      <img
+                        src={publicUrl("/olho-branco.svg")}
+                        alt=""
+                        className="h-12 w-12 opacity-70 transition-transform duration-500 ease-apple sm:group-hover:scale-[1.06] hidden dark:block"
+                      />
+                    </div>
+                  )}
                 </div>
-                <div className="flex-1 min-w-0 px-5 pb-5 pt-4 sm:py-6 sm:px-8 flex flex-col justify-center gap-2.5 overflow-hidden">
+                <div className="flex-1 min-w-0 px-5 pb-5 pt-4 sm:py-6 sm:px-8 flex flex-col justify-center gap-2 overflow-hidden">
                   <span className="self-start rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold font-roboto uppercase tracking-wider text-primary">
-                    {muralMesLabel}
+                    {item.periodo}
                   </span>
                   <p className="font-bold font-anek text-lg sm:text-2xl text-foreground leading-tight line-clamp-2 sm:group-hover:text-primary transition-colors duration-300">{item.titulo}</p>
                   <p className="text-sm text-muted-foreground font-roboto leading-relaxed line-clamp-3">{item.descricao}</p>
+                  {item.envolvidos && item.envolvidos.length > 0 && (
+                    <p className="text-[11px] text-muted-foreground/80 font-roboto leading-snug line-clamp-1">
+                      <span className="font-semibold">Envolvidos:</span> {item.envolvidos.join(", ")}
+                    </p>
+                  )}
                   <span className="inline-flex items-center gap-1 text-xs font-semibold font-roboto text-primary">
                     {item.link ? "Ver novidade" : "Ver no mural"}
                     <ChevronRight className="h-3 w-3 transition-transform duration-300 ease-apple sm:group-hover:translate-x-0.5" />
@@ -798,7 +827,7 @@ export default function Hub() {
               info="Aqui você acompanha o que o time está aprontando: novos sites, melhorias, lançamentos e outras entregas que acabaram de sair do forno."
               action={
                 <Link to="/novidades" className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline">
-                  Ver mural completo <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+                  Ver histórico completo <ChevronRight className="h-3.5 w-3.5 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
                 </Link>
               }
             />
