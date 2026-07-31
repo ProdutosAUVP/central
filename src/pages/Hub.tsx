@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, Map,
-  Globe, Minus, Square, X, Layers
+  Globe, Minus, Square, X, Layers, Brain
 } from "lucide-react";
 import { TeamPhoto } from "@/components/TeamPhoto";
 import { lpScreenshots } from "@/assets/lps";
@@ -26,6 +26,7 @@ import { teamMembers } from "@/data/time";
 import { produtosFisicos, produtosFisicosDestaque } from "@/data/produtosFisicos";
 import { ProdutoFisicoCard } from "@/components/ProdutosFisicos";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useCareca } from "@/contexts/CarecaContext";
 
 function FigmaIcon({ className }: { className?: string }) {
   return (
@@ -95,10 +96,10 @@ interface ProdutoDigital {
 const produtos: ProdutoDigital[] = [
   { name: "AUVP Capital", desc: "Plataforma de investimentos", slug: "capital", href: "https://auvpcapital.com.br/" },
   { name: "AUVP Escola", desc: "Plataforma de educação financeira", slug: "escola", href: "https://auvp.com.br/" },
-  { name: "AUVP Sempre", desc: "Assinatura de evolução contínua", href: "https://www.auvp.com.br/auvp-sempre/" },
+  { name: "AUVP Sempre", desc: "Assinatura de evolução contínua", slug: "sempre", href: "https://www.auvp.com.br/auvp-sempre/" },
   { name: "AUVP ETFs", desc: "Os ETFs próprios da AUVP", slug: "etfs", href: "https://www.auvpetfs.com.br/" },
-  { name: "AUVP Wealth", desc: "Gestão de grandes patrimônios", href: "https://auvpcapital.com.br/wealth/" },
-  { name: "Private Day", desc: "O evento anual da AUVP", href: "https://privateday.auvp.com.br/" },
+  { name: "AUVP Wealth", desc: "Gestão de grandes patrimônios", slug: "wealth", href: "https://auvpcapital.com.br/wealth/" },
+  { name: "Private Day", desc: "O evento anual da AUVP", slug: "private-day", href: "https://privateday.auvp.com.br/" },
   { name: "AUVP Agro", desc: "Produtos do agronegócio", slug: "agro", href: "https://auvpagro.com.br/" },
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
   { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
@@ -392,11 +393,28 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
   );
 }
 
-const faqs = [
+interface Faq {
+  q: string;
+  a: string;
+  /** Identificador da ação que acompanha a resposta, quando houver. */
+  acao?: "megabrain" | "rotina";
+}
+
+const faqs: Faq[] = [
   { q: "Como acesso o Design System?", a: "Clique em 'Design System' nos Acessos Rápidos ou use o menu de navegação global no canto superior esquerdo." },
   { q: "O que é o Manual de Tom e Voz?", a: "É o guia de comunicação verbal da AUVP, com diretrizes de linguagem para cada área e produto da empresa." },
   { q: "Como sugiro um novo componente?", a: "A proposição de um novo componente deve vir via solicitação no ClickUp." },
   { q: "Com que frequência o Design System é atualizado?", a: "O Design System é atualizado continuamente. Novidades são comunicadas no Mural de Novidades desta Central." },
+  {
+    q: "O que o time de produto faz?",
+    a: "O time cuida dos produtos AUVP de ponta a ponta: pesquisa, design, copy, plataformas e a experiência do membro — do digital aos materiais físicos. A dobra \u201cNossa rotina na prática\u201d, no Nosso Time, mostra a especialidade de cada pessoa e quem chamar para cada assunto.",
+    acao: "rotina",
+  },
+  {
+    q: "Como ativar o megabrain?",
+    a: "O Modo Megabrain é um easter egg: digite \u201cmegabrain\u201d em qualquer página, fora de um campo de texto, ou clique três vezes seguidas numa foto do Raul. As fotos do time trocam pelas versões carecas depois de uma varredura na tela. Para desligar, é só repetir. Ou use o botão aqui embaixo.",
+    acao: "megabrain",
+  },
 ];
 
 // ─── Team Carousel ────────────────────────────────────────────────────────────
@@ -623,6 +641,7 @@ export default function Hub() {
     "Boa noite, time 🌙";
   const proximo = proximoMarco();
   const [verTodasSolucoes, setVerTodasSolucoes] = useState(false);
+  const { careca, toggleCareca } = useCareca();
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (spotlightRef.current) {
@@ -939,7 +958,27 @@ export default function Hub() {
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`}>
                   <AccordionTrigger className="text-sm font-medium font-roboto text-left">{faq.q}</AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground font-roboto">{faq.a}</AccordionContent>
+                  <AccordionContent className="text-sm text-muted-foreground font-roboto space-y-3">
+                    <p>{faq.a}</p>
+                    {faq.acao === "megabrain" && (
+                      <button
+                        onClick={toggleCareca}
+                        className="group inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-xs font-semibold font-roboto text-foreground transition-[border-color,color,box-shadow] duration-300 ease-apple sm:hover:border-primary/40 sm:hover:text-primary sm:hover:shadow-sm"
+                      >
+                        <Brain className="h-3.5 w-3.5 shrink-0" />
+                        {careca ? "Desligar o Modo Megabrain" : "Ativar o Modo Megabrain"}
+                      </button>
+                    )}
+                    {faq.acao === "rotina" && (
+                      <Link
+                        to="/time#rotina-na-pratica"
+                        className="group inline-flex items-center gap-1.5 text-xs font-semibold font-roboto text-primary sm:hover:underline"
+                      >
+                        Ver a nossa rotina na prática
+                        <ChevronRight className="h-3.5 w-3.5 shrink-0 sm:group-hover:translate-x-0.5 transition-transform duration-300 ease-apple" />
+                      </Link>
+                    )}
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

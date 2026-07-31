@@ -12,6 +12,9 @@ import cambio from "./lps/cambio.webp?url";
 import credito from "./lps/credito.webp?url";
 import seguros from "./lps/seguros.webp?url";
 import etfs from "./lps/etfs.webp?url";
+import sempre from "./lps/sempre.webp?url";
+import wealth from "./lps/wealth.webp?url";
+import privateDay from "./lps/private-day.webp?url";
 
 export const lpScreenshots: Record<string, string> = {
   capital,
@@ -22,4 +25,7 @@ export const lpScreenshots: Record<string, string> = {
   credito,
   seguros,
   etfs,
+  sempre,
+  wealth,
+  "private-day": privateDay,
 };
