@@ -97,9 +97,9 @@ export function GlobalNav() {
         />
       </div>
 
-      {/* Alfa badge */}
+      {/* Selo de versão */}
       <span className="shrink-0 text-[9px] font-bold font-roboto uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 leading-none">
-        alfa
+        v1
       </span>
 
       {/* Mobile: dropdown */}

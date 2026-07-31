@@ -32,13 +32,13 @@ interface Geo {
   gap: number;     // vão entre o nó e cada um dos dois cartões
 }
 
-/* A altura do cartão comporta o pior caso — título em duas linhas mais
-   descrição em três —, senão o flex espreme o texto e corta a última
-   linha pela metade. A altura da faixa acompanha: de cada nó sai um
+/* A altura do cartão comporta o pior caso — título em duas linhas ao lado
+   do ícone, mais descrição em três —, senão o flex espreme o texto e corta
+   a última linha pela metade. A altura da faixa acompanha: de cada nó sai um
    cartão para um lado e o minicartão para o outro, e os dois precisam
    caber dentro da faixa tanto na crista quanto no vale. */
-const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 258, h: 520, cardW: 232, cardH: 164, miniW: 116, miniH: 58, gap: 32 };
-const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 232, h: 470, cardW: 186, cardH: 156, miniW: 110, miniH: 54, gap: 26 };
+const GEO_AMPLA:    Geo = { stride: 300, pad: 168, amp: 46, mid: 238, h: 480, cardW: 232, cardH: 136, miniW: 116, miniH: 58, gap: 32 };
+const GEO_COMPACTA: Geo = { stride: 224, pad: 126, amp: 42, mid: 217, h: 440, cardW: 186, cardH: 130, miniW: 110, miniH: 54, gap: 26 };
 
 const nX = (g: Geo, i: number) => g.pad + g.stride * i;
 const nY = (g: Geo, i: number) => g.mid - g.amp * (i % 2 === 0 ? 1 : -1);
@@ -105,21 +105,22 @@ function MarcoCard({ marco, ativo }: { marco: Marco; ativo: boolean }) {
           : "sm:group-hover:border-primary/30 sm:group-hover:shadow-lg sm:group-hover:-translate-y-0.5"
       )}
     >
-      <span
-        className={cn(
-          "shrink-0 flex items-center justify-center h-8 w-8 rounded-lg",
-          tagToneClasses[marco.tone]
-        )}
-        aria-hidden="true"
-      >
-        <Icon className="h-4 w-4" />
-      </span>
-      {/* shrink-0 nos dois: como o cartão tem altura fixa, sem isso o flex
-          encolhe o bloco de texto abaixo do que ele precisa e a segunda
-          linha sai cortada no meio do glifo. */}
-      <p className="shrink-0 font-bold font-anek text-foreground text-[13px] sm:text-sm leading-tight line-clamp-2">
-        {marco.titulo}
-      </p>
+      {/* items-center faz ícone e título se centralizarem um no outro,
+          seja o título de uma ou de duas linhas. */}
+      <div className="shrink-0 flex items-center gap-2.5">
+        <span
+          className={cn(
+            "shrink-0 flex items-center justify-center h-8 w-8 rounded-lg",
+            tagToneClasses[marco.tone]
+          )}
+          aria-hidden="true"
+        >
+          <Icon className="h-4 w-4" />
+        </span>
+        <p className="min-w-0 font-bold font-anek text-foreground text-[13px] sm:text-sm leading-tight line-clamp-2">
+          {marco.titulo}
+        </p>
+      </div>
       <p className="shrink-0 text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-3">
         {marco.descricao}
       </p>

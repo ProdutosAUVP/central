@@ -96,8 +96,8 @@ const orgPeople: Record<string, OrgPerson> = {
     responsibilities: ["Direção estratégica de produto", "Gestão e desenvolvimento do time", "CX estratégico", "Alinhamento cross-funcional"],
   },
   lilian: {
-    id: "lilian", name: "Lilian Machado", role: "Especialista em CX",
-    initials: "LM", color: "cx", level: "Especialista", rank: 2,
+    id: "lilian", name: "Lilian Araújo", role: "Especialista em CX",
+    initials: "LA", color: "cx", level: "Especialista", rank: 2,
     description: "Especialista em experiência do cliente, responsável pela gestão da jornada, retenção e fidelização dos membros — conectando áreas e indicadores como NPS, CSAT e churn para evoluir a experiência de ponta a ponta.",
     responsibilities: [
       "Gestão da jornada do cliente",
@@ -743,7 +743,7 @@ const dayToDay = [
   { icon: Palette, title: "Design (Físico & Digital)", tagline: "Identidade visual e experiência tangível.", desc: "Cuidamos da nossa marca de ponta a ponta, do digital aos materiais físicos que os membros recebem. Se você precisa das logos oficiais, fotos do Raul, paleta de cores ou quer desenvolver novos kits e brindes (como meias e bonés), nós garantimos que o visual saia com a qualidade que a AUVP exige.", quemChamar: ["Armando", "Éria"] },
   { icon: PenTool, title: "Copy & Redação", tagline: "Estratégia em cada palavra.", desc: "De apostilas, roteiros e mapas mentais até este texto que você está lendo. Se você precisa criar ou revisar um playbook e garantir que o material não tenha jargões de marketing ou cara de inteligência artificial, nossos redatores estão prontos para ajudar.", quemChamar: ["Jeniffer", "Mateus", "Ana"] },
   { icon: Settings, title: "Produtividade & Gestão", tagline: "Fazemos projetos rodarem.", desc: "Planilhas, ClickUp, fluxos de trabalho e priorização. Se o desafio é gestão de tempo, de pessoas ou aumentar a eficiência do time, somos especialistas em transformar caos em projetos executados.", quemChamar: ["Beatriz Henriques", "Daniel", "Ariadne"] },
-  { icon: Heart, title: "CX & relacionamento com membros", tagline: "Ouvimos o mercado e cuidamos de cada membro.", desc: "Nós mapeamos o mercado e ouvimos quem consome o nosso conteúdo para aplicar melhorias práticas. Da análise de dados à mediação dos grupos de WhatsApp, nosso papel é garantir que o convívio e a experiência do membro mantenham o padrão da AUVP.", quemChamar: ["Beatriz Henriques", "Debora"] },
+  { icon: Heart, title: "CX & relacionamento com membros", tagline: "Ouvimos o mercado e cuidamos de cada membro.", desc: "Nós mapeamos o mercado e ouvimos quem consome o nosso conteúdo para aplicar melhorias práticas. Da análise de dados à mediação dos grupos de WhatsApp, nosso papel é garantir que o convívio e a experiência do membro mantenham o padrão da AUVP.", quemChamar: ["Beatriz Henriques", "Lilian", "Debora"] },
 ];
 
 // ─── Section helpers ──────────────────────────────────────────────────────────

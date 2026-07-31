@@ -6,7 +6,7 @@ import {
   GraduationCap, RefreshCw, BarChart3, Globe2, Tractor, Landmark, Table2,
   Shirt, UserPlus, Laptop, CreditCard, Video as VideoIcon, Handshake,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, publicUrl } from "@/lib/utils";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/components/PageHero";
 import { sidebarNavClass } from "@/components/sidebarNav";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import {
   solucoesSections,
+  ecossistemaHero, ecossistemaEtapas, ecossistemaCartao,
   type Aula, type Modulo, type InfoCard, type FeatureItem, type QuickInfo,
   escolaInfo, escolaHero, escolaPublico, escolaFeatures, escolaDuracao,
   escolaModulos, obsAjustesRegulares, escolaFerramentas, escolaGarantia,
@@ -46,6 +47,7 @@ const accentChip = "bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(va
 
 /** Classe .sol-* de cada seção de produto (define --sol-accent). */
 const solAccentClass: Record<string, string> = {
+  "ecossistema": "sol-escola",
   "auvp-escola": "sol-escola",
   "auvp-sempre": "sol-sempre",
   "auvp-pro": "sol-pro",
@@ -682,6 +684,11 @@ export default function SolucoesPage() {
 
         <div className="flex-1 py-8 pl-0 md:pl-8 min-w-0 space-y-24">
 
+        {/* ==================== ECOSSISTEMA ==================== */}
+        <section id="ecossistema" className={cn("sol-escola scroll-mt-32", printHide("ecossistema"))}>
+          <EcossistemaDobra />
+        </section>
+
         {/* ==================== AUVP ESCOLA ==================== */}
         <section id="auvp-escola" className={cn("sol-escola scroll-mt-32 space-y-16", printHide("auvp-escola"))}>
           <ProdutoHero
@@ -1255,6 +1262,93 @@ function AgroSubprodutos({ expandAll }: { expandAll: boolean }) {
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+  );
+}
+
+/* Dobra "Tudo começa na escola", transposta da LP da Escola. A estética é a
+   da Central — mesmos cartões, bordas e tokens de acento —, exceto o cartão
+   de crédito, que mantém o visual preto próprio dele. */
+function EcossistemaDobra() {
+  return (
+    <div className="space-y-8">
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground">
+          {ecossistemaHero.titulo}
+        </h2>
+        <p className="text-muted-foreground font-roboto leading-relaxed">
+          {ecossistemaHero.subtitulo}
+        </p>
+      </div>
+
+      <div className="relative">
+        {/* Fio que liga os quatro nós, só no desktop, onde eles ficam em linha */}
+        <span
+          aria-hidden="true"
+          className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-6 h-px bg-border"
+        />
+        <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {ecossistemaEtapas.map((etapa) => {
+            const Icon = etapa.icon;
+            return (
+              <div key={etapa.titulo} className="flex flex-col items-center text-center">
+                <span className={cn("flex h-12 w-12 items-center justify-center rounded-full border bg-card shrink-0", accentText)}>
+                  <Icon className="h-5 w-5" />
+                </span>
+                <p className="mt-4 font-bold font-anek text-foreground">
+                  {etapa.titulo}
+                  {etapa.opcional && <sup className="ml-0.5 text-muted-foreground">*</sup>}
+                </p>
+                <ul className="mt-3 w-full space-y-2">
+                  {etapa.itens.map((item) => (
+                    <li key={item.label} className="rounded-lg border bg-card px-4 py-2.5 text-left">
+                      <p className="text-sm font-semibold font-roboto text-foreground leading-tight">{item.label}</p>
+                      <p className="text-xs text-muted-foreground font-roboto leading-snug">{item.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Cartão de crédito — único bloco que preserva a estética da LP */}
+      <div className="rounded-2xl bg-[hsl(220_15%_8%)] text-white p-6 md:p-10 grid md:grid-cols-2 gap-8 items-center print-flatten">
+        <div className="space-y-3">
+          <span className="inline-block text-[10px] font-bold font-roboto uppercase tracking-wider text-[hsl(42_84%_63%)]">
+            {ecossistemaCartao.tag}
+          </span>
+          <h3 className="text-xl md:text-2xl font-bold font-anek">
+            {ecossistemaCartao.titulo}
+            <sup className="ml-0.5 text-white/60">*</sup>
+          </h3>
+          <p className="text-sm font-roboto text-white/75 leading-relaxed">
+            {ecossistemaCartao.desc}
+            <br />
+            <strong className="text-white font-semibold">{ecossistemaCartao.destaque}</strong>
+          </p>
+          <p className="text-xs font-roboto text-white/50">*{ecossistemaCartao.obs}</p>
+        </div>
+        <div className="flex justify-center md:justify-end">
+          <div className="relative w-full max-w-[280px] aspect-[1.586/1] rounded-xl bg-gradient-to-br from-[hsl(220_12%_16%)] to-[hsl(220_15%_6%)] border border-white/10 shadow-2xl flex items-center justify-center">
+            <img
+              src={publicUrl("/olho-branco.svg")}
+              alt=""
+              aria-hidden="true"
+              className="h-9 opacity-90"
+            />
+            <span aria-hidden="true" className="absolute bottom-5 right-5 flex">
+              <span className="h-5 w-5 rounded-full bg-white/25" />
+              <span className="h-5 w-5 rounded-full bg-white/40 -ml-2" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-xs text-muted-foreground font-roboto text-center">
+        *{ecossistemaHero.rodape}
+      </p>
+    </div>
   );
 }
 

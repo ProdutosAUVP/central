@@ -1,8 +1,9 @@
 import {
-  GraduationCap, RefreshCw, Award, BarChart3, Globe2, Tractor, Landmark, Table2,
+  GraduationCap, RefreshCw, Award, Layers, BarChart3, Globe2, Tractor, Landmark, Table2,
   Sprout, TrendingUp, Umbrella, Video, Headset, BookOpen, Users, CheckCircle2,
   Database, ShieldCheck, ChartPie, Presentation, LineChart, CloudSun, FileText,
   Coins, HandCoins, Percent, Gem, MessageCircle, CreditCard, Sparkles, Crown,
+  PieChart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -29,6 +30,10 @@ export interface SolucaoSection {
 }
 
 export const solucoesSections: SolucaoSection[] = [
+  {
+    id: "ecossistema", label: "Ecossistema", icon: Layers,
+    anchors: [],
+  },
   {
     id: "auvp-escola", label: "Escola", icon: GraduationCap,
     anchors: [
@@ -91,6 +96,77 @@ export const solucoesSections: SolucaoSection[] = [
   },
   { id: "resumo-produtos", label: "Resumo", icon: Table2, anchors: [] },
 ];
+
+/* ============================================================
+   Ecossistema — dobra "Tudo começa na escola"
+   Conteúdo transposto da LP da Escola (ProdutosAUVP/lp-auvp-escola-prod,
+   seção #ecosys-section), com o texto passado para a 3ª pessoa da Central.
+   ============================================================ */
+
+export interface EcossistemaEtapa {
+  titulo: string;
+  icon: LucideIcon;
+  /** Marca as etapas opcionais, sinalizadas com asterisco na LP. */
+  opcional?: boolean;
+  itens: { label: string; desc: string }[];
+}
+
+export const ecossistemaHero = {
+  titulo: "Tudo começa na escola",
+  subtitulo:
+    "Muito além de um curso: um ecossistema completo de educação, proteção e estrutura patrimonial, a partir da matrícula.",
+  rodape:
+    "Soluções adicionais e opcionais, disponíveis para contratação à medida que o patrimônio evolui.",
+};
+
+export const ecossistemaEtapas: EcossistemaEtapa[] = [
+  {
+    titulo: "Aprendizado",
+    icon: GraduationCap,
+    itens: [
+      { label: "+120 aulas", desc: "do zero ao avançado" },
+      { label: "Comunidade 24h", desc: "com especialistas" },
+      { label: "Plantão ao vivo", desc: "8 semanas com Raul Sena" },
+    ],
+  },
+  {
+    titulo: "Acompanhamento",
+    icon: PieChart,
+    itens: [
+      { label: "Open Finance", desc: "os gastos num só lugar" },
+      { label: "Carteiras recomendadas", desc: "para o perfil do aluno" },
+      { label: "Plataforma de investimentos", desc: "exclusiva para alunos" },
+    ],
+  },
+  {
+    titulo: "Proteção da Família",
+    icon: ShieldCheck,
+    opcional: true,
+    itens: [
+      { label: "Seguro de vida", desc: "proteção para toda a família" },
+      { label: "Análise de crédito", desc: "o financiamento mais barato" },
+      { label: "Previdência privada", desc: "com a menor taxa do mercado" },
+    ],
+  },
+  {
+    titulo: "Patrimônio & Consultoria",
+    icon: Landmark,
+    opcional: true,
+    itens: [
+      { label: "Consultor privado", desc: "+R$ 300 mil · private bank +R$ 5 mi" },
+      { label: "Holding imobiliária", desc: "organização e sucessão" },
+      { label: "Offshore e AMC", desc: "para grandes clientes" },
+    ],
+  },
+];
+
+export const ecossistemaCartao = {
+  tag: "Também incluso no ecossistema",
+  titulo: "Cartão de crédito AUVP",
+  desc: "Mastercard Platinum, Black e Ultrablue com todos os benefícios.",
+  destaque: "Os melhores do mercado.",
+  obs: "sujeito a aprovação",
+};
 
 /* ============================================================
    Tipos compartilhados
