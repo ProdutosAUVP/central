@@ -232,12 +232,13 @@ export const marcos: Marco[] = [
     icon: Video,
     titulo: "Giro Itinerante · Curitiba",
     // Sem data confirmada — a edição foi adiada. A âncora só posiciona o
-    // marco na trilha (depois de São Paulo); a interface não mostra data.
+    // marco na trilha (depois das entregas de julho); a interface não
+    // mostra data nenhuma.
     // O minicartão já mostra o estado "Adiada" ao lado; o rótulo de data
     // fala da data em si para os dois não repetirem a mesma palavra.
     quando: "Adiada — nova data a definir",
     periodo: "Sem data",
-    data: "2026-07-15",
+    data: "2026-07-20",
     status: "adiado",
     tone: "neutral",
     descricao:
@@ -264,13 +265,10 @@ export const marcos: Marco[] = [
     id: "encantamento",
     icon: HeartHandshake,
     titulo: "Treinamento de encantamento do cliente",
-    // Sem data registrada. Estimado para setembro, depois do sistema de
-    // indicação, quando o time de CX assume a nova jornada.
-    quando: "Setembro de 2026",
-    periodo: "Set",
-    data: "2026-09-15",
-    dataAssumida: true,
-    status: "planejado",
+    quando: "15 de julho de 2026",
+    periodo: "Jul",
+    data: "2026-07-15",
+    status: "concluido",
     tone: "success",
     descricao:
       "Formação do time em produto, encantamento e experiência do cliente — para que cada ponto de contato com o membro tenha a mesma temperatura.",

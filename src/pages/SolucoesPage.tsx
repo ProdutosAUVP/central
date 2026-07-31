@@ -6,7 +6,7 @@ import {
   GraduationCap, RefreshCw, BarChart3, Globe2, Tractor, Landmark, Table2,
   Shirt, UserPlus, Laptop, CreditCard, Video as VideoIcon, Handshake,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, publicUrl } from "@/lib/utils";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/components/PageHero";
 import { sidebarNavClass } from "@/components/sidebarNav";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import {
   solucoesSections,
+  ecossistemaHero, ecossistemaEtapas, ecossistemaCartao,
   type Aula, type Modulo, type InfoCard, type FeatureItem, type QuickInfo,
   escolaInfo, escolaHero, escolaPublico, escolaFeatures, escolaDuracao,
   escolaModulos, obsAjustesRegulares, escolaFerramentas, escolaGarantia,
@@ -29,7 +30,7 @@ import {
   internacionalFeatures, internacionalCronograma,
   agroInfo, agroHero, agroPlataforma, agroConsultoria, agroFazendas,
   contaInfo, contaHero, contaInvestimentos, contaBanking, contaPlanos,
-  contaBeneficios, cartaoModulos, cartaoDestaques, contaVideos,
+  contaBeneficios, cartaoIntro, cartoesAuvp, type CartaoAUVP, contaVideos,
   resumoProdutos,
 } from "@/data/solucoes";
 
@@ -46,6 +47,7 @@ const accentChip = "bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(va
 
 /** Classe .sol-* de cada seção de produto (define --sol-accent). */
 const solAccentClass: Record<string, string> = {
+  "ecossistema": "sol-escola",
   "auvp-escola": "sol-escola",
   "auvp-sempre": "sol-sempre",
   "auvp-pro": "sol-pro",
@@ -63,7 +65,7 @@ const resumoAccentClass: Record<string, string> = {
   "AUVP Analítica": "sol-analitica",
   "AUVP Internacional": "sol-internacional",
   "AUVP Agro": "sol-agro",
-  "AUVP Capital (Conta e Cartão)": "sol-conta",
+  "AUVP Banking (Conta e Cartões)": "sol-conta",
 };
 
 function QuickInfoBar({ items, className }: { items: QuickInfo[]; className?: string }) {
@@ -370,7 +372,7 @@ function DemoVideo({ src, className }: { src: string; className?: string }) {
       controls
     >
       <source src={src} type="video/mp4" />
-      O seu navegador não suporta a tag de vídeo.
+      O navegador não suporta a tag de vídeo.
     </video>
   );
 }
@@ -666,8 +668,8 @@ export default function SolucoesPage() {
           <SolucoesMobileNav activeSection={activeSection} goTo={goTo} />
           <PageHero
             icon={Layers}
-            title="O ecossistema de produtos AUVP"
-            description="Tudo sobre cada solução da AUVP em um só lugar: para quem é, o que entrega, cronogramas de conteúdo, ferramentas, planos e condições — o material de consulta oficial do time."
+            title="Soluções digitais da AUVP"
+            description="Um compilado dos produtos digitais da AUVP em um só lugar: para quem é, o que entrega, cronogramas de conteúdo, ferramentas, planos e condições, o material de consulta oficial do time."
             className={cn(printing && printing !== "all" && "print:hidden")}
           />
         </>
@@ -681,6 +683,11 @@ export default function SolucoesPage() {
         <SolucoesSidebar activeSection={activeSection} activeAnchor={activeAnchor} goTo={goTo} />
 
         <div className="flex-1 py-8 pl-0 md:pl-8 min-w-0 space-y-24">
+
+        {/* ==================== ECOSSISTEMA ==================== */}
+        <section id="ecossistema" className={cn("sol-escola scroll-mt-32", printHide("ecossistema"))}>
+          <EcossistemaDobra />
+        </section>
 
         {/* ==================== AUVP ESCOLA ==================== */}
         <section id="auvp-escola" className={cn("sol-escola scroll-mt-32 space-y-16", printHide("auvp-escola"))}>
@@ -712,7 +719,7 @@ export default function SolucoesPage() {
           <div id="escola-cronograma" className="scroll-mt-32 space-y-5">
             <BlocoTitle icon={ListChecks}>Cronograma de conteúdo</BlocoTitle>
             <p className="text-sm text-muted-foreground font-roboto italic print:hidden">
-              * Clique nos módulos abaixo para expandir e ver a lista de aulas e durações.
+              * Os módulos abaixo podem ser expandidos para consultar a lista de aulas e durações.
             </p>
             <ModuloList modulos={escolaModulos} idPrefix="escola" expandAll={expandAll} />
             <ObsBanner>{obsAjustesRegulares}</ObsBanner>
@@ -729,8 +736,8 @@ export default function SolucoesPage() {
             <div className="rounded-xl border bg-muted/40 p-6">
               <BlocoTitle icon={Shirt} as="h4">Produtos físicos</BlocoTitle>
               <p className="text-muted-foreground font-roboto text-sm">
-                Também temos a nossa loja Investidor Sardinha, onde o aluno encontra itens clássicos
-                da nossa comunidade. Para acessar,{" "}
+                A AUVP também mantém a loja Investidor Sardinha, onde o aluno encontra itens clássicos
+                da comunidade. Para acessar,{" "}
                 <a
                   href="https://loja.investidorsardinha.com.br/"
                   target="_blank"
@@ -781,7 +788,7 @@ export default function SolucoesPage() {
           <div id="sempre-cronograma" className="scroll-mt-32 space-y-5">
             <BlocoTitle icon={ListChecks}>O que encontro na AUVP Sempre?</BlocoTitle>
             <p className="text-sm text-muted-foreground font-roboto italic print:hidden">
-              * Clique nos módulos extras abaixo para expandir e ver a lista de aulas e durações.
+              * Os módulos extras abaixo podem ser expandidos para consultar a lista de aulas e durações.
             </p>
             <ModuloList modulos={sempreModulos} idPrefix="sempre" expandAll={expandAll} />
             <ObsBanner>{obsAjustesRegulares}</ObsBanner>
@@ -814,7 +821,7 @@ export default function SolucoesPage() {
             <BlocoTitle icon={GraduationCap}>O que é AUVP PRO?</BlocoTitle>
             <p className="text-muted-foreground font-roboto max-w-3xl">{proHero.oQueE}</p>
             <p className="text-muted-foreground font-roboto max-w-3xl">
-              Cada certificação contará com um curso exclusivo dentro da nossa plataforma.
+              Cada certificação contará com um curso exclusivo dentro da plataforma.
               Com esse treinamento o aluno encontrará:
             </p>
             <FeatureList items={proFeatures} cols={2} />
@@ -877,7 +884,7 @@ export default function SolucoesPage() {
             <BlocoTitle icon={Globe2}>O que é AUVP Internacional?</BlocoTitle>
             <p className="text-muted-foreground font-roboto max-w-3xl">{internacionalHero.oQueE}</p>
             <p className="text-muted-foreground font-roboto max-w-3xl">
-              Com nossos especialistas, o aluno aprenderá tudo o que precisa para:
+              Com os especialistas da AUVP, o aluno aprenderá tudo o que precisa para:
             </p>
             <FeatureList items={internacionalFeatures} cols={2} />
             <p className="inline-flex items-center gap-2 rounded-lg border bg-muted/40 px-3 py-2 text-sm font-roboto text-foreground">
@@ -924,7 +931,7 @@ export default function SolucoesPage() {
         <section id="auvp-conta" className={cn("sol-conta scroll-mt-32 space-y-16 border-t pt-16", printHide("auvp-conta"))}>
           <ProdutoHero
             badge={contaHero.badge}
-            titulo="Conta AUVP"
+            titulo="AUVP Banking"
             img={contaHero.img}
             info={contaInfo}
             paraQuemE={<span id="conta-publico" className="scroll-mt-32">{contaHero.paraQuemE}</span>}
@@ -962,9 +969,9 @@ export default function SolucoesPage() {
           <div id="conta-modelos" className="scroll-mt-32 space-y-5">
             <BlocoTitle icon={Handshake}>Modelos de contratação</BlocoTitle>
             <p className="text-muted-foreground font-roboto max-w-3xl">
-              Na AUVP, sabemos que cada pessoa investe de um jeito. Por isso, oferecemos diferentes
-              planos, que combinam com seu momento, são três opções com taxas justas, benefícios
-              reais e zero conflito de interesse.
+              A AUVP reconhece que cada pessoa investe de um jeito. Por isso, oferece diferentes
+              planos, que combinam com o momento de cada investidor: são três opções com taxas justas,
+              benefícios reais e zero conflito de interesse.
             </p>
             <div className="grid gap-4 md:grid-cols-3">
               {contaPlanos.map((plano) => (
@@ -1023,7 +1030,7 @@ export default function SolucoesPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 font-anek font-bold text-[hsl(var(--sol-accent,var(--primary)))] underline underline-offset-4"
               >
-                Clique aqui e conheça os planos da AUVP Capital
+                Conhecer os planos da AUVP Capital
                 <ExternalLink className="h-4 w-4" />
               </a>
             </p>
@@ -1034,7 +1041,7 @@ export default function SolucoesPage() {
               <BlocoTitle icon={UserPlus}>Como funciona a abertura de conta na AUVP?</BlocoTitle>
               <p className="text-muted-foreground font-roboto">
                 Existem várias formas de abrir conta com a AUVP, o processo pode ser feito
-                diretamente pelo nosso site ou pelo app "BTG Investimentos".
+                diretamente pelo site da AUVP ou pelo app "BTG Investimentos".
               </p>
               <ObsBanner>Quem já possui conta no BTG, pode apenas solicitar a troca de assessoria.</ObsBanner>
             </div>
@@ -1043,10 +1050,10 @@ export default function SolucoesPage() {
           <div id="conta-plataforma" className="scroll-mt-32">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="space-y-4">
-                <BlocoTitle icon={Laptop}>Como funciona nossa plataforma de investimentos?</BlocoTitle>
+                <BlocoTitle icon={Laptop}>Como funciona a plataforma de investimentos da AUVP?</BlocoTitle>
                 <p className="text-muted-foreground font-roboto">
-                  Abrindo a conta na nossa plataforma de investimentos, já se tem acesso automático
-                  à plataforma de investimentos, que atua em parceria com o BTG Pactual.
+                  Com a abertura da conta, o acesso à plataforma de investimentos é automático. A
+                  plataforma atua em parceria com o BTG Pactual.
                 </p>
               </div>
               <div className="flex justify-center print:hidden">
@@ -1058,50 +1065,56 @@ export default function SolucoesPage() {
           <div id="conta-beneficios" className="scroll-mt-32 space-y-12">
             <div className="space-y-5">
               <BlocoTitle icon={Landmark}>Benefícios da AUVP Capital</BlocoTitle>
-              <p className="text-muted-foreground font-roboto">Abrindo uma conta na AUVP Capital, você garante:</p>
+              <p className="text-muted-foreground font-roboto">A abertura de conta na AUVP Capital garante ao membro:</p>
               <FeatureList items={contaBeneficios} cols={2} />
             </div>
 
             <div className="space-y-5">
-              <BlocoTitle icon={CreditCard}>Benefícios Cartão AUVP</BlocoTitle>
-              <p className="text-muted-foreground font-roboto max-w-3xl">
-                <strong className="text-foreground">Módulos de Benefícios:</strong> personalize seu
-                cartão com até 5 módulos exclusivos, ajustando os benefícios conforme suas
-                preferências e necessidades. Veja quais são eles:
-              </p>
-              <CartaoModulosAccordion expandAll={expandAll} />
+              <BlocoTitle icon={CreditCard}>Cartões AUVP</BlocoTitle>
+              <p className="text-muted-foreground font-roboto max-w-3xl">{cartaoIntro}</p>
 
-              <div className="grid lg:grid-cols-[1fr_minmax(280px,340px)] gap-4">
-                <div className="flex flex-col gap-4">
-                  {cartaoDestaques.map((card) => {
-                    const Icon = card.icon!;
-                    return (
-                      <div key={card.titulo} className="flex items-start gap-4 rounded-xl border bg-card p-6 flex-1">
-                        <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(var(--sol-accent,var(--primary)))] shrink-0">
-                          <Icon className="h-5 w-5" />
-                        </span>
-                        <div>
-                          <p className="font-bold font-anek text-foreground mb-1">{card.titulo}</p>
-                          <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{card.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="rounded-xl border bg-card p-6 flex flex-col items-center text-center gap-4 print:hidden">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(var(--sol-accent,var(--primary)))]">
-                    <VideoIcon className="h-5 w-5" />
-                  </span>
-                  <p className="font-bold font-anek text-foreground">Demonstração no App BTG</p>
-                  <DemoVideo src={contaVideos.appBtg} className="max-w-[240px]" />
-                </div>
+              {/* Platinum e Black lado a lado: a estrutura dos dois é paralela
+                  (fidelidade + módulos), então a comparação fica direta. */}
+              <div className="grid lg:grid-cols-2 gap-6 items-start">
+                {cartoesAuvp.filter((c) => c.modulos).map((cartao) => (
+                  <CartaoDetalhado key={cartao.nome} cartao={cartao} expandAll={expandAll} />
+                ))}
               </div>
 
-              <ObsBanner>O cartão AUVP Capital está sujeito a análise de crédito.</ObsBanner>
+              {/* Ultrablue e World Legend: descritos em texto corrido */}
+              <div className="grid md:grid-cols-2 gap-4">
+                {cartoesAuvp.filter((c) => !c.modulos).map((cartao) => {
+                  const Icon = cartao.icon;
+                  return (
+                    <div key={cartao.nome} className="rounded-xl border bg-card p-6 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg shrink-0", accentChip)}>
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <p className="font-bold font-anek text-foreground">{cartao.nome}</p>
+                      </div>
+                      <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{cartao.publico}</p>
+                      {cartao.descricao?.map((par, i) => (
+                        <p key={i} className="text-sm text-muted-foreground font-roboto leading-relaxed">{par}</p>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="rounded-xl border bg-card p-6 flex flex-col items-center text-center gap-4 print:hidden">
+                <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg", accentChip)}>
+                  <VideoIcon className="h-5 w-5" />
+                </span>
+                <p className="font-bold font-anek text-foreground">Demonstração no App BTG</p>
+                <DemoVideo src={contaVideos.appBtg} className="max-w-[240px]" />
+              </div>
+
+              <ObsBanner>Os cartões AUVP Capital estão sujeitos a análise de crédito.</ObsBanner>
             </div>
           </div>
 
-          <ExportButton onClick={() => exportPdf("auvp-conta")}>Exportar Conta AUVP (PDF)</ExportButton>
+          <ExportButton onClick={() => exportPdf("auvp-conta")}>Exportar AUVP Banking (PDF)</ExportButton>
         </section>
 
         {/* ==================== RESUMO ==================== */}
@@ -1110,7 +1123,7 @@ export default function SolucoesPage() {
             <Tag tone="primary" className="mb-3">Tabela Comparativa</Tag>
             <BlocoTitle icon={Table2} as="h2">Resumo de Produtos</BlocoTitle>
             <p className="text-muted-foreground font-roboto">
-              Consulte rapidamente as informações objetivas de cada produto do ecossistema AUVP.
+              Reúne, para consulta rápida, as informações objetivas de cada produto do ecossistema AUVP.
             </p>
           </div>
           <div className="overflow-x-auto rounded-xl border bg-card">
@@ -1252,33 +1265,178 @@ function AgroSubprodutos({ expandAll }: { expandAll: boolean }) {
   );
 }
 
-function CartaoModulosAccordion({ expandAll }: { expandAll: boolean }) {
-  const [open, setOpen] = useState<string[]>([]);
-  const allValues = cartaoModulos.map((m) => m.titulo);
+/* Dobra "Tudo começa na escola", transposta da LP da Escola. A estética é a
+   da Central — mesmos cartões, bordas e tokens de acento —, exceto o cartão
+   de crédito, que mantém o visual preto próprio dele. */
+function EcossistemaDobra() {
   return (
-    <Accordion
-      type="multiple"
-      value={expandAll ? allValues : open}
-      onValueChange={setOpen}
-      className="rounded-xl border bg-card divide-y overflow-hidden"
-    >
-      {cartaoModulos.map((mod) => (
-        <AccordionItem key={mod.titulo} value={mod.titulo} className="border-b-0">
-          <AccordionTrigger className="px-5 py-4 font-anek font-semibold text-foreground hover:no-underline">
-            {mod.titulo}
-          </AccordionTrigger>
-          <AccordionContent className="px-5 pb-5 pt-4 bg-muted/30 border-t">
-            <ul className="space-y-2">
-              {mod.itens.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground font-roboto leading-relaxed">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--sol-accent,var(--primary)))] shrink-0 mt-1.5" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
+    <div className="space-y-8">
+      <div className="text-center max-w-3xl mx-auto space-y-3">
+        <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground">
+          {ecossistemaHero.titulo}
+        </h2>
+        <p className="text-muted-foreground font-roboto leading-relaxed">
+          {ecossistemaHero.subtitulo}
+        </p>
+      </div>
+
+      <div className="relative">
+        {/* Fio que liga os quatro nós, só no desktop, onde eles ficam em linha */}
+        <span
+          aria-hidden="true"
+          className="hidden lg:block absolute left-[12.5%] right-[12.5%] top-6 h-px bg-border"
+        />
+        <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {ecossistemaEtapas.map((etapa) => {
+            const Icon = etapa.icon;
+            return (
+              <div key={etapa.titulo} className="flex flex-col items-center text-center">
+                <span className={cn("flex h-12 w-12 items-center justify-center rounded-full border bg-card shrink-0", accentText)}>
+                  <Icon className="h-5 w-5" />
+                </span>
+                <p className="mt-4 font-bold font-anek text-foreground">
+                  {etapa.titulo}
+                  {etapa.opcional && <sup className="ml-0.5 text-muted-foreground">*</sup>}
+                </p>
+                <ul className="mt-3 w-full space-y-2">
+                  {etapa.itens.map((item) => (
+                    <li key={item.label} className="rounded-lg border bg-card px-4 py-2.5 text-left">
+                      <p className="text-sm font-semibold font-roboto text-foreground leading-tight">{item.label}</p>
+                      <p className="text-xs text-muted-foreground font-roboto leading-snug">{item.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Cartão de crédito — único bloco que preserva a estética da LP */}
+      <div className="rounded-2xl bg-[hsl(220_15%_8%)] text-white p-6 md:p-10 grid md:grid-cols-2 gap-8 items-center print-flatten">
+        <div className="space-y-3">
+          <span className="inline-block text-[10px] font-bold font-roboto uppercase tracking-wider text-[hsl(42_84%_63%)]">
+            {ecossistemaCartao.tag}
+          </span>
+          <h3 className="text-xl md:text-2xl font-bold font-anek">
+            {ecossistemaCartao.titulo}
+            <sup className="ml-0.5 text-white/60">*</sup>
+          </h3>
+          <p className="text-sm font-roboto text-white/75 leading-relaxed">
+            {ecossistemaCartao.desc}
+            <br />
+            <strong className="text-white font-semibold">{ecossistemaCartao.destaque}</strong>
+          </p>
+          <p className="text-xs font-roboto text-white/50">*{ecossistemaCartao.obs}</p>
+        </div>
+        <div className="flex justify-center md:justify-end">
+          <div className="relative w-full max-w-[280px] aspect-[1.586/1] rounded-xl bg-gradient-to-br from-[hsl(220_12%_16%)] to-[hsl(220_15%_6%)] border border-white/10 shadow-2xl flex items-center justify-center">
+            <img
+              src={publicUrl("/olho-branco.svg")}
+              alt=""
+              aria-hidden="true"
+              className="h-9 opacity-90"
+            />
+            <span aria-hidden="true" className="absolute bottom-5 right-5 flex">
+              <span className="h-5 w-5 rounded-full bg-white/25" />
+              <span className="h-5 w-5 rounded-full bg-white/40 -ml-2" />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-xs text-muted-foreground font-roboto text-center">
+        *{ecossistemaHero.rodape}
+      </p>
+    </div>
+  );
+}
+
+/** Um cartão com estrutura completa: fidelidade + módulos em accordion. */
+function CartaoDetalhado({ cartao, expandAll }: { cartao: CartaoAUVP; expandAll: boolean }) {
+  const [open, setOpen] = useState<string[]>([]);
+  const Icon = cartao.icon;
+  const modulos = cartao.modulos ?? [];
+  const allValues = modulos.map((m) => `${cartao.nome}-${m.titulo}`);
+
+  return (
+    <div className="rounded-2xl border bg-card p-6 space-y-5 h-full">
+      <div className="flex items-center gap-3">
+        <span className={cn("flex h-11 w-11 items-center justify-center rounded-lg shrink-0", accentChip)}>
+          <Icon className="h-5 w-5" />
+        </span>
+        <p className="text-lg font-bold font-anek text-foreground">{cartao.nome}</p>
+      </div>
+
+      <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{cartao.publico}</p>
+
+      {cartao.fidelidade && (
+        <div className="space-y-2">
+          <p className="text-sm font-bold font-anek text-foreground">1. Programa de Fidelidade</p>
+          <p className="text-sm text-muted-foreground font-roboto">{cartao.fidelidade.intro}</p>
+          <ul className="space-y-2">
+            {cartao.fidelidade.opcoes.map((opcao, i) => (
+              <li key={i} className="flex items-start gap-3 rounded-lg border bg-muted/30 px-4 py-2.5 text-sm text-muted-foreground font-roboto">
+                <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--sol-accent,var(--primary)))] shrink-0 mt-1.5" />
+                {opcao}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {modulos.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-sm font-bold font-anek text-foreground">2. Personalização por módulos</p>
+          {cartao.modulosIntro && (
+            <p className="text-sm text-muted-foreground font-roboto leading-relaxed">{cartao.modulosIntro}</p>
+          )}
+          <Accordion
+            type="multiple"
+            value={expandAll ? allValues : open}
+            onValueChange={setOpen}
+            className="rounded-xl border bg-background divide-y overflow-hidden"
+          >
+            {modulos.map((mod, idx) => (
+              <AccordionItem key={mod.titulo} value={`${cartao.nome}-${mod.titulo}`} className="border-b-0">
+                <AccordionTrigger className="px-4 py-3 text-sm font-anek font-semibold text-foreground hover:no-underline">
+                  {idx + 1}. {mod.titulo}
+                </AccordionTrigger>
+                <AccordionContent className="px-4 pb-4 pt-3 bg-muted/30 border-t space-y-2">
+                  {mod.nota && (
+                    <p className="text-xs text-muted-foreground font-roboto italic">{mod.nota}</p>
+                  )}
+                  <ul className="space-y-2">
+                    {mod.itens.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground font-roboto leading-relaxed">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--sol-accent,var(--primary)))] shrink-0 mt-1.5" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  {mod.link && (
+                    <a
+                      href={mod.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn("inline-flex items-center gap-1.5 text-sm font-roboto underline underline-offset-2", accentText)}
+                    >
+                      {mod.link.label}
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      )}
+
+      {cartao.liberacao && (
+        <p className="rounded-lg border border-dashed px-4 py-3 text-sm text-muted-foreground font-roboto leading-relaxed">
+          {cartao.liberacao}
+        </p>
+      )}
+    </div>
   );
 }
