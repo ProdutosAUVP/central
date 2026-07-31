@@ -5,7 +5,7 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, Map,
-  Globe, Minus, Square, X, Layers, Brain, Info
+  Globe, Minus, Square, X, Layers, Brain
 } from "lucide-react";
 import { TeamPhoto } from "@/components/TeamPhoto";
 import { lpScreenshots } from "@/assets/lps";
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/accordion";
 import { PageShell } from "@/components/PageShell";
 import { Tag } from "@/components/widgets/Tag";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { InfoDobra } from "@/components/InfoDobra";
 import { RoadmapTimeline } from "@/components/widgets/RoadmapTimeline";
 import { novidadesDestaque } from "@/data/novidades";
 import { proximoMarco } from "@/data/roadmapMarcos";
@@ -658,25 +658,12 @@ function RotatingPreview({ items }: { items: string[] }) {
  */
 function SectionHeader({ title, info, action }: { icon?: React.ElementType; title: string; info?: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
+    /* `relative` é o que ancora o painel do "i" na margem esquerda da dobra
+       (ver src/components/InfoDobra.tsx). */
+    <div className="relative flex items-center justify-between gap-2 mb-4 md:mb-6 flex-wrap">
       <div className="flex items-center gap-1.5 min-w-0">
         <h2 className="text-base sm:text-xl font-bold font-anek text-foreground">{title}</h2>
-        {info && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                aria-label={`Sobre a seção ${title}`}
-                className="shrink-0 rounded-full text-muted-foreground/40 transition-colors duration-300 ease-apple hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Info className="h-4 w-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" align="start" className="max-w-xs text-xs font-roboto leading-relaxed">
-              {info}
-            </TooltipContent>
-          </Tooltip>
-        )}
+        {info && <InfoDobra titulo={title}>{info}</InfoDobra>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>

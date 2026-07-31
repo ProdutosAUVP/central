@@ -8,7 +8,7 @@ import { EstruturaIsometrica, ProdutoCubeGraphic } from "@/components/widgets/Es
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   Database, Palette, Rocket, ListOrdered, FileText, Users, Gift, MessageCircle, Lightbulb,
-  Search, Monitor, PenTool, Settings, Heart, ChevronRight, ChevronDown, User, X, Info,
+  Search, Monitor, PenTool, Settings, Heart, ChevronRight, ChevronDown, User, X,
 } from "lucide-react";
 import { areaIcons } from "@/data/areasEmpresa";
 import { cn } from "@/lib/utils";
@@ -731,6 +731,7 @@ const network = [
   { area: "Financeiro", icon: areaIcons.Financeiro, desc: "Planejamos custos e acompanhamos gastos para desenvolver produtos sustentáveis e bem estruturados." },
   { area: "Capital Humano", icon: areaIcons["Capital Humano"], desc: "Apoiamos treinamentos, integração de novos colaboradores e iniciativas que ajudam o time a evoluir continuamente." },
   { area: "Logística", icon: areaIcons.Logística, desc: "Planejamos e acompanhamos a produção e a distribuição dos nossos materiais físicos para garantir que a experiência continue mesmo fora do digital." },
+  { area: "Comercial & Relacionamento", icon: areaIcons["Comercial & Relacionamento"], desc: "Com o Comercial, acompanhamos indicadores e oportunidades de crescimento. Com o Relacionamento, transformamos o feedback dos membros em melhorias para os produtos." },
   { area: "Jurídico", icon: areaIcons.Jurídico, desc: "Trabalhamos em conjunto para garantir que nossos produtos, comunicações e materiais estejam alinhados às exigências legais e de compliance." },
 ];
 
@@ -765,31 +766,8 @@ function Section({ id, children, className }: { id?: string; children: React.Rea
   );
 }
 
-function SectionTitle({ children, info }: { children: React.ReactNode; info?: React.ReactNode }) {
-  const titulo = (
-    <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">{children}</h2>
-  );
-  if (!info) return titulo;
-  // Mesmo "i" das dobras do Hub: baixa opacidade, a descrição no hover/foco.
-  return (
-    <div className="flex items-start gap-2 mb-2">
-      <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground leading-tight">{children}</h2>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            type="button"
-            aria-label={`Sobre a seção ${typeof children === "string" ? children : ""}`}
-            className="shrink-0 mt-1.5 rounded-full text-muted-foreground/40 transition-colors duration-300 ease-apple hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Info className="h-4 w-4" />
-          </button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom" align="start" className="max-w-xs text-xs font-roboto leading-relaxed">
-          {info}
-        </TooltipContent>
-      </Tooltip>
-    </div>
-  );
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-2xl md:text-3xl font-bold font-anek text-foreground mb-2 leading-tight">{children}</h2>;
 }
 
 // ─── Voo do cubo do Produto, conduzido pelo scroll (telas largas) ────────────
@@ -1124,20 +1102,13 @@ export default function TimePage() {
         <Section className="relative rounded-3xl border bg-muted/40 dark:bg-muted/20 px-6 py-10 md:px-10 md:py-12">
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
             <div className="lg:flex-1">
-              <SectionTitle
-                info={
-                  <>
-                    Nenhum time trabalha sozinho. O nosso trabalho acontece em parceria com praticamente
-                    todas as áreas da empresa. Cada time contribui com uma parte do processo para que a
-                    experiência final seja a melhor possível. Passe o mouse ou clique em cada área para
-                    entender como trabalhamos juntos.
-                  </>
-                }
-              >
-                Nossa estrutura
-              </SectionTitle>
-              {/* O subtítulo virou a descrição do "i" — o espaço fica para a cena. */}
-              <div className="mb-10 lg:mb-0" />
+              <SectionTitle>Nossa estrutura</SectionTitle>
+              <p className="text-muted-foreground font-roboto max-w-md mb-10 lg:mb-0">
+                Nenhum time trabalha sozinho. O nosso trabalho acontece em parceria com praticamente
+                todas as áreas da empresa. Cada time contribui com uma parte do processo para que a
+                experiência final seja a melhor possível. Passe o mouse ou clique em cada área para
+                entender como trabalhamos juntos.
+              </p>
             </div>
             <EstruturaIsometrica
               items={network}
