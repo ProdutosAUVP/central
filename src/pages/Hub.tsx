@@ -758,7 +758,8 @@ export default function Hub() {
         <Reveal>
           <section>
             <SectionHeader icon={BarChart3} title="Produtos Digitais" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {/* Três colunas: com nove produtos, fecha uma grade 3x3 certinha. */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {produtos.map((p, i) => (
                 <ProdutoCard key={i} p={p} />
               ))}
