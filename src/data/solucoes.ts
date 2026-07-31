@@ -2,7 +2,7 @@ import {
   GraduationCap, RefreshCw, Award, BarChart3, Globe2, Tractor, Landmark, Table2,
   Sprout, TrendingUp, Umbrella, Video, Headset, BookOpen, Users, CheckCircle2,
   Database, ShieldCheck, ChartPie, Presentation, LineChart, CloudSun, FileText,
-  Coins, HandCoins, Percent, Gem, MessageCircle, Banknote, Handshake,
+  Coins, HandCoins, Percent, Gem, MessageCircle, CreditCard, Sparkles, Crown,
   type LucideIcon,
 } from "lucide-react";
 
@@ -79,7 +79,7 @@ export const solucoesSections: SolucaoSection[] = [
     ],
   },
   {
-    id: "auvp-conta", label: "Conta AUVP", icon: Landmark,
+    id: "auvp-conta", label: "AUVP Banking", icon: Landmark,
     anchors: [
       { id: "conta-publico", label: "Para quem é" },
       { id: "conta-o-que-e", label: "Contas Integradas" },
@@ -144,7 +144,7 @@ const gh = "https://github.com/design-auvp/projetodelta/blob/main";
 const ghProd = "https://github.com/ProdutosAUVP/projetodelta/blob/main";
 
 export const escolaInfo: QuickInfo[] = [
-  { tipo: "investimento", texto: "Investimento: R$ 2.997,00" },
+  { tipo: "investimento", texto: "Investimento: 12 vezes de R$ 297,00 (R$ 3.564,00) ou R$ 2.997,00 à vista" },
   { tipo: "site", texto: "auvp.com.br", href: "https://www.auvp.com.br/" },
   { tipo: "acesso", texto: "Tempo de acesso: 1 ano (treinamento completo)" },
 ];
@@ -157,14 +157,14 @@ export const escolaHero = {
 
 export const escolaPublico: InfoCard[] = [
   { icon: Sprout, titulo: "Conhecimento do zero", desc: "Nunca investiu e precisa de uma base que vá do fundamental ao avançado." },
-  { icon: TrendingUp, titulo: "Aperfeiçoamento", desc: "Já investe, mas quer estruturar melhor sua carteira, otimizar a rentabilidade e expandir para o mercado internacional." },
-  { icon: Umbrella, titulo: "Viver de renda", desc: "Tem o objetivo claro de viver dos seus investimentos e busca o planejamento e a estratégia necessários para construir esse futuro." },
+  { icon: TrendingUp, titulo: "Aperfeiçoamento", desc: "Já investe, mas quer estruturar melhor a carteira, otimizar a rentabilidade e expandir para o mercado internacional." },
+  { icon: Umbrella, titulo: "Viver de renda", desc: "Tem o objetivo claro de viver dos próprios investimentos e busca o planejamento e a estratégia necessários para construir esse futuro." },
 ];
 
 export const escolaFeatures: FeatureItem[] = [
-  { icon: Video, destaque: "Conteúdo detalhado:", texto: "mais de 100 aulas gravadas, disponíveis para assistir quando e onde for mais conveniente para você. Estude no seu próprio ritmo." },
-  { icon: Headset, destaque: "Suporte contínuo:", texto: "durante 2 meses, acesso a plantões de dúvidas ao vivo, toda segunda-feira, às 19h. Um momento para revisar o conteúdo e esclarecer suas dúvidas diretamente com Raul Sena." },
-  { icon: BookOpen, destaque: "Material complementar:", texto: "ebooks e mapas mentais para garantir que você entenda e aplique o conhecimento de forma prática." },
+  { icon: Video, destaque: "Conteúdo detalhado:", texto: "mais de 100 aulas gravadas, disponíveis para assistir quando e onde for mais conveniente para o aluno, que estuda no próprio ritmo." },
+  { icon: Headset, destaque: "Suporte contínuo:", texto: "durante 2 meses, acesso a plantões de dúvidas ao vivo, toda segunda-feira, às 19h. Um momento para revisar o conteúdo e esclarecer dúvidas diretamente com Raul Sena." },
+  { icon: BookOpen, destaque: "Material complementar:", texto: "ebooks e mapas mentais para garantir a compreensão e a aplicação prática do conhecimento." },
   { icon: Users, destaque: "Comunidade Ativa:", texto: "acesso à maior comunidade de investidores do Brasil, disponível para tirar dúvidas e compartilhar experiências." },
 ];
 
@@ -175,7 +175,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Preparando o seu cérebro",
     img: `${wp}/2024/09/MODULO-1-768x481.png`,
     meta: ["10 Aulas padrão", "1 Aula bônus", "> 3h 40min"],
-    desc: "Mude sua perspectiva sobre o dinheiro aprendendo sobre crenças limitantes, liberdade financeira e como ter disciplina para conseguir alcançar seus objetivos.",
+    desc: "Aborda a mudança de perspectiva sobre o dinheiro, tratando de crenças limitantes, liberdade financeira e da disciplina necessária para alcançar os objetivos.",
     aulas: [
       { num: "Aula 01", titulo: "Preparando seu cérebro", duracao: "04:49" },
       { num: "Aula 02", titulo: "Por que os ricos ficam cada vez mais ricos?", duracao: "13:37" },
@@ -195,7 +195,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Organizando sua vida financeira",
     img: `${wp}/2024/09/MODULO-2-768x481.png`,
     meta: ["6 Aulas padrão", "1h 24min"],
-    desc: "Aprenda a identificar gargalos, fazer o orçamento doméstico, a verdade sobre financiamentos, consórcios e previdência privada e como chegar ao primeiro milhão para viver de renda.",
+    desc: "Ensina a identificar gargalos, a fazer o orçamento doméstico, a verdade sobre financiamentos, consórcios e previdência privada e como chegar ao primeiro milhão para viver de renda.",
     aulas: [
       { num: "Aula 01", titulo: "Finanças pessoais", duracao: "20:30" },
       { num: "Aula 02", titulo: "Como usar seu cartão de crédito", duracao: "19:00" },
@@ -210,7 +210,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Renda fixa",
     img: `${wp}/2024/09/MODULO-3-768x481.png`,
     meta: ["17 Aulas padrão", "2 Aulas bônus", "5 horas"],
-    desc: "Explore Tesouro Direto, CDBs, Debêntures e LCIs/LCAs e aprenda conceitos como Marcação a Mercado, Contrafluxo e Juros Semestrais.",
+    desc: "Explora Tesouro Direto, CDBs, Debêntures e LCIs/LCAs e apresenta conceitos como Marcação a Mercado, Contrafluxo e Juros Semestrais.",
     aulas: [
       { num: "Aula 01", titulo: "O que é Renda Fixa?", duracao: "11:40" },
       { num: "Aula 02", titulo: "Escolhendo uma corretora", duracao: "13:20" },
@@ -238,7 +238,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Renda variável",
     img: `${wp}/2024/09/MODULO-4-768x481.png`,
     meta: ["21 Aulas padrão", "3 Aulas bônus", "09h 39min"],
-    desc: "Domine proventos, dividendos e data ex, desdobramentos e grupamentos, índices e ETF's, fundos imobiliários, FIIs, fiagro, fi-infra e claro, aprenda a construir uma carteira de ações brasileiras.",
+    desc: "Aborda proventos, dividendos e data ex, desdobramentos e grupamentos, índices e ETF's, fundos imobiliários, FIIs, fiagro e fi-infra e, claro, ensina a construir uma carteira de ações brasileiras.",
     aulas: [
       { num: "Aula 01", titulo: "Introdução à Renda Variável", duracao: "03:28" },
       { num: "Aula 02", titulo: "Bolsa de Valores", duracao: "17:26" },
@@ -275,7 +275,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Reserva de valor",
     img: `${wp}/2024/09/MODULO-5-768x481.png`,
     meta: ["7 Aulas padrão", "2 Aulas bônus", "2h 16min"],
-    desc: "Compreenda como comprar ouro físico ou na bolsa, o que são fundos de ouro, Bitcoin, blockchain e as maneiras de armazenar sua moeda virtual.",
+    desc: "Explica como comprar ouro físico ou na bolsa, o que são fundos de ouro, Bitcoin, blockchain e as maneiras de armazenar a moeda virtual.",
     aulas: [
       { num: "Aula 01", titulo: "O que é uma reserva de valor, e qual a sua função?", duracao: "19:11" },
       { num: "Aula 02", titulo: "Comprando ouro físico", duracao: "14:03" },
@@ -292,7 +292,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Investindo no exterior",
     img: `${wp}/2024/09/MODULO-6-768x481.png`,
     meta: ["12 Aulas padrão", "3h 13min"],
-    desc: "Entenda como funciona o mercado norte-americano, sobre as corretoras, as diferenças do mercado dos EUA e do Brasil, sobre ETF's, Reits, Stocks e Renda Fixa nos Estados Unidos.",
+    desc: "Explica como funciona o mercado norte-americano, as corretoras, as diferenças entre o mercado dos EUA e o do Brasil, além de ETF's, Reits, Stocks e Renda Fixa nos Estados Unidos.",
     aulas: [
       { num: "Aula 01", titulo: "Por que investir no exterior?", duracao: "25:09" },
       { num: "Aula 02", titulo: "Como funciona o mercado americano?", duracao: "13:19" },
@@ -312,7 +312,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "O começo",
     img: `${wp}/2025/05/MODULO-7-768x481.jpg`,
     meta: ["4 Aulas padrão", "1h 6min"],
-    desc: "Aprenda de vez a operacionalizar e gerir sua carteira de forma autônoma, com o auxílio de nossas ferramentas e demais soluções.",
+    desc: "Ensina a operacionalizar e gerir a carteira de forma autônoma, com o auxílio das ferramentas e das demais soluções da AUVP.",
     aulas: [
       { num: "Aula 01", titulo: "Operacionalizando sua Carteira", duracao: "19:51" },
       { num: "Aula 02", titulo: "Corrigindo os erros da sua carteira", duracao: "12:39" },
@@ -345,7 +345,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Bônus: Criptomoedas",
     img: `${ghProd}/cripto.jpg?raw=true`,
     meta: ["15 Aulas", "~2 horas (131 min)"],
-    desc: "Entenda fundamentos para investir em criptoativos com segurança.",
+    desc: "Apresenta os fundamentos para investir em criptoativos com segurança.",
     aulas: [
       { num: "Aula 0", titulo: "Introdução ao módulo de criptomoedas", duracao: "03:15" },
       { num: "Aula 01", titulo: "Por que o Bitcoin foi criado? O problema do dinheiro fiduciário e a inflação", duracao: "07:34" },
@@ -368,7 +368,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Bônus: AUVP Analítica",
     img: `${ghProd}/thumb%20analitica.jpg?raw=true`,
     meta: ["10 Aulas", "~1 hora (85 min)"],
-    desc: "Aprenda a extrair o máximo da nossa ferramenta de inteligência para avaliar ativos com precisão.",
+    desc: "Ensina a extrair o máximo da ferramenta de inteligência da AUVP para avaliar ativos com precisão.",
     aulas: [
       { num: "Aula 01", titulo: "Bem-vindo à AUVP Analítica", duracao: "07:27" },
       { num: "Aula 02", titulo: "Ações, Stocks e REITs", duracao: "16:59" },
@@ -411,19 +411,19 @@ export const escolaModulos: Modulo[] = [
 ];
 
 export const obsAjustesRegulares =
-  "A quantidade de aulas e módulos sofrerá com ajustes regulares, pois estamos sempre produzindo e disponibilizando novos conteúdos aos membros, como forma de preservar qualidade e manter a evolução constante de nossos produtos.";
+  "A quantidade de aulas e módulos sofrerá ajustes regulares, pois a AUVP produz e disponibiliza novos conteúdos aos membros continuamente, como forma de preservar a qualidade e manter a evolução constante dos produtos.";
 
 export const escolaFerramentas: InfoCard[] = [
-  { img: `${gh}/COMUNIDADE.png?raw=true`, titulo: "Comunidade", desc: "uma comunidade exclusiva para você interagir com outros alunos e tirar suas dúvidas com nossos especialistas." },
-  { img: `${gh}/PIAR.png?raw=true`, titulo: "PIAR", desc: "nosso sistema te ajuda a montar e balancear sua carteira de acordo com seu perfil de investidor." },
-  { img: `${gh}/DIAGRAMA%20DO%20CERRADO.png?raw=true`, titulo: "Diagrama do cerrado", desc: "ferramenta de rebalanceamento de carteira pra você manter seus investimentos protegidos e otimizados conforme as mudanças do mercado." },
-  { img: `${gh}/OR%C3%87AMENTO%20DOM%C3%89STICO.png?raw=true`, titulo: "Orçamento doméstico", desc: "um planejamento financeiro que organiza o fluxo de dinheiro da sua casa com base em suas próprias metas e rendimentos." },
+  { img: `${gh}/COMUNIDADE.png?raw=true`, titulo: "Comunidade", desc: "uma comunidade exclusiva para o aluno interagir com outros alunos e tirar dúvidas com os especialistas da AUVP." },
+  { img: `${gh}/PIAR.png?raw=true`, titulo: "PIAR", desc: "o sistema ajuda a montar e balancear a carteira de acordo com o perfil de investidor." },
+  { img: `${gh}/DIAGRAMA%20DO%20CERRADO.png?raw=true`, titulo: "Diagrama do cerrado", desc: "ferramenta de rebalanceamento de carteira que mantém os investimentos protegidos e otimizados conforme as mudanças do mercado." },
+  { img: `${gh}/OR%C3%87AMENTO%20DOM%C3%89STICO.png?raw=true`, titulo: "Orçamento doméstico", desc: "um planejamento financeiro que organiza o fluxo de dinheiro da casa com base nas metas e nos rendimentos do próprio aluno." },
 ];
 
 export const escolaGarantia = {
   selo: `${gh}/Prancheta-55-300x300.png?raw=true`,
   titulo: "Aprendizado Garantido",
-  texto: "Se você concluir todas as aulas, emitir seu certificado e não se sentir seguro para investir, nós devolvemos o seu dinheiro.",
+  texto: "Caso o aluno conclua todas as aulas, emita o certificado e não se sinta seguro para investir, a AUVP devolve o valor pago.",
 };
 
 /* ============================================================
@@ -471,7 +471,7 @@ export const sempreModulos: Modulo[] = [
     titulo: "Geopolítica",
     img: `${prod}/2025/09/thumb-treinamento.jpg`,
     meta: ["China: 03 | EUA: 10 | Índia: 03", "~7,6 horas (456 min)"],
-    desc: "Este conteúdo mostra como decisões políticas, guerras, políticas econômicas e relações internacionais afetam diretamente seus investimentos. Desenvolva uma visão estratégica para antecipar movimentos do mercado e proteger sua carteira.",
+    desc: "Este conteúdo mostra como decisões políticas, guerras, políticas econômicas e relações internacionais afetam diretamente os investimentos, desenvolvendo uma visão estratégica para antecipar movimentos do mercado e proteger a carteira.",
     aulas: [
       { num: "Mód 1 - 00", titulo: "Boas vindas (China)", duracao: "19:26" },
       { num: "Mód 1 - 01", titulo: "Retorno do Império do Meio", duracao: "32:03" },
@@ -496,7 +496,7 @@ export const sempreModulos: Modulo[] = [
     titulo: "Valuation",
     img: `${prod}/2026/03/9650cccc4a538335429d2752327ee254.jpg`,
     meta: ["11 Aulas", "~5,53 horas (332 min)"],
-    desc: "Domine a matemática por trás das grandes decisões. Ensina fundamentos da análise contábil, como a leitura de Balanços, DREs, Fluxos de Caixa para encontrar o valor real de qualquer empresa.",
+    desc: "Aborda a matemática por trás das grandes decisões. Ensina fundamentos da análise contábil, como a leitura de Balanços, DREs e Fluxos de Caixa, para encontrar o valor real de qualquer empresa.",
     aulas: [
       { num: "Aula 01", titulo: "Introdução", duracao: "08:31" },
       { num: "Aula 02", titulo: "Balanço Patrimonial", duracao: "35:15" },
@@ -515,7 +515,7 @@ export const sempreModulos: Modulo[] = [
     titulo: "Aulas Técnicas",
     img: `${prod}/2025/09/thumb-treinamento-2.jpg`,
     meta: ["15 Aulas", "~4,22 horas (253 min)"],
-    desc: "Auxilia na compreensão da saúde financeira de empresas e tomar decisões de investimento fundamentadas. Aprenda a interpretar balanços, DRE, fluxo de caixa e estrutura de capital.",
+    desc: "Auxilia na compreensão da saúde financeira de empresas e na tomada de decisões de investimento fundamentadas. Ensina a interpretar balanços, DRE, fluxo de caixa e estrutura de capital.",
     aulas: [
       { num: "Aula 01", titulo: "Balanço Patrimonial", duracao: "30:00" },
       { num: "Aula 02", titulo: "O segredo dos Grandes Investidores: como o DRE Pode Mudar Seu Jogo!", duracao: "21:56" },
@@ -538,7 +538,7 @@ export const sempreModulos: Modulo[] = [
     titulo: "AUVP Internacional (bônus com 2 primeiros módulos)",
     img: `${prod}/2025/09/thumb-treinamento-3.jpg`,
     meta: ["Mód 1: 16 Aulas | Mód 2: 11 Aulas", "~8,73 horas (524 min)"],
-    desc: "Em dois módulos, mergulha na Renda Fixa Internacional, ensina sobre stocks, REITs e Private Equity, e explica como o ciclo econômico impacta os seus investimentos. Assim, ajuda a expandir oportunidades no mercado global.",
+    desc: "Em dois módulos, mergulha na Renda Fixa Internacional, ensina sobre stocks, REITs e Private Equity, e explica como o ciclo econômico impacta os investimentos. Assim, ajuda a expandir oportunidades no mercado global.",
     aulas: [
       { num: "Mód 1 - 00", titulo: "Onboarding", duracao: "03:49" },
       { num: "Mód 1 - 01", titulo: "O que é e como funciona a renda fixa internacional", duracao: "31:06" },
@@ -573,7 +573,7 @@ export const sempreModulos: Modulo[] = [
     titulo: "Indicadores",
     img: `${ghProd}/indicadores.jpg?raw=true`,
     meta: ["9 Aulas", "~5 horas (321 min)"],
-    desc: "Aprenda a interpretar e analisar os principais indicadores fundamentalistas para avaliar a saúde financeira de empresas e tomar decisões de investimento mais assertivas.",
+    desc: "Ensina a interpretar e analisar os principais indicadores fundamentalistas para avaliar a saúde financeira de empresas e tomar decisões de investimento mais assertivas.",
     aulas: [
       { num: "Aula 0", titulo: "Introdução ao Módulo de Indicadores", duracao: "06:24" },
       { num: "Aula 1", titulo: "Endividamento", duracao: "31:59" },
@@ -590,9 +590,9 @@ export const sempreModulos: Modulo[] = [
 ];
 
 export const sempreBeneficios: InfoCard[] = [
-  { img: `${gh}/Analise-de-a%C3%A7%C3%B5es-e-indicadores-AUVP-Anal%C3%ADtica.png?raw=true`, titulo: "AUVP Analítica", desc: "Acesso completo e sempre ativo à nossa ferramenta exclusiva. Tome decisões fundamentadas com dados atualizados." },
-  { img: `${gh}/DIAGRAMA%20DO%20CERRADO.png?raw=true`, titulo: "Diagrama do Cerrado", desc: "Gerencie sua carteira com segurança. Ferramenta exclusiva de rebalanceamento para manter seus investimentos otimizados." },
-  { img: `${gh}/OR%C3%87AMENTO%20DOM%C3%89STICO.png?raw=true`, titulo: "Orçamento Doméstico", desc: "Nossa ferramenta de planejamento financeiro completo para organizar seu fluxo de dinheiro." },
+  { img: `${gh}/Analise-de-a%C3%A7%C3%B5es-e-indicadores-AUVP-Anal%C3%ADtica.png?raw=true`, titulo: "AUVP Analítica", desc: "Acesso completo e sempre ativo à ferramenta exclusiva da AUVP, que apoia decisões fundamentadas com dados atualizados." },
+  { img: `${gh}/DIAGRAMA%20DO%20CERRADO.png?raw=true`, titulo: "Diagrama do Cerrado", desc: "Ferramenta exclusiva de rebalanceamento, que permite gerenciar a carteira com segurança e manter os investimentos otimizados." },
+  { img: `${gh}/OR%C3%87AMENTO%20DOM%C3%89STICO.png?raw=true`, titulo: "Orçamento Doméstico", desc: "Ferramenta de planejamento financeiro completo para organizar o fluxo de dinheiro." },
   { img: `${ghProd}/COMUNIDADE.png?raw=true`, titulo: "Comunidade Ativa", desc: "A maior comunidade de investidores do Brasil segue disponível para tirar dúvidas, interagir com especialistas e compartilhar experiências." },
   { img: `${ghProd}/Captura%20de%20tela%202026-07-24%20113031.png?raw=true`, titulo: "Aulas Atualizadas", desc: "Acesso contínuo ao treinamento AUVP Escola com aulas e conteúdos constantemente renovados." },
   { img: `${ghProd}/Captura%20de%20tela%202026-07-24%20112002.png?raw=true`, titulo: "Live Semanal", desc: "Live e plantão de dúvidas diretamente com o Raul toda semana. Um contato próximo e constante, enquanto for assinante." },
@@ -611,13 +611,13 @@ export const proInfo: QuickInfo[] = [
 export const proHero = {
   badge: "B2B / Certificações",
   img: `${gh}/AUVP-Pro.png?raw=true`,
-  paraQuemE: "Pessoas que desejam conquistar as certificações CPA, C-Pro-R ou C-Pro-I para ampliar suas oportunidades de atuação como especialistas em investimentos, além de profissionais já certificados que buscam se destacar por meio de uma gestão de carteiras mais eficiente, segura e estratégica.",
-  oQueE: "A AUVP Pro é nossa plataforma de ensino profissionalizante, com foco exclusivo em treinamentos que ajudem o aluno a conquistar qualquer uma das certificações oferecidas pela ANBIMA.",
+  paraQuemE: "Pessoas que desejam conquistar as certificações CPA, C-Pro-R ou C-Pro-I para ampliar as oportunidades de atuação como especialistas em investimentos, além de profissionais já certificados que buscam se destacar por meio de uma gestão de carteiras mais eficiente, segura e estratégica.",
+  oQueE: "A AUVP Pro é a plataforma de ensino profissionalizante da AUVP, com foco exclusivo em treinamentos que ajudem o aluno a conquistar qualquer uma das certificações oferecidas pela ANBIMA.",
 };
 
 export const proFeatures: FeatureItem[] = [
   { icon: CheckCircle2, destaque: "Conteúdo detalhado:", texto: "para cada certificação, temos um treinamento com conteúdos específicos e direcionados." },
-  { icon: CheckCircle2, destaque: "Liberdade de acesso:", texto: "o conteúdo ficará gravado e disponível na nossa plataforma, permitindo acesso 24 horas por dia, 7 dias por semana." },
+  { icon: CheckCircle2, destaque: "Liberdade de acesso:", texto: "o conteúdo ficará gravado e disponível na plataforma, permitindo acesso 24 horas por dia, 7 dias por semana." },
   { icon: CheckCircle2, destaque: "Material complementar:", texto: "além das aulas em vídeo, poderá contar com e-books e mapas mentais para garantir aplicação do conhecimento de forma prática." },
   { icon: CheckCircle2, destaque: "Mão na massa de verdade:", texto: "simulados com resolução em vídeo, ensinando exatamente como os temas são cobrados nas certificações." },
   { icon: CheckCircle2, destaque: "Comunidade AUVP Escola:", texto: "nela o aluno terá acesso exclusivo a um tópico para discutir sobre as certificações, onde poderá interagir com outros alunos, trocar conhecimentos e identificar oportunidades de negócios." },
@@ -649,14 +649,14 @@ export const analiticaInfo: QuickInfo[] = [
 export const analiticaHero = {
   badge: "Dados e Ferramentas",
   img: `${gh}/Analise-de-a%C3%A7%C3%B5es-e-indicadores-AUVP-Anal%C3%ADtica.png?raw=true`,
-  paraQuemE: "Tanto a investidores iniciantes quanto experientes. Nossa missão é fornecer dados confiáveis e ferramentas analíticas para apoiar decisões de investimentos sem recomendações.",
+  paraQuemE: "Tanto a investidores iniciantes quanto experientes. A missão da AUVP Analítica é fornecer dados confiáveis e ferramentas analíticas para apoiar decisões de investimentos sem recomendações.",
   obs: "A AUVP Analítica possui em todos os planos de assinatura um período de 30 dias corridos de teste grátis. Após os 30 dias de teste, a cobrança é realizada no cartão de crédito inserido no checkout. Assim, a primeira cobrança só é realizada após os 30 dias corridos de teste.",
   oQueE: "A AUVP Analítica é um site voltado para a consulta de dados sobre investimentos em ações e fundos imobiliários.",
   freemium: "O serviço opera sob um modelo freemium, onde uma parte das funcionalidades está disponível gratuitamente para todos os usuários, enquanto recursos adicionais são oferecidos mediante assinatura paga.",
 };
 
 export const analiticaFeatures: FeatureItem[] = [
-  { icon: Database, destaque: "Dados Diretos da CVM:", texto: "os dados disponíveis para consulta são replicados diretamente da CVM e de outros bancos de dados relevantes, permitindo que os usuários analisem o ativo de sua escolha com base em informações atualizadas e confiáveis." },
+  { icon: Database, destaque: "Dados Diretos da CVM:", texto: "os dados disponíveis para consulta são replicados diretamente da CVM e de outros bancos de dados relevantes, permitindo que os usuários analisem o ativo escolhido com base em informações atualizadas e confiáveis." },
   { icon: ShieldCheck, destaque: "Análise Pessoal e Segura:", texto: "reforçamos que o produto possui apenas fins de conhecimento, para análise pessoal. Nenhuma das funcionalidades são recomendações de compra/venda de ativos." },
 ];
 
@@ -665,7 +665,7 @@ export const analiticaFeatures: FeatureItem[] = [
    ============================================================ */
 
 export const internacionalInfo: QuickInfo[] = [
-  { tipo: "investimento", texto: "Investimento: R$ 3.997 (junto ao treinamento da Escola) ou R$ 997 (caso já tenha a Escola)" },
+  { tipo: "investimento", texto: "Investimento: R$ 3.997,00 à vista ou R$ 997 (caso já tenha a Escola)" },
   { tipo: "site", texto: "aulasauvp.com.br/auvp-internacional", href: "https://www.aulasauvp.com.br/auvp-internacional" },
   { tipo: "acesso", texto: "Tempo de acesso: 1 ano (prorrogação: R$ 49,50/mês)" },
 ];
@@ -674,7 +674,7 @@ export const internacionalHero = {
   badge: "Especialização",
   img: `${gh}/AUVP-Internacional.png?raw=true`,
   paraQuemE: "Investidores que buscam segurança e querem deixar de ser reféns da economia local para se tornarem Estrategistas Globais.",
-  oQueE: "É nosso treinamento completo, composto por 05 módulos exclusivos que vão desde os fundamentos práticos do investimento em dólar até as estratégias mais avançadas de alocação de ativos, leitura macroeconômica e blindagem sucessória no exterior.",
+  oQueE: "É o treinamento completo da AUVP, composto por 05 módulos exclusivos que vão desde os fundamentos práticos do investimento em dólar até as estratégias mais avançadas de alocação de ativos, leitura macroeconômica e blindagem sucessória no exterior.",
   duracao: "Duração completa: 1339 min | aproximadamente 22 horas e 19 minutos.",
 };
 
@@ -688,9 +688,9 @@ export const internacionalModalidades = {
 
 export const internacionalFeatures: FeatureItem[] = [
   { icon: CheckCircle2, texto: "Construir uma carteira global resiliente;" },
-  { icon: CheckCircle2, texto: "Proteger seu patrimônio do risco de moeda e inflação;" },
+  { icon: CheckCircle2, texto: "Proteger o patrimônio do risco de moeda e inflação;" },
   { icon: CheckCircle2, texto: "Tomar decisões baseadas na Macroeconomia Aplicada;" },
-  { icon: CheckCircle2, texto: "Blindar sua sucessão do caro e lento inventário estrangeiro (probate)." },
+  { icon: CheckCircle2, texto: "Blindar a sucessão do caro e lento inventário estrangeiro (probate)." },
 ];
 
 export const internacionalCronograma = {
@@ -719,8 +719,8 @@ export const agroHero = {
   img: `${gh}/AUVP-Agro-Consultoria-Agro-Especializada.png?raw=true`,
   paraQuemE: "Desde produtores de soja, milho e pecuaristas que trabalham com gado de corte até gestores, sucessores, grandes tomadores de decisão e estudantes da área, buscamos atender ao produtor que quer deixar de ser refém das oscilações constantes de preços do mercado agropecuário.",
   oQueE: [
-    "Nossa missão é formar produtores e comercializadores que não ficam reféns da queda do preço da soja, milho e boi. AUVP Agro é um ecossistema de soluções e informações especializadas no mercado financeiro do agronegócio.",
-    "Ela traz consigo nossas veias de educação, inteligência de mercado, plataformas, ferramentas e consultoria da AUVP para atender às necessidades e especificidades daqueles que vivem e adquirem patrimônio através do agro, especialmente aqueles que trabalham com milho, boi e soja.",
+    "A missão da AUVP Agro é formar produtores e comercializadores que não ficam reféns da queda do preço da soja, milho e boi. AUVP Agro é um ecossistema de soluções e informações especializadas no mercado financeiro do agronegócio.",
+    "Ela traz consigo as veias de educação, inteligência de mercado, plataformas, ferramentas e consultoria da AUVP para atender às necessidades e especificidades daqueles que vivem e adquirem patrimônio através do agro, especialmente aqueles que trabalham com milho, boi e soja.",
   ],
 };
 
@@ -759,11 +759,11 @@ export const agroFazendas = {
 };
 
 /* ============================================================
-   Conta AUVP (AUVP Capital)
+   AUVP Banking (AUVP Capital)
    ============================================================ */
 
 export const contaInfo: QuickInfo[] = [
-  { tipo: "investimento", texto: "Investimento: variável (0,025% a 0,075% a.m.)" },
+  { tipo: "investimento", texto: "Investimento: variável de acordo com a modalidade de contratação" },
   { tipo: "site", texto: "auvpcapital.com.br/planos", href: "https://auvpcapital.com.br/planos/" },
   { tipo: "acesso", texto: "Tempo de acesso: contínuo, enquanto a conta estiver ativa" },
 ];
@@ -771,7 +771,7 @@ export const contaInfo: QuickInfo[] = [
 export const contaHero = {
   badge: "Ecossistema Financeiro",
   img: `${gh}/Planos-AUVP-Capital.png?raw=true`,
-  paraQuemE: "A conta AUVP é destinada exclusivamente para alunos do treinamento da AUVP, funcionando como uma extensão prática do que é ensinado e permitindo que o cliente aplique e gerencie seus investimentos com suporte da consultoria.",
+  paraQuemE: "O AUVP Banking é destinado exclusivamente aos alunos do treinamento da AUVP, funcionando como uma extensão prática do que é ensinado e permitindo que o cliente aplique e gerencie os investimentos com suporte da consultoria.",
 };
 
 export const contaInvestimentos = {
@@ -813,14 +813,14 @@ export interface PlanoConta {
 export const contaPlanos: PlanoConta[] = [
   {
     tag: "Plano \"Se Vira Aí\"",
-    desc: "(Autoatendimento) Você investe com autonomia total, usando a plataforma e usufruindo dos benefícios de ser membro da AUVP Capital.",
+    desc: "(Autoatendimento) O membro investe com autonomia total, usando a plataforma e usufruindo dos benefícios de ser membro da AUVP Capital.",
     taxaLabel: "Taxa:",
     taxa: "0,025% a 0,033% a.m.",
     taxaDesc: "(0,3% a 0,4% a.a.)",
   },
   {
     tag: "Plano \"Me diz o que fazer\"",
-    desc: "(Básico) Orientação em investimentos para quem quer clareza e direção na hora de montar ou ajustar sua carteira.",
+    desc: "(Básico) Orientação em investimentos para quem quer clareza e direção na hora de montar ou ajustar a carteira.",
     taxaLabel: "Taxa:",
     taxa: "0,075% a.m.",
     taxaDesc: "(0,9% a.a.)",
@@ -836,65 +836,158 @@ export const contaPlanos: PlanoConta[] = [
 ];
 
 export const contaBeneficios: FeatureItem[] = [
-  { icon: HandCoins, destaque: "Cashback em Renda Fixa:", texto: "não retemos parte dos rendimentos, como fazem outras corretoras, nós devolvemos essa porcentagem em forma de saldo." },
-  { icon: TrendingUp, destaque: "Cashback de aluguel de ações:", texto: "receba pelo seu aluguel das suas ações e uma porcentagem a mais sobre esse valor." },
-  { icon: Percent, destaque: "Isenção de Taxa de Corretagem:", texto: "taxa de corretagem zero em suas operações." },
+  { icon: HandCoins, destaque: "Cashback em Renda Fixa:", texto: "aplicável ao investimento em alguns títulos de renda fixa disponíveis na plataforma. Esse valor corresponde a uma parte do spread da operação e pode variar conforme o título, o emissor e a taxa negociada." },
+  { icon: TrendingUp, destaque: "Cashback de aluguel de ações:", texto: "o membro recebe pelo aluguel das próprias ações e uma porcentagem a mais sobre esse valor." },
+  { icon: Percent, destaque: "Isenção de Taxa de Corretagem:", texto: "taxa de corretagem zero nas operações." },
   { icon: Gem, destaque: "Kinvo premium:", texto: "12 meses de acesso gratuito." },
-  { icon: MessageCircle, destaque: "Seleção Curada de Títulos de Renda Fixa:", texto: "enviamos semanalmente uma seleção exclusiva dos melhores títulos de renda fixa, escolhidos a dedo, diretamente para você via WhatsApp." },
+  { icon: MessageCircle, destaque: "Seleção Curada de Títulos de Renda Fixa:", texto: "a AUVP envia diariamente uma seleção exclusiva dos melhores títulos de renda fixa, escolhidos a dedo, ao membro via WhatsApp." },
+  { icon: CreditCard, destaque: "Acesso a Cartões de crédito AUVP Capital:", texto: "sujeitos à análise." },
 ];
 
-export const cartaoModulos = [
-  {
-    titulo: "1. Entretenimento",
-    itens: [
-      "Arena BTG: 10% de desconto nas locações e aulas.",
-      "Empiricus: 10% de desconto e cursos \"Palavras do estrategistas\" e \"Super Renda Fixa\" grátis.",
-      "Benefício Mastercard Black: seguro viagem, concierge, sala VIP em aeroportos e mais.",
-      "Mastercard Surpreenda: 1 ponto a cada compra feita com seu cartão BTG.",
-      "Isenção de rolha: isenção da taxa da rolha na primeira garrafa em restaurantes selecionados.",
-      "Iplace: acesso ao Iplace facilita a melhor opção para garantir seu novo produto Apple.",
-    ],
-  },
-  {
-    titulo: "2. Viagem",
-    itens: [
-      "IOF Zero: sem cobrança de IOF em compras internacionais (crédito ou débito).",
-      "4 acessos gratuitos a Salas VIP LoungeKey.",
-      "Terminal BTG Pactual: 10% de desconto no primeiro terminal exclusivo da América Latina.",
-      "Rhino: descontos para viajar em transportes blindados.",
-    ],
-  },
-  {
-    titulo: "3. Investimentos",
-    itens: [
-      "Acesso exclusivo a um novo Fundo com liquidez diária, sem taxa de administração e com teto de R$ 1 milhão.",
-      "Acesso aos conteúdos da revista Exame Digital.",
-    ],
-  },
-  {
-    titulo: "4. Segurança Extra",
-    itens: [
-      "Seguro Conta e Cartão.",
-      "Monitoramento do CPF pelo Serasa.",
-      "Avisos e alertas de segurança via WhatsApp.",
-    ],
-  },
-  {
-    titulo: "5. Transacional",
-    itens: [
-      "10 dias sem juros no Limite da Conta (cheque especial do BTG).",
-      "10% de cashback nas Tags de Transporte (Sem Parar, ConectCar, Veloe) limitado a R$ 30.",
-      "Saques ilimitados.",
-      "2 cartões adicionais isentos da taxa de adesão.",
-      "Sujeito a análise de crédito.",
-    ],
-  },
-];
+/* ------------------------------------------------------------
+   Cartões AUVP
+   ------------------------------------------------------------ */
 
-export const cartaoDestaques: InfoCard[] = [
-  { icon: Coins, titulo: "Programa de Pontos", desc: "Acumule 2.2 pontos por dólar gasto, podendo escolher entre Esfera ou Livelo. Troque seus pontos por milhas, serviços ou outros benefícios que mais lhe agradam." },
-  { icon: Banknote, titulo: "Cashback na Fatura", desc: "Receba 1% do valor das suas compras de volta como cashback, diretamente na sua fatura, para usar como preferir." },
-  { icon: Handshake, titulo: "FEE Based", desc: "Nosso modelo de cobrança atual é o Fee Based, escolhido por ser transparente e eliminando possíveis conflitos de interesses, que outros modelos de cobranças podem ter. A taxa Fee Based corresponde a 0,9% ao ano sobre o seu patrimônio total, mas fique tranquilo, pois é diluída em 12 meses, resultando em apenas 0,075% ao mês.",
+export const cartaoIntro =
+  "Os cartões AUVP reúnem funções de crédito e débito no mesmo cartão, permitindo centralizar movimentações em uma única solução. Além disso, o membro pode personalizar o cartão com benefícios adicionais, escolhendo entre cashback na fatura ou programa de pontos, além de módulos extras conforme a necessidade.";
+
+export interface CartaoModulo {
+  titulo: string;
+  /** Observação curta sobre o módulo (ex.: se é gratuito). */
+  nota?: string;
+  itens: string[];
+  link?: { label: string; href: string };
+}
+
+export interface CartaoAUVP {
+  nome: string;
+  icon: LucideIcon;
+  /** Para quem o cartão é indicado. */
+  publico: string;
+  /** Cartões com estrutura detalhada (Platinum e Black). */
+  fidelidade?: { intro: string; opcoes: string[] };
+  modulosIntro?: string;
+  modulos?: CartaoModulo[];
+  /** Observação de liberação/limite, quando houver. */
+  liberacao?: string;
+  /** Cartões descritos em texto corrido (Ultrablue e World Legend). */
+  descricao?: string[];
+}
+
+/** Módulos comuns ao Platinum e ao Black — evita divergirem por descuido. */
+const moduloEntretenimento: CartaoModulo = {
+  titulo: "Entretenimento",
+  nota: "Gratuito e incluso no cartão.",
+  itens: [
+    "Descontos na Arena BTG",
+    "Produtos Empiricus",
+    "Mastercard Surpreenda",
+    "Benefícios Mastercard",
+    "Campanhas promocionais vigentes",
+  ],
+};
+
+const moduloSeguranca: CartaoModulo = {
+  titulo: "Segurança Extra",
+  itens: [
+    "Seguro Conta e Cartão",
+    "Monitoramento de CPF",
+    "Alertas e notificações via WhatsApp",
+  ],
+};
+
+const moduloTransacional: CartaoModulo = {
+  titulo: "Transacional",
+  itens: [
+    "10 dias sem juros no Limite da Conta",
+    "Cashback em tags de mobilidade parceiras",
+    "Saques ilimitados",
+    "Cartões adicionais conforme regras vigentes",
+  ],
+};
+
+const MODULOS_INTRO =
+  "O membro pode selecionar os módulos de benefícios disponíveis e ajustar a configuração conforme a necessidade, de acordo com as opções vigentes no aplicativo.";
+
+export const cartoesAuvp: CartaoAUVP[] = [
+  {
+    nome: "Cartão Platinum",
+    icon: CreditCard,
+    publico: "Voltado para membros que buscam praticidade, benefícios personalizáveis e boa relação custo-benefício.",
+    fidelidade: {
+      intro: "É possível optar entre:",
+      opcoes: [
+        "Pontos BTG: 1,6 pontos por dólar gasto",
+        "Cashback BTG: 0,5% ou 0,75% sobre o valor da fatura",
+      ],
+    },
+    modulosIntro: MODULOS_INTRO,
+    modulos: [
+      moduloEntretenimento,
+      {
+        titulo: "Viagem",
+        itens: ["IOF Zero em compras internacionais, conforme regras vigentes"],
+      },
+      moduloSeguranca,
+      moduloTransacional,
+    ],
+  },
+  {
+    nome: "Cartão Black",
+    icon: Crown,
+    publico: "Voltado para membros que buscam flexibilidade, permitindo combinar vantagens em viagens, investimentos, segurança, cashback, pontos e experiências exclusivas.",
+    fidelidade: {
+      intro: "É possível optar entre:",
+      opcoes: [
+        "Pontos BTG: 2,2 pontos por dólar gasto",
+        "Cashback BTG: 1% sobre o valor da fatura",
+      ],
+    },
+    modulosIntro: MODULOS_INTRO,
+    modulos: [
+      moduloEntretenimento,
+      {
+        titulo: "Viagem",
+        nota: "Benefícios voltados para uso internacional.",
+        itens: [
+          "4 acessos gratuitos LoungeKey (modalidade Black)",
+          "IOF Zero em compras internacionais, conforme regras vigentes",
+        ],
+        link: {
+          label: "Consultar as salas VIP disponíveis",
+          href: "https://airport.mastercard.com/pt/lounge-finder/terminal?airportcode=GRU&terminalcode=1428",
+        },
+      },
+      {
+        titulo: "Investimentos",
+        itens: [
+          "Acesso a fundo exclusivo com liquidez diária",
+          "Sem taxa de administração",
+          "Limite de aplicação conforme regras vigentes",
+          "Conteúdo digital Exame",
+        ],
+      },
+      moduloSeguranca,
+      moduloTransacional,
+    ],
+    liberacao: "Liberação do Cartão Black — limite por investimentos: com investimentos a partir de R$ 5 mil em produtos elegíveis, o membro pode ter acesso ao Cartão Black. Além disso, o cartão pode contar com 6 primeiros meses de mensalidade grátis, conforme campanha vigente.",
+  },
+  {
+    nome: "Cartão Ultrablue",
+    icon: Sparkles,
+    publico: "Voltado para membros que buscam exclusividade, alto nível de benefícios e uma experiência diferenciada no dia a dia e em viagens.",
+    descricao: [
+      "Oferece crédito ilimitado, IOF zero em compras internacionais, cashback ou pontos, acesso a salas VIP e benefícios premium em um pacote completo.",
+      "Desenvolvido para quem possui patrimônio investido a partir de R$ 1 milhão e deseja unir conveniência, sofisticação e vantagens financeiras.",
+    ],
+  },
+  {
+    nome: "Cartão Ultrablue World Legend",
+    icon: Crown,
+    publico: "Uma evolução que ampliou os benefícios do Ultrablue.",
+    descricao: [
+      "Conecta o membro a vivências ainda mais exclusivas ao redor do mundo.",
+    ],
   },
 ];
 
@@ -918,7 +1011,7 @@ export interface ResumoProduto {
 export const resumoProdutos: ResumoProduto[] = [
   {
     produto: "AUVP Escola",
-    investimento: "R$ 2.997,00",
+    investimento: "12x de R$ 297,00 (R$ 3.564,00) ou R$ 2.997,00 à vista",
     paraQuemE: "Iniciantes a avançados que buscam base sólida, aperfeiçoamento e planejamento para viver de renda.",
     duracao: "1843 min (~30 horas) — 2 meses de suporte ao vivo",
     site: { label: "auvp.com.br", href: "https://www.auvp.com.br/" },
@@ -946,7 +1039,7 @@ export const resumoProdutos: ResumoProduto[] = [
   },
   {
     produto: "AUVP Internacional",
-    investimento: "R$ 3.997 (junto à Escola) ou R$ 997 (só Internacional)",
+    investimento: "R$ 3.997,00 à vista ou R$ 997 (caso já tenha a Escola)",
     paraQuemE: "Investidores que buscam segurança, blindagem sucessória e expansão para o mercado global.",
     duracao: "1339 min (~22h19) — acesso de 1 ano. Prorrogação: R$ 49,50/mês",
     site: { label: "aulasauvp.com.br/auvp-internacional", href: "https://www.aulasauvp.com.br/auvp-internacional" },
@@ -959,8 +1052,8 @@ export const resumoProdutos: ResumoProduto[] = [
     site: { label: "auvpagro.com.br", href: "https://auvpagro.com.br/" },
   },
   {
-    produto: "AUVP Capital (Conta e Cartão)",
-    investimento: "Variável (0,025% a 0,075% a.m.)",
+    produto: "AUVP Banking (Conta e Cartões)",
+    investimento: "Variável de acordo com a modalidade de contratação",
     paraQuemE: "Destinada exclusivamente para alunos do treinamento da AUVP.",
     duracao: "Contínua",
     site: { label: "auvpcapital.com.br/planos", href: "https://auvpcapital.com.br/planos/" },
