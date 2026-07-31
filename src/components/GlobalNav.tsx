@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { olhoBranco, olhoPreto } from "@/assets/olhos";
-import { useBrand } from "@/contexts/BrandContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +61,6 @@ const systems = [
 export function GlobalNav() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { brand } = useBrand();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
 
@@ -83,17 +81,20 @@ export function GlobalNav() {
 
   return (
     <div className="relative flex items-center gap-3">
-      {/* Logo */}
-      <div
-        className={cn(
-          "flex items-center justify-center h-8 w-8 md:h-10 md:w-10 rounded-lg shrink-0",
-          brand === "capital" ? "bg-brand-dark" : "bg-brand"
-        )}
-      >
+      {/* Logo — sem caixa: o olho fica solto sobre o fundo da navegação e
+          troca de cor por tema, já que precisa de contraste contra o fundo
+          e não mais contra uma superfície própria. */}
+      <div className="shrink-0">
         <img
-          src={brand === "capital" ? olhoBranco.url : olhoPreto.url}
+          src={olhoPreto.url}
           alt="AUVP Logo"
-          className="h-5 w-5 md:h-7 md:w-7"
+          className="h-8 w-8 md:h-10 md:w-10 dark:hidden"
+        />
+        <img
+          src={olhoBranco.url}
+          alt=""
+          aria-hidden="true"
+          className="hidden h-8 w-8 md:h-10 md:w-10 dark:block"
         />
       </div>
 
