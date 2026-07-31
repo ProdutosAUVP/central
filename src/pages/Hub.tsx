@@ -98,6 +98,7 @@ const produtos: ProdutoDigital[] = [
   { name: "AUVP Câmbio", desc: "Operações de câmbio", slug: "cambio", href: "https://auvpcapital.com.br/cambio/" },
   { name: "AUVP Crédito", desc: "Soluções de crédito", slug: "credito", href: "https://auvpcapital.com.br/credito/" },
   { name: "AUVP Seguros", desc: "Produtos de seguro", slug: "seguros", href: "https://auvpcapital.com.br/seguros/" },
+  { name: "AUVP ETFs", desc: "Os ETFs próprios da AUVP", slug: "etfs", href: "https://www.auvpetfs.com.br/" },
   { name: "AUVP Experience", desc: "Experiências premium", soon: true },
 ];
 
