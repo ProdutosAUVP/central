@@ -15,6 +15,7 @@ import etfs from "./lps/etfs.webp?url";
 import sempre from "./lps/sempre.webp?url";
 import wealth from "./lps/wealth.webp?url";
 import privateDay from "./lps/private-day.webp?url";
+import giroItinerante from "./lps/giro-itinerante.webp?url";
 
 export const lpScreenshots: Record<string, string> = {
   capital,
@@ -28,4 +29,5 @@ export const lpScreenshots: Record<string, string> = {
   sempre,
   wealth,
   "private-day": privateDay,
+  "giro-itinerante": giroItinerante,
 };

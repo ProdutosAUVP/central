@@ -271,7 +271,9 @@ export function GlobalNav() {
       {/* Welcome tooltip — mobile only */}
       {showWelcome && (
         <div className="md:hidden absolute top-full left-12 mt-3 z-[60] animate-in fade-in slide-in-from-top-2 duration-300">
-          <div className="relative bg-popover border border-border rounded-xl p-4 shadow-xl w-[380px] max-w-[calc(100vw-2rem)] backdrop-blur-xl">
+          {/* O max-w desconta também o deslocamento `left-12` e o padding do
+              header (3rem + 1rem + 1rem), senão o balão vaza pela direita. */}
+          <div className="relative bg-popover border border-border rounded-xl p-4 shadow-xl w-[380px] max-w-[calc(100vw-5rem)] backdrop-blur-xl">
             <div className="absolute -top-1.5 left-6 w-3 h-3 bg-popover border-l border-t border-border rotate-45 rounded-sm" />
             <button
               onClick={dismissWelcome}

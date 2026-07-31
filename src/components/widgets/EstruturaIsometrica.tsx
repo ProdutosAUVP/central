@@ -48,16 +48,56 @@ interface CubeSpec {
 // Layout fixo: 4 cubos nos pontos cardeais da grade e 4 nas diagonais de
 // tela, com rotas em L que desviam dos cubos intermediários. Os tamanhos
 // variam pouco de propósito — nenhuma área deve parecer menos importante.
-const SPECS: Record<string, CubeSpec> = {
-  Tecnologia:  { g: [-3.5, -3.5], w: 31, h: 36, hsl: [152, 68, 38], anchor: "above", route: [[0, 0], [0, -1.5], [-3.5, -1.5], [-3.5, -3.5]] },
-  Vendas:      { g: [3.5, -3.5],  w: 30, h: 35, hsl: [38, 92, 48],  anchor: "above", route: [[0, 0], [1.5, 0], [1.5, -3.5], [3.5, -3.5]] },
-  Atendimento: { g: [-3.5, 3.5],  w: 30, h: 35, hsl: [205, 78, 46], anchor: "above", route: [[0, 0], [-1.5, 0], [-1.5, 3.5], [-3.5, 3.5]] },
-  Consultoria: { g: [3.5, 3.5],   w: 30, h: 34, hsl: [265, 60, 54], anchor: "below", route: [[0, 0], [0, 1.5], [3.5, 1.5], [3.5, 3.5]] },
-  Marketing:   { g: [0, -3.25],   w: 28, h: 32, hsl: [15, 78, 50],  anchor: "above", route: [[0, 0], [0, -3.25]] },
-  Audiovisual: { g: [-3.25, 0],   w: 27, h: 30, hsl: [330, 70, 52], anchor: "above", route: [[0, 0], [-3.25, 0]] },
-  Financeiro:  { g: [0, 3.25],    w: 28, h: 31, hsl: [175, 60, 36], anchor: "below", route: [[0, 0], [0, 3.25]] },
-  Jurídico:    { g: [3.25, 0],    w: 26, h: 29, hsl: [220, 26, 46], anchor: "below", route: [[0, 0], [3.25, 0]] },
+// São oito vagas: a cena comporta exatamente as oito áreas parceiras.
+const SLOTS: CubeSpec[] = [
+  { g: [-3.5, -3.5], w: 31, h: 36, hsl: [152, 68, 38], anchor: "above", route: [[0, 0], [0, -1.5], [-3.5, -1.5], [-3.5, -3.5]] },
+  { g: [3.5, -3.5],  w: 30, h: 35, hsl: [38, 92, 48],  anchor: "above", route: [[0, 0], [1.5, 0], [1.5, -3.5], [3.5, -3.5]] },
+  { g: [-3.5, 3.5],  w: 30, h: 35, hsl: [205, 78, 46], anchor: "above", route: [[0, 0], [-1.5, 0], [-1.5, 3.5], [-3.5, 3.5]] },
+  { g: [3.5, 3.5],   w: 30, h: 34, hsl: [265, 60, 54], anchor: "below", route: [[0, 0], [0, 1.5], [3.5, 1.5], [3.5, 3.5]] },
+  { g: [0, -3.25],   w: 28, h: 32, hsl: [15, 78, 50],  anchor: "above", route: [[0, 0], [0, -3.25]] },
+  { g: [-3.25, 0],   w: 27, h: 30, hsl: [330, 70, 52], anchor: "above", route: [[0, 0], [-3.25, 0]] },
+  { g: [0, 3.25],    w: 28, h: 31, hsl: [175, 60, 36], anchor: "below", route: [[0, 0], [0, 3.25]] },
+  { g: [3.25, 0],    w: 26, h: 29, hsl: [220, 26, 46], anchor: "below", route: [[0, 0], [3.25, 0]] },
+];
+
+// Vaga preferida de cada área (índice em SLOTS). Serve só para manter cor e
+// lugar estáveis entre renders — área que não estiver aqui ocupa a primeira
+// vaga livre, então renomear uma área nunca a faz sumir da cena.
+const VAGA_PREFERIDA: Record<string, number> = {
+  Tecnologia: 0,
+  "Capital Humano": 1,
+  Logística: 2,
+  Consultoria: 3,
+  Marketing: 4,
+  Audiovisual: 5,
+  Financeiro: 6,
+  Jurídico: 7,
 };
+
+type AreaPosicionada = AreaEstrutura & { spec: CubeSpec };
+
+/** Distribui as áreas pelas vagas da cena, respeitando as preferências. */
+function posicionar(items: AreaEstrutura[]): AreaPosicionada[] {
+  const ocupadas = new Set<number>();
+  const escolhidas = items.map((it) => {
+    const vaga = VAGA_PREFERIDA[it.area];
+    if (vaga !== undefined && !ocupadas.has(vaga)) { ocupadas.add(vaga); return { it, vaga }; }
+    return { it, vaga: -1 };
+  });
+
+  let proxima = 0;
+  for (const e of escolhidas) {
+    if (e.vaga >= 0) continue;
+    while (proxima < SLOTS.length && ocupadas.has(proxima)) proxima++;
+    if (proxima >= SLOTS.length) continue; // mais áreas que vagas: as extras ficam só na grade mobile
+    ocupadas.add(proxima);
+    e.vaga = proxima;
+  }
+
+  return escolhidas
+    .filter((e) => e.vaga >= 0)
+    .map((e) => ({ ...e.it, spec: SLOTS[e.vaga] }));
+}
 
 const CENTER = { w: 48, h: 52 }; // cubo do Produto
 // Cores do cubo do Produto — tokens no index.css: preto no tema claro,
@@ -187,14 +227,13 @@ export function EstruturaIsometrica({
 
   const open = hovered ?? active;
 
-  // Apenas áreas com posição definida entram na cena; ordena do fundo para a
-  // frente (algoritmo do pintor) pela profundidade gx + gy.
-  const placed = items
-    .filter((it) => SPECS[it.area])
-    .sort((a, b) => (SPECS[a.area].g[0] + SPECS[a.area].g[1]) - (SPECS[b.area].g[0] + SPECS[b.area].g[1]));
+  // Ordena do fundo para a frente (algoritmo do pintor) pela profundidade
+  // gx + gy, para os cubos da frente cobrirem os de trás.
+  const placed = posicionar(items)
+    .sort((a, b) => (a.spec.g[0] + a.spec.g[1]) - (b.spec.g[0] + b.spec.g[1]));
 
-  const openItem = open ? items.find((it) => it.area === open) : null;
-  const openSpec = open ? SPECS[open] : null;
+  const openItem = open ? placed.find((it) => it.area === open) ?? null : null;
+  const openSpec = openItem?.spec ?? null;
 
   // Posição do popover em % do container (o SVG escala com a largura)
   let popStyle: React.CSSProperties | null = null;
@@ -275,7 +314,7 @@ export function EstruturaIsometrica({
 
             {/* ── Linhas de conexão animadas (no chão, sob os cubos) ── */}
             {placed.map((it, i) => {
-              const spec = SPECS[it.area];
+              const spec = it.spec;
               const d = routePath(spec.route);
               const bends = spec.route.slice(1, -1).map(([gx, gy]) => iso(gx, gy));
               return (
@@ -388,7 +427,7 @@ export function EstruturaIsometrica({
               );
 
               placed.forEach((it, i) => {
-                const spec = SPECS[it.area];
+                const spec = it.spec;
                 const depth = spec.g[0] + spec.g[1];
                 if (!centerDrawn && depth > 0) { nodes.push(drawCenter()); centerDrawn = true; }
 

@@ -70,6 +70,24 @@ export function NovidadeCard({ item }: { item: NovidadeItem }) {
           </div>
         )}
 
+        {item.envolvidos && item.envolvidos.length > 0 && (
+          <div>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground font-roboto mb-1.5">
+              Envolvidos na entrega
+            </p>
+            <ul className="flex flex-wrap gap-1.5">
+              {item.envolvidos.map((nome, k) => (
+                <li
+                  key={k}
+                  className="rounded-full border bg-muted/40 px-2.5 py-0.5 text-[11px] font-roboto text-muted-foreground"
+                >
+                  {nome}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {item.link && (
           <a
             href={item.link}
