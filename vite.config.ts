@@ -8,7 +8,9 @@ export default defineConfig(({ mode: _mode }: { mode: string }) => ({
   // - Se publicado em https://<user>.github.io/<repo>/ -> use "/<repo>/"
   // - Se publicado em dominio customizado (raiz) -> use "/"
   // Pode ser sobrescrito via env: VITE_BASE=/central/ npm run build
-  base: process.env.VITE_BASE ?? "/central/",
+  // Na Vercel (process.env.VERCEL definido automaticamente pela plataforma) o site
+  // é publicado na raiz do domínio, então o base cai para "/" sem configuração manual.
+  base: process.env.VITE_BASE ?? (process.env.VERCEL ? "/" : "/central/"),
   server: {
     host: "::",
     port: 8080,
