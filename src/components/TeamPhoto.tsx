@@ -27,7 +27,7 @@ export const TEAM_PHOTO_ANCHOR = "object-cover object-top";
  * Megabrain, que só troca a URL da foto.
  */
 const MEMORIAM: Record<string, string> = {
-  hiago: "IN MEMORIAN",
+  hiago: "IN MEMORIAM",
 };
 
 interface TeamPhotoProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src" | "alt"> {
