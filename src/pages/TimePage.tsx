@@ -1222,6 +1222,14 @@ export default function TimePage() {
               </button>
             )}
           </div>
+
+          {/* Aviso — mesmo padrão do hint no organograma (texto pequeno,
+              itálico, alinhado à direita sob um divisor). */}
+          <div className="mt-8 pt-6 border-t flex justify-end">
+            <span className="text-[10px] font-roboto text-muted-foreground italic">
+              Demandas urgentes devem ser previamente acordadas com a liderança
+            </span>
+          </div>
         </Section>
 
         <Section>
