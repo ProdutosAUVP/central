@@ -106,8 +106,6 @@ export const solucoesSections: SolucaoSection[] = [
 export interface EcossistemaEtapa {
   titulo: string;
   icon: LucideIcon;
-  /** Marca as etapas opcionais, sinalizadas com asterisco na LP. */
-  opcional?: boolean;
   itens: { label: string; desc: string }[];
 }
 
@@ -115,8 +113,6 @@ export const ecossistemaHero = {
   titulo: "Tudo começa na escola",
   subtitulo:
     "Muito além de um curso: um ecossistema completo de educação, proteção e estrutura patrimonial, a partir da matrícula.",
-  rodape:
-    "Soluções adicionais e opcionais, disponíveis para contratação à medida que o patrimônio evolui.",
 };
 
 export const ecossistemaEtapas: EcossistemaEtapa[] = [
@@ -141,7 +137,6 @@ export const ecossistemaEtapas: EcossistemaEtapa[] = [
   {
     titulo: "Proteção da Família",
     icon: ShieldCheck,
-    opcional: true,
     itens: [
       { label: "Seguro de vida", desc: "proteção para toda a família" },
       { label: "Análise de crédito", desc: "o financiamento mais barato" },
@@ -151,7 +146,6 @@ export const ecossistemaEtapas: EcossistemaEtapa[] = [
   {
     titulo: "Patrimônio & Consultoria",
     icon: Landmark,
-    opcional: true,
     itens: [
       { label: "Consultor privado", desc: "+R$ 300 mil · private bank +R$ 5 mi" },
       { label: "Holding imobiliária", desc: "organização e sucessão" },
