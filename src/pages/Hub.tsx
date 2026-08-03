@@ -312,22 +312,13 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
                 <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 border-b sm:border-b-0 sm:border-r shrink-0 overflow-hidden">
                   {item.img && item.capa ? (
                     /* Capa própria da entrega: paisagem, com título no centro.
-                       Aparece inteira e centralizada; o fundo desfocado da
-                       própria arte preenche a sobra do painel, que muda de
-                       proporção entre mobile e desktop. */
-                    <div className="relative h-full w-full overflow-hidden">
-                      <img
-                        src={item.img}
-                        alt=""
-                        aria-hidden
-                        className="absolute inset-0 h-full w-full object-cover scale-110 blur-xl opacity-60"
-                      />
-                      <img
-                        src={item.img}
-                        alt=""
-                        className="relative h-full w-full object-contain object-center transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
-                      />
-                    </div>
+                       Preenche o painel por corte (como a screenshot de LP),
+                       recortada a partir do centro — é onde o título mora. */
+                    <img
+                      src={item.img}
+                      alt=""
+                      className="h-full w-full object-cover object-center transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
+                    />
                   ) : item.img ? (
                     <img
                       src={item.img}
@@ -474,7 +465,7 @@ const faqs: Faq[] = [
     /* Easter egg: a resposta é charada de propósito e não vem com botão —
        com o atalho pronto na tela, deixaria de ser segredo. A mecânica em si
        mora em src/contexts/CarecaContext.tsx. */
-    a: "Não se ativa no clique: se soletra. Meu nome já está na pergunta — nove letras, tudo junto, digitadas em qualquer página desta Central, contanto que nenhum campo de texto esteja escutando. Quem tem pressa bate três vezes seguidas no rosto de quem fundou a casa. Uma luz varre a tela de cima a baixo e o time inteiro amanhece sem cabelo. Para desfazer, repita o mesmo feitiço.",
+    a: "Não se ativa no clique: se soletra. Meu nome já está na pergunta — nove letras, tudo junto, digitadas em qualquer página desta Central, contanto que nenhum campo de texto esteja escutando. Quem tem pressa bate três vezes seguidas no rosto de quem fundou a casa. Para desfazer, repita o mesmo feitiço.",
   },
 ];
 
