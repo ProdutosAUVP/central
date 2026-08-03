@@ -28,7 +28,12 @@ export interface NovidadeItem {
   destaque?: {
     titulo?: string;
     descricao?: string;
-    /** Chave em `lpScreenshots`. Sem imagem, o card usa o painel da marca. */
+    /**
+     * Chave da arte do card. Procurada primeiro em `novidadeArtes`
+     * (capa própria da entrega) e, se não houver, em `lpScreenshots`
+     * (screenshot da landing page do produto). Sem imagem, o card usa
+     * o painel da marca.
+     */
     imagem?: string;
   };
   /** Link externo real. Itens sem link não renderizam CTA. */
@@ -65,7 +70,7 @@ export const novidadesMensais: NovidadeMensal[] = [
         antes: "O Hub reunia os produtos numa interface antiga, pensada quando o catálogo era bem menor.",
         depois: "Minha AUVP: visual novo e funcionalidades que facilitam o acesso a todas as soluções em um só lugar.",
         envolvidos: ["Ariadne Carneiro", "Éria Alencar", "Vitor Manoel", "Witor Lomazzi", "Cauê Filipe", "João Lima", "Thiago Langsdorf"],
-        destaque: {},
+        destaque: { imagem: "minha-auvp" },
       },
       {
         emoji: "📊",
@@ -80,14 +85,14 @@ export const novidadesMensais: NovidadeMensal[] = [
         titulo: "Módulo de Indicadores (exclusivo AUVP Sempre)",
         descricao: "Promessa cumprida! Subimos um novo módulo exclusivo para os assinantes da AUVP Sempre, aprofundando a parte técnica de avaliação de empresas.",
         envolvidos: ["Matheus Graff", "Douglas Ribeiro", "Maximiliano Carneiro (Max)", "Lucas Magalhães", "Luis Guilherme Borges"],
-        destaque: { titulo: "Módulo de Indicadores", imagem: "sempre" },
+        destaque: { titulo: "Módulo de Indicadores", imagem: "modulo-indicadores" },
       },
       {
         emoji: "📒",
         titulo: "Módulo AUVP Analítica",
         descricao: "Liberamos na Escola um módulo completo ensinando o passo a passo para extrair o máximo da nossa ferramenta e todas as suas funcionalidades.",
         envolvidos: ["Jeniffer Nascimento", "Hemily Borges", "Maximiliano Carneiro (Max)", "Lucas Magalhães", "Luis Guilherme Borges"],
-        destaque: { imagem: "analitica" },
+        destaque: { imagem: "modulo-analitica" },
       },
     ],
     spoiler: [
@@ -119,7 +124,7 @@ export const novidadesMensais: NovidadeMensal[] = [
         destaque: {
           titulo: "AUVP Escola 100% Regravada",
           descricao: "Concluímos a regravação integral e a atualização de todo o conteúdo da AUVP Escola. Uma entrega focada em manter o nosso padrão de qualidade e entregar a melhor experiência de estudo possível.",
-          imagem: "escola",
+          imagem: "escola-regravada",
         },
         link: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6772ad0d1fe057e9530659d2Unit",
       },
@@ -133,7 +138,7 @@ export const novidadesMensais: NovidadeMensal[] = [
         destaque: {
           titulo: "Cadernos de Exercícios na Escola",
           descricao: "Implementamos atividades práticas antes das avaliações em todos os módulos da AUVP Escola para deixar a jornada de aprendizado dos alunos muito mais dinâmica e facilitar a fixação do conteúdo.",
-          imagem: "escola",
+          imagem: "caderno-exercicios",
         },
         link: "https://www.aulasauvp.com.br/path-player?courseid=auvp&unit=6a3d845094f35e363d0cbd26Unit",
       },
