@@ -83,8 +83,13 @@ export function GlobalNav() {
     <div className="relative flex items-center gap-3">
       {/* Logo — sem caixa: o olho fica solto sobre o fundo da navegação e
           troca de cor por tema, já que precisa de contraste contra o fundo
-          e não mais contra uma superfície própria. */}
-      <div className="shrink-0">
+          e não mais contra uma superfície própria. Clicável: leva pra Central
+          de Produto (Hub), como em qualquer app. */}
+      <button
+        onClick={() => navigate("/")}
+        className="shrink-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        aria-label="Ir para a Central de Produto"
+      >
         <img
           src={olhoPreto.url}
           alt="AUVP Logo"
@@ -96,7 +101,7 @@ export function GlobalNav() {
           aria-hidden="true"
           className="hidden h-8 w-8 md:h-10 md:w-10 dark:block"
         />
-      </div>
+      </button>
 
       {/* Selo de versão */}
       <span className="shrink-0 text-[9px] font-bold font-roboto uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 leading-none">
