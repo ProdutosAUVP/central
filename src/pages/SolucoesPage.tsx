@@ -1302,7 +1302,6 @@ function EcossistemaDobra() {
                 </span>
                 <p className="mt-4 font-bold font-anek text-foreground">
                   {etapa.titulo}
-                  {etapa.opcional && <sup className="ml-0.5 text-muted-foreground">*</sup>}
                 </p>
                 <ul className="mt-3 w-full space-y-2">
                   {etapa.itens.map((item) => (
@@ -1317,10 +1316,6 @@ function EcossistemaDobra() {
           })}
         </div>
       </div>
-
-      <p className="text-xs text-muted-foreground font-roboto text-center">
-        *{ecossistemaHero.rodape}
-      </p>
     </div>
   );
 }
