@@ -6,7 +6,7 @@ import {
   GraduationCap, RefreshCw, BarChart3, Globe2, Tractor, Landmark, Table2,
   Shirt, UserPlus, Laptop, CreditCard, Video as VideoIcon, Handshake,
 } from "lucide-react";
-import { cn, publicUrl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/components/PageHero";
 import { sidebarNavClass } from "@/components/sidebarNav";
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/accordion";
 import {
   solucoesSections,
-  ecossistemaHero, ecossistemaEtapas, ecossistemaCartao,
+  ecossistemaHero, ecossistemaEtapas,
   type Aula, type Modulo, type InfoCard, type FeatureItem, type QuickInfo,
   escolaInfo, escolaHero, escolaPublico, escolaFeatures, escolaDuracao,
   escolaModulos, obsAjustesRegulares, escolaFerramentas, escolaGarantia,
@@ -45,9 +45,10 @@ const quickInfoIcons = { investimento: TagIcon, site: Globe, acesso: Clock } as 
 const accentText = "text-[hsl(var(--sol-accent,var(--primary)))]";
 const accentChip = "bg-[hsl(var(--sol-accent,var(--primary))/0.12)] text-[hsl(var(--sol-accent,var(--primary)))]";
 
-/** Classe .sol-* de cada seção de produto (define --sol-accent). */
+/** Classe .sol-* de cada seção de produto (define --sol-accent).
+    Ecossistema e Resumo ficam de fora: são sínteses do conjunto, não produtos,
+    e por isso usam o acento neutro da Central. */
 const solAccentClass: Record<string, string> = {
-  "ecossistema": "sol-escola",
   "auvp-escola": "sol-escola",
   "auvp-sempre": "sol-sempre",
   "auvp-pro": "sol-pro",
@@ -684,11 +685,6 @@ export default function SolucoesPage() {
 
         <div className="flex-1 py-8 pl-0 md:pl-8 min-w-0 space-y-24">
 
-        {/* ==================== ECOSSISTEMA ==================== */}
-        <section id="ecossistema" className={cn("sol-escola scroll-mt-32", printHide("ecossistema"))}>
-          <EcossistemaDobra />
-        </section>
-
         {/* ==================== AUVP ESCOLA ==================== */}
         <section id="auvp-escola" className={cn("sol-escola scroll-mt-32 space-y-16", printHide("auvp-escola"))}>
           <ProdutoHero
@@ -1117,6 +1113,14 @@ export default function SolucoesPage() {
           <ExportButton onClick={() => exportPdf("auvp-conta")}>Exportar AUVP Banking (PDF)</ExportButton>
         </section>
 
+        {/* ==================== ECOSSISTEMA ====================
+            Fecha a sequência dos produtos mostrando como eles se encaixam, e
+            por isso vem depois de todos. Sem classe .sol-*: como o Resumo
+            logo abaixo, é uma síntese do conjunto e usa o acento neutro. */}
+        <section id="ecossistema" className={cn("scroll-mt-32 border-t pt-16", printHide("ecossistema"))}>
+          <EcossistemaDobra />
+        </section>
+
         {/* ==================== RESUMO ==================== */}
         <section id="resumo-produtos" className={cn("scroll-mt-32 space-y-5 border-t pt-16", printHide("resumo-produtos"))}>
           <div>
@@ -1265,9 +1269,11 @@ function AgroSubprodutos({ expandAll }: { expandAll: boolean }) {
   );
 }
 
-/* Dobra "Tudo começa na escola", transposta da LP da Escola. A estética é a
-   da Central — mesmos cartões, bordas e tokens de acento —, exceto o cartão
-   de crédito, que mantém o visual preto próprio dele. */
+/* Dobra "Tudo começa na escola", transposta da LP da Escola, com a estética da
+   Central: mesmos cartões, bordas e tokens de acento. O bloco do cartão de
+   crédito que vinha da LP saiu daqui — os cartões AUVP são detalhados na seção
+   AUVP Banking, e o painel preto dele era o único ponto fora da curva visual
+   da página. */
 function EcossistemaDobra() {
   return (
     <div className="space-y-8">
@@ -1309,39 +1315,6 @@ function EcossistemaDobra() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Cartão de crédito — único bloco que preserva a estética da LP */}
-      <div className="rounded-2xl bg-[hsl(220_15%_8%)] text-white p-6 md:p-10 grid md:grid-cols-2 gap-8 items-center print-flatten">
-        <div className="space-y-3">
-          <span className="inline-block text-[10px] font-bold font-roboto uppercase tracking-wider text-[hsl(42_84%_63%)]">
-            {ecossistemaCartao.tag}
-          </span>
-          <h3 className="text-xl md:text-2xl font-bold font-anek">
-            {ecossistemaCartao.titulo}
-            <sup className="ml-0.5 text-white/60">*</sup>
-          </h3>
-          <p className="text-sm font-roboto text-white/75 leading-relaxed">
-            {ecossistemaCartao.desc}
-            <br />
-            <strong className="text-white font-semibold">{ecossistemaCartao.destaque}</strong>
-          </p>
-          <p className="text-xs font-roboto text-white/50">*{ecossistemaCartao.obs}</p>
-        </div>
-        <div className="flex justify-center md:justify-end">
-          <div className="relative w-full max-w-[280px] aspect-[1.586/1] rounded-xl bg-gradient-to-br from-[hsl(220_12%_16%)] to-[hsl(220_15%_6%)] border border-white/10 shadow-2xl flex items-center justify-center">
-            <img
-              src={publicUrl("/olho-branco.svg")}
-              alt=""
-              aria-hidden="true"
-              className="h-9 opacity-90"
-            />
-            <span aria-hidden="true" className="absolute bottom-5 right-5 flex">
-              <span className="h-5 w-5 rounded-full bg-white/25" />
-              <span className="h-5 w-5 rounded-full bg-white/40 -ml-2" />
-            </span>
-          </div>
         </div>
       </div>
 

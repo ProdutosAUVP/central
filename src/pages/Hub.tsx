@@ -5,10 +5,11 @@ import {
   ChevronRight, ChevronLeft, ChevronDown, Newspaper, Zap,
   BarChart3, GraduationCap, MessageSquare, Settings,
   FileText, Lightbulb, ImageIcon, Map,
-  Globe, Minus, Square, X, Layers, Brain
+  Globe, Minus, Square, X, Layers
 } from "lucide-react";
 import { TeamPhoto } from "@/components/TeamPhoto";
 import { lpScreenshots } from "@/assets/lps";
+import { novidadeArtes } from "@/assets/novidades";
 import { cn, publicUrl } from "@/lib/utils";
 import {
   Accordion,
@@ -26,7 +27,6 @@ import { teamMembers } from "@/data/time";
 import { produtosFisicos, produtosFisicosDestaque } from "@/data/produtosFisicos";
 import { ProdutoFisicoCard } from "@/components/ProdutosFisicos";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { useCareca } from "@/contexts/CarecaContext";
 
 function FigmaIcon({ className }: { className?: string }) {
   return (
@@ -249,12 +249,22 @@ interface MuralCard {
   link?: string;
   /** Arte do card. Sem imagem própria, o slide usa o painel da marca. */
   img?: string;
+  /**
+   * A arte é uma capa em formato paisagem (`novidadeArtes`), com título
+   * centralizado: precisa aparecer inteira, sem o corte lateral que as
+   * screenshots de LP recebem.
+   */
+  capa?: boolean;
 }
 
 /**
  * Cards do carrossel do Mural — os destaques de toda a história, e não os
  * itens de um mês fixo. Marcar `destaque` em `src/data/novidades.ts` basta
  * para uma entrega entrar aqui; o histórico completo fica em /novidades.
+ *
+ * A chave de `imagem` é procurada primeiro nas capas próprias das entregas e
+ * só depois nas screenshots de landing page — assim uma entrega pode ter arte
+ * própria mesmo quando existe uma LP com o mesmo nome.
  */
 const muralNovidades: MuralCard[] = novidadesDestaque.map((d) => ({
   titulo: d.titulo,
@@ -262,7 +272,8 @@ const muralNovidades: MuralCard[] = novidadesDestaque.map((d) => ({
   periodo: `${d.mes} ${d.ano}`,
   envolvidos: d.envolvidos,
   link: d.link,
-  img: d.imagem ? lpScreenshots[d.imagem] : undefined,
+  img: d.imagem ? novidadeArtes[d.imagem] ?? lpScreenshots[d.imagem] : undefined,
+  capa: !!(d.imagem && novidadeArtes[d.imagem]),
 }));
 
 function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
@@ -299,7 +310,25 @@ function MuralNovidadesCarousel({ items }: { items: MuralCard[] }) {
             const slide = (
               <div className="flex h-full flex-col sm:flex-row">
                 <div className="h-36 sm:h-full sm:w-2/5 bg-muted/50 border-b sm:border-b-0 sm:border-r shrink-0 overflow-hidden">
-                  {item.img ? (
+                  {item.img && item.capa ? (
+                    /* Capa própria da entrega: paisagem, com título no centro.
+                       Aparece inteira e centralizada; o fundo desfocado da
+                       própria arte preenche a sobra do painel, que muda de
+                       proporção entre mobile e desktop. */
+                    <div className="relative h-full w-full overflow-hidden">
+                      <img
+                        src={item.img}
+                        alt=""
+                        aria-hidden
+                        className="absolute inset-0 h-full w-full object-cover scale-110 blur-xl opacity-60"
+                      />
+                      <img
+                        src={item.img}
+                        alt=""
+                        className="relative h-full w-full object-contain object-center transition-transform duration-500 ease-apple sm:group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  ) : item.img ? (
                     <img
                       src={item.img}
                       alt=""
@@ -427,7 +456,7 @@ interface Faq {
   q: string;
   a: string;
   /** Identificador da ação que acompanha a resposta, quando houver. */
-  acao?: "megabrain" | "rotina";
+  acao?: "rotina";
 }
 
 const faqs: Faq[] = [
@@ -442,8 +471,10 @@ const faqs: Faq[] = [
   },
   {
     q: "Como ativar o megabrain?",
-    a: "O Modo Megabrain é um easter egg: digite \u201cmegabrain\u201d em qualquer página, fora de um campo de texto, ou clique três vezes seguidas numa foto do Raul. As fotos do time trocam pelas versões carecas depois de uma varredura na tela. Para desligar, é só repetir. Ou use o botão aqui embaixo.",
-    acao: "megabrain",
+    /* Easter egg: a resposta é charada de propósito e não vem com botão —
+       com o atalho pronto na tela, deixaria de ser segredo. A mecânica em si
+       mora em src/contexts/CarecaContext.tsx. */
+    a: "Não se ativa no clique: se soletra. Meu nome já está na pergunta — nove letras, tudo junto, digitadas em qualquer página desta Central, contanto que nenhum campo de texto esteja escutando. Quem tem pressa bate três vezes seguidas no rosto de quem fundou a casa. Uma luz varre a tela de cima a baixo e o time inteiro amanhece sem cabelo. Para desfazer, repita o mesmo feitiço.",
   },
 ];
 
@@ -681,7 +712,6 @@ export default function Hub() {
     "Boa noite, time 🌙";
   const proximo = proximoMarco();
   const [verTodasSolucoes, setVerTodasSolucoes] = useState(false);
-  const { careca, toggleCareca } = useCareca();
   const spotlightRef = useRef<HTMLDivElement>(null);
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (spotlightRef.current) {
@@ -931,15 +961,6 @@ export default function Hub() {
                   <AccordionTrigger className="text-sm font-medium font-roboto text-left">{faq.q}</AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground font-roboto space-y-3">
                     <p>{faq.a}</p>
-                    {faq.acao === "megabrain" && (
-                      <button
-                        onClick={toggleCareca}
-                        className="group inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-xs font-semibold font-roboto text-foreground transition-[border-color,color,box-shadow] duration-300 ease-apple sm:hover:border-primary/40 sm:hover:text-primary sm:hover:shadow-sm"
-                      >
-                        <Brain className="h-3.5 w-3.5 shrink-0" />
-                        {careca ? "Desligar o Modo Megabrain" : "Ativar o Modo Megabrain"}
-                      </button>
-                    )}
                     {faq.acao === "rotina" && (
                       <Link
                         to="/time#rotina-na-pratica"

@@ -31,10 +31,6 @@ export interface SolucaoSection {
 
 export const solucoesSections: SolucaoSection[] = [
   {
-    id: "ecossistema", label: "Ecossistema", icon: Layers,
-    anchors: [],
-  },
-  {
     id: "auvp-escola", label: "Escola", icon: GraduationCap,
     anchors: [
       { id: "escola-publico", label: "Para quem é" },
@@ -94,6 +90,10 @@ export const solucoesSections: SolucaoSection[] = [
       { id: "conta-beneficios", label: "Benefícios e Cartão" },
     ],
   },
+  /* Fecho da página: o Ecossistema resume como os produtos se encaixam, então
+     vem depois de todos eles e logo antes da tabela-resumo. Como as duas são
+     seções de síntese, e não de um produto, nenhuma tem cor de marca. */
+  { id: "ecossistema", label: "Ecossistema", icon: Layers, anchors: [] },
   { id: "resumo-produtos", label: "Resumo", icon: Table2, anchors: [] },
 ];
 
@@ -160,13 +160,9 @@ export const ecossistemaEtapas: EcossistemaEtapa[] = [
   },
 ];
 
-export const ecossistemaCartao = {
-  tag: "Também incluso no ecossistema",
-  titulo: "Cartão de crédito AUVP",
-  desc: "Mastercard Platinum, Black e Ultrablue com todos os benefícios.",
-  destaque: "Os melhores do mercado.",
-  obs: "sujeito a aprovação",
-};
+/* O bloco do cartão de crédito que vinha junto desta dobra na LP saiu da
+   Central: os cartões AUVP são detalhados na seção AUVP Banking
+   (`conta-beneficios`), que é a fonte da informação. */
 
 /* ============================================================
    Tipos compartilhados

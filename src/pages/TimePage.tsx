@@ -175,10 +175,15 @@ const orgPeople: Record<string, OrgPerson> = {
 
 type CardSize = "lg" | "md" | "sm";
 
+/* A largura de `sm` é o que dita a largura total da árvore: a linha das
+   categorias tem 7 cards `sm` e é a mais larga de todas. Em 132px ela fecha em
+   ~1176px e cabe inteira no container de um notebook (max-w-7xl menos o padding
+   do <main> = 1216px) — passando disso, o organograma volta a precisar de
+   rolagem lateral. Ver o cálculo no comentário da linha das categorias. */
 const cardDims: Record<CardSize, { w: number; avatar: number }> = {
   lg: { w: 188, avatar: 60 },
   md: { w: 164, avatar: 52 },
-  sm: { w: 146, avatar: 44 },
+  sm: { w: 132, avatar: 44 },
 };
 
 function PersonCard({
@@ -625,9 +630,13 @@ function OrgChart() {
 
   return (
     <div data-org className="w-full">
-      {/* The tree may be wider than the viewport on small screens; scroll only there.
-          On md+ it fits, so no scrollbar/box appears and the page just expands. */}
-      <div className="-mx-4 px-4 overflow-x-auto md:mx-0 md:px-0 md:overflow-visible">
+      {/* A árvore tem largura fixa (~1320px na linha das categorias) e não cabe
+          nem em notebooks: em md+ ela estourava o container e criava scroll
+          horizontal na página inteira. O scroll fica sempre aqui dentro, em
+          qualquer viewport — a página nunca rola de lado. O `-mx-4 px-4` deixa
+          a área de rolagem sangrar até a borda do card em vez de cortar os
+          cards no padding. */}
+      <div className="-mx-4 px-4 overflow-x-auto md:-mx-8 md:px-8">
         <div ref={containerRef} className="relative w-fit min-w-full mx-auto pt-1 pb-2">
 
           {/* Connector overlay — sits behind the opaque cards so curves appear to
@@ -664,8 +673,13 @@ function OrgChart() {
               <PersonCard id="debora" activeId={activeId} onToggle={toggle} size="sm" cardRef={registerNode("debora")} />
             </div>
 
-            {/* Squads de produto — Gerência na mesma altura das demais categorias. */}
-            <div className="flex items-start justify-center gap-5 sm:gap-8" style={{ marginTop: ROW_GAP }}>
+            {/* Squads de produto — Gerência na mesma altura das demais categorias.
+                É a linha mais larga da árvore e a que define se o organograma
+                cabe na tela: 7 cards `sm` (132px) + 2 vãos internos de 8px + 4
+                vãos entre colunas. Com `gap-6` dá 1176px, dentro dos 1216px
+                úteis de um notebook. Aumentar os vãos ou a largura do card
+                traz a rolagem lateral de volta. */}
+            <div className="flex items-start justify-center gap-4 lg:gap-6" style={{ marginTop: ROW_GAP }}>
               <CategoryColumn catId="cat-gerencia"    label="Gerência"    ids={["ariadne"]}            activeId={activeId} onToggle={toggle} registerNode={registerNode} />
               <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}    activeId={activeId} onToggle={toggle} registerNode={registerNode} />
               <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]}  activeId={activeId} onToggle={toggle} registerNode={registerNode} />
