@@ -1,14 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { ArrowUp, Package, Shapes, Sparkles } from "lucide-react";
+import { ArrowUp, Package, Shapes } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/components/PageHero";
 import { VoltarParaCentral } from "@/components/VoltarParaCentral";
 import { FiltroCategorias, ProdutoFisicoCard, type FiltroCategoria } from "@/components/ProdutosFisicos";
-import {
-  categoriasProdutosFisicos,
-  produtosFisicos,
-  PRODUTOS_FISICOS_DESTAQUE,
-} from "@/data/produtosFisicos";
+import { categoriasProdutosFisicos, produtosFisicos } from "@/data/produtosFisicos";
 
 /**
  * Catálogo completo dos produtos físicos. O Hub mostra só os destaques e
@@ -56,7 +52,6 @@ export default function ProdutosFisicosPage() {
       <div className="flex flex-wrap gap-x-10 gap-y-4">
         <Stat icon={Package} valor={produtosFisicos.length} rotulo="produtos no catálogo" />
         <Stat icon={Shapes} valor={categoriasProdutosFisicos.length} rotulo="categorias" />
-        <Stat icon={Sparkles} valor={PRODUTOS_FISICOS_DESTAQUE} rotulo="em destaque na Central" />
       </div>
 
       {/* Filtro por categoria — sticky logo abaixo do header global */}

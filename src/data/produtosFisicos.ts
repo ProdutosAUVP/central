@@ -46,8 +46,19 @@ export const categoriaVisual: Record<
   "Sacolas & caixas": { tone: "graphite", icon: Boxes },
 };
 
-/** Ordem curada: os quatro primeiros são o destaque exibido no Hub. */
+/**
+ * Ordem curada: os quatro primeiros são os mesmos, e na mesma ordem, do
+ * destaque do Hub (`PRODUTOS_FISICOS_DESTAQUE`), para que "Todos os
+ * produtos" comece do jeito que a Central já mostrou na home. O resto do
+ * catálogo segue livre.
+ */
 const catalogo: Omit<ProdutoFisico, "img">[] = [
+  {
+    slug: "bourbon-auvp",
+    nome: "Licor AUVP “Punch Me Up”",
+    categoria: "Bebidas",
+    desc: "Garrafa de 700 ml com rótulo autoral, feita para as ativações e eventos.",
+  },
   {
     slug: "meia-sardinha",
     nome: "Meia Investidor Sardinha",
@@ -55,16 +66,22 @@ const catalogo: Omit<ProdutoFisico, "img">[] = [
     desc: "Meia vermelha com o símbolo do Investidor Sardinha no cano e recado bordado na ponta do pé.",
   },
   {
-    slug: "garrafa-olho",
-    nome: "Garrafa térmica AUVP",
-    categoria: "Canecas e garrafas",
-    desc: "Garrafa térmica preta fosca com o olho AUVP aplicado em dourado.",
-  },
-  {
     slug: "bone-capitalismo",
     nome: "Boné “O capitalismo é simplesmente maravilhoso”",
     categoria: "Vestuário",
     desc: "Boné vermelho com patch bordado circular — um dos brindes mais pedidos da comunidade.",
+  },
+  {
+    slug: "canivete-agro",
+    nome: "Canivete AUVP Agro",
+    categoria: "Acessórios",
+    desc: "Canivete com cabo de madeira e gravação AUVP Agro, entregue em caixa kraft.",
+  },
+  {
+    slug: "garrafa-olho",
+    nome: "Garrafa térmica AUVP",
+    categoria: "Canecas e garrafas",
+    desc: "Garrafa térmica preta fosca com o olho AUVP aplicado em dourado.",
   },
   {
     slug: "caneca-auvp-dourada",
@@ -91,22 +108,10 @@ const catalogo: Omit<ProdutoFisico, "img">[] = [
     desc: "Sacola de algodão preta com estampa em silk e o trocadilho da casa.",
   },
   {
-    slug: "bourbon-auvp",
-    nome: "Licor AUVP “Punch Me Up”",
-    categoria: "Bebidas",
-    desc: "Garrafa de 700 ml com rótulo autoral, feita para as ativações e eventos.",
-  },
-  {
     slug: "porta-cartao-preto",
     nome: "Porta-cartão AUVP preto",
     categoria: "Acessórios",
     desc: "Porta-cartão dobrável em couro preto com a marca AUVP gravada em baixo relevo.",
-  },
-  {
-    slug: "canivete-agro",
-    nome: "Canivete AUVP Agro",
-    categoria: "Acessórios",
-    desc: "Canivete com cabo de madeira e gravação AUVP Agro, entregue em caixa kraft.",
   },
   {
     slug: "vela-aromatica",
