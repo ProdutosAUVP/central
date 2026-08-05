@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
-  AlertCircle, ChevronDown, Clock, ExternalLink, FileDown, Globe, Layers,
+  AlertCircle, ChevronDown, Clock, ExternalLink, FileDown, FileText, Globe, Layers,
   ListChecks, Tag as TagIcon, Target, HelpCircle, Wrench, BadgeCheck, Gift,
   GraduationCap, RefreshCw, BarChart3, Globe2, Tractor, Landmark, Table2,
   Shirt, UserPlus, Laptop, CreditCard, Video as VideoIcon, Handshake,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { baixarResumoSolucoesMarkdown } from "@/lib/solucoesMarkdown";
 import { PageShell } from "@/components/PageShell";
 import { PageHero } from "@/components/PageHero";
 import { sidebarNavClass } from "@/components/sidebarNav";
@@ -424,16 +425,15 @@ function ExportFloater({ onClick }: { onClick: () => void }) {
   );
 }
 
+const exportBtnClass = cn(
+  "inline-flex items-center gap-2 rounded-lg border-2 border-[hsl(var(--sol-accent,var(--primary))/0.5)] px-4 py-2 text-sm font-anek font-bold uppercase tracking-wide hover:bg-[hsl(var(--sol-accent,var(--primary))/0.1)] transition-colors",
+  accentText
+);
+
 function ExportButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <div className="flex justify-end border-t border-dashed pt-6 print:hidden">
-      <button
-        onClick={onClick}
-        className={cn(
-          "inline-flex items-center gap-2 rounded-lg border-2 border-[hsl(var(--sol-accent,var(--primary))/0.5)] px-4 py-2 text-sm font-anek font-bold uppercase tracking-wide hover:bg-[hsl(var(--sol-accent,var(--primary))/0.1)] transition-colors",
-          accentText
-        )}
-      >
+      <button onClick={onClick} className={exportBtnClass}>
         <FileDown className="h-4 w-4" />
         {children}
       </button>
@@ -1165,7 +1165,16 @@ export default function SolucoesPage() {
             </table>
           </div>
 
-          <ExportButton onClick={() => exportPdf("resumo-produtos")}>Exportar Resumo (PDF)</ExportButton>
+          <div className="flex flex-wrap justify-end gap-3 border-t border-dashed pt-6 print:hidden">
+            <button onClick={() => baixarResumoSolucoesMarkdown()} className={exportBtnClass}>
+              <FileText className="h-4 w-4" />
+              Baixar resumo completo (Markdown)
+            </button>
+            <button onClick={() => exportPdf("resumo-produtos")} className={exportBtnClass}>
+              <FileDown className="h-4 w-4" />
+              Exportar Resumo (PDF)
+            </button>
+          </div>
         </section>
         </div>
       </div>
