@@ -11,6 +11,10 @@ import { produtosFisicosFotos } from "@/assets/produtosFisicos";
  * item aqui tem uma foto de estúdio correspondente. Para incluir um produto
  * novo, adicione o mockup à pasta, gere o WebP em
  * `src/assets/produtos-fisicos/` com o mesmo slug e registre o item abaixo.
+ *
+ * Produto com dois lados (frente e verso) não precisa de campo extra aqui:
+ * basta existir um WebP `<slug>-verso` em `src/assets/produtosFisicos.ts` que
+ * o card passa a virar a foto no hover.
  */
 
 export type CategoriaProdutoFisico =
@@ -30,6 +34,12 @@ export interface ProdutoFisico {
   desc: string;
   /** URL da foto otimizada, resolvida a partir do slug. */
   img: string;
+  /**
+   * URL do verso, quando o produto tem os dois lados desenhados. Resolvida a
+   * partir da chave `<slug>-verso`; o card usa a presença dela para virar a
+   * foto no hover.
+   */
+  imgVerso?: string;
 }
 
 /** Identidade visual de cada categoria — tom do Design System + ícone. */
@@ -78,6 +88,12 @@ const catalogo: Omit<ProdutoFisico, "img">[] = [
     desc: "Canivete com cabo de madeira e gravação AUVP Agro, entregue em caixa kraft.",
   },
   {
+    slug: "caneca-aupo11",
+    nome: "Caneca AUPO11",
+    categoria: "Canecas e garrafas",
+    desc: "Caneca preta com o porco coroado do AUPO11 na frente e, no verso, o recado: “Aproveite seu café com calma, seu dinheiro está no AUPO11.”",
+  },
+  {
     slug: "garrafa-olho",
     nome: "Garrafa térmica AUVP",
     categoria: "Canecas e garrafas",
@@ -124,6 +140,7 @@ const catalogo: Omit<ProdutoFisico, "img">[] = [
 export const produtosFisicos: ProdutoFisico[] = catalogo.map((p) => ({
   ...p,
   img: produtosFisicosFotos[p.slug],
+  imgVerso: produtosFisicosFotos[`${p.slug}-verso`],
 }));
 
 /**

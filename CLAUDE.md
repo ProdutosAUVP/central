@@ -99,6 +99,8 @@ O mapa `MEMORIAM`, no mesmo arquivo, marca quem é homenageado: no hover a foto 
 
 Os quatro primeiros itens do catálogo são os destaques exibidos no Hub (`PRODUTOS_FISICOS_DESTAQUE`); o resto aparece em `/produtos-fisicos`. Card e filtro de categorias são compartilhados via `src/components/ProdutosFisicos.tsx`. Os originais sem tratamento ficam em `docs/fotos-originais/produtos-fisicos/` e não entram no build.
 
+**Produto com frente e verso** — quando o produto tem os dois lados desenhados (a caneca AUPO11 é o caso), o card vira a foto em 3D: a frente fica em repouso e o verso aparece no hover. Não há campo novo em `src/data/produtosFisicos.ts` para isso: basta registrar o segundo WebP na chave `<slug>-verso` em `src/assets/produtosFisicos.ts` (mesmo 900×1200 da frente) que `produtosFisicos` resolve o `imgVerso` e o card liga a virada sozinho. Fora do mouse a virada continua acessível: um botão cobre a foto e vira no clique (toque) e no foco (teclado), com o selo "Frente"/"Verso" no canto indicando o lado visível.
+
 ## Como adicionar uma nova página
 
 1. Criar `src/pages/NovaPagina.tsx`
