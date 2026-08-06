@@ -366,23 +366,43 @@ export const marcos: Marco[] = [
   },
 ];
 
-/** Marcos em ordem cronológica — ordem em que aparecem na trilha. */
-export const marcosOrdenados: Marco[] = [...marcos].sort((a, b) =>
-  a.data < b.data ? -1 : a.data > b.data ? 1 : 0
-);
+/** Marco que ainda vem por aí — o que a trilha mostra como "Vem por aí". */
+export const marcoVemPorAi = (m: Marco) => m.status === "planejado";
 
 /**
- * Índice do marco em foco na abertura da trilha: o primeiro que ainda não
- * passou (ou, se o ano já acabou, o último da lista).
+ * Marcos na ordem em que aparecem na trilha: cronológica dentro de cada
+ * grupo, mas com tudo o que ainda vem por aí depois do que já aconteceu.
+ *
+ * A separação por estado (e não só por data) é o que mantém o "Vem por aí"
+ * sempre à frente da linha do "hoje". As datas dos planejados são estimativas
+ * e envelhecem sozinhas — quando a estimativa vence sem que o marco mude de
+ * estado, ordenar só pela data jogaria o marco para trás do "hoje" e a
+ * trilha passaria a insinuar atraso de cronograma que não existe.
  */
-export function indiceMarcoAtual(ref: Date = new Date()): number {
-  const hoje = ref.toISOString().slice(0, 10);
-  const i = marcosOrdenados.findIndex((m) => m.data >= hoje);
-  return i === -1 ? marcosOrdenados.length - 1 : i;
+export const marcosOrdenados: Marco[] = [...marcos].sort((a, b) => {
+  if (marcoVemPorAi(a) !== marcoVemPorAi(b)) return marcoVemPorAi(a) ? 1 : -1;
+  return a.data < b.data ? -1 : a.data > b.data ? 1 : 0;
+});
+
+/**
+ * Índice do primeiro marco que ainda vem por aí — a fronteira onde a linha
+ * do "hoje" cai. Vale `marcosOrdenados.length` quando não sobrou nada
+ * planejado na trilha.
+ */
+export const indiceFronteira: number = (() => {
+  const i = marcosOrdenados.findIndex(marcoVemPorAi);
+  return i === -1 ? marcosOrdenados.length : i;
+})();
+
+/**
+ * Índice do marco em foco na abertura da trilha: o primeiro que ainda vem
+ * por aí (ou, se não houver nenhum, o último da lista).
+ */
+export function indiceMarcoAtual(): number {
+  return Math.min(indiceFronteira, marcosOrdenados.length - 1);
 }
 
 /** Próximo marco ainda por acontecer — usado no destaque do topo do Hub. */
-export function proximoMarco(ref: Date = new Date()): Marco | undefined {
-  const hoje = ref.toISOString().slice(0, 10);
-  return marcosOrdenados.find((m) => m.data >= hoje);
+export function proximoMarco(): Marco | undefined {
+  return marcosOrdenados[indiceFronteira];
 }
