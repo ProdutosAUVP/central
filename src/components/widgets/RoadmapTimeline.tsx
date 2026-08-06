@@ -6,6 +6,7 @@ import { Tag, tagToneClasses } from "@/components/widgets/Tag";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   marcosOrdenados,
+  indiceFronteira,
   indiceMarcoAtual,
   type Marco,
   type MarcoStatus,
@@ -74,20 +75,40 @@ const statusConfig: Record<MarcoStatus, { label: string; icon: React.ElementType
   "adiado":       { label: "Adiada",     icon: CalendarClock, classe: "text-[hsl(var(--warning))]" },
 };
 
+/* Largura do selo "HOJE" desenhado acima da onda. */
+const SELO_HOJE_W = 50;
+
+/* Meia-largura do que cada marco ocupa acima da onda: nos índices pares sobe
+   o cartão, nos ímpares o minicartão (é a mesma alternância do render). */
+const meiaLarguraAcima = (g: Geo, i: number) => (i % 2 === 0 ? g.cardW : g.miniW) / 2;
+
 /**
- * Posição, em px, da linha do "hoje" sobre a onda. Interpola entre o último
- * marco que já passou e o próximo, para a trilha colorida parar exatamente
- * onde estamos no ano.
+ * Posição, em px, da linha do "hoje" sobre a onda. Fica no vão entre o
+ * último marco que já aconteceu e o primeiro que ainda vem por aí,
+ * interpolada pelas datas dos dois para a trilha colorida acompanhar o
+ * calendário.
+ *
+ * A interpolação é presa à faixa que sobra livre acima da onda entre os dois
+ * marcos, de modo que o selo caiba inteiro nela. São os dois limites dessa
+ * faixa que sustentam a leitura da trilha: o de baixo tira o selo de cima do
+ * texto do cartão anterior, e o de cima garante que o primeiro "Vem por aí"
+ * fique sempre à frente do "hoje" — inclusive quando a data estimada dele já
+ * venceu, que é quando a interpolação passaria do nó e a trilha insinuaria
+ * um atraso de cronograma que não existe.
  */
 function xDeHoje(g: Geo, hoje: string, largura: number): number {
-  const passados = marcosOrdenados.filter((m) => m.data <= hoje).length;
-  if (passados === 0) return 0;
-  if (passados === marcosOrdenados.length) return largura;
-  const t0 = new Date(marcosOrdenados[passados - 1].data).getTime();
-  const t1 = new Date(marcosOrdenados[passados].data).getTime();
+  const i = indiceFronteira;
+  if (i === 0) return 0;
+  if (i === marcosOrdenados.length) return largura;
+  const x0 = nX(g, i - 1);
+  const x1 = nX(g, i);
+  const min = x0 + meiaLarguraAcima(g, i - 1) + SELO_HOJE_W / 2;
+  const max = x1 - meiaLarguraAcima(g, i) - SELO_HOJE_W / 2;
+  const t0 = new Date(marcosOrdenados[i - 1].data).getTime();
+  const t1 = new Date(marcosOrdenados[i].data).getTime();
   const t  = new Date(hoje).getTime();
-  const frac = t1 === t0 ? 0 : Math.min(Math.max((t - t0) / (t1 - t0), 0), 1);
-  return nX(g, passados - 1) + frac * g.stride;
+  const bruta = t1 === t0 ? max : x0 + ((t - t0) / (t1 - t0)) * (x1 - x0);
+  return Math.min(Math.max(bruta, min), Math.max(min, max));
 }
 
 /* ── Cartão de um marco ───────────────────────────────────────────────────── */
@@ -393,39 +414,6 @@ export function RoadmapTimeline() {
                 )}
               </g>
 
-              {/* Marca do "hoje" sobre a onda */}
-              {progressoX > 0 && progressoX < W && (
-                <g>
-                  <line
-                    x1={progressoX} y1={ondaY(g, progressoX) - 74}
-                    x2={progressoX} y2={ondaY(g, progressoX) + 62}
-                    stroke="hsl(var(--primary))" strokeWidth="1.5" strokeDasharray="3 5" opacity="0.5"
-                  />
-                  <rect
-                    x={progressoX - 25} y={ondaY(g, progressoX) - 91}
-                    width="50" height="18" rx="9"
-                    fill="hsl(var(--primary))"
-                  />
-                  <text
-                    x={progressoX} y={ondaY(g, progressoX) - 78}
-                    textAnchor="middle"
-                    className="font-roboto"
-                    style={{ fill: "hsl(var(--primary-foreground))", fontSize: 9, fontWeight: 700, letterSpacing: "0.08em" }}
-                  >
-                    HOJE
-                  </text>
-                  <circle cx={progressoX} cy={ondaY(g, progressoX)} r="5" fill="hsl(var(--primary))" />
-                  <circle cx={progressoX} cy={ondaY(g, progressoX)} r="5" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" opacity="0.5">
-                    {!reducedMotion && (
-                      <>
-                        <animate attributeName="r" values="5;16;5" dur="2.6s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.5;0;0.5" dur="2.6s" repeatCount="indefinite" />
-                      </>
-                    )}
-                  </circle>
-                </g>
-              )}
-
               {/* Nós + hastes que ligam cada nó aos seus dois cartões */}
               {marcos.map((m, i) => {
                 const x = nX(g, i), y = nY(g, i);
@@ -515,6 +503,51 @@ export function RoadmapTimeline() {
                 </React.Fragment>
               );
             })}
+
+            {/* Marca do "hoje" — camada própria, por cima dos cartões.
+                A fronteira cai justamente no vão entre o último marco
+                entregue e o primeiro "Vem por aí", e ali sempre há um cartão
+                ocupando um dos lados da onda: dentro do SVG de baixo a marca
+                ficava escondida atrás dele. Como régua por cima de tudo ela
+                se lê sempre, e é ela que mostra que o "Vem por aí" está à
+                frente do hoje. */}
+            {progressoX > 0 && progressoX < W && (
+              <svg
+                width={W}
+                height={g.h}
+                viewBox={`0 0 ${W} ${g.h}`}
+                className="pointer-events-none absolute inset-0 z-20"
+                aria-hidden="true"
+              >
+                <line
+                  x1={progressoX} y1={ondaY(g, progressoX) - 74}
+                  x2={progressoX} y2={ondaY(g, progressoX) + 62}
+                  stroke="hsl(var(--primary))" strokeWidth="1.5" strokeDasharray="3 5" opacity="0.5"
+                />
+                <rect
+                  x={progressoX - 25} y={ondaY(g, progressoX) - 91}
+                  width="50" height="18" rx="9"
+                  fill="hsl(var(--primary))"
+                />
+                <text
+                  x={progressoX} y={ondaY(g, progressoX) - 78}
+                  textAnchor="middle"
+                  className="font-roboto"
+                  style={{ fill: "hsl(var(--primary-foreground))", fontSize: 9, fontWeight: 700, letterSpacing: "0.08em" }}
+                >
+                  HOJE
+                </text>
+                <circle cx={progressoX} cy={ondaY(g, progressoX)} r="5" fill="hsl(var(--primary))" />
+                <circle cx={progressoX} cy={ondaY(g, progressoX)} r="5" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" opacity="0.5">
+                  {!reducedMotion && (
+                    <>
+                      <animate attributeName="r" values="5;16;5" dur="2.6s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.5;0;0.5" dur="2.6s" repeatCount="indefinite" />
+                    </>
+                  )}
+                </circle>
+              </svg>
+            )}
           </div>
         </div>
       </div>
