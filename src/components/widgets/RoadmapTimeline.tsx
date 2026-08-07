@@ -34,7 +34,7 @@ interface Geo {
 }
 
 /* A altura do cartão comporta o pior caso — título em duas linhas ao lado
-   do ícone, mais descrição em três —, senão o flex espreme o texto e corta
+   do ícone, mais descrição em quatro —, senão o flex espreme o texto e corta
    a última linha pela metade. A altura da faixa acompanha: de cada nó sai um
    cartão para um lado e o minicartão para o outro, e os dois precisam
    caber dentro da faixa tanto na crista quanto no vale. */
@@ -142,7 +142,7 @@ function MarcoCard({ marco, ativo }: { marco: Marco; ativo: boolean }) {
           {marco.titulo}
         </p>
       </div>
-      <p className="shrink-0 text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-3">
+      <p className="shrink-0 text-[11px] text-muted-foreground font-roboto leading-snug line-clamp-4">
         {marco.descricao}
       </p>
       {/* O minicartão do lado oposto é decorativo para a árvore de
