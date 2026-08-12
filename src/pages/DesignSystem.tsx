@@ -626,9 +626,9 @@ export default function DesignSystemPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="sm" className="shrink-0">
+                <Button variant="default" size="default" className="shrink-0 shadow-md">
                   <Download className="h-4 w-4 mr-2" />
-                  Repositório
+                  Logos
                 </Button>
               </a>
             </div>

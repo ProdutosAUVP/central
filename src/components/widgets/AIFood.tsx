@@ -685,7 +685,7 @@ Agora gere a interface solicitada:`,
 const componentCatalog = {
   institucional: `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CATÁLOGO COMPLETO — SITES & LPs
+CATÁLOGO COMPLETO
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Use SOMENTE componentes desta lista:
 

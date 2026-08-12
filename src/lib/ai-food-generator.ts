@@ -199,7 +199,7 @@ export function generateComponentPrompt(
   const brandLabel = brand === "capital" ? "AUVP Capital" : "AUVP Escola";
   const viewLabel =
     view === "institucional"
-      ? "Sites & LPs"
+      ? ""
       : view === "ferramentas"
       ? "Ferramentas / Calculadoras"
       : "Plataforma EAD";
@@ -224,7 +224,7 @@ export function generateComponentPrompt(
 
   const descBlock = description ? `\n${description}` : "";
 
-  return `Você é um Desenvolvedor Front-end Especialista. Replique EXATAMENTE o componente abaixo, pertencente ao Design System ${brandLabel} (${viewLabel}).
+  return `Você é um Desenvolvedor Front-end Especialista. Replique EXATAMENTE o componente abaixo, pertencente ao Design System ${brandLabel}${viewLabel ? ` (${viewLabel})` : ""}.
 
 ${sep}
 COMPONENTE: ${title.toUpperCase()}
