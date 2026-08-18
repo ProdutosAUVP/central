@@ -8,6 +8,8 @@ import { JornadaHeroi } from "@/components/widgets/JornadaHeroi";
 import { AIFood } from "@/components/widgets/AIFood";
 import { MarcaLogos } from "@/components/widgets/MarcaLogos";
 import { GlobalNav } from "@/components/GlobalNav";
+import { MenusSuperiores } from "@/components/widgets/MenusSuperiores";
+import { MenusLaterais } from "@/components/widgets/MenusLaterais";
 import { Icones } from "@/components/widgets/Icones";
 import { PaletaDataViz } from "@/components/widgets/PaletaDataViz";
 import { GraficoPizza } from "@/components/widgets/GraficoPizza";
@@ -1333,6 +1335,20 @@ const { toast } = useToast();
 
 
           {/* ===== NAVEGAÇÃO ===== */}
+          <Separator />
+          <section id="menus-superiores">
+            <h2 className="text-2xl font-bold mb-2">Menus Superiores</h2>
+            <p className="text-muted-foreground mb-6">Seis modelos independentes de navegação de topo — do institucional da Central ao mega menu de catálogo e à barra flutuante de produto. Não são variações de um mesmo componente: cada um resolve um cenário e uma densidade de conteúdo diferente.</p>
+            <MenusSuperiores />
+          </section>
+
+          <Separator />
+          <section id="menus-laterais">
+            <h2 className="text-2xl font-bold mb-2">Menus Laterais</h2>
+            <p className="text-muted-foreground mb-6">Seis modelos independentes de navegação lateral — documentação com grupos, editorial escura, trilho de ícones, workspace recolhível, drawer sobreposto e árvore de referência.</p>
+            <MenusLaterais />
+          </section>
+
           <Separator />
           <section id="steps">
             <h2 className="text-2xl font-bold mb-2">Steps (Wizard)</h2>
