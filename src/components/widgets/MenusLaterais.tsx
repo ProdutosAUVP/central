@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ComponentShowcase } from "@/components/design-system/ComponentShowcase";
 import { cn } from "@/lib/utils";
 import { olhoBranco, olhoPreto } from "@/assets/olhos";
@@ -17,9 +17,37 @@ import {
  * (documentação, editorial, app compacto, workspace, mobile e referência
  * técnica), então não são variações de um mesmo componente.
  *
- * Todos vivem dentro de uma moldura de altura fixa que simula a página —
- * nada usa position: fixed, para o catálogo poder ser lido em sequência.
+ * Os modelos são NAVEGÁVEIS de verdade: clicar num item troca a página
+ * mostrada ao lado, a busca filtra, o drawer abre e fecha no clique, no Esc
+ * e no overlay, e o item ativo carrega aria-current.
+ *
+ * Tudo vive dentro de uma moldura de altura fixa que simula a página — nada
+ * usa position: fixed, e nenhum overlay escapa do palco, porque o
+ * ComponentShowcase tem `overflow-hidden` na raiz e cortaria o que vazasse.
  */
+
+/** Fecha um painel ao apertar Esc ou clicar fora dele. */
+function useFecharAoSair(aberto: boolean, setAberto: (v: boolean) => void) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!aberto) return;
+    const aoClicar = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setAberto(false);
+    };
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAberto(false);
+    };
+    document.addEventListener("mousedown", aoClicar);
+    document.addEventListener("keydown", aoTeclar);
+    return () => {
+      document.removeEventListener("mousedown", aoClicar);
+      document.removeEventListener("keydown", aoTeclar);
+    };
+  }, [aberto, setAberto]);
+
+  return ref;
+}
 
 /** Moldura de página: menu à esquerda, conteúdo fantasma à direita. */
 function Palco({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -30,11 +58,12 @@ function Palco({ children, className }: { children: React.ReactNode; className?:
   );
 }
 
-/** Blocos cinzas que representam o conteúdo da página. */
+/** Blocos cinzas que representam o conteúdo da página aberta. */
 function ConteudoFantasma({ titulo }: { titulo: string }) {
   return (
     <div className="flex-1 min-w-0 overflow-hidden p-6">
-      <p className="text-sm font-anek font-bold text-foreground">{titulo}</p>
+      <p className="text-[10px] font-roboto uppercase tracking-wider text-muted-foreground">Você está em</p>
+      <p className="mt-0.5 text-sm font-anek font-bold text-foreground">{titulo}</p>
       <div className="mt-4 space-y-2.5">
         {[100, 92, 78, 96, 64, 88].map((w, i) => (
           <div key={i} className="h-2.5 rounded-full bg-muted" style={{ width: `${w}%` }} />
@@ -48,6 +77,9 @@ function ConteudoFantasma({ titulo }: { titulo: string }) {
     </div>
   );
 }
+
+const normalizar = (s: string) =>
+  s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 /* --------------------------------------------------- */
 /* 1. Documentação — busca + grupos colapsáveis         */
@@ -81,56 +113,80 @@ const GRUPOS_DOC = [
 
 export function LateralDocumentacao() {
   const [ativo, setAtivo] = useState("Menus laterais");
+  const [busca, setBusca] = useState("");
   const [abertos, setAbertos] = useState<Record<string, boolean>>({ Fundamentos: true, "Navegação": true });
+
+  // A busca filtra a lista de verdade; com filtro ativo todos os grupos abrem.
+  const q = normalizar(busca.trim());
+  const grupos = useMemo(() => {
+    if (!q) return GRUPOS_DOC;
+    return GRUPOS_DOC.map((g) => ({
+      ...g,
+      itens: g.itens.filter((i) => normalizar(i.label).includes(q)),
+    })).filter((g) => g.itens.length > 0);
+  }, [q]);
 
   return (
     <Palco>
-      <nav className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
+      <nav aria-label="Componentes" className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
         <div className="px-3 pb-3">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <div className="h-9 rounded-md border border-border bg-background pl-8 pr-3 text-sm font-roboto leading-9 text-muted-foreground">
-              Buscar componente…
-            </div>
+            <input
+              type="search"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Buscar componente…"
+              aria-label="Buscar componente"
+              className="h-9 w-full rounded-md border border-border bg-background pl-8 pr-3 text-sm font-roboto text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-foreground/30"
+            />
           </div>
         </div>
 
-        <div className="space-y-1 px-2">
-          {GRUPOS_DOC.map((g) => {
-            const aberto = abertos[g.titulo] ?? false;
-            return (
-              <div key={g.titulo}>
-                <button
-                  onClick={() => setAbertos((p) => ({ ...p, [g.titulo]: !aberto }))}
-                  className="flex w-full items-start justify-between gap-2 rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-                >
-                  <span className="flex-1 text-left leading-tight">{g.titulo}</span>
-                  <ChevronRight className={cn("mt-0.5 h-3.5 w-3.5 shrink-0 transition-transform", aberto && "rotate-90")} />
-                </button>
-                {aberto && (
-                  <ul className="mb-1 mt-1 space-y-0.5">
-                    {g.itens.map((i) => (
-                      <li key={i.label}>
-                        <button
-                          onClick={() => setAtivo(i.label)}
-                          className={cn(
-                            "flex w-full items-center gap-2.5 rounded-lg py-2 pl-6 pr-3 text-left text-sm font-anek leading-tight transition-colors",
-                            ativo === i.label
-                              ? "bg-muted font-semibold text-foreground"
-                              : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                          )}
-                        >
-                          <i.icon className="h-4 w-4 shrink-0" />
-                          <span className="flex-1">{i.label}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        {grupos.length === 0 ? (
+          <p className="px-4 py-6 text-center text-sm font-roboto text-muted-foreground">
+            Nenhum componente encontrado.
+          </p>
+        ) : (
+          <div className="space-y-1 px-2">
+            {grupos.map((g) => {
+              const aberto = q ? true : abertos[g.titulo] ?? false;
+              return (
+                <div key={g.titulo}>
+                  <button
+                    onClick={() => setAbertos((p) => ({ ...p, [g.titulo]: !aberto }))}
+                    aria-expanded={aberto}
+                    className="flex w-full items-start justify-between gap-2 rounded-md px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+                  >
+                    <span className="flex-1 text-left leading-tight">{g.titulo}</span>
+                    <ChevronRight className={cn("mt-0.5 h-3.5 w-3.5 shrink-0 transition-transform", aberto && "rotate-90")} />
+                  </button>
+                  {aberto && (
+                    <ul className="mb-1 mt-1 space-y-0.5">
+                      {g.itens.map((i) => (
+                        <li key={i.label}>
+                          <button
+                            onClick={() => setAtivo(i.label)}
+                            aria-current={ativo === i.label ? "page" : undefined}
+                            className={cn(
+                              "flex w-full items-center gap-2.5 rounded-lg py-2 pl-6 pr-3 text-left text-sm font-anek leading-tight transition-colors",
+                              ativo === i.label
+                                ? "bg-muted font-semibold text-foreground"
+                                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                            )}
+                          >
+                            <i.icon className="h-4 w-4 shrink-0" />
+                            <span className="flex-1">{i.label}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </nav>
       <ConteudoFantasma titulo={ativo} />
     </Palco>
@@ -148,7 +204,9 @@ export function LateralEditorialEscura() {
 
   return (
     <Palco>
-      <nav className="flex w-56 shrink-0 flex-col bg-[#18181b] py-8">
+      {/* Cores literais: as travas de contraste de .dark no index.css
+          neutralizam bg-zinc-900 e apagariam a superfície no tema escuro. */}
+      <nav aria-label="Seções" className="flex w-56 shrink-0 flex-col bg-[#18181b] py-8">
         <div className="px-8 pb-10">
           <img src={olhoBranco.url} alt="AUVP" className="h-9 w-9" />
         </div>
@@ -159,7 +217,8 @@ export function LateralEditorialEscura() {
               <li key={l}>
                 <button
                   onClick={() => setAtivo(l)}
-                  className="group flex w-full items-center gap-3 px-8 py-2.5 text-left"
+                  aria-current={on ? "page" : undefined}
+                  className="group flex w-full items-center gap-3 px-8 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
                 >
                   <span
                     className={cn(
@@ -190,7 +249,7 @@ export function LateralEditorialEscura() {
 }
 
 /* ------------------------------------------------- */
-/* 3. Trilho de ícones com flyout no hover            */
+/* 3. Trilho de ícones com flyout no hover e no foco  */
 /* ------------------------------------------------- */
 
 const TRILHO = [
@@ -203,29 +262,34 @@ const TRILHO = [
 
 export function LateralTrilhoIcones() {
   const [ativo, setAtivo] = useState("Carteira");
-  const [hover, setHover] = useState<string | null>(null);
+  // Um ícone sozinho não se explica: o rótulo precisa aparecer também
+  // para quem navega por teclado, não só no hover do mouse.
+  const [emFoco, setEmFoco] = useState<string | null>(null);
 
   return (
     <Palco>
-      <nav className="relative flex w-[68px] shrink-0 flex-col items-center border-r border-border bg-muted/30 py-4">
+      <nav aria-label="Áreas" className="relative flex w-[68px] shrink-0 flex-col items-center border-r border-border bg-muted/30 py-4">
         <div className="mb-6">
           <img src={olhoPreto.url} alt="AUVP" className="h-7 w-7 dark:hidden" />
           <img src={olhoBranco.url} alt="" aria-hidden="true" className="hidden h-7 w-7 dark:block" />
         </div>
 
         <ul className="flex flex-1 flex-col items-center gap-1.5">
-          {TRILHO.map((i) => (
+          {[...TRILHO, { label: "Configurações", icon: Settings }].slice(0, 5).map((i) => (
             <li
               key={i.label}
               className="relative"
-              onMouseEnter={() => setHover(i.label)}
-              onMouseLeave={() => setHover(null)}
+              onMouseEnter={() => setEmFoco(i.label)}
+              onMouseLeave={() => setEmFoco((f) => (f === i.label ? null : f))}
             >
               <button
                 onClick={() => setAtivo(i.label)}
+                onFocus={() => setEmFoco(i.label)}
+                onBlur={() => setEmFoco((f) => (f === i.label ? null : f))}
                 aria-label={i.label}
+                aria-current={ativo === i.label ? "page" : undefined}
                 className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-xl transition-colors",
+                  "flex h-10 w-10 items-center justify-center rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   ativo === i.label
                     ? "bg-foreground text-background"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -234,12 +298,13 @@ export function LateralTrilhoIcones() {
                 <i.icon className="h-[18px] w-[18px]" />
               </button>
               {ativo === i.label && (
-                <span className="absolute -left-[14px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-foreground" />
+                <span aria-hidden="true" className="absolute -left-[14px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-foreground" />
               )}
 
               <div
+                role="tooltip"
                 className="pointer-events-none absolute left-full top-1/2 z-30 ml-2 -translate-y-1/2 whitespace-nowrap rounded-lg border border-border bg-popover px-2.5 py-1.5 text-xs font-anek shadow-lg transition-all duration-150"
-                style={{ opacity: hover === i.label ? 1 : 0, transform: `translateY(-50%) translateX(${hover === i.label ? 0 : -4}px)` }}
+                style={{ opacity: emFoco === i.label ? 1 : 0, transform: `translateY(-50%) translateX(${emFoco === i.label ? 0 : -4}px)` }}
               >
                 {i.label}
               </div>
@@ -248,12 +313,24 @@ export function LateralTrilhoIcones() {
         </ul>
 
         <div className="flex flex-col items-center gap-1.5 pt-2">
-          <button className="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+          <button
+            onClick={() => setAtivo("Configurações")}
+            aria-label="Configurações"
+            aria-current={ativo === "Configurações" ? "page" : undefined}
+            className={cn(
+              "flex h-10 w-10 items-center justify-center rounded-xl transition-colors",
+              ativo === "Configurações" ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+          >
             <Settings className="h-[18px] w-[18px]" />
           </button>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-[10px] font-roboto font-bold">
+          <button
+            onClick={() => setAtivo("Minha conta")}
+            aria-label="Minha conta"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-[10px] font-roboto font-bold transition-colors hover:bg-muted/70"
+          >
             RC
-          </div>
+          </button>
         </div>
       </nav>
       <ConteudoFantasma titulo={ativo} />
@@ -290,6 +367,7 @@ export function LateralWorkspace() {
   return (
     <Palco>
       <nav
+        aria-label="Navegação do workspace"
         className={cn(
           "flex shrink-0 flex-col border-r border-border bg-card transition-[width] duration-300",
           recolhida ? "w-[68px]" : "w-64"
@@ -309,6 +387,7 @@ export function LateralWorkspace() {
           <button
             onClick={() => setRecolhida((r) => !r)}
             aria-label={recolhida ? "Expandir menu" : "Recolher menu"}
+            aria-expanded={!recolhida}
             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <ChevronsLeft className={cn("h-4 w-4 transition-transform", recolhida && "rotate-180")} />
@@ -329,6 +408,8 @@ export function LateralWorkspace() {
                     <button
                       onClick={() => setAtivo(i.label)}
                       title={recolhida ? i.label : undefined}
+                      aria-label={recolhida ? i.label : undefined}
+                      aria-current={ativo === i.label ? "page" : undefined}
                       className={cn(
                         "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-anek transition-colors",
                         recolhida && "justify-center px-0",
@@ -358,28 +439,41 @@ export function LateralWorkspace() {
 
         <div className="border-t border-border p-2">
           <button
+            onClick={() => setAtivo("Suporte")}
+            title={recolhida ? "Suporte" : undefined}
+            aria-current={ativo === "Suporte" ? "page" : undefined}
             className={cn(
-              "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-anek text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground",
-              recolhida && "justify-center px-0"
+              "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-anek transition-colors",
+              recolhida && "justify-center px-0",
+              ativo === "Suporte"
+                ? "bg-muted font-semibold text-foreground"
+                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             )}
           >
             <LifeBuoy className="h-4 w-4 shrink-0" />
             {!recolhida && <span>Suporte</span>}
           </button>
-          <div className={cn("mt-1 flex items-center gap-2.5 rounded-lg px-3 py-2", recolhida && "justify-center px-0")}>
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-roboto font-bold">
+          <button
+            onClick={() => setAtivo("Minha conta")}
+            title={recolhida ? "Minha conta" : undefined}
+            className={cn(
+              "mt-1 flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left transition-colors hover:bg-muted/60",
+              recolhida && "justify-center px-0"
+            )}
+          >
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-roboto font-bold">
               RC
-            </div>
+            </span>
             {!recolhida && (
               <>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-anek font-medium leading-tight">Raul Cardoso</p>
-                  <p className="truncate text-[10px] font-roboto text-muted-foreground">produto@auvp</p>
-                </div>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-xs font-anek font-medium leading-tight text-foreground">Raul Cardoso</span>
+                  <span className="block truncate text-[10px] font-roboto text-muted-foreground">produto@auvp</span>
+                </span>
                 <LogOut className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
               </>
             )}
-          </div>
+          </button>
         </div>
       </nav>
       <ConteudoFantasma titulo={ativo} />
@@ -392,16 +486,24 @@ export function LateralWorkspace() {
 /* ---------------------------------------------- */
 
 const ITENS_DRAWER = [
-  { label: "Editorias", filhos: true },
-  { label: "Guia de compras", filhos: true },
-  { label: "Podcasts", filhos: false },
-  { label: "Vídeos", filhos: false },
-  { label: "Serviços", filhos: true },
-  { label: "Newsletter", filhos: false },
+  { label: "Editorias", filhos: ["Economia", "Mercado", "Educação financeira"] },
+  { label: "Guia de compras", filhos: ["Livros", "Cursos", "Brindes"] },
+  { label: "Podcasts", filhos: [] as string[] },
+  { label: "Vídeos", filhos: [] },
+  { label: "Serviços", filhos: ["Assessoria", "Suporte"] },
+  { label: "Newsletter", filhos: [] },
 ];
 
 export function LateralDrawerSobreposto() {
   const [aberto, setAberto] = useState(true);
+  const [pagina, setPagina] = useState("Editorias");
+  const [expandido, setExpandido] = useState<string | null>("Editorias");
+  const ref = useFecharAoSair(aberto, setAberto);
+
+  const navegar = (destino: string) => {
+    setPagina(destino);
+    setAberto(false);
+  };
 
   return (
     <Palco className="relative">
@@ -409,6 +511,7 @@ export function LateralDrawerSobreposto() {
         <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-4">
           <button
             onClick={() => setAberto(true)}
+            aria-expanded={aberto}
             className="inline-flex items-center gap-2 rounded-lg border border-border px-2.5 py-1.5 text-xs font-anek font-bold uppercase tracking-wider text-foreground transition-colors hover:bg-muted"
           >
             <MenuIcon className="h-4 w-4" />
@@ -418,18 +521,24 @@ export function LateralDrawerSobreposto() {
             <img src={olhoPreto.url} alt="AUVP" className="h-7 w-7 dark:hidden" />
             <img src={olhoBranco.url} alt="" aria-hidden="true" className="hidden h-7 w-7 dark:block" />
           </div>
-          <Search className="h-4 w-4 text-muted-foreground" />
+          <button aria-label="Buscar" className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+            <Search className="h-4 w-4" />
+          </button>
         </header>
-        <ConteudoFantasma titulo="Conteúdo da página" />
+        <ConteudoFantasma titulo={pagina} />
       </div>
 
       <div
+        aria-hidden="true"
         className="absolute inset-0 z-10 bg-black/50 transition-opacity duration-300"
         style={{ opacity: aberto ? 1 : 0, pointerEvents: aberto ? "auto" : "none" }}
         onClick={() => setAberto(false)}
       />
 
       <nav
+        ref={ref}
+        aria-label="Navegação"
+        aria-hidden={!aberto}
         className="absolute inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background shadow-2xl transition-transform duration-300"
         style={{ transform: aberto ? "translateX(0)" : "translateX(-100%)", transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)" }}
       >
@@ -438,6 +547,7 @@ export function LateralDrawerSobreposto() {
           <button
             onClick={() => setAberto(false)}
             aria-label="Fechar menu"
+            tabIndex={aberto ? 0 : -1}
             className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <X className="h-4 w-4" />
@@ -445,18 +555,56 @@ export function LateralDrawerSobreposto() {
         </div>
 
         <ul className="flex-1 overflow-y-auto py-2">
-          {ITENS_DRAWER.map((i) => (
-            <li key={i.label}>
-              <button className="flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm font-anek text-foreground transition-colors hover:bg-muted">
-                {i.label}
-                {i.filhos && <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />}
-              </button>
-            </li>
-          ))}
+          {ITENS_DRAWER.map((i) => {
+            const temFilhos = i.filhos.length > 0;
+            const expandidoAqui = expandido === i.label;
+            return (
+              <li key={i.label}>
+                <button
+                  onClick={() => (temFilhos ? setExpandido(expandidoAqui ? null : i.label) : navegar(i.label))}
+                  tabIndex={aberto ? 0 : -1}
+                  aria-expanded={temFilhos ? expandidoAqui : undefined}
+                  aria-current={pagina === i.label ? "page" : undefined}
+                  className={cn(
+                    "flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm font-anek transition-colors hover:bg-muted",
+                    pagina === i.label ? "font-semibold text-foreground" : "text-foreground"
+                  )}
+                >
+                  {i.label}
+                  {temFilhos && (
+                    <ChevronRight className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform", expandidoAqui && "rotate-90")} />
+                  )}
+                </button>
+                {temFilhos && expandidoAqui && (
+                  <ul className="bg-muted/30 pb-1">
+                    {i.filhos.map((f) => (
+                      <li key={f}>
+                        <button
+                          onClick={() => navegar(f)}
+                          tabIndex={aberto ? 0 : -1}
+                          aria-current={pagina === f ? "page" : undefined}
+                          className={cn(
+                            "w-full py-2 pl-8 pr-4 text-left text-sm font-roboto transition-colors hover:text-foreground",
+                            pagina === f ? "font-semibold text-foreground" : "text-muted-foreground"
+                          )}
+                        >
+                          {f}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         <div className="border-t border-border px-4 py-3">
-          <button className="inline-flex items-center gap-2 text-xs font-roboto text-muted-foreground transition-colors hover:text-foreground">
+          <button
+            onClick={() => navegar("Minha conta")}
+            tabIndex={aberto ? 0 : -1}
+            className="inline-flex items-center gap-2 rounded text-xs font-roboto text-muted-foreground transition-colors hover:text-foreground"
+          >
             <Users className="h-3.5 w-3.5" />
             Entrar na conta
           </button>
@@ -513,10 +661,12 @@ function NoLista({
     <li>
       <button
         onClick={() => (temFilhos ? setAberto((a) => !a) : setAtivo(no.label))}
+        aria-expanded={temFilhos ? aberto : undefined}
+        aria-current={!temFilhos && ativo === no.label ? "page" : undefined}
         className={cn(
           "flex w-full items-center gap-1.5 rounded-md py-1.5 pr-2 text-left text-sm font-anek transition-colors",
-          ativo === no.label && !temFilhos
-            ? "font-semibold text-foreground"
+          !temFilhos && ativo === no.label
+            ? "bg-muted font-semibold text-foreground"
             : "text-muted-foreground hover:text-foreground"
         )}
         style={{ paddingLeft: nivel === 0 ? 8 : 10 }}
@@ -546,7 +696,7 @@ export function LateralArvore() {
 
   return (
     <Palco className="h-[440px]">
-      <nav className="w-64 shrink-0 overflow-y-auto border-r border-border p-3">
+      <nav aria-label="Documentação" className="w-64 shrink-0 overflow-y-auto border-r border-border p-3">
         <div className="mb-3 flex items-center gap-2 px-1">
           <img src={olhoPreto.url} alt="AUVP" className="h-6 w-6 dark:hidden" />
           <img src={olhoBranco.url} alt="" aria-hidden="true" className="hidden h-6 w-6 dark:block" />
@@ -567,41 +717,43 @@ export function LateralArvore() {
 /* Catálogo — os seis modelos, cada um no seu ComponentShowcase        */
 /* ------------------------------------------------------------------ */
 
-const CODIGO_DOC = `<nav className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
-  <div className="px-3 pb-3"><Input type="search" placeholder="Buscar componente…" className="pl-8 h-9" /></div>
+const CODIGO_DOC = `const [busca, setBusca] = useState("");
+const q = normalizar(busca.trim());
 
-  {GRUPOS.map((g) => (
+// a busca filtra de verdade; com filtro ativo todos os grupos abrem
+const grupos = useMemo(() => {
+  if (!q) return GRUPOS;
+  return GRUPOS.map((g) => ({ ...g, itens: g.itens.filter((i) => normalizar(i.label).includes(q)) }))
+               .filter((g) => g.itens.length > 0);
+}, [q]);
+
+<nav aria-label="Componentes" className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
+  <input type="search" value={busca} onChange={(e) => setBusca(e.target.value)} aria-label="Buscar componente" className="h-9 w-full rounded-md border border-border pl-8" />
+
+  {grupos.map((g) => (
     <div key={g.titulo}>
-      <button
-        onClick={() => alternar(g.titulo)}
-        className="flex w-full items-start justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-      >
+      <button onClick={() => alternar(g.titulo)} aria-expanded={aberto} className="flex w-full items-start justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider">
         {g.titulo}
         <ChevronRight className={cn("h-3.5 w-3.5 transition-transform", aberto && "rotate-90")} />
       </button>
-      {aberto && (
-        <ul>
-          {g.itens.map((i) => (
-            <li key={i.label}>
-              <button className={sidebarItemClass(ativo === i.label, "pl-6")}>
-                <i.icon className="h-4 w-4" />
-                {i.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      {aberto && g.itens.map((i) => (
+        <button onClick={() => setAtivo(i.label)} aria-current={ativo === i.label ? "page" : undefined} className={sidebarItemClass(ativo === i.label, "pl-6")}>
+          <i.icon className="h-4 w-4" />
+          {i.label}
+        </button>
+      ))}
     </div>
   ))}
 </nav>`;
 
-const CODIGO_EDITORIAL = `<nav className="flex w-56 flex-col bg-[#18181b] py-8">
+const CODIGO_EDITORIAL = `{/* cores literais: as travas de .dark no index.css neutralizam bg-zinc-900 */}
+<nav aria-label="Seções" className="flex w-56 flex-col bg-[#18181b] py-8">
   <div className="px-8 pb-10"><img src={olhoBranco.url} className="h-9 w-9" /></div>
 
   <ul className="space-y-1">
     {ITENS.map((l) => (
       <li key={l}>
-        <button onClick={() => setAtivo(l)} className="group flex w-full items-center gap-3 px-8 py-2.5">
+        <button onClick={() => setAtivo(l)} aria-current={on ? "page" : undefined} className="group flex w-full items-center gap-3 px-8 py-2.5">
           {/* traço que cresce da esquerda ao entrar no item ativo */}
           <span className={cn("h-px bg-amber-400 transition-all duration-300", on ? "w-4 opacity-100" : "w-0 opacity-0 group-hover:w-2")} />
           <span className={cn("text-xs font-anek font-bold uppercase tracking-[0.14em]", on ? "text-amber-400" : "text-[#a1a1aa] group-hover:text-white")}>
@@ -615,18 +767,30 @@ const CODIGO_EDITORIAL = `<nav className="flex w-56 flex-col bg-[#18181b] py-8">
   <div className="mt-auto px-8"><p className="text-[10px] uppercase text-[#71717a]">Edição 2026</p></div>
 </nav>`;
 
-const CODIGO_TRILHO = `<nav className="flex w-[68px] flex-col items-center border-r border-border bg-muted/30 py-4">
+const CODIGO_TRILHO = `const [emFoco, setEmFoco] = useState<string | null>(null);
+
+<nav aria-label="Áreas" className="flex w-[68px] flex-col items-center border-r border-border bg-muted/30 py-4">
   {ITENS.map((i) => (
-    <li key={i.label} className="relative" onMouseEnter={() => setHover(i.label)} onMouseLeave={() => setHover(null)}>
-      <button aria-label={i.label} className={cn("flex h-10 w-10 items-center justify-center rounded-xl", ativo === i.label ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted")}>
+    <li key={i.label} className="relative"
+        onMouseEnter={() => setEmFoco(i.label)}
+        onMouseLeave={() => setEmFoco((f) => (f === i.label ? null : f))}>
+      <button
+        onClick={() => setAtivo(i.label)}
+        onFocus={() => setEmFoco(i.label)}          {/* o rótulo também aparece no teclado */}
+        onBlur={() => setEmFoco((f) => (f === i.label ? null : f))}
+        aria-label={i.label}
+        aria-current={ativo === i.label ? "page" : undefined}
+        className={cn("flex h-10 w-10 items-center justify-center rounded-xl", ativo === i.label ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted")}
+      >
         <i.icon className="h-[18px] w-[18px]" />
       </button>
 
-      {/* marcador do item ativo colado na borda do trilho */}
+      {/* marcador do item ativo encostado na borda do trilho */}
       {ativo === i.label && <span className="absolute -left-[14px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-foreground" />}
 
       {/* flyout com o rótulo — o ícone sozinho nunca basta */}
-      <div className="pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2 rounded-lg border border-border bg-popover px-2.5 py-1.5 text-xs shadow-lg" style={{ opacity: hover === i.label ? 1 : 0 }}>
+      <div role="tooltip" className="pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2 rounded-lg border border-border bg-popover px-2.5 py-1.5 text-xs shadow-lg"
+           style={{ opacity: emFoco === i.label ? 1 : 0 }}>
         {i.label}
       </div>
     </li>
@@ -638,44 +802,45 @@ const CODIGO_WORKSPACE = `<nav className={cn("flex flex-col border-r border-bord
   <div className="flex items-center gap-2.5 border-b border-border p-3">
     <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-background">AU</div>
     {!recolhida && <div><p className="text-sm font-semibold">AUVP Capital</p><p className="text-[11px] text-muted-foreground">Plano Produto</p></div>}
-    <button onClick={() => setRecolhida((r) => !r)}><ChevronsLeft className={cn("h-4 w-4", recolhida && "rotate-180")} /></button>
+    <button onClick={() => setRecolhida((r) => !r)} aria-label={recolhida ? "Expandir menu" : "Recolher menu"} aria-expanded={!recolhida}>
+      <ChevronsLeft className={cn("h-4 w-4", recolhida && "rotate-180")} />
+    </button>
   </div>
 
-  {/* itens com contador — some junto com o rótulo quando recolhe */}
-  <button className={cn("flex w-full items-center gap-2.5 rounded-lg px-3 py-2", recolhida && "justify-center px-0")}>
+  {/* item com contador — recolhido vira só ícone, com title/aria-label pelo rótulo */}
+  <button onClick={() => setAtivo(i.label)} title={recolhida ? i.label : undefined} aria-label={recolhida ? i.label : undefined}
+          aria-current={ativo === i.label ? "page" : undefined}
+          className={cn("flex w-full items-center gap-2.5 rounded-lg px-3 py-2", recolhida && "justify-center px-0")}>
     <i.icon className="h-4 w-4" />
     {!recolhida && <><span className="flex-1 truncate">{i.label}</span>
       {i.contador && <span className="rounded-full bg-primary/10 px-1.5 text-[10px] font-bold text-primary">{i.contador}</span>}</>}
   </button>
 
-  {/* rodapé fixo com usuário */}
+  {/* rodapé fixo com suporte e usuário */}
   <div className="border-t border-border p-2">…</div>
 </nav>`;
 
-const CODIGO_DRAWER = `{/* overlay escurece a página e fecha no clique */}
-<div
-  className="absolute inset-0 z-10 bg-black/50 transition-opacity duration-300"
-  style={{ opacity: aberto ? 1 : 0, pointerEvents: aberto ? "auto" : "none" }}
-  onClick={() => setAberto(false)}
-/>
+const CODIGO_DRAWER = `const ref = useFecharAoSair(aberto, setAberto);   // Esc + clique fora
+const navegar = (destino: string) => { setPagina(destino); setAberto(false); };
 
-{/* painel entra deslizando pela esquerda */}
-<nav
-  className="absolute inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background shadow-2xl transition-transform duration-300"
-  style={{ transform: aberto ? "translateX(0)" : "translateX(-100%)" }}
->
-  <div className="flex items-center justify-between border-b border-border px-4 py-3">
-    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Navegar</span>
-    <button onClick={() => setAberto(false)} aria-label="Fechar menu"><X className="h-4 w-4" /></button>
-  </div>
+{/* overlay escurece a página e fecha no clique */}
+<div className="absolute inset-0 z-10 bg-black/50 transition-opacity duration-300"
+     style={{ opacity: aberto ? 1 : 0, pointerEvents: aberto ? "auto" : "none" }}
+     onClick={() => setAberto(false)} />
 
+{/* painel entra deslizando pela esquerda; fechado, sai da ordem de tabulação */}
+<nav ref={ref} aria-hidden={!aberto}
+     className="absolute inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background shadow-2xl transition-transform duration-300"
+     style={{ transform: aberto ? "translateX(0)" : "translateX(-100%)" }}>
   <ul className="flex-1 overflow-y-auto py-2">
     {ITENS.map((i) => (
       <li key={i.label}>
-        <button className="flex w-full items-center justify-between px-4 py-3 text-sm hover:bg-muted">
+        <button onClick={() => (temFilhos ? setExpandido(...) : navegar(i.label))} tabIndex={aberto ? 0 : -1} aria-expanded={temFilhos ? expandidoAqui : undefined}>
           {i.label}
-          {i.filhos && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+          {temFilhos && <ChevronRight className={cn("h-4 w-4", expandidoAqui && "rotate-90")} />}
         </button>
+        {/* submenu abre no próprio painel, sem empurrar uma segunda camada */}
+        {expandidoAqui && <ul className="bg-muted/30">{i.filhos.map((f) => <li key={f}><button onClick={() => navegar(f)} className="pl-8">{f}</button></li>)}</ul>}
       </li>
     ))}
   </ul>
@@ -689,6 +854,8 @@ const CODIGO_ARVORE = `function No({ no, nivel, ativo, setAtivo }) {
     <li>
       <button
         onClick={() => (temFilhos ? setAberto((a) => !a) : setAtivo(no.label))}
+        aria-expanded={temFilhos ? aberto : undefined}
+        aria-current={!temFilhos && ativo === no.label ? "page" : undefined}
         style={{ paddingLeft: nivel === 0 ? 8 : 10 }}
         className="flex w-full items-center gap-1.5 rounded-md py-1.5 text-left text-sm"
       >
@@ -711,7 +878,7 @@ export function MenusLaterais() {
     <div className="w-full space-y-8">
       <ComponentShowcase
         title="1. Documentação com grupos colapsáveis"
-        description="O menu do próprio Design System: busca no topo, categorias que abrem e fecham e item ativo com fundo sutil. Aguenta dezenas de destinos sem virar uma lista infinita — é o modelo para conteúdo longo e catalogado."
+        description="O menu do próprio Design System: a busca filtra a lista, as categorias abrem e fecham e o item ativo ganha fundo sutil. Aguenta dezenas de destinos sem virar uma lista infinita — é o modelo para conteúdo longo e catalogado."
         code={CODIGO_DOC}
       >
         <LateralDocumentacao />
@@ -727,7 +894,7 @@ export function MenusLaterais() {
 
       <ComponentShowcase
         title="3. Trilho de ícones com flyout"
-        description="Barra estreita só de ícones, com marcador na borda e o rótulo aparecendo em flyout no hover. Devolve largura ao conteúdo em telas de trabalho — exige ícones inequívocos e no máximo seis ou sete destinos."
+        description="Barra estreita só de ícones, com marcador na borda e o rótulo aparecendo em flyout no hover e no foco do teclado. Devolve largura ao conteúdo em telas de trabalho — exige ícones inequívocos e no máximo seis ou sete destinos."
         code={CODIGO_TRILHO}
       >
         <LateralTrilhoIcones />
@@ -743,7 +910,7 @@ export function MenusLaterais() {
 
       <ComponentShowcase
         title="5. Drawer sobreposto"
-        description="O menu não ocupa espaço: entra deslizando por cima do conteúdo, com overlay que escurece a página e fecha no clique. Modelo para mobile e telas estreitas, e também para navegação secundária em desktop."
+        description="O menu não ocupa espaço: entra deslizando por cima do conteúdo, com overlay que escurece a página e fecha no clique ou no Esc. Os itens com seta abrem submenu no próprio painel. Modelo para mobile e telas estreitas."
         code={CODIGO_DRAWER}
       >
         <LateralDrawerSobreposto />
