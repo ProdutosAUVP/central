@@ -13,6 +13,7 @@ import {
   Tag as TagIcon, CircleUser,
   TrendingUp, SquareStack, Network, Gauge, MoreHorizontal, Book,
   MousePointerClick, StarHalf, TextCursorInput, LayoutList, Layers2,
+  PanelTop, PanelLeft,
 } from "lucide-react";
 
 export type SectionDef = {
@@ -71,6 +72,8 @@ export const sections: SectionDefWithKeywords[] = [
   { id: "drawer-multi", label: "Drawer Multi-nível", icon: SquareStack, category: "feedback", keywords: "drawer menu lateral nested empilhado overlay" },
 
   // NAVEGAÇÃO — orientação e deslocamento entre conteúdos
+  { id: "menus-superiores", label: "Menus Superiores", icon: PanelTop, category: "navegacao", keywords: "menu topo header navbar navegação superior mega menu topbar catálogo" },
+  { id: "menus-laterais", label: "Menus Laterais", icon: PanelLeft, category: "navegacao", keywords: "menu lateral sidebar navegação lateral rail trilho drawer árvore" },
   { id: "steps", label: "Steps (Wizard)", icon: ListChecks, category: "navegacao", keywords: "wizard passos etapas stepper" },
   { id: "anchor", label: "Anchor (Scroll Spy)", icon: AnchorIcon, category: "navegacao", keywords: "scroll spy âncora navegação" },
   { id: "tabs-geist", label: "Tabs", icon: Columns3, category: "navegacao", keywords: "tabs abas guia geist underline" },
