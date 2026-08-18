@@ -1338,14 +1338,14 @@ const { toast } = useToast();
           <Separator />
           <section id="menus-superiores">
             <h2 className="text-2xl font-bold mb-2">Menus Superiores</h2>
-            <p className="text-muted-foreground mb-6">Seis modelos independentes de navegação de topo — do institucional da Central ao mega menu de catálogo e à barra flutuante de produto. Não são variações de um mesmo componente: cada um resolve um cenário e uma densidade de conteúdo diferente.</p>
+            <p className="text-muted-foreground mb-6">Seis modelos independentes de navegação de topo — do institucional da Central ao mega menu de catálogo, à barra flutuante e ao portal multimarca. Todos carregam os mesmos destinos de propósito: o que muda de um para o outro é só a forma de navegar.</p>
             <MenusSuperiores />
           </section>
 
           <Separator />
           <section id="menus-laterais">
             <h2 className="text-2xl font-bold mb-2">Menus Laterais</h2>
-            <p className="text-muted-foreground mb-6">Seis modelos independentes de navegação lateral — documentação com grupos, editorial escura, trilho de ícones, workspace recolhível, drawer sobreposto e árvore de referência.</p>
+            <p className="text-muted-foreground mb-6">Seis modelos independentes de navegação lateral — documentação com grupos, índice sem fundo à direita do texto, trilho de ícones, workspace recolhível, drawer sobreposto e árvore de referência. Também com os mesmos destinos em todos.</p>
             <MenusLaterais />
           </section>
 

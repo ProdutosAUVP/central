@@ -3,23 +3,29 @@ import { ComponentShowcase } from "@/components/design-system/ComponentShowcase"
 import { cn } from "@/lib/utils";
 import { olhoBranco, olhoPreto } from "@/assets/olhos";
 import {
-  Search, ChevronRight, ChevronDown, ChevronsLeft, Home, Users, Palette,
-  Layers, BookOpen, BarChart3, Wallet, GraduationCap, Video,
-  MessageCircle, Settings, LifeBuoy, X, Menu as MenuIcon, LogOut, Bell,
-  FileText, Folder, Hash,
+  MENU_AUVP, UTILITARIOS_MENU_AUVP, ITEM_PADRAO_MENU, itemMenu, gruposComItens,
+} from "@/data/menusCatalogo";
+import {
+  Search, ChevronRight, ChevronDown, ChevronsLeft, Settings, LifeBuoy,
+  X, Menu as MenuIcon, LogOut, Users, ArrowRight,
 } from "lucide-react";
 
 /**
  * Catálogo de menus laterais
  * --------------------------
  * Seis modelos independentes de navegação lateral para apresentar à
- * liderança. Cada um assume uma densidade e um tipo de conteúdo diferente
- * (documentação, editorial, app compacto, workspace, mobile e referência
- * técnica), então não são variações de um mesmo componente.
+ * liderança. Cada um assume uma densidade e um tipo de página diferente
+ * (documentação, leitura longa, app compacto, workspace, mobile e
+ * referência técnica), então não são variações de um mesmo componente.
+ *
+ * TODOS usam a mesma navegação de exemplo (`src/data/menusCatalogo.ts`): o
+ * catálogo compara formas de navegar, não conteúdos. O que muda de um
+ * modelo para o outro é quanto da hierarquia cada um consegue mostrar.
  *
  * Os modelos são NAVEGÁVEIS de verdade: clicar num item troca a página
- * mostrada ao lado, a busca filtra, o drawer abre e fecha no clique, no Esc
- * e no overlay, e o item ativo carrega aria-current.
+ * mostrada ao lado, a busca filtra, o índice acompanha a rolagem, o drawer
+ * abre e fecha no clique, no Esc e no overlay, e o item ativo carrega
+ * aria-current.
  *
  * Tudo vive dentro de uma moldura de altura fixa que simula a página — nada
  * usa position: fixed, e nenhum overlay escapa do palco, porque o
@@ -49,7 +55,7 @@ function useFecharAoSair(aberto: boolean, setAberto: (v: boolean) => void) {
   return ref;
 }
 
-/** Moldura de página: menu à esquerda, conteúdo fantasma à direita. */
+/** Moldura de página: menu de um lado, conteúdo do outro. */
 function Palco({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={cn("flex w-full h-[400px] rounded-xl border border-border bg-background overflow-hidden", className)}>
@@ -61,7 +67,7 @@ function Palco({ children, className }: { children: React.ReactNode; className?:
 /** Blocos cinzas que representam o conteúdo da página aberta. */
 function ConteudoFantasma({ titulo }: { titulo: string }) {
   return (
-    <div className="flex-1 min-w-0 overflow-hidden p-6">
+    <div className="min-w-0 flex-1 overflow-hidden p-6">
       <p className="text-[10px] font-roboto uppercase tracking-wider text-muted-foreground">Você está em</p>
       <p className="mt-0.5 text-sm font-anek font-bold text-foreground">{titulo}</p>
       <div className="mt-4 space-y-2.5">
@@ -81,46 +87,25 @@ function ConteudoFantasma({ titulo }: { titulo: string }) {
 const normalizar = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+const GRUPOS = gruposComItens();
+const COM_FILHOS = itemMenu(ITEM_PADRAO_MENU);
+
 /* --------------------------------------------------- */
 /* 1. Documentação — busca + grupos colapsáveis         */
 /* --------------------------------------------------- */
 
-const GRUPOS_DOC = [
-  {
-    titulo: "Fundamentos",
-    itens: [
-      { label: "Introdução", icon: BookOpen },
-      { label: "Marca & Logos", icon: Palette },
-      { label: "Tipografia", icon: FileText },
-    ],
-  },
-  {
-    titulo: "Navegação",
-    itens: [
-      { label: "Menus superiores", icon: Layers },
-      { label: "Menus laterais", icon: Layers },
-      { label: "Breadcrumb", icon: ChevronRight },
-    ],
-  },
-  {
-    titulo: "Exibição de dados",
-    itens: [
-      { label: "Tabela", icon: BarChart3 },
-      { label: "Gráficos", icon: BarChart3 },
-    ],
-  },
-];
-
 export function LateralDocumentacao() {
-  const [ativo, setAtivo] = useState("Menus laterais");
+  const [ativo, setAtivo] = useState(COM_FILHOS.label);
   const [busca, setBusca] = useState("");
-  const [abertos, setAbertos] = useState<Record<string, boolean>>({ Fundamentos: true, "Navegação": true });
+  const [abertos, setAbertos] = useState<Record<string, boolean>>(
+    Object.fromEntries(GRUPOS.map((g) => [g.titulo, true]))
+  );
 
   // A busca filtra a lista de verdade; com filtro ativo todos os grupos abrem.
   const q = normalizar(busca.trim());
   const grupos = useMemo(() => {
-    if (!q) return GRUPOS_DOC;
-    return GRUPOS_DOC.map((g) => ({
+    if (!q) return GRUPOS;
+    return GRUPOS.map((g) => ({
       ...g,
       itens: g.itens.filter((i) => normalizar(i.label).includes(q)),
     })).filter((g) => g.itens.length > 0);
@@ -128,7 +113,7 @@ export function LateralDocumentacao() {
 
   return (
     <Palco>
-      <nav aria-label="Componentes" className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
+      <nav aria-label="Conteúdo" className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
         <div className="px-3 pb-3">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -136,8 +121,8 @@ export function LateralDocumentacao() {
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar componente…"
-              aria-label="Buscar componente"
+              placeholder="Buscar…"
+              aria-label="Buscar no menu"
               className="h-9 w-full rounded-md border border-border bg-background pl-8 pr-3 text-sm font-roboto text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-foreground/30"
             />
           </div>
@@ -145,7 +130,7 @@ export function LateralDocumentacao() {
 
         {grupos.length === 0 ? (
           <p className="px-4 py-6 text-center text-sm font-roboto text-muted-foreground">
-            Nenhum componente encontrado.
+            Nenhum item encontrado.
           </p>
         ) : (
           <div className="space-y-1 px-2">
@@ -164,7 +149,7 @@ export function LateralDocumentacao() {
                   {aberto && (
                     <ul className="mb-1 mt-1 space-y-0.5">
                       {g.itens.map((i) => (
-                        <li key={i.label}>
+                        <li key={i.id}>
                           <button
                             onClick={() => setAtivo(i.label)}
                             aria-current={ativo === i.label ? "page" : undefined}
@@ -193,57 +178,99 @@ export function LateralDocumentacao() {
   );
 }
 
-/* ------------------------------------------------ */
-/* 2. Editorial escuro — rótulos secos e traço ativo */
-/* ------------------------------------------------ */
+/* ---------------------------------------------------------- */
+/* 2. Índice sem fundo — à direita do conteúdo, depois do hero */
+/* ---------------------------------------------------------- */
 
-const ITENS_EDITORIAL = ["Início", "Ingressos", "Roteiro", "Histórico", "Edições", "FAQ"];
+export function LateralIndiceSemFundo() {
+  const [ativo, setAtivo] = useState(MENU_AUVP[0].id);
+  const rolagemRef = useRef<HTMLDivElement>(null);
+  const marcandoRef = useRef(false);
 
-export function LateralEditorialEscura() {
-  const [ativo, setAtivo] = useState("Roteiro");
+  const irPara = (id: string) => {
+    const container = rolagemRef.current;
+    const secao = container?.querySelector<HTMLElement>(`[data-secao="${id}"]`);
+    if (!container || !secao) return;
+    // Trava o spy enquanto a rolagem suave acontece, senão o destaque
+    // pisca nas seções do caminho.
+    marcandoRef.current = true;
+    setAtivo(id);
+    container.scrollTo({ top: secao.offsetTop - 12, behavior: "smooth" });
+    window.setTimeout(() => {
+      marcandoRef.current = false;
+    }, 500);
+  };
+
+  // Scroll-spy: o índice acompanha a leitura, que é o ponto deste modelo.
+  const aoRolar = () => {
+    if (marcandoRef.current) return;
+    const container = rolagemRef.current;
+    if (!container) return;
+    const secoes = Array.from(container.querySelectorAll<HTMLElement>("[data-secao]"));
+    const atual = secoes.filter((s) => s.offsetTop - 24 <= container.scrollTop).pop() ?? secoes[0];
+    if (atual) setAtivo(atual.dataset.secao!);
+  };
 
   return (
-    <Palco>
-      {/* Cores literais: as travas de contraste de .dark no index.css
-          neutralizam bg-zinc-900 e apagariam a superfície no tema escuro. */}
-      <nav aria-label="Seções" className="flex w-56 shrink-0 flex-col bg-[#18181b] py-8">
-        <div className="px-8 pb-10">
-          <img src={olhoBranco.url} alt="AUVP" className="h-9 w-9" />
+    <Palco className="h-[440px] flex-col">
+      {/* Hero: o índice só começa depois dele. */}
+      <div className="shrink-0 border-b border-border bg-muted/30 px-8 py-6">
+        <p className="text-[10px] font-roboto uppercase tracking-wider text-muted-foreground">Manual</p>
+        <h3 className="mt-1 font-anek text-xl font-bold leading-tight text-foreground">
+          Guia da plataforma AUVP
+        </h3>
+        <p className="mt-1 max-w-md text-xs font-roboto leading-relaxed text-muted-foreground">
+          Tudo o que existe na plataforma, explicado na ordem em que você vai usar.
+        </p>
+      </div>
+
+      <div ref={rolagemRef} onScroll={aoRolar} className="flex flex-1 gap-8 overflow-y-auto px-8 py-6">
+        <div className="min-w-0 flex-1 space-y-8">
+          {MENU_AUVP.map((item) => (
+            <section key={item.id} data-secao={item.id} className="scroll-mt-4">
+              <h4 className="font-anek text-sm font-bold text-foreground">{item.label}</h4>
+              <p className="mt-1 text-xs font-roboto leading-relaxed text-muted-foreground">{item.desc}</p>
+              <div className="mt-3 space-y-2">
+                {[100, 88, 72].map((w, i) => (
+                  <div key={i} className="h-2 rounded-full bg-muted" style={{ width: `${w}%` }} />
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
-        <ul className="space-y-1">
-          {ITENS_EDITORIAL.map((l) => {
-            const on = ativo === l;
-            return (
-              <li key={l}>
-                <button
-                  onClick={() => setAtivo(l)}
-                  aria-current={on ? "page" : undefined}
-                  className="group flex w-full items-center gap-3 px-8 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
-                >
-                  <span
+
+        {/* O menu: sem fundo, sem borda de caixa — só tipografia e um traço. */}
+        <nav aria-label="Nesta página" className="sticky top-0 hidden w-44 shrink-0 self-start md:block">
+          <p className="mb-3 text-[10px] font-roboto font-bold uppercase tracking-wider text-muted-foreground">
+            Nesta página
+          </p>
+          <ul className="space-y-0.5 border-l border-border">
+            {MENU_AUVP.map((item) => {
+              const on = ativo === item.id;
+              return (
+                <li key={item.id}>
+                  <button
+                    onClick={() => irPara(item.id)}
+                    aria-current={on ? "true" : undefined}
                     className={cn(
-                      "h-px shrink-0 bg-amber-400 transition-all duration-300",
-                      on ? "w-4 opacity-100" : "w-0 opacity-0 group-hover:w-2 group-hover:opacity-60"
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "text-xs font-anek font-bold uppercase tracking-[0.14em] transition-colors",
-                      on ? "text-amber-400" : "text-[#a1a1aa] group-hover:text-white"
+                      "-ml-px flex w-full items-center border-l py-1.5 pl-3 text-left text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
+                      on
+                        ? "border-foreground font-semibold text-foreground"
+                        : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
                     )}
                   >
-                    {l}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-        <div className="mt-auto px-8">
-          <p className="text-[10px] font-roboto uppercase tracking-wider text-[#71717a]">Edição 2026</p>
-        </div>
-      </nav>
-      <ConteudoFantasma titulo={ativo} />
+                    {item.label}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <button className="mt-4 inline-flex items-center gap-1.5 pl-3 text-xs font-roboto text-muted-foreground transition-colors hover:text-foreground">
+            {UTILITARIOS_MENU_AUVP[2]}
+            <ArrowRight className="h-3 w-3" />
+          </button>
+        </nav>
+      </div>
     </Palco>
   );
 }
@@ -252,16 +279,8 @@ export function LateralEditorialEscura() {
 /* 3. Trilho de ícones com flyout no hover e no foco  */
 /* ------------------------------------------------- */
 
-const TRILHO = [
-  { label: "Início", icon: Home },
-  { label: "Carteira", icon: Wallet },
-  { label: "Aulas", icon: GraduationCap },
-  { label: "Lives", icon: Video },
-  { label: "Comunidade", icon: MessageCircle },
-];
-
 export function LateralTrilhoIcones() {
-  const [ativo, setAtivo] = useState("Carteira");
+  const [ativo, setAtivo] = useState(COM_FILHOS.label);
   // Um ícone sozinho não se explica: o rótulo precisa aparecer também
   // para quem navega por teclado, não só no hover do mouse.
   const [emFoco, setEmFoco] = useState<string | null>(null);
@@ -275,9 +294,9 @@ export function LateralTrilhoIcones() {
         </div>
 
         <ul className="flex flex-1 flex-col items-center gap-1.5">
-          {[...TRILHO, { label: "Configurações", icon: Settings }].slice(0, 5).map((i) => (
+          {MENU_AUVP.map((i) => (
             <li
-              key={i.label}
+              key={i.id}
               className="relative"
               onMouseEnter={() => setEmFoco(i.label)}
               onMouseLeave={() => setEmFoco((f) => (f === i.label ? null : f))}
@@ -299,6 +318,11 @@ export function LateralTrilhoIcones() {
               </button>
               {ativo === i.label && (
                 <span aria-hidden="true" className="absolute -left-[14px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-foreground" />
+              )}
+              {i.contador && (
+                <span className="pointer-events-none absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-roboto font-bold text-primary-foreground">
+                  {i.contador}
+                </span>
               )}
 
               <div
@@ -342,26 +366,8 @@ export function LateralTrilhoIcones() {
 /* 4. Workspace de app — grupos, contadores e recolhimento   */
 /* -------------------------------------------------------- */
 
-const GRUPOS_APP = [
-  {
-    titulo: "Geral",
-    itens: [
-      { label: "Visão geral", icon: Home, contador: null as string | null },
-      { label: "Relatórios", icon: BarChart3, contador: null },
-      { label: "Notificações", icon: Bell, contador: "12" },
-    ],
-  },
-  {
-    titulo: "Conteúdo",
-    itens: [
-      { label: "Aulas", icon: GraduationCap, contador: null },
-      { label: "Comunidade", icon: MessageCircle, contador: "3" },
-    ],
-  },
-];
-
 export function LateralWorkspace() {
-  const [ativo, setAtivo] = useState("Relatórios");
+  const [ativo, setAtivo] = useState(COM_FILHOS.label);
   const [recolhida, setRecolhida] = useState(false);
 
   return (
@@ -395,7 +401,7 @@ export function LateralWorkspace() {
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto p-2">
-          {GRUPOS_APP.map((g) => (
+          {GRUPOS.map((g) => (
             <div key={g.titulo}>
               {!recolhida && (
                 <p className="px-3 pb-1 pt-1 text-[10px] font-roboto font-bold uppercase tracking-wider text-muted-foreground">
@@ -404,7 +410,7 @@ export function LateralWorkspace() {
               )}
               <ul className="space-y-0.5">
                 {g.itens.map((i) => (
-                  <li key={i.label}>
+                  <li key={i.id}>
                     <button
                       onClick={() => setAtivo(i.label)}
                       title={recolhida ? i.label : undefined}
@@ -439,19 +445,19 @@ export function LateralWorkspace() {
 
         <div className="border-t border-border p-2">
           <button
-            onClick={() => setAtivo("Suporte")}
-            title={recolhida ? "Suporte" : undefined}
-            aria-current={ativo === "Suporte" ? "page" : undefined}
+            onClick={() => setAtivo(UTILITARIOS_MENU_AUVP[0])}
+            title={recolhida ? UTILITARIOS_MENU_AUVP[0] : undefined}
+            aria-current={ativo === UTILITARIOS_MENU_AUVP[0] ? "page" : undefined}
             className={cn(
               "flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-anek transition-colors",
               recolhida && "justify-center px-0",
-              ativo === "Suporte"
+              ativo === UTILITARIOS_MENU_AUVP[0]
                 ? "bg-muted font-semibold text-foreground"
                 : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             )}
           >
             <LifeBuoy className="h-4 w-4 shrink-0" />
-            {!recolhida && <span>Suporte</span>}
+            {!recolhida && <span className="truncate">{UTILITARIOS_MENU_AUVP[0]}</span>}
           </button>
           <button
             onClick={() => setAtivo("Minha conta")}
@@ -485,19 +491,10 @@ export function LateralWorkspace() {
 /* 5. Drawer sobreposto — mobile e telas estreitas */
 /* ---------------------------------------------- */
 
-const ITENS_DRAWER = [
-  { label: "Editorias", filhos: ["Economia", "Mercado", "Educação financeira"] },
-  { label: "Guia de compras", filhos: ["Livros", "Cursos", "Brindes"] },
-  { label: "Podcasts", filhos: [] as string[] },
-  { label: "Vídeos", filhos: [] },
-  { label: "Serviços", filhos: ["Assessoria", "Suporte"] },
-  { label: "Newsletter", filhos: [] },
-];
-
 export function LateralDrawerSobreposto() {
   const [aberto, setAberto] = useState(true);
-  const [pagina, setPagina] = useState("Editorias");
-  const [expandido, setExpandido] = useState<string | null>("Editorias");
+  const [pagina, setPagina] = useState(COM_FILHOS.label);
+  const [expandido, setExpandido] = useState<string | null>(ITEM_PADRAO_MENU);
   const ref = useFecharAoSair(aberto, setAberto);
 
   const navegar = (destino: string) => {
@@ -555,13 +552,13 @@ export function LateralDrawerSobreposto() {
         </div>
 
         <ul className="flex-1 overflow-y-auto py-2">
-          {ITENS_DRAWER.map((i) => {
-            const temFilhos = i.filhos.length > 0;
-            const expandidoAqui = expandido === i.label;
+          {MENU_AUVP.map((i) => {
+            const temFilhos = Boolean(i.filhos?.length);
+            const expandidoAqui = expandido === i.id;
             return (
-              <li key={i.label}>
+              <li key={i.id}>
                 <button
-                  onClick={() => (temFilhos ? setExpandido(expandidoAqui ? null : i.label) : navegar(i.label))}
+                  onClick={() => (temFilhos ? setExpandido(expandidoAqui ? null : i.id) : navegar(i.label))}
                   tabIndex={aberto ? 0 : -1}
                   aria-expanded={temFilhos ? expandidoAqui : undefined}
                   aria-current={pagina === i.label ? "page" : undefined}
@@ -577,18 +574,18 @@ export function LateralDrawerSobreposto() {
                 </button>
                 {temFilhos && expandidoAqui && (
                   <ul className="bg-muted/30 pb-1">
-                    {i.filhos.map((f) => (
-                      <li key={f}>
+                    {i.filhos!.map((f) => (
+                      <li key={f.id}>
                         <button
-                          onClick={() => navegar(f)}
+                          onClick={() => navegar(f.label)}
                           tabIndex={aberto ? 0 : -1}
-                          aria-current={pagina === f ? "page" : undefined}
+                          aria-current={pagina === f.label ? "page" : undefined}
                           className={cn(
                             "w-full py-2 pl-8 pr-4 text-left text-sm font-roboto transition-colors hover:text-foreground",
-                            pagina === f ? "font-semibold text-foreground" : "text-muted-foreground"
+                            pagina === f.label ? "font-semibold text-foreground" : "text-muted-foreground"
                           )}
                         >
-                          {f}
+                          {f.label}
                         </button>
                       </li>
                     ))}
@@ -615,32 +612,21 @@ export function LateralDrawerSobreposto() {
 }
 
 /* ------------------------------------------------------- */
-/* 6. Árvore de referência — níveis aninhados com linha guia */
+/* 6. Árvore de referência — grupo, item e filho aninhados  */
 /* ------------------------------------------------------- */
 
-type NoArvore = { label: string; icon?: React.ElementType; filhos?: NoArvore[] };
+type NoArvore = { id: string; label: string; icon?: React.ElementType; filhos?: NoArvore[] };
 
-const ARVORE: NoArvore[] = [
-  {
-    label: "Começando",
-    icon: Folder,
-    filhos: [{ label: "Instalação" }, { label: "Primeiros passos" }],
-  },
-  {
-    label: "Produtos",
-    icon: Folder,
-    filhos: [
-      { label: "Analítica", filhos: [{ label: "Visão geral" }, { label: "Indicadores" }] },
-      { label: "PIAR", filhos: [{ label: "Como funciona" }, { label: "Perguntas frequentes" }] },
-      { label: "Carteira" },
-    ],
-  },
-  {
-    label: "Referência",
-    icon: Hash,
-    filhos: [{ label: "Tokens" }, { label: "Componentes" }],
-  },
-];
+const ARVORE: NoArvore[] = GRUPOS.map((g) => ({
+  id: g.titulo,
+  label: g.titulo,
+  filhos: g.itens.map((i) => ({
+    id: i.id,
+    label: i.label,
+    icon: i.icon,
+    filhos: i.filhos?.map((f) => ({ id: f.id, label: f.label })),
+  })),
+}));
 
 function NoLista({
   no,
@@ -653,7 +639,7 @@ function NoLista({
   ativo: string;
   setAtivo: (v: string) => void;
 }) {
-  const [aberto, setAberto] = useState(nivel === 0 || no.label === "Analítica");
+  const [aberto, setAberto] = useState(nivel === 0 || no.id === ITEM_PADRAO_MENU);
   const temFilhos = Boolean(no.filhos?.length);
   const Icon = no.icon;
 
@@ -677,13 +663,15 @@ function NoLista({
           <span className="w-3.5 shrink-0" />
         )}
         {Icon && <Icon className="h-3.5 w-3.5 shrink-0" />}
-        <span className={cn("truncate", nivel === 0 && "font-semibold text-foreground")}>{no.label}</span>
+        <span className={cn("truncate", nivel === 0 && "font-semibold uppercase tracking-wider text-foreground")}>
+          {no.label}
+        </span>
       </button>
 
       {temFilhos && aberto && (
         <ul className="ml-[13px] border-l border-border pl-2">
           {no.filhos!.map((f) => (
-            <NoLista key={f.label} no={f} nivel={nivel + 1} ativo={ativo} setAtivo={setAtivo} />
+            <NoLista key={f.id} no={f} nivel={nivel + 1} ativo={ativo} setAtivo={setAtivo} />
           ))}
         </ul>
       )}
@@ -692,11 +680,11 @@ function NoLista({
 }
 
 export function LateralArvore() {
-  const [ativo, setAtivo] = useState("Indicadores");
+  const [ativo, setAtivo] = useState(COM_FILHOS.filhos![0].label);
 
   return (
     <Palco className="h-[440px]">
-      <nav aria-label="Documentação" className="w-64 shrink-0 overflow-y-auto border-r border-border p-3">
+      <nav aria-label="Referência" className="w-64 shrink-0 overflow-y-auto border-r border-border p-3">
         <div className="mb-3 flex items-center gap-2 px-1">
           <img src={olhoPreto.url} alt="AUVP" className="h-6 w-6 dark:hidden" />
           <img src={olhoBranco.url} alt="" aria-hidden="true" className="hidden h-6 w-6 dark:block" />
@@ -704,7 +692,7 @@ export function LateralArvore() {
         </div>
         <ul className="space-y-0.5">
           {ARVORE.map((no) => (
-            <NoLista key={no.label} no={no} nivel={0} ativo={ativo} setAtivo={setAtivo} />
+            <NoLista key={no.id} no={no} nivel={0} ativo={ativo} setAtivo={setAtivo} />
           ))}
         </ul>
       </nav>
@@ -717,7 +705,9 @@ export function LateralArvore() {
 /* Catálogo — os seis modelos, cada um no seu ComponentShowcase        */
 /* ------------------------------------------------------------------ */
 
-const CODIGO_DOC = `const [busca, setBusca] = useState("");
+const CODIGO_DOC = `import { gruposComItens } from "@/data/menusCatalogo";  // mesma lista nos doze modelos
+
+const GRUPOS = gruposComItens();
 const q = normalizar(busca.trim());
 
 // a busca filtra de verdade; com filtro ativo todos os grupos abrem
@@ -727,8 +717,8 @@ const grupos = useMemo(() => {
                .filter((g) => g.itens.length > 0);
 }, [q]);
 
-<nav aria-label="Componentes" className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
-  <input type="search" value={busca} onChange={(e) => setBusca(e.target.value)} aria-label="Buscar componente" className="h-9 w-full rounded-md border border-border pl-8" />
+<nav aria-label="Conteúdo" className="w-60 shrink-0 overflow-y-auto border-r border-border py-4">
+  <input type="search" value={busca} onChange={(e) => setBusca(e.target.value)} aria-label="Buscar no menu" className="h-9 w-full rounded-md border border-border pl-8" />
 
   {grupos.map((g) => (
     <div key={g.titulo}>
@@ -746,32 +736,45 @@ const grupos = useMemo(() => {
   ))}
 </nav>`;
 
-const CODIGO_EDITORIAL = `{/* cores literais: as travas de .dark no index.css neutralizam bg-zinc-900 */}
-<nav aria-label="Seções" className="flex w-56 flex-col bg-[#18181b] py-8">
-  <div className="px-8 pb-10"><img src={olhoBranco.url} className="h-9 w-9" /></div>
+const CODIGO_INDICE = `{/* o índice começa DEPOIS do hero e mora à direita do texto, sem superfície */}
+<div className="border-b border-border bg-muted/30 px-8 py-6">…hero…</div>
 
-  <ul className="space-y-1">
-    {ITENS.map((l) => (
-      <li key={l}>
-        <button onClick={() => setAtivo(l)} aria-current={on ? "page" : undefined} className="group flex w-full items-center gap-3 px-8 py-2.5">
-          {/* traço que cresce da esquerda ao entrar no item ativo */}
-          <span className={cn("h-px bg-amber-400 transition-all duration-300", on ? "w-4 opacity-100" : "w-0 opacity-0 group-hover:w-2")} />
-          <span className={cn("text-xs font-anek font-bold uppercase tracking-[0.14em]", on ? "text-amber-400" : "text-[#a1a1aa] group-hover:text-white")}>
-            {l}
-          </span>
-        </button>
-      </li>
-    ))}
-  </ul>
+<div ref={rolagemRef} onScroll={aoRolar} className="flex flex-1 gap-8 overflow-y-auto px-8 py-6">
+  <div className="min-w-0 flex-1 space-y-8">
+    {MENU_AUVP.map((item) => <section key={item.id} data-secao={item.id}>…</section>)}
+  </div>
 
-  <div className="mt-auto px-8"><p className="text-[10px] uppercase text-[#71717a]">Edição 2026</p></div>
-</nav>`;
+  <nav aria-label="Nesta página" className="sticky top-0 w-44 shrink-0 self-start">
+    <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Nesta página</p>
+    {/* a única "caixa" é a linha guia: border-l na lista, e o item ativo
+        sobrepõe a sua própria borda com -ml-px */}
+    <ul className="space-y-0.5 border-l border-border">
+      {MENU_AUVP.map((item) => (
+        <li key={item.id}>
+          <button onClick={() => irPara(item.id)} aria-current={on ? "true" : undefined}
+                  className={cn("-ml-px w-full border-l py-1.5 pl-3 text-left text-sm",
+                    on ? "border-foreground font-semibold text-foreground" : "border-transparent text-muted-foreground hover:border-border")}>
+            {item.label}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+// scroll-spy: o índice acompanha a leitura
+const aoRolar = () => {
+  if (marcandoRef.current) return;   // travado durante a rolagem suave do clique
+  const secoes = [...container.querySelectorAll("[data-secao]")];
+  const atual = secoes.filter((s) => s.offsetTop - 24 <= container.scrollTop).pop();
+  if (atual) setAtivo(atual.dataset.secao);
+};`;
 
 const CODIGO_TRILHO = `const [emFoco, setEmFoco] = useState<string | null>(null);
 
 <nav aria-label="Áreas" className="flex w-[68px] flex-col items-center border-r border-border bg-muted/30 py-4">
-  {ITENS.map((i) => (
-    <li key={i.label} className="relative"
+  {MENU_AUVP.map((i) => (
+    <li key={i.id} className="relative"
         onMouseEnter={() => setEmFoco(i.label)}
         onMouseLeave={() => setEmFoco((f) => (f === i.label ? null : f))}>
       <button
@@ -787,6 +790,9 @@ const CODIGO_TRILHO = `const [emFoco, setEmFoco] = useState<string | null>(null)
 
       {/* marcador do item ativo encostado na borda do trilho */}
       {ativo === i.label && <span className="absolute -left-[14px] top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-foreground" />}
+
+      {/* contador cabe no trilho como bolha sobre o ícone */}
+      {i.contador && <span className="absolute -right-0.5 -top-0.5 rounded-full bg-primary px-1 text-[9px] text-primary-foreground">{i.contador}</span>}
 
       {/* flyout com o rótulo — o ícone sozinho nunca basta */}
       <div role="tooltip" className="pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2 rounded-lg border border-border bg-popover px-2.5 py-1.5 text-xs shadow-lg"
@@ -807,17 +813,20 @@ const CODIGO_WORKSPACE = `<nav className={cn("flex flex-col border-r border-bord
     </button>
   </div>
 
-  {/* item com contador — recolhido vira só ícone, com title/aria-label pelo rótulo */}
-  <button onClick={() => setAtivo(i.label)} title={recolhida ? i.label : undefined} aria-label={recolhida ? i.label : undefined}
-          aria-current={ativo === i.label ? "page" : undefined}
-          className={cn("flex w-full items-center gap-2.5 rounded-lg px-3 py-2", recolhida && "justify-center px-0")}>
-    <i.icon className="h-4 w-4" />
-    {!recolhida && <><span className="flex-1 truncate">{i.label}</span>
-      {i.contador && <span className="rounded-full bg-primary/10 px-1.5 text-[10px] font-bold text-primary">{i.contador}</span>}</>}
-  </button>
-
-  {/* rodapé fixo com suporte e usuário */}
-  <div className="border-t border-border p-2">…</div>
+  {/* mesmos grupos da lista compartilhada; recolhido vira só ícone, com title/aria-label pelo rótulo */}
+  {gruposComItens().map((g) => (
+    <div key={g.titulo}>
+      {!recolhida && <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{g.titulo}</p>}
+      {g.itens.map((i) => (
+        <button onClick={() => setAtivo(i.label)} title={recolhida ? i.label : undefined} aria-current={ativo === i.label ? "page" : undefined}
+                className={cn("flex w-full items-center gap-2.5 rounded-lg px-3 py-2", recolhida && "justify-center px-0")}>
+          <i.icon className="h-4 w-4" />
+          {!recolhida && <><span className="flex-1 truncate">{i.label}</span>
+            {i.contador && <span className="rounded-full bg-primary/10 px-1.5 text-[10px] font-bold text-primary">{i.contador}</span>}</>}
+        </button>
+      ))}
+    </div>
+  ))}
 </nav>`;
 
 const CODIGO_DRAWER = `const ref = useFecharAoSair(aberto, setAberto);   // Esc + clique fora
@@ -833,20 +842,26 @@ const navegar = (destino: string) => { setPagina(destino); setAberto(false); };
      className="absolute inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-border bg-background shadow-2xl transition-transform duration-300"
      style={{ transform: aberto ? "translateX(0)" : "translateX(-100%)" }}>
   <ul className="flex-1 overflow-y-auto py-2">
-    {ITENS.map((i) => (
-      <li key={i.label}>
-        <button onClick={() => (temFilhos ? setExpandido(...) : navegar(i.label))} tabIndex={aberto ? 0 : -1} aria-expanded={temFilhos ? expandidoAqui : undefined}>
+    {MENU_AUVP.map((i) => (
+      <li key={i.id}>
+        <button onClick={() => (i.filhos ? setExpandido(...) : navegar(i.label))} tabIndex={aberto ? 0 : -1} aria-expanded={i.filhos ? expandidoAqui : undefined}>
           {i.label}
-          {temFilhos && <ChevronRight className={cn("h-4 w-4", expandidoAqui && "rotate-90")} />}
+          {i.filhos && <ChevronRight className={cn("h-4 w-4", expandidoAqui && "rotate-90")} />}
         </button>
         {/* submenu abre no próprio painel, sem empurrar uma segunda camada */}
-        {expandidoAqui && <ul className="bg-muted/30">{i.filhos.map((f) => <li key={f}><button onClick={() => navegar(f)} className="pl-8">{f}</button></li>)}</ul>}
+        {expandidoAqui && <ul className="bg-muted/30">{i.filhos.map((f) => <li key={f.id}><button onClick={() => navegar(f.label)} className="pl-8">{f.label}</button></li>)}</ul>}
       </li>
     ))}
   </ul>
 </nav>`;
 
-const CODIGO_ARVORE = `function No({ no, nivel, ativo, setAtivo }) {
+const CODIGO_ARVORE = `// grupo → item → filho: a árvore é a mesma lista, só que inteira
+const ARVORE = gruposComItens().map((g) => ({
+  id: g.titulo, label: g.titulo,
+  filhos: g.itens.map((i) => ({ id: i.id, label: i.label, icon: i.icon, filhos: i.filhos })),
+}));
+
+function No({ no, nivel, ativo, setAtivo }) {
   const [aberto, setAberto] = useState(nivel === 0);
   const temFilhos = Boolean(no.filhos?.length);
 
@@ -866,7 +881,7 @@ const CODIGO_ARVORE = `function No({ no, nivel, ativo, setAtivo }) {
       {/* a linha guia é a borda do próprio <ul> do nível de baixo */}
       {temFilhos && aberto && (
         <ul className="ml-[13px] border-l border-border pl-2">
-          {no.filhos.map((f) => <No key={f.label} no={f} nivel={nivel + 1} ativo={ativo} setAtivo={setAtivo} />)}
+          {no.filhos.map((f) => <No key={f.id} no={f} nivel={nivel + 1} ativo={ativo} setAtivo={setAtivo} />)}
         </ul>
       )}
     </li>
@@ -885,16 +900,16 @@ export function MenusLaterais() {
       </ComponentShowcase>
 
       <ComponentShowcase
-        title="2. Editorial escura"
-        description="Fundo escuro fixo, rótulos curtos em caixa alta e um traço que cresce à esquerda do item ativo. Poucos itens, muito respiro: pensada para hotsites, eventos e páginas de campanha, onde o menu também é peça gráfica."
-        code={CODIGO_EDITORIAL}
+        title="2. Índice à direita, sem fundo"
+        description="Não é uma barra: é um índice que começa depois do hero, à direita do texto, sem superfície própria — só tipografia e um traço no item ativo. Acompanha a leitura (scroll-spy) e não rouba largura do conteúdo. Modelo para páginas longas: manuais, políticas e artigos."
+        code={CODIGO_INDICE}
       >
-        <LateralEditorialEscura />
+        <LateralIndiceSemFundo />
       </ComponentShowcase>
 
       <ComponentShowcase
         title="3. Trilho de ícones com flyout"
-        description="Barra estreita só de ícones, com marcador na borda e o rótulo aparecendo em flyout no hover e no foco do teclado. Devolve largura ao conteúdo em telas de trabalho — exige ícones inequívocos e no máximo seis ou sete destinos."
+        description="Barra estreita só de ícones, com marcador na borda, contador em bolha e o rótulo aparecendo em flyout no hover e no foco do teclado. Devolve largura ao conteúdo em telas de trabalho — exige ícones inequívocos e no máximo seis ou sete destinos."
         code={CODIGO_TRILHO}
       >
         <LateralTrilhoIcones />
@@ -902,7 +917,7 @@ export function MenusLaterais() {
 
       <ComponentShowcase
         title="4. Workspace recolhível"
-        description="Cabeçalho com o contexto da conta, grupos de itens com contadores e rodapé fixo com usuário e suporte. Recolhe para um trilho de ícones sem trocar de componente. É o modelo para telas logadas e uso diário."
+        description="Cabeçalho com o contexto da conta, grupos de itens com contadores e rodapé fixo com usuário e ajuda. Recolhe para um trilho de ícones sem trocar de componente. É o modelo para telas logadas e uso diário."
         code={CODIGO_WORKSPACE}
       >
         <LateralWorkspace />
@@ -918,7 +933,7 @@ export function MenusLaterais() {
 
       <ComponentShowcase
         title="6. Árvore de referência"
-        description="Níveis aninhados com linha guia e chevrons por nó, mostrando a hierarquia inteira do conteúdo. Para documentação técnica e bases de conhecimento, onde o usuário precisa enxergar onde está dentro da estrutura."
+        description="Grupo, item e filho aninhados com linha guia e chevrons por nó, mostrando a hierarquia inteira de uma vez. Para documentação técnica e bases de conhecimento, onde o usuário precisa enxergar onde está dentro da estrutura."
         code={CODIGO_ARVORE}
       >
         <LateralArvore />
