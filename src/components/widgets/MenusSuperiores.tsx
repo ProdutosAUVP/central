@@ -3,10 +3,12 @@ import { ComponentShowcase } from "@/components/design-system/ComponentShowcase"
 import { cn } from "@/lib/utils";
 import { olhoBranco, olhoPreto } from "@/assets/olhos";
 import {
-  ChevronDown, Search, Bell, Gift, HelpCircle, User, ExternalLink,
-  BarChart3, Wallet, BookOpen, Calculator, Users, Video, GraduationCap,
-  LineChart, Sparkles, LifeBuoy, FileText, ArrowRight, Menu as MenuIcon,
-  Command, Sun,
+  MENU_AUVP, UTILITARIOS_MENU_AUVP, PRODUTOS_MENU_AUVP, ITEM_PADRAO_MENU, itemMenu,
+  type ItemMenu,
+} from "@/data/menusCatalogo";
+import {
+  ChevronDown, Search, Bell, HelpCircle, User, ExternalLink,
+  ArrowRight, Menu as MenuIcon, Command, Sun, BookOpen,
 } from "lucide-react";
 
 /**
@@ -14,8 +16,14 @@ import {
  * ----------------------------
  * Seis modelos independentes de navegação de topo para apresentar à
  * liderança. Cada um resolve o problema de um jeito diferente (institucional,
- * catálogo, produto SaaS, portal, marketing e app) — não são variações de um
+ * catálogo, produto, portal, marketing e app) — não são variações de um
  * mesmo componente, e a ideia é escolher um ou dois depois da apresentação.
+ *
+ * TODOS usam a mesma navegação de exemplo (`src/data/menusCatalogo.ts`), de
+ * propósito: o catálogo compara formas de navegar, não conteúdos. Com os
+ * mesmos destinos em todo lugar, o que sobra na tela é só a decisão de
+ * design. A única variação é o portal em duas linhas, onde trocar de produto
+ * recorta essa mesma lista — que é justamente a possibilidade daquele modelo.
  *
  * Os modelos são NAVEGÁVEIS de verdade: cada item leva a uma "página" dentro
  * da moldura, os painéis abrem e fecham no clique, no teclado (Esc) e ao
@@ -27,9 +35,6 @@ import {
  *
  * Todos usam os tokens do design system (background, foreground, muted,
  * border, primary), então acompanham tema claro/escuro e a troca de marca.
- * A exceção intencional é o modelo flutuante, que é sempre escuro por
- * decisão de estilo — e por isso usa cores literais, já que as travas de
- * contraste de `.dark` no index.css neutralizam as classes zinc/white.
  */
 
 /** Fecha um painel ao apertar Esc ou clicar fora dele. */
@@ -55,7 +60,7 @@ function useFecharAoSair(aberto: boolean, setAberto: (v: boolean) => void) {
   return ref;
 }
 
-/** Logo da AUVP que troca com o tema — usada em quase todos os modelos. */
+/** Logo da AUVP que troca com o tema — usada em todos os modelos. */
 function Olho({ className }: { className?: string }) {
   return (
     <>
@@ -92,31 +97,32 @@ function PaginaFalsa({ titulo, className }: { titulo: string; className?: string
   );
 }
 
+const COM_FILHOS = itemMenu(ITEM_PADRAO_MENU);
+
 /* ------------------------------------------------------------------ */
 /* 1. Institucional com popover — o menu da própria Central de Produto */
 /* ------------------------------------------------------------------ */
 
-const SISTEMAS = [
-  { id: "central", label: "Central de Produto", desc: "Página inicial e visão geral dos sistemas", icon: Sparkles },
-  { id: "time", label: "Nosso Time", desc: "Missão, pilares e estrutura do time", icon: Users },
-  { id: "ds", label: "Design System", desc: "Componentes, cores e padrões visuais", icon: BookOpen },
-  { id: "tom", label: "Tom e Voz", desc: "Diretrizes de comunicação verbal", icon: FileText },
-];
-
 export function MenuInstitucional() {
-  const [ativo, setAtivo] = useState("ds");
+  const [ativo, setAtivo] = useState(ITEM_PADRAO_MENU);
   // O popover abre no hover E no foco, senão o menu não existe para o teclado.
   const [aberto, setAberto] = useState<string | null>(null);
-  const paginaAtual = SISTEMAS.find((s) => s.id === ativo)!;
+  const paginaAtual = itemMenu(ativo);
 
   return (
     <Palco>
       <header className="border-b border-border bg-background/95">
-        <div className="flex h-16 items-center justify-between px-5">
-          <div className="flex items-center gap-3">
-            <Olho className="h-8 w-8" />
-            <nav aria-label="Sistemas" className="hidden sm:flex items-center gap-0.5 ml-1">
-              {SISTEMAS.map((s) => (
+        <div className="flex h-16 items-center justify-between gap-3 px-5">
+          <div className="flex min-w-0 items-center gap-3">
+            <Olho className="h-8 w-8 shrink-0" />
+            <nav aria-label="Principal" className="hidden md:flex items-center gap-0.5">
+              {MENU_AUVP.map((s, i) => {
+                // O popover é largo e a moldura tem overflow-hidden: centralizar
+                // no primeiro e no último item jogaria metade dele para fora.
+                const alinhamento =
+                  i === 0 ? "esquerda" : i === MENU_AUVP.length - 1 ? "direita" : "centro";
+                const base = alinhamento === "centro" ? "translateX(-50%)" : "translateX(0)";
+                return (
                 <div
                   key={s.id}
                   className="relative"
@@ -130,60 +136,63 @@ export function MenuInstitucional() {
                     aria-current={ativo === s.id ? "page" : undefined}
                     aria-describedby={`sistema-${s.id}`}
                     className={cn(
-                      "relative px-3 py-2 text-sm font-anek rounded-lg transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                      ativo === s.id ? "text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      "relative whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      ativo === s.id ? "text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
                     {s.label}
                     {ativo === s.id && (
-                      <span className="absolute bottom-1 left-3 right-3 h-px bg-foreground/30 rounded-full" />
+                      <span className="absolute bottom-1 left-2.5 right-2.5 h-px rounded-full bg-foreground/30" />
                     )}
                   </button>
 
                   <div
                     id={`sistema-${s.id}`}
                     role="tooltip"
-                    className="absolute top-full left-1/2 z-30 mt-1.5 w-[220px]"
+                    className={cn(
+                      "absolute top-full z-30 mt-1.5 w-[220px]",
+                      alinhamento === "centro" && "left-1/2",
+                      alinhamento === "esquerda" && "left-0",
+                      alinhamento === "direita" && "right-0"
+                    )}
                     style={{
-                      transform: aberto === s.id ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(-5px)",
+                      transform: `${base} translateY(${aberto === s.id ? "0" : "-5px"})`,
                       opacity: aberto === s.id ? 1 : 0,
                       pointerEvents: aberto === s.id ? "auto" : "none",
                       transition: "opacity 200ms cubic-bezier(0.22,1,0.36,1), transform 200ms cubic-bezier(0.22,1,0.36,1)",
                     }}
                   >
-                    <div className="relative bg-popover border border-border rounded-xl p-3 shadow-lg">
-                      <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-3 w-3 bg-popover border-l border-t border-border rotate-45 rounded-sm" />
+                    <div className="relative rounded-xl border border-border bg-popover p-3 shadow-lg">
+                      <div
+                        className={cn(
+                          "absolute -top-1.5 h-3 w-3 rotate-45 rounded-sm border-l border-t border-border bg-popover",
+                          alinhamento === "centro" && "left-1/2 -translate-x-1/2",
+                          alinhamento === "esquerda" && "left-6",
+                          alinhamento === "direita" && "right-6"
+                        )}
+                      />
                       <div className="flex items-start gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card shrink-0">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card">
                           <s.icon className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium font-anek leading-tight">{s.label}</p>
-                          <p className="text-xs text-muted-foreground font-roboto mt-0.5 leading-snug">{s.desc}</p>
+                          <p className="text-sm font-anek font-medium leading-tight">{s.label}</p>
+                          <p className="mt-0.5 text-xs font-roboto leading-snug text-muted-foreground">{s.desc}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-              <div className="mx-1.5 h-4 w-px bg-border" />
-              <a
-                href="https://produtosauvp.github.io/etica/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-anek text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                Código de Ética
-                <ExternalLink className="h-3 w-3" />
-              </a>
+                );
+              })}
             </nav>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <button aria-label="Buscar" className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          <div className="flex shrink-0 items-center gap-1.5">
+            <button aria-label="Buscar" className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <Search className="h-4 w-4" />
             </button>
-            <button aria-label="Alternar tema" className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+            <button aria-label="Alternar tema" className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <Sun className="h-4 w-4" />
             </button>
           </div>
@@ -200,87 +209,56 @@ export function MenuInstitucional() {
 /* 2. Mega menu de catálogo — miniaturas + coluna editorial */
 /* ------------------------------------------------------- */
 
-const CATALOGO = [
-  { label: "Analítica", icon: BarChart3 },
-  { label: "PIAR", icon: LineChart },
-  { label: "Carteira", icon: Wallet },
-  { label: "Dicionário", icon: BookOpen },
-  { label: "Calculadoras", icon: Calculator },
-  { label: "Comunidade", icon: Users },
-  { label: "Lives", icon: Video },
-  { label: "Certificados", icon: GraduationCap },
-];
-
-const CONHECA = [
-  "Por que investir com a AUVP",
-  "Como funciona o PIAR",
-  "Quero ajuda para começar",
-  "Perguntas frequentes",
-];
-
-const CATALOGO_LINKS = ["Aulas", "Minhas Finanças", "Comunidade"];
-
 export function MenuMegaCatalogo() {
-  const [aberto, setAberto] = useState(true);
-  const [pagina, setPagina] = useState("Aulas");
-  const ref = useFecharAoSair(aberto, setAberto);
+  // Qualquer item com filhos abre o SEU painel — é o que um mega menu de
+  // catálogo faz de verdade, e mostra a lista inteira sem inventar rótulos.
+  const [abertoId, setAbertoId] = useState<string | null>(ITEM_PADRAO_MENU);
+  const [pagina, setPagina] = useState(COM_FILHOS.label);
+  const ref = useFecharAoSair(abertoId !== null, (v) => !v && setAbertoId(null));
+
+  const aberto = abertoId !== null ? itemMenu(abertoId) : null;
 
   const navegar = (destino: string) => {
     setPagina(destino);
-    setAberto(false);
+    setAbertoId(null);
   };
 
   return (
     <Palco>
-      <div ref={ref} onMouseLeave={() => setAberto(false)}>
+      <div ref={ref} onMouseLeave={() => setAbertoId(null)}>
         <header className="border-b border-border bg-background">
-          <div className="flex h-16 items-center gap-8 px-5">
+          <div className="flex h-16 items-center gap-5 px-5">
             <Olho className="h-8 w-8 shrink-0" />
-            <nav aria-label="Principal" className="flex items-center gap-6">
-              {CATALOGO_LINKS.map((l) => (
-                <button
-                  key={l}
-                  onClick={() => navegar(l)}
-                  aria-current={pagina === l ? "page" : undefined}
-                  className={cn(
-                    "relative py-5 text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
-                    pagina === l ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {l}
-                  {pagina === l && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-primary" />}
-                </button>
-              ))}
-              <button
-                onMouseEnter={() => setAberto(true)}
-                onClick={() => setAberto((a) => !a)}
-                aria-expanded={aberto}
-                aria-haspopup="true"
-                className={cn(
-                  "relative inline-flex items-center gap-1 py-5 text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
-                  aberto ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                Ferramentas
-                <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", aberto && "rotate-180")} />
-                {aberto && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-primary" />}
-              </button>
-              <button
-                onClick={() => navegar("Minha AUVP")}
-                aria-current={pagina === "Minha AUVP" ? "page" : undefined}
-                className={cn(
-                  "relative py-5 text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
-                  pagina === "Minha AUVP" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                Minha AUVP
-                {pagina === "Minha AUVP" && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-primary" />}
-              </button>
+            <nav aria-label="Principal" className="flex items-center gap-5">
+              {MENU_AUVP.map((item) => {
+                const temFilhos = Boolean(item.filhos?.length);
+                const marcado = temFilhos ? abertoId === item.id : pagina === item.label;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => (temFilhos ? setAbertoId((a) => (a === item.id ? null : item.id)) : navegar(item.label))}
+                    onMouseEnter={temFilhos ? () => setAbertoId(item.id) : undefined}
+                    aria-expanded={temFilhos ? abertoId === item.id : undefined}
+                    aria-haspopup={temFilhos ? "true" : undefined}
+                    aria-current={!temFilhos && pagina === item.label ? "page" : undefined}
+                    className={cn(
+                      "relative inline-flex items-center gap-1 whitespace-nowrap py-5 text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
+                      marcado ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {item.label}
+                    {temFilhos && (
+                      <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", abertoId === item.id && "rotate-180")} />
+                    )}
+                    {marcado && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-primary" />}
+                  </button>
+                );
+              })}
             </nav>
             <div className="ml-auto flex items-center gap-1">
               {[
                 { icon: Search, label: "Buscar" },
-                { icon: Gift, label: "Benefícios" },
+                { icon: Bell, label: "Notificações" },
                 { icon: User, label: "Minha conta" },
               ].map((a) => (
                 <button
@@ -301,18 +279,18 @@ export function MenuMegaCatalogo() {
           aria-hidden={!aberto}
         >
           <div className="grid gap-8 px-5 py-8 md:grid-cols-[1fr_240px]">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
-              {CATALOGO.map((item) => (
+            <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3">
+              {(aberto?.filhos ?? COM_FILHOS.filhos!).map((filho) => (
                 <button
-                  key={item.label}
-                  onClick={() => navegar(item.label)}
+                  key={filho.id}
+                  onClick={() => navegar(filho.label)}
                   tabIndex={aberto ? 0 : -1}
                   className="group flex flex-col items-center gap-2 rounded-lg text-center outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <span className="flex h-16 w-full items-center justify-center rounded-lg bg-muted transition-colors group-hover:bg-muted/70">
-                    <item.icon className="h-6 w-6 text-foreground/70" />
+                    <filho.icon className="h-6 w-6 text-foreground/70" />
                   </span>
-                  <span className="text-xs font-anek font-medium leading-tight">{item.label}</span>
+                  <span className="text-xs font-anek font-medium leading-tight">{filho.label}</span>
                 </button>
               ))}
             </div>
@@ -322,7 +300,7 @@ export function MenuMegaCatalogo() {
                 Conheça
               </p>
               <ul className="space-y-3">
-                {CONHECA.map((l) => (
+                {UTILITARIOS_MENU_AUVP.map((l) => (
                   <li key={l}>
                     <button
                       onClick={() => navegar(l)}
@@ -345,36 +323,20 @@ export function MenuMegaCatalogo() {
 }
 
 /* --------------------------------------------------------- */
-/* 3. Barra flutuante escura — pílula sobre o conteúdo (SaaS) */
+/* 3. Barra flutuante — cartão sobre o conteúdo (produto)     */
 /* --------------------------------------------------------- */
 
-const COLUNAS_FLUTUANTE = [
-  {
-    titulo: "Casos de uso",
-    itens: [
-      { label: "Investir", desc: "Monte e acompanhe a sua carteira.", icon: LineChart },
-      { label: "Aprender", desc: "Trilhas e aulas do começo ao fim.", icon: GraduationCap },
-      { label: "Planejar", desc: "Metas, aportes e projeções.", icon: Calculator },
-    ],
-  },
-  {
-    titulo: "Recursos",
-    itens: [
-      { label: "Blog", desc: "Notícias e análises do mercado.", icon: FileText },
-      { label: "Histórias", desc: "Como nossos alunos evoluíram.", icon: Users },
-      { label: "Vídeos", desc: "Tutoriais das ferramentas.", icon: Video },
-    ],
-  },
-];
+export function MenuFlutuante() {
+  const [abertoId, setAbertoId] = useState<string | null>(ITEM_PADRAO_MENU);
+  const [pagina, setPagina] = useState(COM_FILHOS.label);
+  const ref = useFecharAoSair(abertoId !== null, (v) => !v && setAbertoId(null));
 
-export function MenuFlutuanteEscuro() {
-  const [aberto, setAberto] = useState(true);
-  const [pagina, setPagina] = useState("Produtos");
-  const ref = useFecharAoSair(aberto, setAberto);
+  const aberto = abertoId !== null ? itemMenu(abertoId) : null;
+  const filhos = aberto?.filhos ?? COM_FILHOS.filhos!;
 
   const navegar = (destino: string) => {
     setPagina(destino);
-    setAberto(false);
+    setAbertoId(null);
   };
 
   return (
@@ -382,62 +344,49 @@ export function MenuFlutuanteEscuro() {
       <div className="p-6 pb-0">
         <div
           ref={ref}
-          onMouseLeave={() => setAberto(false)}
-          className="rounded-2xl bg-[#09090b] text-[#fafafa] shadow-2xl ring-1 ring-white/10 overflow-hidden"
+          onMouseLeave={() => setAbertoId(null)}
+          className="overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
         >
-          <div className="flex h-16 items-center gap-7 px-6">
-            <div className="flex items-center gap-2 shrink-0">
-              <img src={olhoBranco.url} alt="AUVP" className="h-7 w-7" />
+          <div className="flex h-16 items-center gap-3 px-5">
+            <div className="flex shrink-0 items-center gap-2">
+              <Olho className="h-7 w-7" />
               <span className="font-anek text-sm font-bold">AUVP</span>
             </div>
-            <nav aria-label="Principal" className="hidden items-center gap-1 sm:flex">
-              {["Produtos", "Preços"].map((l) => (
-                <button
-                  key={l}
-                  onClick={() => navegar(l)}
-                  aria-current={pagina === l ? "page" : undefined}
-                  className={cn(
-                    "rounded-lg px-3 py-2 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white/40",
-                    pagina === l ? "bg-white/10 text-white" : "text-[#a1a1aa] hover:text-white"
-                  )}
-                >
-                  {l}
-                </button>
-              ))}
-              <button
-                onMouseEnter={() => setAberto(true)}
-                onClick={() => setAberto((a) => !a)}
-                aria-expanded={aberto}
-                aria-haspopup="true"
-                className={cn(
-                  "inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white/40",
-                  aberto ? "bg-white/10 text-white" : "text-[#a1a1aa] hover:text-white"
-                )}
-              >
-                Recursos
-                <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", aberto && "rotate-180")} />
-              </button>
-              <button
-                onClick={() => navegar("Docs")}
-                aria-current={pagina === "Docs" ? "page" : undefined}
-                className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white/40",
-                  pagina === "Docs" ? "bg-white/10 text-white" : "text-[#a1a1aa] hover:text-white"
-                )}
-              >
-                Docs
-              </button>
+            <nav aria-label="Principal" className="hidden items-center gap-0.5 md:flex">
+              {MENU_AUVP.map((item) => {
+                const temFilhos = Boolean(item.filhos?.length);
+                const marcado = temFilhos ? abertoId === item.id : pagina === item.label;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => (temFilhos ? setAbertoId((a) => (a === item.id ? null : item.id)) : navegar(item.label))}
+                    onMouseEnter={temFilhos ? () => setAbertoId(item.id) : undefined}
+                    aria-expanded={temFilhos ? abertoId === item.id : undefined}
+                    aria-haspopup={temFilhos ? "true" : undefined}
+                    aria-current={!temFilhos && pagina === item.label ? "page" : undefined}
+                    className={cn(
+                      "inline-flex items-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      marcado ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {item.label}
+                    {temFilhos && (
+                      <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", abertoId === item.id && "rotate-180")} />
+                    )}
+                  </button>
+                );
+              })}
             </nav>
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ml-auto flex shrink-0 items-center gap-2">
               <button
                 onClick={() => navegar("Entrar")}
-                className="rounded-lg px-3 py-2 text-sm font-anek text-[#d4d4d8] transition-colors hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-anek text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Entrar
               </button>
               <button
                 onClick={() => navegar("Criar conta")}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#fafafa] px-3.5 py-2 text-sm font-anek font-semibold text-[#09090b] transition-colors hover:bg-[#e4e4e7] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3.5 py-2 text-sm font-anek font-semibold text-primary-foreground outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Começar
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -446,47 +395,45 @@ export function MenuFlutuanteEscuro() {
           </div>
 
           <div
-            className="overflow-hidden border-t border-white/10 transition-all duration-300"
+            className="overflow-hidden border-t border-border transition-all duration-300"
             style={{ maxHeight: aberto ? 400 : 0, opacity: aberto ? 1 : 0 }}
             aria-hidden={!aberto}
           >
-            <div className="grid gap-8 p-6 md:grid-cols-[1fr_1fr_220px]">
-              {COLUNAS_FLUTUANTE.map((col) => (
-                <div key={col.titulo}>
-                  <p className="mb-4 text-[10px] font-roboto font-bold uppercase tracking-wider text-[#71717a]">
-                    {col.titulo}
-                  </p>
-                  <ul className="space-y-1">
-                    {col.itens.map((item) => (
-                      <li key={item.label}>
-                        <button
-                          onClick={() => navegar(item.label)}
-                          tabIndex={aberto ? 0 : -1}
-                          className="flex w-full items-start gap-3 rounded-lg p-2.5 text-left transition-colors hover:bg-white/5 outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-                        >
-                          <item.icon className="mt-0.5 h-4 w-4 shrink-0 text-[#a1a1aa]" />
-                          <span className="min-w-0">
-                            <span className="block text-sm font-anek font-medium text-white">{item.label}</span>
-                            <span className="block text-xs font-roboto leading-snug text-[#a1a1aa]">{item.desc}</span>
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <div className="grid gap-8 p-6 md:grid-cols-[1fr_220px]">
+              <div>
+                <p className="mb-4 text-[10px] font-roboto font-bold uppercase tracking-wider text-muted-foreground">
+                  {aberto?.label ?? COM_FILHOS.label}
+                </p>
+                <ul className="grid gap-1 sm:grid-cols-2">
+                  {filhos.map((filho) => (
+                    <li key={filho.id}>
+                      <button
+                        onClick={() => navegar(filho.label)}
+                        tabIndex={aberto ? 0 : -1}
+                        className="flex w-full items-start gap-3 rounded-lg p-2.5 text-left outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        <filho.icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                        <span className="min-w-0">
+                          <span className="block text-sm font-anek font-medium text-foreground">{filho.label}</span>
+                          <span className="block text-xs font-roboto leading-snug text-muted-foreground">{filho.desc}</span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              <div className="md:border-l md:border-white/10 md:pl-6">
-                <p className="mb-4 text-[10px] font-roboto font-bold uppercase tracking-wider text-[#71717a]">
+              <div className="md:border-l md:border-border md:pl-6">
+                <p className="mb-4 text-[10px] font-roboto font-bold uppercase tracking-wider text-muted-foreground">
                   Comece por aqui
                 </p>
                 <ul className="space-y-3">
-                  {["Primeiros passos", "Convidar o time", "Integrações"].map((l) => (
+                  {UTILITARIOS_MENU_AUVP.map((l) => (
                     <li key={l}>
                       <button
                         onClick={() => navegar(l)}
                         tabIndex={aberto ? 0 : -1}
-                        className="inline-flex items-center gap-1.5 rounded text-sm font-roboto text-[#d4d4d8] transition-colors hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                        className="inline-flex items-center gap-1.5 rounded text-sm font-roboto text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                       >
                         {l}
                         <ArrowRight className="h-3 w-3" />
@@ -497,7 +444,7 @@ export function MenuFlutuanteEscuro() {
                 <button
                   onClick={() => navegar("Documentação")}
                   tabIndex={aberto ? 0 : -1}
-                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-xs font-anek font-semibold text-white transition-colors hover:bg-white/5 outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                  className="mt-5 inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-xs font-anek font-semibold text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <BookOpen className="h-3.5 w-3.5" />
                   Documentação
@@ -514,47 +461,61 @@ export function MenuFlutuanteEscuro() {
 }
 
 /* ------------------------------------------------------ */
-/* 4. Portal em duas linhas — utilitários + navegação      */
+/* 4. Portal em duas linhas — cor e itens por produto      */
 /* ------------------------------------------------------ */
 
-const PORTAL_ABAS = ["Início", "Mercado", "Educação", "Ferramentas", "Comunidade"];
-const PORTAL_MARCAS = ["AUVP Capital", "AUVP Escola", "Comunidade"];
-
 export function MenuDuasLinhas() {
-  const [ativo, setAtivo] = useState("Mercado");
-  const [marca, setMarca] = useState("AUVP Capital");
+  const [produtoId, setProdutoId] = useState<string>(PRODUTOS_MENU_AUVP[0].id);
+  const [pagina, setPagina] = useState(itemMenu("financas").label);
   const [busca, setBusca] = useState("");
+
+  const produto = PRODUTOS_MENU_AUVP.find((p) => p.id === produtoId)!;
+  const itens: ItemMenu[] = produto.itens.map(itemMenu);
+
+  // Trocar de produto troca o que está disponível: se a página aberta não
+  // existe no produto novo, cai no primeiro item dele.
+  const trocarProduto = (id: string) => {
+    const alvo = PRODUTOS_MENU_AUVP.find((p) => p.id === id)!;
+    setProdutoId(id);
+    const continua = alvo.itens.some((i) => itemMenu(i).label === pagina);
+    if (!continua) setPagina(itemMenu(alvo.itens[0]).label);
+  };
 
   return (
     <Palco>
-      <div className="flex h-9 items-center justify-between border-b border-border bg-muted/40 px-5">
-        <div className="flex items-center gap-4">
-          {PORTAL_MARCAS.map((l) => (
+      {/* Linha 1 — a faixa veste a cor do produto ativo. */}
+      <div
+        className="flex h-10 items-center justify-between px-5 transition-colors duration-300"
+        style={{ backgroundColor: `hsl(${produto.fundo})`, color: `hsl(${produto.texto})` }}
+      >
+        <div className="flex items-center gap-1">
+          {PRODUTOS_MENU_AUVP.map((p) => (
             <button
-              key={l}
-              onClick={() => setMarca(l)}
-              aria-pressed={marca === l}
+              key={p.id}
+              onClick={() => trocarProduto(p.id)}
+              aria-pressed={p.id === produtoId}
               className={cn(
-                "rounded text-xs font-roboto transition-colors hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                marca === l ? "font-bold text-foreground" : "text-muted-foreground"
+                "rounded-md px-2 py-1 text-xs font-roboto outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-current",
+                p.id === produtoId ? "font-bold opacity-100" : "opacity-60 hover:opacity-100"
               )}
+              style={p.id === produtoId ? { backgroundColor: "rgb(255 255 255 / 0.15)" } : undefined}
             >
-              {l}
+              {p.label}
             </button>
           ))}
         </div>
         <div className="flex items-center gap-4">
           <button
-            onClick={() => setAtivo("Suporte")}
-            className="rounded text-xs font-roboto text-muted-foreground transition-colors hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            onClick={() => setPagina(UTILITARIOS_MENU_AUVP[0])}
+            className="rounded text-xs font-roboto opacity-80 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-current"
           >
-            Suporte
+            {UTILITARIOS_MENU_AUVP[0]}
           </button>
           <a
             href="https://auvp.com.br"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded text-xs font-roboto text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1 rounded text-xs font-roboto opacity-80 transition-opacity hover:opacity-100"
           >
             Para Empresas
             <ExternalLink className="h-3 w-3" />
@@ -562,35 +523,41 @@ export function MenuDuasLinhas() {
         </div>
       </div>
 
+      {/* Linha 2 — navegação principal com os itens daquele produto. */}
       <header className="border-b border-border bg-background">
-        <div className="flex h-16 items-center gap-6 px-5">
-          <div className="flex items-center gap-2 shrink-0">
+        <div className="flex h-16 items-center gap-5 px-5">
+          <div className="flex shrink-0 items-center gap-2">
             <Olho className="h-8 w-8" />
-            <span className="font-anek text-base font-bold leading-none">AUVP</span>
+            <span className="font-anek text-base font-bold leading-none">{produto.label}</span>
           </div>
 
-          <nav aria-label="Seções do portal" className="hidden items-center gap-1 md:flex">
-            {PORTAL_ABAS.map((l) => (
+          <nav aria-label={`Seções de ${produto.label}`} className="hidden items-center gap-1 md:flex">
+            {itens.map((item) => (
               <button
-                key={l}
-                onClick={() => setAtivo(l)}
-                aria-current={ativo === l ? "page" : undefined}
+                key={item.id}
+                onClick={() => setPagina(item.label)}
+                aria-current={pagina === item.label ? "page" : undefined}
                 className={cn(
-                  "relative px-3 py-5 text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
-                  ativo === l ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
+                  "relative whitespace-nowrap px-3 py-5 text-sm font-anek transition-colors outline-none focus-visible:text-foreground",
+                  pagina === item.label ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {l}
-                {ativo === l && <span className="absolute inset-x-2 -bottom-px h-[3px] rounded-t-full bg-primary" />}
+                {item.label}
+                {pagina === item.label && (
+                  <span
+                    className="absolute inset-x-2 -bottom-px h-[3px] rounded-t-full"
+                    style={{ backgroundColor: `hsl(${produto.fundo})` }}
+                  />
+                )}
               </button>
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-3">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (busca.trim()) setAtivo(`Busca: ${busca.trim()}`);
+                if (busca.trim()) setPagina(`Busca: ${busca.trim()}`);
               }}
               className="hidden items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2 transition-colors focus-within:border-foreground/30 sm:flex"
             >
@@ -598,21 +565,13 @@ export function MenuDuasLinhas() {
               <input
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
-                placeholder="Buscar no portal"
+                placeholder="Buscar"
                 aria-label="Buscar no portal"
-                className="w-32 bg-transparent text-xs font-roboto text-foreground outline-none placeholder:text-muted-foreground"
+                className="w-24 bg-transparent text-xs font-roboto text-foreground outline-none placeholder:text-muted-foreground"
               />
             </form>
             <button
-              onClick={() => setAtivo("Notificações")}
-              aria-label="Notificações"
-              className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              <Bell className="h-4 w-4" />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
-            </button>
-            <button
-              onClick={() => setAtivo("Minha conta")}
+              onClick={() => setPagina("Minha conta")}
               aria-label="Minha conta"
               className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-roboto font-bold transition-colors hover:bg-muted/70"
             >
@@ -622,7 +581,7 @@ export function MenuDuasLinhas() {
         </div>
       </header>
 
-      <PaginaFalsa titulo={`${marca} · ${ativo}`} />
+      <PaginaFalsa titulo={`${produto.label} · ${pagina}`} />
     </Palco>
   );
 }
@@ -631,11 +590,9 @@ export function MenuDuasLinhas() {
 /* 5. Centralizado com pílula deslizante (marketing/LP)  */
 /* ---------------------------------------------------- */
 
-const PILULA_ITENS = ["Visão geral", "Recursos", "Planos", "Clientes", "Blog"];
-
 export function MenuPilulaDeslizante() {
-  const [ativo, setAtivo] = useState("Recursos");
-  const [pagina, setPagina] = useState("Recursos");
+  const [ativo, setAtivo] = useState(ITEM_PADRAO_MENU);
+  const [pagina, setPagina] = useState(COM_FILHOS.label);
   const listaRef = useRef<HTMLDivElement>(null);
   const [pilula, setPilula] = useState({ left: 0, width: 0 });
 
@@ -660,48 +617,43 @@ export function MenuPilulaDeslizante() {
     return () => observer.disconnect();
   }, [medir]);
 
-  const selecionar = (l: string) => {
-    setAtivo(l);
-    setPagina(l);
-  };
-
   return (
     <Palco>
       <header className="border-b border-border bg-background">
-        <div className="flex h-16 items-center px-5">
-          <div className="flex items-center gap-2">
-            <Olho className="h-8 w-8" />
-            <span className="font-anek text-base font-bold leading-none">AUVP</span>
-          </div>
+        <div className="flex h-16 items-center gap-3 px-5">
+          <Olho className="h-8 w-8 shrink-0" />
 
           <nav
             aria-label="Principal"
             ref={listaRef}
-            className="relative mx-auto hidden items-center gap-1 rounded-full border border-border bg-muted/40 p-1 md:flex"
+            className="relative mx-auto hidden items-center gap-0.5 rounded-full border border-border bg-muted/40 p-1 md:flex"
           >
             <span
               aria-hidden="true"
               className="absolute top-1 bottom-1 rounded-full bg-background shadow-sm ring-1 ring-border transition-all duration-300"
               style={{ left: pilula.left, width: pilula.width, transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)" }}
             />
-            {PILULA_ITENS.map((l) => (
+            {MENU_AUVP.map((item) => (
               <button
-                key={l}
-                data-item={l}
-                onClick={() => selecionar(l)}
-                onFocus={() => setAtivo(l)}
-                aria-current={pagina === l ? "page" : undefined}
+                key={item.id}
+                data-item={item.id}
+                onClick={() => {
+                  setAtivo(item.id);
+                  setPagina(item.label);
+                }}
+                onFocus={() => setAtivo(item.id)}
+                aria-current={pagina === item.label ? "page" : undefined}
                 className={cn(
-                  "relative z-10 rounded-full px-3.5 py-1.5 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  ativo === l ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
+                  "relative z-10 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-anek transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  ativo === item.id ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {l}
+                {item.label}
               </button>
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-2">
             <button
               onClick={() => setPagina("Entrar")}
               className="rounded-lg px-3 py-2 text-sm font-anek text-muted-foreground transition-colors hover:text-foreground"
@@ -728,16 +680,9 @@ export function MenuPilulaDeslizante() {
 /* 6. App com busca protagonista (command bar)       */
 /* ------------------------------------------------- */
 
-const APP_MENU = [
-  { label: "Dashboard", icon: BarChart3 },
-  { label: "Carteira", icon: Wallet },
-  { label: "Aulas", icon: GraduationCap },
-  { label: "Suporte", icon: LifeBuoy },
-];
-
 export function MenuBuscaProtagonista() {
   const [aberto, setAberto] = useState(true);
-  const [pagina, setPagina] = useState("Dashboard");
+  const [pagina, setPagina] = useState(itemMenu("inicio").label);
   const [busca, setBusca] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const ref = useFecharAoSair(aberto, setAberto);
@@ -787,7 +732,7 @@ export function MenuBuscaProtagonista() {
                 ref={inputRef}
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
-                placeholder="Buscar ativos, aulas e ferramentas…"
+                placeholder="Buscar aulas, ativos e ferramentas…"
                 aria-label="Buscar"
                 className="flex-1 bg-transparent text-sm font-roboto text-foreground outline-none placeholder:text-muted-foreground"
               />
@@ -798,8 +743,8 @@ export function MenuBuscaProtagonista() {
 
             <div className="flex items-center gap-1.5">
               <button
-                onClick={() => navegar("Ajuda")}
-                aria-label="Ajuda"
+                onClick={() => navegar(UTILITARIOS_MENU_AUVP[0])}
+                aria-label={UTILITARIOS_MENU_AUVP[0]}
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <HelpCircle className="h-4 w-4" />
@@ -828,10 +773,10 @@ export function MenuBuscaProtagonista() {
           style={{ maxHeight: aberto ? 220 : 0, opacity: aberto ? 1 : 0 }}
           aria-hidden={!aberto}
         >
-          <div className="grid grid-cols-2 gap-2 p-4 sm:grid-cols-4">
-            {APP_MENU.map((item) => (
+          <div className="grid grid-cols-2 gap-2 p-4 sm:grid-cols-3">
+            {MENU_AUVP.map((item) => (
               <button
-                key={item.label}
+                key={item.id}
                 onClick={() => navegar(item.label)}
                 tabIndex={aberto ? 0 : -1}
                 aria-current={pagina === item.label ? "page" : undefined}
@@ -841,7 +786,12 @@ export function MenuBuscaProtagonista() {
                 )}
               >
                 <item.icon className="h-4 w-4 shrink-0 text-muted-foreground" />
-                <span className="text-sm font-anek">{item.label}</span>
+                <span className="flex-1 truncate text-sm font-anek">{item.label}</span>
+                {item.contador && (
+                  <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-roboto font-bold text-primary">
+                    {item.contador}
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -857,27 +807,26 @@ export function MenuBuscaProtagonista() {
 /* Catálogo — os seis modelos, cada um no seu ComponentShowcase        */
 /* ------------------------------------------------------------------ */
 
-const CODIGO_INSTITUCIONAL = `const [ativo, setAtivo] = useState("ds");
+const CODIGO_INSTITUCIONAL = `import { MENU_AUVP } from "@/data/menusCatalogo";  // mesma lista nos doze modelos
+
+const [ativo, setAtivo] = useState("ferramentas");
 const [aberto, setAberto] = useState<string | null>(null);
 
-<nav aria-label="Sistemas" className="flex items-center gap-0.5">
-  {SISTEMAS.map((s) => (
-    <div
-      key={s.id}
-      className="relative"
-      onMouseEnter={() => setAberto(s.id)}
-      onMouseLeave={() => setAberto((a) => (a === s.id ? null : a))}
-    >
+<nav aria-label="Principal" className="flex items-center gap-0.5">
+  {MENU_AUVP.map((s) => (
+    <div key={s.id} className="relative"
+         onMouseEnter={() => setAberto(s.id)}
+         onMouseLeave={() => setAberto((a) => (a === s.id ? null : a))}>
       <button
         onClick={() => setAtivo(s.id)}
         onFocus={() => setAberto(s.id)}          {/* abre no teclado, não só no mouse */}
         onBlur={() => setAberto((a) => (a === s.id ? null : a))}
         aria-current={ativo === s.id ? "page" : undefined}
         aria-describedby={"sistema-" + s.id}
-        className="relative px-3 py-2 text-sm font-anek rounded-lg"
+        className="relative rounded-lg px-2.5 py-2 text-sm font-anek"
       >
         {s.label}
-        {ativo === s.id && <span className="absolute bottom-1 left-3 right-3 h-px bg-foreground/30" />}
+        {ativo === s.id && <span className="absolute bottom-1 left-2.5 right-2.5 h-px bg-foreground/30" />}
       </button>
 
       {/* popover sempre no DOM, animado por opacity + translateY */}
@@ -890,76 +839,99 @@ const [aberto, setAberto] = useState<string | null>(null);
 <PaginaFalsa titulo={paginaAtual.label} className="min-h-[168px]" />`;
 
 const CODIGO_MEGA = `const [aberto, setAberto] = useState(true);
-const [pagina, setPagina] = useState("Aulas");
 const ref = useFecharAoSair(aberto, setAberto);   // Esc + clique fora
-
 const navegar = (destino: string) => { setPagina(destino); setAberto(false); };
 
 <div ref={ref} onMouseLeave={() => setAberto(false)}>
-  <header className="border-b border-border bg-background">
-    <nav className="flex items-center gap-6">
-      <button onClick={() => navegar(l)} aria-current={pagina === l ? "page" : undefined}>{l}</button>
-      <button onMouseEnter={() => setAberto(true)} onClick={() => setAberto((a) => !a)} aria-expanded={aberto}>
-        Ferramentas <ChevronDown className={cn("h-3.5 w-3.5", aberto && "rotate-180")} />
-      </button>
-    </nav>
-  </header>
+  <nav aria-label="Principal" className="flex items-center gap-5">
+    {MENU_AUVP.map((item) => {
+      const temFilhos = Boolean(item.filhos?.length);   // todo item com filhos abre o seu painel
+      return (
+        <button
+          onClick={() => (temFilhos ? setAbertoId((a) => (a === item.id ? null : item.id)) : navegar(item.label))}
+          onMouseEnter={temFilhos ? () => setAbertoId(item.id) : undefined}
+          aria-expanded={temFilhos ? abertoId === item.id : undefined}
+          aria-current={!temFilhos && pagina === item.label ? "page" : undefined}
+        >
+          {item.label}
+          {temFilhos && <ChevronDown className={cn("h-3.5 w-3.5", abertoId === item.id && "rotate-180")} />}
+        </button>
+      );
+    })}
+  </nav>
 
-  {/* painel full-bleed: grid de miniaturas + coluna editorial */}
+  {/* painel full-bleed: miniaturas dos filhos + coluna editorial */}
   <div style={{ maxHeight: aberto ? 420 : 0, opacity: aberto ? 1 : 0 }} aria-hidden={!aberto} className="overflow-hidden transition-all">
-    {CATALOGO.map((i) => (
-      <button onClick={() => navegar(i.label)} tabIndex={aberto ? 0 : -1} className="group flex flex-col items-center gap-2">
-        <span className="flex h-16 w-full items-center justify-center rounded-lg bg-muted"><i.icon /></span>
-        <span className="text-xs font-anek font-medium">{i.label}</span>
+    {(aberto?.filhos ?? []).map((f) => (
+      <button onClick={() => navegar(f.label)} tabIndex={aberto ? 0 : -1} className="group flex flex-col items-center gap-2">
+        <span className="flex h-16 w-full items-center justify-center rounded-lg bg-muted"><f.icon /></span>
+        <span className="text-xs font-anek font-medium">{f.label}</span>
       </button>
     ))}
   </div>
 </div>`;
 
-const CODIGO_FLUTUANTE = `<div className="rounded-2xl bg-[#09090b] text-[#fafafa] shadow-2xl ring-1 ring-white/10 overflow-hidden">
-  {/* cores literais: as travas de contraste de .dark no index.css neutralizam
-      bg-zinc-950/bg-white e apagariam esta superfície no tema escuro */}
-  <div className="flex h-16 items-center gap-7 px-6">
-    <img src={olhoBranco.url} className="h-7 w-7" />
-    <nav className="flex items-center gap-1">
-      <button onMouseEnter={() => setAberto(true)} onClick={() => setAberto((a) => !a)} aria-expanded={aberto}
-        className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-[#a1a1aa] hover:text-white">
-        Recursos <ChevronDown className="h-3.5 w-3.5" />
-      </button>
-    </nav>
-    <div className="ml-auto flex items-center gap-2">
-      <button onClick={() => navegar("Entrar")} className="px-3 py-2 text-sm text-[#d4d4d8]">Entrar</button>
-      <button onClick={() => navegar("Criar conta")} className="rounded-lg bg-[#fafafa] px-3.5 py-2 text-sm font-semibold text-[#09090b]">Começar</button>
+const CODIGO_FLUTUANTE = `{/* cartão flutuante em tokens do design system: acompanha claro/escuro
+    e a troca de marca, em vez de fixar uma superfície escura */}
+<div className="p-6">
+  <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+    <div className="flex h-16 items-center gap-5 px-6">
+      <Olho className="h-7 w-7" />
+      <nav className="flex items-center gap-0.5">
+        {MENU_AUVP.map((item) => {
+          const temFilhos = Boolean(item.filhos?.length);   // cada item com filhos abre o SEU painel
+          return (
+            <button
+              onClick={() => (temFilhos ? setAbertoId((a) => (a === item.id ? null : item.id)) : navegar(item.label))}
+              onMouseEnter={temFilhos ? () => setAbertoId(item.id) : undefined}
+              aria-expanded={temFilhos ? abertoId === item.id : undefined}
+              className={cn("whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-anek", marcado ? "bg-muted text-foreground" : "text-muted-foreground")}
+            >
+              {item.label}
+              {temFilhos && <ChevronDown className="h-3.5 w-3.5" />}
+            </button>
+          );
+        })}
+      </nav>
+      <div className="ml-auto flex items-center gap-2">
+        <button className="px-3 py-2 text-sm text-muted-foreground">Entrar</button>
+        <button className="rounded-lg bg-primary px-3.5 py-2 text-sm font-semibold text-primary-foreground">Começar</button>
+      </div>
     </div>
-  </div>
 
-  {/* mega painel escuro: colunas de item + descrição, CTA à direita */}
-  <div className="border-t border-white/10" style={{ maxHeight: aberto ? 400 : 0 }} aria-hidden={!aberto}>…</div>
+    {/* mega painel: os filhos do item aberto em duas colunas, CTA à direita */}
+    <div className="border-t border-border" style={{ maxHeight: aberto ? 400 : 0 }} aria-hidden={!aberto}>…</div>
+  </div>
 </div>`;
 
-const CODIGO_DUAS_LINHAS = `{/* linha 1 — utilitários e troca de marca */}
-<div className="flex h-9 items-center justify-between border-b border-border bg-muted/40 px-5">
-  {MARCAS.map((l) => <button onClick={() => setMarca(l)} aria-pressed={marca === l}>{l}</button>)}
-  <div className="flex gap-4">Suporte · Para Empresas ↗</div>
+const CODIGO_DUAS_LINHAS = `const produto = PRODUTOS_MENU_AUVP.find((p) => p.id === produtoId);
+const itens = produto.itens.map(itemMenu);        // cada produto recorta a mesma lista
+
+// se a página aberta não existe no produto novo, cai no primeiro item dele
+const trocarProduto = (id) => {
+  const alvo = PRODUTOS_MENU_AUVP.find((p) => p.id === id);
+  setProdutoId(id);
+  if (!alvo.itens.some((i) => itemMenu(i).label === pagina)) setPagina(itemMenu(alvo.itens[0]).label);
+};
+
+{/* linha 1 — veste a cor do produto ativo (HSL literal: classe de paleta
+    seria reescrita pelas travas de contraste de .dark no index.css) */}
+<div className="flex h-10 items-center justify-between px-5 transition-colors duration-300"
+     style={{ backgroundColor: "hsl(" + produto.fundo + ")", color: "hsl(" + produto.texto + ")" }}>
+  {PRODUTOS_MENU_AUVP.map((p) => (
+    <button onClick={() => trocarProduto(p.id)} aria-pressed={p.id === produtoId}>{p.label}</button>
+  ))}
 </div>
 
-{/* linha 2 — navegação principal + busca que envia de verdade */}
-<header className="border-b border-border bg-background">
-  <div className="flex h-16 items-center gap-6 px-5">
-    <nav className="flex items-center gap-1">
-      {ABAS.map((l) => (
-        <button onClick={() => setAtivo(l)} aria-current={ativo === l ? "page" : undefined} className="relative px-3 py-5 text-sm">
-          {l}
-          {ativo === l && <span className="absolute inset-x-2 -bottom-px h-[3px] rounded-t-full bg-primary" />}
-        </button>
-      ))}
-    </nav>
-    <form onSubmit={(e) => { e.preventDefault(); setAtivo("Busca: " + busca); }} className="ml-auto flex items-center gap-2 rounded-lg border border-border px-3 py-2">
-      <Search className="h-3.5 w-3.5" />
-      <input value={busca} onChange={(e) => setBusca(e.target.value)} aria-label="Buscar no portal" className="bg-transparent outline-none" />
-    </form>
-  </div>
-</header>`;
+{/* linha 2 — só os itens daquele produto, com o sublinhado na cor dele */}
+<nav aria-label={"Seções de " + produto.label} className="flex items-center gap-1">
+  {itens.map((item) => (
+    <button onClick={() => setPagina(item.label)} aria-current={pagina === item.label ? "page" : undefined} className="relative px-3 py-5">
+      {item.label}
+      {pagina === item.label && <span className="absolute inset-x-2 -bottom-px h-[3px] rounded-t-full" style={{ backgroundColor: "hsl(" + produto.fundo + ")" }} />}
+    </button>
+  ))}
+</nav>`;
 
 const CODIGO_PILULA = `const listaRef = useRef<HTMLDivElement>(null);
 const [pilula, setPilula] = useState({ left: 0, width: 0 });
@@ -978,13 +950,13 @@ useEffect(() => {
   return () => observer.disconnect();
 }, [medir]);
 
-<nav ref={listaRef} className="relative mx-auto flex items-center gap-1 rounded-full border border-border bg-muted/40 p-1">
+<nav ref={listaRef} className="relative mx-auto flex items-center gap-0.5 rounded-full border border-border bg-muted/40 p-1">
   <span className="absolute top-1 bottom-1 rounded-full bg-background shadow-sm ring-1 ring-border transition-all duration-300"
         style={{ left: pilula.left, width: pilula.width }} />
-  {ITENS.map((l) => (
-    <button key={l} data-item={l} onClick={() => selecionar(l)} onFocus={() => setAtivo(l)}
-            aria-current={pagina === l ? "page" : undefined} className="relative z-10 rounded-full px-3.5 py-1.5 text-sm">
-      {l}
+  {MENU_AUVP.map((item) => (
+    <button key={item.id} data-item={item.id} onClick={() => selecionar(item)} onFocus={() => setAtivo(item.id)}
+            aria-current={pagina === item.label ? "page" : undefined} className="relative z-10 rounded-full px-3 py-1.5 text-sm">
+      {item.label}
     </button>
   ))}
 </nav>`;
@@ -1000,15 +972,21 @@ const CODIGO_BUSCA = `<div ref={ref} onKeyDown={(e) => {
             className="mx-auto flex w-full max-w-md items-center gap-2 rounded-xl border border-border bg-muted/40 px-3 py-2">
         <Search className="h-4 w-4 text-muted-foreground" />
         <input ref={inputRef} value={busca} onChange={(e) => setBusca(e.target.value)}
-               placeholder="Buscar ativos, aulas e ferramentas…" className="flex-1 bg-transparent text-sm outline-none" />
+               placeholder="Buscar aulas, ativos e ferramentas…" className="flex-1 bg-transparent text-sm outline-none" />
         <kbd className="rounded-md border border-border bg-background px-1.5 text-[10px]">⌘K</kbd>
       </form>
     </div>
   </header>
 
-  {/* gaveta de atalhos abaixo da barra — itens saem da ordem de tabulação quando fechada */}
+  {/* gaveta de atalhos — os mesmos itens, com contador; fechada, saem da tabulação */}
   <div style={{ maxHeight: aberto ? 220 : 0 }} aria-hidden={!aberto} className="overflow-hidden transition-all">
-    <button onClick={() => navegar(item.label)} tabIndex={aberto ? 0 : -1}>{item.label}</button>
+    {MENU_AUVP.map((item) => (
+      <button onClick={() => navegar(item.label)} tabIndex={aberto ? 0 : -1}>
+        <item.icon className="h-4 w-4" />
+        {item.label}
+        {item.contador && <span className="rounded-full bg-primary/10 px-1.5 text-[10px] text-primary">{item.contador}</span>}
+      </button>
+    ))}
   </div>
 </div>`;
 
@@ -1025,23 +1003,23 @@ export function MenusSuperiores() {
 
       <ComponentShowcase
         title="2. Mega menu de catálogo"
-        description="Um item abre um painel de largura total com miniaturas dos produtos e uma coluna editorial à direita. Feito para quando há muitos destinos e o usuário escolhe pelo reconhecimento visual, não pela leitura da lista."
+        description="O item com filhos abre um painel de largura total com miniaturas e uma coluna editorial à direita. Feito para quando há muitos destinos e o usuário escolhe pelo reconhecimento visual, não pela leitura da lista."
         code={CODIGO_MEGA}
       >
         <MenuMegaCatalogo />
       </ComponentShowcase>
 
       <ComponentShowcase
-        title="3. Barra flutuante escura"
-        description="Barra em cartão arredondado que flutua sobre o conteúdo, sempre escura, com CTA sólido à direita e mega painel em colunas de item + descrição. Postura de produto SaaS: serve bem para landing pages e sites de produto."
+        title="3. Barra flutuante"
+        description="Barra em cartão arredondado que flutua sobre o conteúdo, com CTA sólido à direita e mega painel em colunas de item + descrição. Usa os tokens do design system, então acompanha o tema claro e o escuro. Postura de produto: serve bem para landing pages e sites de produto."
         code={CODIGO_FLUTUANTE}
       >
-        <MenuFlutuanteEscuro />
+        <MenuFlutuante />
       </ComponentShowcase>
 
       <ComponentShowcase
         title="4. Portal em duas linhas"
-        description="Uma faixa fina de utilitários e trocas de marca em cima, a navegação principal embaixo com busca, notificações e avatar. Separa o que é institucional do que é navegação de conteúdo — o padrão de portais e e-commerces."
+        description="A faixa de cima troca de produto e veste a cor dele; a linha de baixo mostra só os destinos daquele produto. Separa o que é ecossistema do que é navegação de conteúdo — o padrão de portais com mais de uma marca."
         code={CODIGO_DUAS_LINHAS}
       >
         <MenuDuasLinhas />
