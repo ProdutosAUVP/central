@@ -371,7 +371,9 @@ export function LateralWorkspace() {
   const [recolhida, setRecolhida] = useState(false);
 
   return (
-    <Palco>
+    // A altura acomoda o estado recolhido, onde o cabeçalho empilha e a
+    // lista ficaria cortada numa moldura de 400px.
+    <Palco className="h-[480px]">
       <nav
         aria-label="Navegação do workspace"
         className={cn(
@@ -380,7 +382,14 @@ export function LateralWorkspace() {
         )}
         style={{ transitionTimingFunction: "cubic-bezier(0.22,1,0.36,1)" }}
       >
-        <div className="flex items-center gap-2.5 border-b border-border p-3">
+        {/* Recolhido, o cabeçalho empilha: o avatar do workspace e o botão de
+            expandir não cabem lado a lado nos 68px do trilho. */}
+        <div
+          className={cn(
+            "border-b border-border p-3",
+            recolhida ? "flex flex-col items-center gap-2" : "flex items-center gap-2.5"
+          )}
+        >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-foreground text-background text-xs font-anek font-bold">
             AU
           </div>
@@ -394,7 +403,10 @@ export function LateralWorkspace() {
             onClick={() => setRecolhida((r) => !r)}
             aria-label={recolhida ? "Expandir menu" : "Recolher menu"}
             aria-expanded={!recolhida}
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className={cn(
+              "flex h-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+              recolhida ? "w-9 border border-border" : "w-7"
+            )}
           >
             <ChevronsLeft className={cn("h-4 w-4 transition-transform", recolhida && "rotate-180")} />
           </button>
@@ -424,7 +436,16 @@ export function LateralWorkspace() {
                           : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                       )}
                     >
-                      <i.icon className="h-4 w-4 shrink-0" />
+                      <span className="relative flex shrink-0 items-center">
+                        <i.icon className="h-4 w-4" />
+                        {/* Recolhido o rótulo some, mas a contagem não pode
+                            sumir junto: vira bolha sobre o ícone. */}
+                        {recolhida && i.contador && (
+                          <span className="absolute -right-2 -top-1.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-primary px-1 text-[8px] font-roboto font-bold text-primary-foreground">
+                            {i.contador}
+                          </span>
+                        )}
+                      </span>
                       {!recolhida && (
                         <>
                           <span className="flex-1 truncate">{i.label}</span>
@@ -804,11 +825,14 @@ const CODIGO_TRILHO = `const [emFoco, setEmFoco] = useState<string | null>(null)
 </nav>`;
 
 const CODIGO_WORKSPACE = `<nav className={cn("flex flex-col border-r border-border bg-card transition-[width] duration-300", recolhida ? "w-[68px]" : "w-64")}>
-  {/* cabeçalho: workspace + botão de recolher */}
-  <div className="flex items-center gap-2.5 border-b border-border p-3">
+  {/* cabeçalho: workspace + botão de recolher. Recolhido ele EMPILHA — o
+      avatar e o botão não cabem lado a lado nos 68px do trilho, e o botão
+      de expandir ficaria para fora da barra */}
+  <div className={cn("border-b border-border p-3", recolhida ? "flex flex-col items-center gap-2" : "flex items-center gap-2.5")}>
     <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground text-background">AU</div>
     {!recolhida && <div><p className="text-sm font-semibold">AUVP Capital</p><p className="text-[11px] text-muted-foreground">Plano Produto</p></div>}
-    <button onClick={() => setRecolhida((r) => !r)} aria-label={recolhida ? "Expandir menu" : "Recolher menu"} aria-expanded={!recolhida}>
+    <button onClick={() => setRecolhida((r) => !r)} aria-label={recolhida ? "Expandir menu" : "Recolher menu"} aria-expanded={!recolhida}
+            className={cn("flex h-7 items-center justify-center rounded-md", recolhida ? "w-9 border border-border" : "w-7")}>
       <ChevronsLeft className={cn("h-4 w-4", recolhida && "rotate-180")} />
     </button>
   </div>
