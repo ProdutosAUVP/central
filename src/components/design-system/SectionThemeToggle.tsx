@@ -101,7 +101,11 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
 
   if (bare) {
     return (
-      <div className={cn("border rounded-lg overflow-hidden bg-card", className)}>
+      <div
+        className={cn("border rounded-lg overflow-hidden bg-card", className)}
+        data-ds-showcase={aiFoodTitle}
+        data-ds-description={description}
+      >
         <div className="px-6 py-4 border-b bg-muted/30">
           <div className="flex items-center justify-between gap-4">
             <span className="text-xs font-roboto font-bold uppercase tracking-wider text-muted-foreground">
@@ -111,7 +115,7 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
           </div>
         </div>
         <div className={cn(isDark ? "dark" : "light", brand === "escola" && "escola")}>
-          <div className="p-6 bg-background text-foreground">{children}</div>
+          <div className="p-6 bg-background text-foreground" data-ds-preview="">{children}</div>
         </div>
         {codeFooter}
       </div>
@@ -119,7 +123,11 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
   }
 
   return (
-    <div className={cn("border rounded-lg overflow-hidden bg-card", className)}>
+    <div
+      className={cn("border rounded-lg overflow-hidden bg-card", className)}
+      data-ds-showcase={aiFoodTitle}
+      data-ds-description={description}
+    >
       <div className="px-6 py-3 border-b bg-muted/30 flex items-center justify-between gap-4">
         <span className="text-xs font-roboto font-bold uppercase tracking-wider text-muted-foreground">
           {label ?? "Pré-visualização"}
@@ -127,7 +135,7 @@ export function SectionThemeToggle({ children, className, bare = false, label, t
         {themeButton}
       </div>
       <div className={cn(isDark ? "dark" : "light", brand === "escola" && "escola")}>
-        <div className="bg-background text-foreground">{children}</div>
+        <div className="bg-background text-foreground" data-ds-preview="">{children}</div>
       </div>
       {codeFooter}
     </div>
