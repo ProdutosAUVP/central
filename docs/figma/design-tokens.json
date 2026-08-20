@@ -746,19 +746,19 @@
     "--font-body": {
       "modos": {
         "capital-light": {
-          "valor": "'Roboto', sans-serif",
+          "valor": "Roboto",
           "css": "'Roboto', sans-serif"
         },
         "escola-light": {
-          "valor": "'Roboto', sans-serif",
+          "valor": "Roboto",
           "css": "'Roboto', sans-serif"
         },
         "capital-dark": {
-          "valor": "'Roboto', sans-serif",
+          "valor": "Roboto",
           "css": "'Roboto', sans-serif"
         },
         "escola-dark": {
-          "valor": "'Roboto', sans-serif",
+          "valor": "Roboto",
           "css": "'Roboto', sans-serif"
         }
       },
@@ -767,19 +767,19 @@
     "--font-display": {
       "modos": {
         "capital-light": {
-          "valor": "'Anek Latin', sans-serif",
+          "valor": "Anek Latin",
           "css": "'Anek Latin', sans-serif"
         },
         "escola-light": {
-          "valor": "'Anek Latin', sans-serif",
+          "valor": "Anek Latin",
           "css": "'Anek Latin', sans-serif"
         },
         "capital-dark": {
-          "valor": "'Anek Latin', sans-serif",
+          "valor": "Anek Latin",
           "css": "'Anek Latin', sans-serif"
         },
         "escola-dark": {
-          "valor": "'Anek Latin', sans-serif",
+          "valor": "Anek Latin",
           "css": "'Anek Latin', sans-serif"
         }
       },
@@ -788,19 +788,19 @@
     "--font-ui": {
       "modos": {
         "capital-light": {
-          "valor": "'Sora', sans-serif",
+          "valor": "Sora",
           "css": "'Sora', sans-serif"
         },
         "escola-light": {
-          "valor": "'Sora', sans-serif",
+          "valor": "Sora",
           "css": "'Sora', sans-serif"
         },
         "capital-dark": {
-          "valor": "'Sora', sans-serif",
+          "valor": "Sora",
           "css": "'Sora', sans-serif"
         },
         "escola-dark": {
-          "valor": "'Sora', sans-serif",
+          "valor": "Sora",
           "css": "'Sora', sans-serif"
         }
       },
@@ -1325,7 +1325,8 @@
           "css": "hsl(var(--primary) / 0.07)"
         }
       },
-      "tipo": "STRING"
+      "tipo": "STRING",
+      "derivado": true
     },
     "--success": {
       "modos": {

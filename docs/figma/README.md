@@ -143,6 +143,36 @@ Prompt para o Claude:
 > quatro coleções separadas e troque a coleção em vez do modo. Verifique o
 > plano antes de começar, senão a fase falha no meio.
 
+### 3.2.1 O que já foi criado
+
+Arquivo de destino: **DESIGN SYSTEM AUVP** — `fileKey` `P4tAGZvCMXzY6d5ovKIyNQ`. O plano do
+arquivo é Professional, então os quatro modos couberam numa coleção só.
+
+A coleção `AUVP Design Tokens` tem os **67 tokens** distribuídos em `color/base` (11),
+`color/brand` (17), `color/status` (10), `color/chart` (16), `color/sidebar` (8),
+`color/effect` (1), `number` (1) e `string` (3). Cada variável leva `scopes` restritos —
+`TEXT_FILL` nos `-foreground`, `STROKE_COLOR` em `border`/`input`/`ring`, `FONT_FAMILY` nas
+fontes, `CORNER_RADIUS` no radius — e o code syntax `var(--token)`, que faz o Dev Mode
+apontar de volta para o nome real no `src/index.css`.
+
+Duas coisas que o CSS obrigou a decidir na hora de criar as variáveis:
+
+- **`--spotlight` não existe em `:root`.** O valor de `capital-light` veio do bloco `.light`
+  (`transparent`); nos dois modos escuros, o alias `hsl(var(--primary) / 0.07)` foi resolvido
+  à mão para a cor de `--primary` **daquele modo** com alpha 0,07. Alias de variável no Figma
+  não carrega opacidade, então o token virou cor literal com alpha em vez de referência.
+
+- **`.light.escola` diverge da cascata em dois tokens.** `--card-foreground` e
+  `--popover-foreground` valem `110 78% 9%` (o verde da Capital) em `:root` + `.escola`, mas
+  `220 15% 15%` (o cinza da Escola) em `.light.escola`. O Figma seguiu a cascata, que é o que
+  a aplicação mostra por padrão. Tem cara de correção que nunca voltou para o bloco `.escola`
+  — vale confirmar com quem escreveu antes de mexer.
+
+> Os blocos `.light` e `.light.escola` (linhas 797 e 855) são **parciais**: existem para forçar
+> tema claro dentro de uma página escura e não redeclaram fontes, radius nem a sidebar. Por isso
+> o extrator continua lendo `:root` como base do modo claro. O segundo bloco `.dark` (linha 706)
+> só define `--cubo-*`, que está fora do sistema de propósito.
+
 ### 3.3 Tipografia
 
 As três famílias são Google Fonts e existem nativamente no Figma:

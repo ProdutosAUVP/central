@@ -57,7 +57,13 @@ function variaveis(corpo) {
 const HSL = /^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/;
 
 /** Classifica o valor para o Figma: COLOR, FLOAT ou STRING. */
-function classificar(valor) {
+function classificar(valor, nome) {
+  // Fontes: o Figma liga a variavel ao estilo de texto pela familia sozinha,
+  // sem o fallback do stack. O valor original do CSS fica guardado em `css`.
+  if (nome.startsWith("--font")) {
+    const familia = valor.split(",")[0].trim().replace(/^['"]|['"]$/g, "");
+    return { tipo: "STRING", valor: familia, css: valor };
+  }
   const hsl = HSL.exec(valor);
   if (hsl) {
     const [, h, s, l] = hsl.map(Number);
@@ -107,14 +113,16 @@ for (const nome of nomes) {
   for (const modo of MODOS) {
     const bruto = porModo[modo.nome][nome];
     if (bruto === undefined) continue;
-    const { tipo, valor, css: origem } = classificar(bruto);
+    const { tipo, valor, css: origem } = classificar(bruto, nome);
     entrada.tipo ??= tipo;
     entrada.modos[modo.nome] = { valor, css: origem };
   }
   if (Object.keys(entrada.modos).length < MODOS.length) semValor.push(nome);
   // Tokens que referenciam outros (ex.: hsl(var(--primary) / 0.07)) viram alias
   // no Figma; marcamos para o agente resolver na hora de criar a variável.
-  if (entrada.tipo === "STRING" && /var\(--/.test(entrada.modos["capital-light"]?.css ?? "")) {
+  // A varredura cobre todos os modos: um token pode ser literal num modo e
+  // derivado em outro, e nem todo token existe no primeiro modo da lista.
+  if (Object.values(entrada.modos).some(({ css }) => css.includes("var(--"))) {
     entrada.derivado = true;
   }
   tokens[nome] = entrada;
