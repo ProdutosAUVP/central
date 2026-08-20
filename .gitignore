@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Preview local dos widgets para a captura no Figma (scripts/figma/build-preview.mjs).
+# Fica em public/ para o Vite servir, mas nao pode entrar no build do GitHub Pages.
+public/_figma-preview/
