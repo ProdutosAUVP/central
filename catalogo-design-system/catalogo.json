@@ -1,0 +1,2592 @@
+{
+  "gerado_por": "scripts/exportar-catalogo-design-system.mjs",
+  "origem": "/design-system",
+  "temas": [
+    "claro",
+    "escuro"
+  ],
+  "formatos": [
+    "svg",
+    "png"
+  ],
+  "escala_png": 3,
+  "largura_viewport": 1440,
+  "total": 103,
+  "componentes": [
+    {
+      "nome": "Marca & Logos",
+      "arquivo": "marca-e-logos",
+      "descricao": "Aplicações oficiais de marca AUVP. Use sempre os arquivos originais sem distorções nem recortes.",
+      "categoria": "fundamentos",
+      "categoriaLabel": "Fundamentos",
+      "secao": "Marca & Logos",
+      "secaoId": "marca",
+      "ancora": "/design-system#marca",
+      "ordem": 0,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/fundamentos/marca-e-logos/marca-e-logos.png",
+          "svg": "claro/svg/fundamentos/marca-e-logos/marca-e-logos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/fundamentos/marca-e-logos/marca-e-logos.png",
+          "svg": "escuro/svg/fundamentos/marca-e-logos/marca-e-logos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 2701
+      }
+    },
+    {
+      "nome": "Paleta de Dados & Gráficos",
+      "arquivo": "paleta-de-dados-e-graficos",
+      "descricao": "Conjunto expandido de cores derivado da identidade de marca, usado em tabelas com múltiplas categorias, gráficos de pizza, barras, linhas e mapas de calor.",
+      "categoria": "fundamentos",
+      "categoriaLabel": "Fundamentos",
+      "secao": "Cores",
+      "secaoId": "colors",
+      "ancora": "/design-system#colors",
+      "ordem": 1,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/fundamentos/cores/paleta-de-dados-e-graficos.png",
+          "svg": "claro/svg/fundamentos/cores/paleta-de-dados-e-graficos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/fundamentos/cores/paleta-de-dados-e-graficos.png",
+          "svg": "escuro/svg/fundamentos/cores/paleta-de-dados-e-graficos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 1540
+      }
+    },
+    {
+      "nome": "Ícones Phosphor",
+      "arquivo": "icones-phosphor",
+      "descricao": "Biblioteca Phosphor Icons utilizada em todo o ecossistema AUVP. Inclui variantes regular, bold e fill.",
+      "categoria": "fundamentos",
+      "categoriaLabel": "Fundamentos",
+      "secao": "Ícones",
+      "secaoId": "icons",
+      "ancora": "/design-system#icons",
+      "ordem": 2,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/fundamentos/icones/icones-phosphor.png",
+          "svg": "claro/svg/fundamentos/icones/icones-phosphor.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/fundamentos/icones/icones-phosphor.png",
+          "svg": "escuro/svg/fundamentos/icones/icones-phosphor.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 567
+      }
+    },
+    {
+      "nome": "Escala de Elevação",
+      "arquivo": "escala-de-elevacao",
+      "descricao": "Do mais sutil (inputs) ao mais elevado (modais). Sombras nunca substituem borda em fundos escuros — combine com border.",
+      "categoria": "fundamentos",
+      "categoriaLabel": "Fundamentos",
+      "secao": "Sombras & Elevação",
+      "secaoId": "elevation",
+      "ancora": "/design-system#elevation",
+      "ordem": 3,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/fundamentos/sombras-e-elevacao/escala-de-elevacao.png",
+          "svg": "claro/svg/fundamentos/sombras-e-elevacao/escala-de-elevacao.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/fundamentos/sombras-e-elevacao/escala-de-elevacao.png",
+          "svg": "escuro/svg/fundamentos/sombras-e-elevacao/escala-de-elevacao.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 264
+      }
+    },
+    {
+      "nome": "Durações & Easings",
+      "arquivo": "duracoes-e-easings",
+      "descricao": "Passe o cursor sobre os cards para sentir cada duração. 240ms ease é o padrão do sistema; 320ms nas LPs da Escola.",
+      "categoria": "fundamentos",
+      "categoriaLabel": "Fundamentos",
+      "secao": "Motion & Animações",
+      "secaoId": "motion",
+      "ancora": "/design-system#motion",
+      "ordem": 4,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/fundamentos/motion-e-animacoes/duracoes-e-easings.png",
+          "svg": "claro/svg/fundamentos/motion-e-animacoes/duracoes-e-easings.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/fundamentos/motion-e-animacoes/duracoes-e-easings.png",
+          "svg": "escuro/svg/fundamentos/motion-e-animacoes/duracoes-e-easings.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 244
+      }
+    },
+    {
+      "nome": "Layout & Espaçamento",
+      "arquivo": "layout-e-espacamento",
+      "descricao": "Ritmo vertical e alinhamento baseados em múltiplos de 15px. Container max-w-1200px, padding inline 24px, seções alternam entre #FFF → #F2F2F2 → #000.",
+      "categoria": "layout",
+      "categoriaLabel": "Layout & Estrutura",
+      "secao": "Layout & Espaçamento",
+      "secaoId": "layout",
+      "ancora": "/design-system#layout",
+      "ordem": 5,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/layout/layout-e-espacamento/layout-e-espacamento.png",
+          "svg": "claro/svg/layout/layout-e-espacamento/layout-e-espacamento.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/layout/layout-e-espacamento/layout-e-espacamento.png",
+          "svg": "escuro/svg/layout/layout-e-espacamento/layout-e-espacamento.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 2079
+      }
+    },
+    {
+      "nome": "Cards & Containers",
+      "arquivo": "cards-e-containers",
+      "descricao": "Border radius 12px sempre. Contraste baixo entre card e fundo da dobra. Dobra preta → card #1B1B1B. Dobra cinza → card #FFF. Dobra branca → card #F2F2F2.",
+      "categoria": "layout",
+      "categoriaLabel": "Layout & Estrutura",
+      "secao": "Cards & Containers",
+      "secaoId": "cards-containers",
+      "ancora": "/design-system#cards-containers",
+      "ordem": 6,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/layout/cards-e-containers/cards-e-containers.png",
+          "svg": "claro/svg/layout/cards-e-containers/cards-e-containers.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/layout/cards-e-containers/cards-e-containers.png",
+          "svg": "escuro/svg/layout/cards-e-containers/cards-e-containers.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 1039
+      }
+    },
+    {
+      "nome": "Variantes de Botão",
+      "arquivo": "variantes-de-botao",
+      "descricao": "Todos os estilos disponíveis",
+      "categoria": "acoes",
+      "categoriaLabel": "Botões & Ações",
+      "secao": "Botões",
+      "secaoId": "buttons",
+      "ancora": "/design-system#buttons",
+      "ordem": 7,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/acoes/botoes/variantes-de-botao.png",
+          "svg": "claro/svg/acoes/botoes/variantes-de-botao.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/acoes/botoes/variantes-de-botao.png",
+          "svg": "escuro/svg/acoes/botoes/variantes-de-botao.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 152
+      }
+    },
+    {
+      "nome": "Tamanhos",
+      "arquivo": "tamanhos",
+      "descricao": "sm, default, lg, xl, icon",
+      "categoria": "acoes",
+      "categoriaLabel": "Botões & Ações",
+      "secao": "Botões",
+      "secaoId": "buttons",
+      "ancora": "/design-system#buttons",
+      "ordem": 8,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/acoes/botoes/tamanhos.png",
+          "svg": "claro/svg/acoes/botoes/tamanhos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/acoes/botoes/tamanhos.png",
+          "svg": "escuro/svg/acoes/botoes/tamanhos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 104
+      }
+    },
+    {
+      "nome": "CTA em Fundo Escuro",
+      "arquivo": "cta-em-fundo-escuro",
+      "descricao": "Comportamento do botão invertido",
+      "categoria": "acoes",
+      "categoriaLabel": "Botões & Ações",
+      "secao": "Botões",
+      "secaoId": "buttons",
+      "ancora": "/design-system#buttons",
+      "ordem": 9,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/acoes/botoes/cta-em-fundo-escuro.png",
+          "svg": "claro/svg/acoes/botoes/cta-em-fundo-escuro.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/acoes/botoes/cta-em-fundo-escuro.png",
+          "svg": "escuro/svg/acoes/botoes/cta-em-fundo-escuro.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 160
+      }
+    },
+    {
+      "nome": "Widgets Flutuantes",
+      "arquivo": "widgets-flutuantes",
+      "descricao": "Botões flutuantes fixos (WhatsApp e Porquinho da Economia) com animação pulse contínua, posicionamento fixed e z-index elevado.",
+      "categoria": "acoes",
+      "categoriaLabel": "Botões & Ações",
+      "secao": "Widgets Flutuantes",
+      "secaoId": "floaters",
+      "ancora": "/design-system#floaters",
+      "ordem": 10,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/acoes/widgets-flutuantes/widgets-flutuantes.png",
+          "svg": "claro/svg/acoes/widgets-flutuantes/widgets-flutuantes.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/acoes/widgets-flutuantes/widgets-flutuantes.png",
+          "svg": "escuro/svg/acoes/widgets-flutuantes/widgets-flutuantes.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 4173
+      }
+    },
+    {
+      "nome": "Grade Curricular",
+      "arquivo": "grade-curricular",
+      "descricao": "Tabs com categorias e cards de módulos",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Grade Curricular",
+      "secaoId": "grade",
+      "ancora": "/design-system#grade",
+      "ordem": 11,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/grade-curricular/grade-curricular.png",
+          "svg": "claro/svg/secoes/grade-curricular/grade-curricular.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/grade-curricular/grade-curricular.png",
+          "svg": "escuro/svg/secoes/grade-curricular/grade-curricular.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 377
+      }
+    },
+    {
+      "nome": "Contagem Regressiva",
+      "arquivo": "contagem-regressiva",
+      "descricao": "Widget de countdown dinâmico focado em escassez. Cards com backdrop-blur e transparência. Exibe dias, horas, minutos e segundos em tempo real.",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Contagem Regressiva",
+      "secaoId": "countdown",
+      "ancora": "/design-system#countdown",
+      "ordem": 12,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/contagem-regressiva/contagem-regressiva.png",
+          "svg": "claro/svg/secoes/contagem-regressiva/contagem-regressiva.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/contagem-regressiva/contagem-regressiva.png",
+          "svg": "escuro/svg/secoes/contagem-regressiva/contagem-regressiva.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 531
+      }
+    },
+    {
+      "nome": "Dropdown / FAQ",
+      "arquivo": "dropdown-faq",
+      "descricao": "Accordion para páginas de vendas com temas claro e escuro. Ícone de + que gira para × na abertura. Transição suave de altura.",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Dropdown",
+      "secaoId": "faq",
+      "ancora": "/design-system#faq",
+      "ordem": 13,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/dropdown/dropdown-faq.png",
+          "svg": "claro/svg/secoes/dropdown/dropdown-faq.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/dropdown/dropdown-faq.png",
+          "svg": "escuro/svg/secoes/dropdown/dropdown-faq.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 547
+      }
+    },
+    {
+      "nome": "Tabela de Preços",
+      "arquivo": "tabela-de-precos",
+      "descricao": "Toggle animado mensal/anual com cards translúcidos, badge de desconto percentual e CTA primário em destaque.",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Tabela de Preços",
+      "secaoId": "pricing",
+      "ancora": "/design-system#pricing",
+      "ordem": 14,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/tabela-de-precos/tabela-de-precos.png",
+          "svg": "claro/svg/secoes/tabela-de-precos/tabela-de-precos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/tabela-de-precos/tabela-de-precos.png",
+          "svg": "escuro/svg/secoes/tabela-de-precos/tabela-de-precos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 634
+      }
+    },
+    {
+      "nome": "Jornada do Herói",
+      "arquivo": "jornada-do-heroi",
+      "descricao": "Timeline interativa com pontos clicáveis, barra de progresso animada e painel de conteúdo contextual para cada etapa da jornada.",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Jornada do Herói",
+      "secaoId": "journey",
+      "ancora": "/design-system#journey",
+      "ordem": 15,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/jornada-do-heroi/jornada-do-heroi.png",
+          "svg": "claro/svg/secoes/jornada-do-heroi/jornada-do-heroi.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/jornada-do-heroi/jornada-do-heroi.png",
+          "svg": "escuro/svg/secoes/jornada-do-heroi/jornada-do-heroi.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 702
+      }
+    },
+    {
+      "nome": "Calculadora de Rendimentos",
+      "arquivo": "calculadora-de-rendimentos",
+      "descricao": "Widget de simulação para landing pages com slider de valor, resultado animado e CTAs do tema Sites. Identidade visual Capital/Escola via contexto de marca.",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Calculadora de Rendimentos",
+      "secaoId": "site-calc",
+      "ancora": "/design-system#site-calc",
+      "ordem": 16,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/calculadora-de-rendimentos/calculadora-de-rendimentos.png",
+          "svg": "claro/svg/secoes/calculadora-de-rendimentos/calculadora-de-rendimentos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/calculadora-de-rendimentos/calculadora-de-rendimentos.png",
+          "svg": "escuro/svg/secoes/calculadora-de-rendimentos/calculadora-de-rendimentos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 1160
+      }
+    },
+    {
+      "nome": "Calculadora de Câmbio",
+      "arquivo": "calculadora-de-cambio",
+      "descricao": "Ferramenta interativa de conversão de moedas com cálculo automático de IOF, VET e exibição de cotação. Suporta múltiplas moedas e sentidos de conversão.",
+      "categoria": "secoes",
+      "categoriaLabel": "Seções de Página",
+      "secao": "Calculadora de Câmbio",
+      "secaoId": "tool-calc",
+      "ancora": "/design-system#tool-calc",
+      "ordem": 17,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/secoes/calculadora-de-cambio/calculadora-de-cambio.png",
+          "svg": "claro/svg/secoes/calculadora-de-cambio/calculadora-de-cambio.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/secoes/calculadora-de-cambio/calculadora-de-cambio.png",
+          "svg": "escuro/svg/secoes/calculadora-de-cambio/calculadora-de-cambio.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 1076
+      }
+    },
+    {
+      "nome": "Tooltips & Popups",
+      "arquivo": "tooltips-e-popups",
+      "descricao": "Elementos flutuantes ancorados ao gatilho: tooltip simples (hover), popover com conteúdo rico (clique) e popup de destaque para Landing Pages.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Tooltips & Popups",
+      "secaoId": "tooltips",
+      "ancora": "/design-system#tooltips",
+      "ordem": 18,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/tooltips-e-popups/tooltips-e-popups.png",
+          "svg": "claro/svg/feedback/tooltips-e-popups/tooltips-e-popups.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/tooltips-e-popups/tooltips-e-popups.png",
+          "svg": "escuro/svg/feedback/tooltips-e-popups/tooltips-e-popups.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 873
+      }
+    },
+    {
+      "nome": "Notificações empilháveis",
+      "arquivo": "notificacoes-empilhaveis",
+      "descricao": "Diferente do Toast: persistem em pilha no canto, com tipo semântico (success/info/warning/error), título, descrição e fechar manual. Ideais para fluxos longos (uploads, salvamentos, alertas de sistema).",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Notificações",
+      "secaoId": "notifications",
+      "ancora": "/design-system#notifications",
+      "ordem": 19,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/notificacoes/notificacoes-empilhaveis.png",
+          "svg": "claro/svg/feedback/notificacoes/notificacoes-empilhaveis.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/notificacoes/notificacoes-empilhaveis.png",
+          "svg": "escuro/svg/feedback/notificacoes/notificacoes-empilhaveis.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Popconfirm (confirmação inline)",
+      "arquivo": "popconfirm-confirmacao-inline",
+      "descricao": "Confirmação leve ancorada ao gatilho — ideal para ações destrutivas rápidas (excluir item, sair, descartar) sem abrir um Dialog completo.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Popconfirm",
+      "secaoId": "popconfirm",
+      "ancora": "/design-system#popconfirm",
+      "ordem": 20,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/popconfirm/popconfirm-confirmacao-inline.png",
+          "svg": "claro/svg/feedback/popconfirm/popconfirm-confirmacao-inline.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/popconfirm/popconfirm-confirmacao-inline.png",
+          "svg": "escuro/svg/feedback/popconfirm/popconfirm-confirmacao-inline.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Spin (3 tamanhos + tip)",
+      "arquivo": "spin-3-tamanhos-tip",
+      "descricao": "Indicador de carregamento com tag de mensagem em Sora uppercase, alinhado ao padrão AUVP de tooltips.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Spin (Loading)",
+      "secaoId": "spin",
+      "ancora": "/design-system#spin",
+      "ordem": 21,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/spin-loading/spin-3-tamanhos-tip.png",
+          "svg": "claro/svg/feedback/spin-loading/spin-3-tamanhos-tip.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/spin-loading/spin-3-tamanhos-tip.png",
+          "svg": "escuro/svg/feedback/spin-loading/spin-3-tamanhos-tip.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 116
+      }
+    },
+    {
+      "nome": "Spin Overlay (sobre conteúdo)",
+      "arquivo": "spin-overlay-sobre-conteudo",
+      "descricao": "Encobre uma área de conteúdo durante operações assíncronas, mantendo o layout estável.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Spin (Loading)",
+      "secaoId": "spin",
+      "ancora": "/design-system#spin",
+      "ordem": 22,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/spin-loading/spin-overlay-sobre-conteudo.png",
+          "svg": "claro/svg/feedback/spin-loading/spin-overlay-sobre-conteudo.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/spin-loading/spin-overlay-sobre-conteudo.png",
+          "svg": "escuro/svg/feedback/spin-loading/spin-overlay-sobre-conteudo.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 274
+      }
+    },
+    {
+      "nome": "Progress",
+      "arquivo": "progress",
+      "descricao": "Barra de progresso minimalista inspirada no Geist: trilha clara, preenchimento sólido em foreground, cantos totalmente arredondados e transição suave.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Progress Bar",
+      "secaoId": "progress-geist",
+      "ancora": "/design-system#progress-geist",
+      "ordem": 23,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/progress-bar/progress.png",
+          "svg": "claro/svg/feedback/progress-bar/progress.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/progress-bar/progress.png",
+          "svg": "escuro/svg/feedback/progress-bar/progress.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 328
+      }
+    },
+    {
+      "nome": "Skeleton — Lista com avatar",
+      "arquivo": "skeleton-lista-com-avatar",
+      "descricao": "Combinação avatar circular + linhas de texto. Padrão para feeds, comentários e listas de usuários.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Skeleton Avançado",
+      "secaoId": "skeleton-avancado",
+      "ancora": "/design-system#skeleton-avancado",
+      "ordem": 24,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/skeleton-avancado/skeleton-lista-com-avatar.png",
+          "svg": "claro/svg/feedback/skeleton-avancado/skeleton-lista-com-avatar.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/skeleton-avancado/skeleton-lista-com-avatar.png",
+          "svg": "escuro/svg/feedback/skeleton-avancado/skeleton-lista-com-avatar.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 256
+      }
+    },
+    {
+      "nome": "Skeleton — Card de conteúdo",
+      "arquivo": "skeleton-card-de-conteudo",
+      "descricao": "Imagem destacada + título + parágrafo + ações. Use para cards de produto, curso ou artigo.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Skeleton Avançado",
+      "secaoId": "skeleton-avancado",
+      "ancora": "/design-system#skeleton-avancado",
+      "ordem": 25,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/skeleton-avancado/skeleton-card-de-conteudo.png",
+          "svg": "claro/svg/feedback/skeleton-avancado/skeleton-card-de-conteudo.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/skeleton-avancado/skeleton-card-de-conteudo.png",
+          "svg": "escuro/svg/feedback/skeleton-avancado/skeleton-card-de-conteudo.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 394
+      }
+    },
+    {
+      "nome": "Skeleton — Tabela",
+      "arquivo": "skeleton-tabela",
+      "descricao": "Cabeçalho + linhas com proporções variadas. Padrão para grids de dados e relatórios.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Skeleton Avançado",
+      "secaoId": "skeleton-avancado",
+      "ancora": "/design-system#skeleton-avancado",
+      "ordem": 26,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/skeleton-avancado/skeleton-tabela.png",
+          "svg": "claro/svg/feedback/skeleton-avancado/skeleton-tabela.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/skeleton-avancado/skeleton-tabela.png",
+          "svg": "escuro/svg/feedback/skeleton-avancado/skeleton-tabela.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 250
+      }
+    },
+    {
+      "nome": "Empty (estado vazio)",
+      "arquivo": "empty-estado-vazio",
+      "descricao": "Placeholder para listas, tabelas e buscas sem resultado. Inclui ícone, título, descrição curta e CTA opcional para guiar a próxima ação.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Empty (Vazio)",
+      "secaoId": "empty",
+      "ancora": "/design-system#empty",
+      "ordem": 27,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/empty-vazio/empty-estado-vazio.png",
+          "svg": "claro/svg/feedback/empty-vazio/empty-estado-vazio.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/empty-vazio/empty-estado-vazio.png",
+          "svg": "escuro/svg/feedback/empty-vazio/empty-estado-vazio.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 306
+      }
+    },
+    {
+      "nome": "Result (página de resultado)",
+      "arquivo": "result-pagina-de-resultado",
+      "descricao": "Tela cheia de feedback após operações críticas (pagamento, envio de formulário, erro 403/404/500). Usa tokens semânticos success/error/warning.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Result",
+      "secaoId": "result",
+      "ancora": "/design-system#result",
+      "ordem": 28,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/result/result-pagina-de-resultado.png",
+          "svg": "claro/svg/feedback/result/result-pagina-de-resultado.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/result/result-pagina-de-resultado.png",
+          "svg": "escuro/svg/feedback/result/result-pagina-de-resultado.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 330
+      }
+    },
+    {
+      "nome": "Dialog & AlertDialog",
+      "arquivo": "dialog-e-alertdialog",
+      "descricao": "Dialog para edições rápidas; AlertDialog para confirmações destrutivas. O conteúdo abre em portal e segue o tema global da página.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Modal (Dialog)",
+      "secaoId": "dialog",
+      "ancora": "/design-system#dialog",
+      "ordem": 29,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/modal-dialog/dialog-e-alertdialog.png",
+          "svg": "claro/svg/feedback/modal-dialog/dialog-e-alertdialog.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/modal-dialog/dialog-e-alertdialog.png",
+          "svg": "escuro/svg/feedback/modal-dialog/dialog-e-alertdialog.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Toast",
+      "arquivo": "toast",
+      "descricao": "Dispare pelo hook useToast. Variante destructive para erros. O toast abre em portal e segue o tema global da página.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Toast",
+      "secaoId": "toast",
+      "ancora": "/design-system#toast",
+      "ordem": 30,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/toast/toast.png",
+          "svg": "claro/svg/feedback/toast/toast.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/toast/toast.png",
+          "svg": "escuro/svg/feedback/toast/toast.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Drawer único",
+      "arquivo": "drawer-unico",
+      "descricao": "Painel lateral simples para edição, detalhes ou formulários secundários sem sair do contexto principal.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Drawer",
+      "secaoId": "drawer-simples",
+      "ancora": "/design-system#drawer-simples",
+      "ordem": 31,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/drawer/drawer-unico.png",
+          "svg": "claro/svg/feedback/drawer/drawer-unico.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/drawer/drawer-unico.png",
+          "svg": "escuro/svg/feedback/drawer/drawer-unico.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Drawer multi-nível (push)",
+      "arquivo": "drawer-multi-nivel-push",
+      "descricao": "Drawers empilhados que abrem em sequência preservando a hierarquia. Todos os níveis compartilham a mesma largura para manter consistência visual ao navegar entre camadas.",
+      "categoria": "feedback",
+      "categoriaLabel": "Feedback & Overlays",
+      "secao": "Drawer Multi-nível",
+      "secaoId": "drawer-multi",
+      "ancora": "/design-system#drawer-multi",
+      "ordem": 32,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/feedback/drawer-multi-nivel/drawer-multi-nivel-push.png",
+          "svg": "claro/svg/feedback/drawer-multi-nivel/drawer-multi-nivel-push.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/feedback/drawer-multi-nivel/drawer-multi-nivel-push.png",
+          "svg": "escuro/svg/feedback/drawer-multi-nivel/drawer-multi-nivel-push.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "1. Institucional com popover",
+      "arquivo": "1-institucional-com-popover",
+      "descricao": "O menu da própria Central. Links em texto, item ativo marcado por um filete discreto e um popover que descreve cada destino no hover e no foco do teclado. Bom para poucos itens de peso igual, quando o nome sozinho não explica o que tem lá dentro.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Superiores",
+      "secaoId": "menus-superiores",
+      "ancora": "/design-system#menus-superiores",
+      "ordem": 33,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-superiores/1-institucional-com-popover.png",
+          "svg": "claro/svg/navegacao/menus-superiores/1-institucional-com-popover.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-superiores/1-institucional-com-popover.png",
+          "svg": "escuro/svg/navegacao/menus-superiores/1-institucional-com-popover.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 283
+      }
+    },
+    {
+      "nome": "2. Mega menu de catálogo",
+      "arquivo": "2-mega-menu-de-catalogo",
+      "descricao": "O item com filhos abre um painel de largura total com miniaturas e uma coluna editorial à direita. Feito para quando há muitos destinos e o usuário escolhe pelo reconhecimento visual, não pela leitura da lista.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Superiores",
+      "secaoId": "menus-superiores",
+      "ancora": "/design-system#menus-superiores",
+      "ordem": 34,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-superiores/2-mega-menu-de-catalogo.png",
+          "svg": "claro/svg/navegacao/menus-superiores/2-mega-menu-de-catalogo.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-superiores/2-mega-menu-de-catalogo.png",
+          "svg": "escuro/svg/navegacao/menus-superiores/2-mega-menu-de-catalogo.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 503
+      }
+    },
+    {
+      "nome": "3. Barra flutuante",
+      "arquivo": "3-barra-flutuante",
+      "descricao": "Barra em cartão arredondado que flutua sobre o conteúdo, com CTA sólido à direita e mega painel em colunas de item + descrição. Usa os tokens do design system, então acompanha o tema claro e o escuro. Postura de produto: serve bem para landing pages e sites de produto.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Superiores",
+      "secaoId": "menus-superiores",
+      "ancora": "/design-system#menus-superiores",
+      "ordem": 35,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-superiores/3-barra-flutuante.png",
+          "svg": "claro/svg/navegacao/menus-superiores/3-barra-flutuante.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-superiores/3-barra-flutuante.png",
+          "svg": "escuro/svg/navegacao/menus-superiores/3-barra-flutuante.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 543
+      }
+    },
+    {
+      "nome": "4. Portal em duas linhas",
+      "arquivo": "4-portal-em-duas-linhas",
+      "descricao": "A faixa de cima troca de produto e veste a cor dele; a linha de baixo mostra só os destinos daquele produto. Separa o que é ecossistema do que é navegação de conteúdo — o padrão de portais com mais de uma marca.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Superiores",
+      "secaoId": "menus-superiores",
+      "ancora": "/design-system#menus-superiores",
+      "ordem": 36,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-superiores/4-portal-em-duas-linhas.png",
+          "svg": "claro/svg/navegacao/menus-superiores/4-portal-em-duas-linhas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-superiores/4-portal-em-duas-linhas.png",
+          "svg": "escuro/svg/navegacao/menus-superiores/4-portal-em-duas-linhas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 276
+      }
+    },
+    {
+      "nome": "5. Centralizado com pílula deslizante",
+      "arquivo": "5-centralizado-com-pilula-deslizante",
+      "descricao": "Navegação centralizada dentro de um trilho arredondado; a pílula do item ativo desliza medindo a posição real do botão e acompanha o foco do teclado. Poucos itens, muito acabamento — indicado para landing pages e páginas de venda.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Superiores",
+      "secaoId": "menus-superiores",
+      "ancora": "/design-system#menus-superiores",
+      "ordem": 37,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-superiores/5-centralizado-com-pilula-deslizante.png",
+          "svg": "claro/svg/navegacao/menus-superiores/5-centralizado-com-pilula-deslizante.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-superiores/5-centralizado-com-pilula-deslizante.png",
+          "svg": "escuro/svg/navegacao/menus-superiores/5-centralizado-com-pilula-deslizante.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 236
+      }
+    },
+    {
+      "nome": "6. App com busca protagonista",
+      "arquivo": "6-app-com-busca-protagonista",
+      "descricao": "A busca ocupa o centro da barra (com ⌘K) e os links viram uma gaveta de atalhos atrás do botão de menu. Para telas logadas, onde o usuário chega sabendo o que procura e a navegação por lista é secundária.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Superiores",
+      "secaoId": "menus-superiores",
+      "ancora": "/design-system#menus-superiores",
+      "ordem": 38,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-superiores/6-app-com-busca-protagonista.png",
+          "svg": "claro/svg/navegacao/menus-superiores/6-app-com-busca-protagonista.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-superiores/6-app-com-busca-protagonista.png",
+          "svg": "escuro/svg/navegacao/menus-superiores/6-app-com-busca-protagonista.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 361
+      }
+    },
+    {
+      "nome": "1. Documentação com grupos colapsáveis",
+      "arquivo": "1-documentacao-com-grupos-colapsaveis",
+      "descricao": "O menu do próprio Design System: a busca filtra a lista, as categorias abrem e fecham e o item ativo ganha fundo sutil. Aguenta dezenas de destinos sem virar uma lista infinita — é o modelo para conteúdo longo e catalogado.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Laterais",
+      "secaoId": "menus-laterais",
+      "ancora": "/design-system#menus-laterais",
+      "ordem": 39,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-laterais/1-documentacao-com-grupos-colapsaveis.png",
+          "svg": "claro/svg/navegacao/menus-laterais/1-documentacao-com-grupos-colapsaveis.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-laterais/1-documentacao-com-grupos-colapsaveis.png",
+          "svg": "escuro/svg/navegacao/menus-laterais/1-documentacao-com-grupos-colapsaveis.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 448
+      }
+    },
+    {
+      "nome": "2. Índice à direita, sem fundo",
+      "arquivo": "2-indice-a-direita-sem-fundo",
+      "descricao": "Não é uma barra: é um índice que começa depois do hero, à direita do texto, sem superfície própria — só tipografia e um traço no item ativo. Acompanha a leitura (scroll-spy) e não rouba largura do conteúdo. Modelo para páginas longas: manuais, políticas e artigos.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Laterais",
+      "secaoId": "menus-laterais",
+      "ancora": "/design-system#menus-laterais",
+      "ordem": 40,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-laterais/2-indice-a-direita-sem-fundo.png",
+          "svg": "claro/svg/navegacao/menus-laterais/2-indice-a-direita-sem-fundo.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-laterais/2-indice-a-direita-sem-fundo.png",
+          "svg": "escuro/svg/navegacao/menus-laterais/2-indice-a-direita-sem-fundo.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 488
+      }
+    },
+    {
+      "nome": "3. Trilho de ícones com flyout",
+      "arquivo": "3-trilho-de-icones-com-flyout",
+      "descricao": "Barra estreita só de ícones, com marcador na borda, contador em bolha e o rótulo aparecendo em flyout no hover e no foco do teclado. Devolve largura ao conteúdo em telas de trabalho — exige ícones inequívocos e no máximo seis ou sete destinos.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Laterais",
+      "secaoId": "menus-laterais",
+      "ancora": "/design-system#menus-laterais",
+      "ordem": 41,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-laterais/3-trilho-de-icones-com-flyout.png",
+          "svg": "claro/svg/navegacao/menus-laterais/3-trilho-de-icones-com-flyout.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-laterais/3-trilho-de-icones-com-flyout.png",
+          "svg": "escuro/svg/navegacao/menus-laterais/3-trilho-de-icones-com-flyout.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 448
+      }
+    },
+    {
+      "nome": "4. Workspace recolhível",
+      "arquivo": "4-workspace-recolhivel",
+      "descricao": "Cabeçalho com o contexto da conta, grupos de itens com contadores e rodapé fixo com usuário e ajuda. Recolhe para um trilho de ícones sem trocar de componente. É o modelo para telas logadas e uso diário.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Laterais",
+      "secaoId": "menus-laterais",
+      "ancora": "/design-system#menus-laterais",
+      "ordem": 42,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-laterais/4-workspace-recolhivel.png",
+          "svg": "claro/svg/navegacao/menus-laterais/4-workspace-recolhivel.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-laterais/4-workspace-recolhivel.png",
+          "svg": "escuro/svg/navegacao/menus-laterais/4-workspace-recolhivel.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 528
+      }
+    },
+    {
+      "nome": "5. Drawer sobreposto",
+      "arquivo": "5-drawer-sobreposto",
+      "descricao": "O menu não ocupa espaço: entra deslizando por cima do conteúdo, com overlay que escurece a página e fecha no clique ou no Esc. Os itens com seta abrem submenu no próprio painel. Modelo para mobile e telas estreitas.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Laterais",
+      "secaoId": "menus-laterais",
+      "ancora": "/design-system#menus-laterais",
+      "ordem": 43,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-laterais/5-drawer-sobreposto.png",
+          "svg": "claro/svg/navegacao/menus-laterais/5-drawer-sobreposto.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-laterais/5-drawer-sobreposto.png",
+          "svg": "escuro/svg/navegacao/menus-laterais/5-drawer-sobreposto.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 448
+      }
+    },
+    {
+      "nome": "6. Árvore de referência",
+      "arquivo": "6-arvore-de-referencia",
+      "descricao": "Grupo, item e filho aninhados com linha guia e chevrons por nó, mostrando a hierarquia inteira de uma vez. Para documentação técnica e bases de conhecimento, onde o usuário precisa enxergar onde está dentro da estrutura.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Menus Laterais",
+      "secaoId": "menus-laterais",
+      "ancora": "/design-system#menus-laterais",
+      "ordem": 44,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/menus-laterais/6-arvore-de-referencia.png",
+          "svg": "claro/svg/navegacao/menus-laterais/6-arvore-de-referencia.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/menus-laterais/6-arvore-de-referencia.png",
+          "svg": "escuro/svg/navegacao/menus-laterais/6-arvore-de-referencia.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 488
+      }
+    },
+    {
+      "nome": "Steps (wizard horizontal)",
+      "arquivo": "steps-wizard-horizontal",
+      "descricao": "Etapas numeradas com estado completo / atual / pendente e linha de progresso. Ideal para onboarding, checkouts e fluxos de cadastro.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Steps (Wizard)",
+      "secaoId": "steps",
+      "ancora": "/design-system#steps",
+      "ordem": 45,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/steps-wizard/steps-wizard-horizontal.png",
+          "svg": "claro/svg/navegacao/steps-wizard/steps-wizard-horizontal.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/steps-wizard/steps-wizard-horizontal.png",
+          "svg": "escuro/svg/navegacao/steps-wizard/steps-wizard-horizontal.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 184
+      }
+    },
+    {
+      "nome": "Anchor (navegação com scroll spy)",
+      "arquivo": "anchor-navegacao-com-scroll-spy",
+      "descricao": "Menu lateral de âncoras que rola até a seção e destaca automaticamente o item visível. Usa borda lateral (left border) como indicador ativo.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Anchor (Scroll Spy)",
+      "secaoId": "anchor",
+      "ancora": "/design-system#anchor",
+      "ordem": 46,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/anchor-scroll-spy/anchor-navegacao-com-scroll-spy.png",
+          "svg": "claro/svg/navegacao/anchor-scroll-spy/anchor-navegacao-com-scroll-spy.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/anchor-scroll-spy/anchor-navegacao-com-scroll-spy.png",
+          "svg": "escuro/svg/navegacao/anchor-scroll-spy/anchor-navegacao-com-scroll-spy.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 600
+      }
+    },
+    {
+      "nome": "Tabs",
+      "arquivo": "tabs",
+      "descricao": "Tabs minimalistas inspiradas no Geist: rótulos discretos, divisor inferior contínuo e indicador em barra sob a aba ativa. Útil para alternar visualizações dentro de um mesmo contexto sem competir com o conteúdo.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Tabs",
+      "secaoId": "tabs-geist",
+      "ancora": "/design-system#tabs-geist",
+      "ordem": 47,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/tabs/tabs.png",
+          "svg": "claro/svg/navegacao/tabs/tabs.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/tabs/tabs.png",
+          "svg": "escuro/svg/navegacao/tabs/tabs.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 152
+      }
+    },
+    {
+      "nome": "Tour (onboarding guiado)",
+      "arquivo": "tour-onboarding-guiado",
+      "descricao": "Sequência de tooltips ancorados a elementos da UI com overlay e spotlight. Ideal para apresentar funcionalidades novas no primeiro acesso.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Tour",
+      "secaoId": "tour",
+      "ancora": "/design-system#tour",
+      "ordem": 48,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/tour/tour-onboarding-guiado.png",
+          "svg": "claro/svg/navegacao/tour/tour-onboarding-guiado.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/tour/tour-onboarding-guiado.png",
+          "svg": "escuro/svg/navegacao/tour/tour-onboarding-guiado.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 236
+      }
+    },
+    {
+      "nome": "Breadcrumb",
+      "arquivo": "breadcrumb",
+      "descricao": "Último item é a página atual (sem link). Roboto 14px, separador chevron.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Breadcrumb",
+      "secaoId": "breadcrumb",
+      "ancora": "/design-system#breadcrumb",
+      "ordem": 49,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/breadcrumb/breadcrumb.png",
+          "svg": "claro/svg/navegacao/breadcrumb/breadcrumb.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/breadcrumb/breadcrumb.png",
+          "svg": "escuro/svg/navegacao/breadcrumb/breadcrumb.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 84
+      }
+    },
+    {
+      "nome": "Pagination",
+      "arquivo": "pagination",
+      "descricao": "Anterior/Próxima nas extremidades, página ativa destacada com isActive.",
+      "categoria": "navegacao",
+      "categoriaLabel": "Navegação",
+      "secao": "Pagination",
+      "secaoId": "pagination",
+      "ancora": "/design-system#pagination",
+      "ordem": 50,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/navegacao/pagination/pagination.png",
+          "svg": "claro/svg/navegacao/pagination/pagination.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/navegacao/pagination/pagination.png",
+          "svg": "escuro/svg/navegacao/pagination/pagination.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Campos de Texto",
+      "arquivo": "campos-de-texto",
+      "descricao": "Estados: padrão, erro (aria-invalid + mensagem) e desabilitado. Textarea para textos longos.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Inputs & Formulários",
+      "secaoId": "form-inputs",
+      "ancora": "/design-system#form-inputs",
+      "ordem": 51,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/inputs-e-formularios/campos-de-texto.png",
+          "svg": "claro/svg/entrada/inputs-e-formularios/campos-de-texto.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/inputs-e-formularios/campos-de-texto.png",
+          "svg": "escuro/svg/entrada/inputs-e-formularios/campos-de-texto.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 246
+      }
+    },
+    {
+      "nome": "Seleção (Select & Radio)",
+      "arquivo": "selecao-select-e-radio",
+      "descricao": "Select para listas longas; RadioGroup para até 4 opções visíveis.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Inputs & Formulários",
+      "secaoId": "form-inputs",
+      "ancora": "/design-system#form-inputs",
+      "ordem": 52,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/inputs-e-formularios/selecao-select-e-radio.png",
+          "svg": "claro/svg/entrada/inputs-e-formularios/selecao-select-e-radio.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/inputs-e-formularios/selecao-select-e-radio.png",
+          "svg": "escuro/svg/entrada/inputs-e-formularios/selecao-select-e-radio.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 108
+      }
+    },
+    {
+      "nome": "Slider",
+      "arquivo": "slider",
+      "descricao": "Para valores numéricos em faixa contínua. Thumb na cor primária da marca ativa.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Inputs & Formulários",
+      "secaoId": "form-inputs",
+      "ancora": "/design-system#form-inputs",
+      "ordem": 53,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/inputs-e-formularios/slider.png",
+          "svg": "claro/svg/entrada/inputs-e-formularios/slider.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/inputs-e-formularios/slider.png",
+          "svg": "escuro/svg/entrada/inputs-e-formularios/slider.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 82
+      }
+    },
+    {
+      "nome": "Segmented (toggle compacto)",
+      "arquivo": "segmented-toggle-compacto",
+      "descricao": "Seletor de opções estilo segmented control. Alternativa compacta a Tabs ou Radio Group para alternar entre poucas opções (ex: períodos, modos de visualização, filtros rápidos).",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Switch",
+      "secaoId": "segmented",
+      "ancora": "/design-system#segmented",
+      "ordem": 54,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/switch/segmented-toggle-compacto.png",
+          "svg": "claro/svg/entrada/switch/segmented-toggle-compacto.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/switch/segmented-toggle-compacto.png",
+          "svg": "escuro/svg/entrada/switch/segmented-toggle-compacto.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Switch (ligado/desligado)",
+      "arquivo": "switch-ligado-desligado",
+      "descricao": "Toggle simples estilo switch para alternar entre estados binários (on/off, ativo/inativo).",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Switch",
+      "secaoId": "segmented",
+      "ancora": "/design-system#segmented",
+      "ordem": 55,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/switch/switch-ligado-desligado.png",
+          "svg": "claro/svg/entrada/switch/switch-ligado-desligado.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/switch/switch-ligado-desligado.png",
+          "svg": "escuro/svg/entrada/switch/switch-ligado-desligado.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 72
+      }
+    },
+    {
+      "nome": "Switch com estado desabilitado",
+      "arquivo": "switch-com-estado-desabilitado",
+      "descricao": "Switch cujo estado interativo pode ser alternado externamente via botão (controle de disponibilidade).",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Switch",
+      "secaoId": "segmented",
+      "ancora": "/design-system#segmented",
+      "ordem": 56,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/switch/switch-com-estado-desabilitado.png",
+          "svg": "claro/svg/entrada/switch/switch-com-estado-desabilitado.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/switch/switch-com-estado-desabilitado.png",
+          "svg": "escuro/svg/entrada/switch/switch-com-estado-desabilitado.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Upload com preview",
+      "arquivo": "upload-com-preview",
+      "descricao": "Dropzone para imagens com preview em grid, barra de progresso simulada, tamanho do arquivo e remover individual. Suporta drag-and-drop e clique.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Upload com Preview",
+      "secaoId": "upload-preview",
+      "ancora": "/design-system#upload-preview",
+      "ordem": 57,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/upload-com-preview/upload-com-preview.png",
+          "svg": "claro/svg/entrada/upload-com-preview/upload-com-preview.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/upload-com-preview/upload-com-preview.png",
+          "svg": "escuro/svg/entrada/upload-com-preview/upload-com-preview.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 200
+      }
+    },
+    {
+      "nome": "Calendário — data única",
+      "arquivo": "calendario-data-unica",
+      "descricao": "Calendário inline para seleção de uma única data. Ideal para agendamentos rápidos e formulários simples.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Calendário",
+      "secaoId": "calendar",
+      "ancora": "/design-system#calendar",
+      "ordem": 58,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/calendario/calendario-data-unica.png",
+          "svg": "claro/svg/entrada/calendario/calendario-data-unica.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/calendario/calendario-data-unica.png",
+          "svg": "escuro/svg/entrada/calendario/calendario-data-unica.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 431
+      }
+    },
+    {
+      "nome": "Calendário — intervalo de datas",
+      "arquivo": "calendario-intervalo-de-datas",
+      "descricao": "Seleção de um período (data inicial e final), com limite mínimo e máximo. Útil para reservas, relatórios e filtros por período.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Calendário",
+      "secaoId": "calendar",
+      "ancora": "/design-system#calendar",
+      "ordem": 59,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/calendario/calendario-intervalo-de-datas.png",
+          "svg": "claro/svg/entrada/calendario/calendario-intervalo-de-datas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/calendario/calendario-intervalo-de-datas.png",
+          "svg": "escuro/svg/entrada/calendario/calendario-intervalo-de-datas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 431
+      }
+    },
+    {
+      "nome": "DatePicker — popover compacto",
+      "arquivo": "datepicker-popover-compacto",
+      "descricao": "Botão que abre o calendário em um popover. Recomendado para formulários onde o espaço é limitado.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Calendário",
+      "secaoId": "calendar",
+      "ancora": "/design-system#calendar",
+      "ordem": 60,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/calendario/datepicker-popover-compacto.png",
+          "svg": "claro/svg/entrada/calendario/datepicker-popover-compacto.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/calendario/datepicker-popover-compacto.png",
+          "svg": "escuro/svg/entrada/calendario/datepicker-popover-compacto.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Calendário — intervalo com presets (compact)",
+      "arquivo": "calendario-intervalo-com-presets-compact",
+      "descricao": "Versão compacta em popover: o trigger mostra o período selecionado e abre um painel com atalhos rápidos (últimos 3, 7, 14 dias e último mês) ao lado do calendário.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Calendário",
+      "secaoId": "calendar",
+      "ancora": "/design-system#calendar",
+      "ordem": 61,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/calendario/calendario-intervalo-com-presets-compact.png",
+          "svg": "claro/svg/entrada/calendario/calendario-intervalo-com-presets-compact.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/calendario/calendario-intervalo-com-presets-compact.png",
+          "svg": "escuro/svg/entrada/calendario/calendario-intervalo-com-presets-compact.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 88
+      }
+    },
+    {
+      "nome": "Rate — interativo",
+      "arquivo": "rate-interativo",
+      "descricao": "Estrelas clicáveis com hover preview e label de valor.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Rate (Avaliação)",
+      "secaoId": "rate",
+      "ancora": "/design-system#rate",
+      "ordem": 62,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/rate-avaliacao/rate-interativo.png",
+          "svg": "claro/svg/entrada/rate-avaliacao/rate-interativo.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/rate-avaliacao/rate-interativo.png",
+          "svg": "escuro/svg/entrada/rate-avaliacao/rate-interativo.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 72
+      }
+    },
+    {
+      "nome": "Rate — meias estrelas",
+      "arquivo": "rate-meias-estrelas",
+      "descricao": "Clique na metade esquerda da estrela para meio ponto.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Rate (Avaliação)",
+      "secaoId": "rate",
+      "ancora": "/design-system#rate",
+      "ordem": 63,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/rate-avaliacao/rate-meias-estrelas.png",
+          "svg": "claro/svg/entrada/rate-avaliacao/rate-meias-estrelas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/rate-avaliacao/rate-meias-estrelas.png",
+          "svg": "escuro/svg/entrada/rate-avaliacao/rate-meias-estrelas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 80
+      }
+    },
+    {
+      "nome": "Rate — somente leitura",
+      "arquivo": "rate-somente-leitura",
+      "descricao": "Para exibição de avaliações já recebidas (cards de produtos, depoimentos).",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Rate (Avaliação)",
+      "secaoId": "rate",
+      "ancora": "/design-system#rate",
+      "ordem": 64,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/rate-avaliacao/rate-somente-leitura.png",
+          "svg": "claro/svg/entrada/rate-avaliacao/rate-somente-leitura.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/rate-avaliacao/rate-somente-leitura.png",
+          "svg": "escuro/svg/entrada/rate-avaliacao/rate-somente-leitura.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 80
+      }
+    },
+    {
+      "nome": "Mentions (menções e tags)",
+      "arquivo": "mentions-mencoes-e-tags",
+      "descricao": "Textarea que detecta '@' ou '#' enquanto você digita e abre um popover com sugestões. Padrão para comentários, posts da comunidade e descrições de operação.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Mentions",
+      "secaoId": "mentions",
+      "ancora": "/design-system#mentions",
+      "ordem": 65,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/mentions/mentions-mencoes-e-tags.png",
+          "svg": "claro/svg/entrada/mentions/mentions-mencoes-e-tags.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/mentions/mentions-mencoes-e-tags.png",
+          "svg": "escuro/svg/entrada/mentions/mentions-mencoes-e-tags.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 141
+      }
+    },
+    {
+      "nome": "Cascader (drill-down em colunas)",
+      "arquivo": "cascader-drill-down-em-colunas",
+      "descricao": "Seletor que abre colunas em sequência (categoria → subcategoria → item). Diferente do TreeSelect, mantém cada nível visível lado a lado para comparar opções.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Cascader",
+      "secaoId": "cascader",
+      "ancora": "/design-system#cascader",
+      "ordem": 66,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/cascader/cascader-drill-down-em-colunas.png",
+          "svg": "claro/svg/entrada/cascader/cascader-drill-down-em-colunas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/cascader/cascader-drill-down-em-colunas.png",
+          "svg": "escuro/svg/entrada/cascader/cascader-drill-down-em-colunas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 116
+      }
+    },
+    {
+      "nome": "AutoComplete (sugestões filtradas)",
+      "arquivo": "autocomplete-sugestoes-filtradas",
+      "descricao": "Input com sugestões em popover ancorado, navegação por teclado (↑ ↓ Enter Esc) e highlight do trecho buscado. Ideal para busca de ativos, tickers, cidades.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "AutoComplete",
+      "secaoId": "tool-autocomplete",
+      "ancora": "/design-system#tool-autocomplete",
+      "ordem": 67,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/autocomplete/autocomplete-sugestoes-filtradas.png",
+          "svg": "claro/svg/entrada/autocomplete/autocomplete-sugestoes-filtradas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/autocomplete/autocomplete-sugestoes-filtradas.png",
+          "svg": "escuro/svg/entrada/autocomplete/autocomplete-sugestoes-filtradas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 112
+      }
+    },
+    {
+      "nome": "TreeSelect (seleção hierárquica)",
+      "arquivo": "treeselect-selecao-hierarquica",
+      "descricao": "Select com nodes expansíveis em popover, exibindo o caminho completo da seleção. Ideal para categorias aninhadas, classes de ativos, taxonomias.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "TreeSelect",
+      "secaoId": "tool-treeselect",
+      "ancora": "/design-system#tool-treeselect",
+      "ordem": 68,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/treeselect/treeselect-selecao-hierarquica.png",
+          "svg": "claro/svg/entrada/treeselect/treeselect-selecao-hierarquica.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/treeselect/treeselect-selecao-hierarquica.png",
+          "svg": "escuro/svg/entrada/treeselect/treeselect-selecao-hierarquica.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 112
+      }
+    },
+    {
+      "nome": "Transfer (transferência entre listas)",
+      "arquivo": "transfer-transferencia-entre-listas",
+      "descricao": "Mover itens entre listas 'disponíveis' e 'selecionados' com checkboxes, busca e ações em massa. Útil para gestão de permissões, atribuição de turmas, seleção de ativos.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Transfer",
+      "secaoId": "tool-transfer",
+      "ancora": "/design-system#tool-transfer",
+      "ordem": 69,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/transfer/transfer-transferencia-entre-listas.png",
+          "svg": "claro/svg/entrada/transfer/transfer-transferencia-entre-listas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/transfer/transfer-transferencia-entre-listas.png",
+          "svg": "escuro/svg/entrada/transfer/transfer-transferencia-entre-listas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 392
+      }
+    },
+    {
+      "nome": "Default",
+      "arquivo": "default",
+      "descricao": "Checkbox controlado com estado de marcado/desmarcado.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Checkbox",
+      "secaoId": "checkbox",
+      "ancora": "/design-system#checkbox",
+      "ordem": 70,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/checkbox/default.png",
+          "svg": "claro/svg/entrada/checkbox/default.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/checkbox/default.png",
+          "svg": "escuro/svg/entrada/checkbox/default.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 68
+      }
+    },
+    {
+      "nome": "Disabled",
+      "arquivo": "disabled",
+      "descricao": "Estados desabilitados: padrão, marcado e indeterminado.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Checkbox",
+      "secaoId": "checkbox",
+      "ancora": "/design-system#checkbox",
+      "ordem": 71,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/checkbox/disabled.png",
+          "svg": "claro/svg/entrada/checkbox/disabled.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/checkbox/disabled.png",
+          "svg": "escuro/svg/entrada/checkbox/disabled.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 140
+      }
+    },
+    {
+      "nome": "Radio (escolha única)",
+      "arquivo": "radio-escolha-unica",
+      "descricao": "Grupo de cartões com seleção única usando type='radio'.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Choicebox",
+      "secaoId": "choicebox",
+      "ancora": "/design-system#choicebox",
+      "ordem": 72,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/choicebox/radio-escolha-unica.png",
+          "svg": "claro/svg/entrada/choicebox/radio-escolha-unica.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/choicebox/radio-escolha-unica.png",
+          "svg": "escuro/svg/entrada/choicebox/radio-escolha-unica.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 112
+      }
+    },
+    {
+      "nome": "Checkbox (múltipla escolha)",
+      "arquivo": "checkbox-multipla-escolha",
+      "descricao": "Grupo de cartões permitindo seleção múltipla usando type='checkbox'.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Choicebox",
+      "secaoId": "choicebox",
+      "ancora": "/design-system#choicebox",
+      "ordem": 73,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/choicebox/checkbox-multipla-escolha.png",
+          "svg": "claro/svg/entrada/choicebox/checkbox-multipla-escolha.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/choicebox/checkbox-multipla-escolha.png",
+          "svg": "escuro/svg/entrada/choicebox/checkbox-multipla-escolha.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 112
+      }
+    },
+    {
+      "nome": "Disabled",
+      "arquivo": "disabled",
+      "descricao": "Grupo inteiro desabilitado e item individual desabilitado.",
+      "categoria": "entrada",
+      "categoriaLabel": "Entrada de Dados",
+      "secao": "Choicebox",
+      "secaoId": "choicebox",
+      "ancora": "/design-system#choicebox",
+      "ordem": 74,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/entrada/choicebox/disabled.png",
+          "svg": "claro/svg/entrada/choicebox/disabled.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/entrada/choicebox/disabled.png",
+          "svg": "escuro/svg/entrada/choicebox/disabled.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 248
+      }
+    },
+    {
+      "nome": "Statistic (KPIs animados)",
+      "arquivo": "statistic-kpis-animados",
+      "descricao": "Cards numéricos com contagem progressiva, prefixos/sufixos e indicador de tendência. Ideal para dashboards e seções de provas sociais.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Statistic (KPIs)",
+      "secaoId": "statistic",
+      "ancora": "/design-system#statistic",
+      "ordem": 75,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/statistic-kpis/statistic-kpis-animados.png",
+          "svg": "claro/svg/exibicao/statistic-kpis/statistic-kpis-animados.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/statistic-kpis/statistic-kpis-animados.png",
+          "svg": "escuro/svg/exibicao/statistic-kpis/statistic-kpis-animados.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 185
+      }
+    },
+    {
+      "nome": "Timeline (linha do tempo)",
+      "arquivo": "timeline-linha-do-tempo",
+      "descricao": "Três variações: Linear (eventos com status semânticos), Trilha Horizontal (marcos com nós conectados — desktop) e Trilha Vertical (mobile, com barra de progresso e prêmios).",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Timeline",
+      "secaoId": "timeline",
+      "ancora": "/design-system#timeline",
+      "ordem": 76,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/timeline/timeline-linha-do-tempo.png",
+          "svg": "claro/svg/exibicao/timeline/timeline-linha-do-tempo.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/timeline/timeline-linha-do-tempo.png",
+          "svg": "escuro/svg/exibicao/timeline/timeline-linha-do-tempo.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 521
+      }
+    },
+    {
+      "nome": "Tree (árvore de arquivos)",
+      "arquivo": "tree-arvore-de-arquivos",
+      "descricao": "Estrutura hierárquica expansível com ícones de pasta/arquivo. Ideal para explorar arquivos, taxonomias e organogramas.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Tree",
+      "secaoId": "tree",
+      "ancora": "/design-system#tree",
+      "ordem": 77,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/tree/tree-arvore-de-arquivos.png",
+          "svg": "claro/svg/exibicao/tree/tree-arvore-de-arquivos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/tree/tree-arvore-de-arquivos.png",
+          "svg": "escuro/svg/exibicao/tree/tree-arvore-de-arquivos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 234
+      }
+    },
+    {
+      "nome": "Descriptions (lista de propriedades)",
+      "arquivo": "descriptions-lista-de-propriedades",
+      "descricao": "Apresenta pares chave/valor estruturados em grid responsivo. Padrão para páginas de detalhe (perfil, pedido, fatura) — substitui listas DL com melhor leitura.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Descriptions",
+      "secaoId": "descriptions",
+      "ancora": "/design-system#descriptions",
+      "ordem": 78,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/descriptions/descriptions-lista-de-propriedades.png",
+          "svg": "claro/svg/exibicao/descriptions/descriptions-lista-de-propriedades.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/descriptions/descriptions-lista-de-propriedades.png",
+          "svg": "escuro/svg/exibicao/descriptions/descriptions-lista-de-propriedades.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 409
+      }
+    },
+    {
+      "nome": "Tabela",
+      "arquivo": "tabela",
+      "descricao": "Tabela minimalista inspirada no Geist: cabeçalho discreto, linhas alternadas (zebra) e alinhamento da última coluna à direita. Útil para listagens de dados tabulares enxutos.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Tabela",
+      "secaoId": "tabela",
+      "ancora": "/design-system#tabela",
+      "ordem": 79,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/tabela/tabela.png",
+          "svg": "claro/svg/exibicao/tabela/tabela.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/tabela/tabela.png",
+          "svg": "escuro/svg/exibicao/tabela/tabela.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 255
+      }
+    },
+    {
+      "nome": "Tabela Bordered",
+      "arquivo": "tabela-bordered",
+      "descricao": "Variação bordered: sem zebra, com divisor sutil entre todas as linhas. Indicada quando todas as linhas têm o mesmo peso visual e a leitura horizontal precisa de uma guia clara.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Tabela",
+      "secaoId": "tabela",
+      "ancora": "/design-system#tabela",
+      "ordem": 80,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/tabela/tabela-bordered.png",
+          "svg": "claro/svg/exibicao/tabela/tabela-bordered.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/tabela/tabela-bordered.png",
+          "svg": "escuro/svg/exibicao/tabela/tabela-bordered.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 257
+      }
+    },
+    {
+      "nome": "Watermark (marca d'água)",
+      "arquivo": "watermark-marca-d-agua",
+      "descricao": "Sobrepõe texto repetido em diagonal sobre conteúdo sensível (relatórios, PDFs, documentos internos). Renderizado via canvas em data URL.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Watermark",
+      "secaoId": "watermark",
+      "ancora": "/design-system#watermark",
+      "ordem": 81,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/watermark/watermark-marca-d-agua.png",
+          "svg": "claro/svg/exibicao/watermark/watermark-marca-d-agua.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/watermark/watermark-marca-d-agua.png",
+          "svg": "escuro/svg/exibicao/watermark/watermark-marca-d-agua.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 300
+      }
+    },
+    {
+      "nome": "Gráfico Donut (Pizza)",
+      "arquivo": "grafico-donut-pizza",
+      "descricao": "Padrão oficial de donut chart AUVP. Cor primária da marca na fatia de maior valor. Legenda abaixo com swatches e percentuais.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Gráficos",
+      "secaoId": "tool-graficos",
+      "ancora": "/design-system#tool-graficos",
+      "ordem": 82,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/graficos/grafico-donut-pizza.png",
+          "svg": "claro/svg/exibicao/graficos/grafico-donut-pizza.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/graficos/grafico-donut-pizza.png",
+          "svg": "escuro/svg/exibicao/graficos/grafico-donut-pizza.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 977
+      }
+    },
+    {
+      "nome": "Gráfico Donut com Legendas",
+      "arquivo": "grafico-donut-com-legendas",
+      "descricao": "Variações de posição da legenda: horizontal abaixo, em linha única e vertical lateral ao gráfico. Mesmas cores e regras do donut padrão.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Gráficos",
+      "secaoId": "tool-graficos",
+      "ancora": "/design-system#tool-graficos",
+      "ordem": 83,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/graficos/grafico-donut-com-legendas.png",
+          "svg": "claro/svg/exibicao/graficos/grafico-donut-com-legendas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/graficos/grafico-donut-com-legendas.png",
+          "svg": "escuro/svg/exibicao/graficos/grafico-donut-com-legendas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 2008
+      }
+    },
+    {
+      "nome": "Badge",
+      "arquivo": "badge",
+      "descricao": "Quatro variantes do componente base.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Badges & Tags",
+      "secaoId": "tags-badges",
+      "ancora": "/design-system#tags-badges",
+      "ordem": 84,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/badges-e-tags/badge.png",
+          "svg": "claro/svg/exibicao/badges-e-tags/badge.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/badges-e-tags/badge.png",
+          "svg": "escuro/svg/exibicao/badges-e-tags/badge.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 70
+      }
+    },
+    {
+      "nome": "Tag (tokenizada)",
+      "arquivo": "tag-tokenizada",
+      "descricao": "Tons semânticos (success/warning/info/error) e categóricos (chart-1 a chart-8). Nunca use classes Tailwind de cor hardcoded em tags.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Badges & Tags",
+      "secaoId": "tags-badges",
+      "ancora": "/design-system#tags-badges",
+      "ordem": 85,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/badges-e-tags/tag-tokenizada.png",
+          "svg": "claro/svg/exibicao/badges-e-tags/tag-tokenizada.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/badges-e-tags/tag-tokenizada.png",
+          "svg": "escuro/svg/exibicao/badges-e-tags/tag-tokenizada.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 102
+      }
+    },
+    {
+      "nome": "Avatar",
+      "arquivo": "avatar",
+      "descricao": "Tamanhos, fallback em iniciais e grupo empilhado com excedente.",
+      "categoria": "exibicao",
+      "categoriaLabel": "Exibição de Dados",
+      "secao": "Avatar",
+      "secaoId": "avatar",
+      "ancora": "/design-system#avatar",
+      "ordem": 86,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/exibicao/avatar/avatar.png",
+          "svg": "claro/svg/exibicao/avatar/avatar.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/exibicao/avatar/avatar.png",
+          "svg": "escuro/svg/exibicao/avatar/avatar.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 104
+      }
+    },
+    {
+      "nome": "Visualização de Cursos",
+      "arquivo": "visualizacao-de-cursos",
+      "descricao": "Grid de cursos com cards de progresso, thumbnail, badge de conclusão e botão de retomada de aula. Light/dark mode.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Visualização de Cursos",
+      "secaoId": "plat-courses",
+      "ancora": "/design-system#plat-courses",
+      "ordem": 87,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/visualizacao-de-cursos/visualizacao-de-cursos.png",
+          "svg": "claro/svg/plataforma/visualizacao-de-cursos/visualizacao-de-cursos.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/visualizacao-de-cursos/visualizacao-de-cursos.png",
+          "svg": "escuro/svg/plataforma/visualizacao-de-cursos/visualizacao-de-cursos.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 446
+      }
+    },
+    {
+      "nome": "Interface do Player",
+      "arquivo": "interface-do-player",
+      "descricao": "Player de vídeo com overlay de controles, barra de progresso clicável, volume, fullscreen e auto-hide dos controles após inatividade.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Video Player",
+      "secaoId": "plat-player",
+      "ancora": "/design-system#plat-player",
+      "ordem": 88,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/video-player/interface-do-player.png",
+          "svg": "claro/svg/plataforma/video-player/interface-do-player.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/video-player/interface-do-player.png",
+          "svg": "escuro/svg/plataforma/video-player/interface-do-player.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 856
+      }
+    },
+    {
+      "nome": "Lista de Aulas (Playlist)",
+      "arquivo": "lista-de-aulas-playlist",
+      "descricao": "Lista lateral de aulas com três estados visuais distintos: Assistindo (destaque amarelo), Concluído (check verde) e Bloqueado (cadeado + opacidade reduzida).",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Lista de Aulas",
+      "secaoId": "plat-playlist",
+      "ancora": "/design-system#plat-playlist",
+      "ordem": 89,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/lista-de-aulas/lista-de-aulas-playlist.png",
+          "svg": "claro/svg/plataforma/lista-de-aulas/lista-de-aulas-playlist.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/lista-de-aulas/lista-de-aulas-playlist.png",
+          "svg": "escuro/svg/plataforma/lista-de-aulas/lista-de-aulas-playlist.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 425
+      }
+    },
+    {
+      "nome": "Dashboard do Aluno",
+      "arquivo": "dashboard-do-aluno",
+      "descricao": "Painel com KPIs (aulas assistidas, tempo total, streak), gráfico de barras de atividade semanal e grid de conquistas desbloqueadas.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Dashboard do Aluno",
+      "secaoId": "plat-dashboard",
+      "ancora": "/design-system#plat-dashboard",
+      "ordem": 90,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/dashboard-do-aluno/dashboard-do-aluno.png",
+          "svg": "claro/svg/plataforma/dashboard-do-aluno/dashboard-do-aluno.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/dashboard-do-aluno/dashboard-do-aluno.png",
+          "svg": "escuro/svg/plataforma/dashboard-do-aluno/dashboard-do-aluno.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 954
+      }
+    },
+    {
+      "nome": "Notas & Anotações",
+      "arquivo": "notas-e-anotacoes",
+      "descricao": "Bloco de notas vinculado ao timestamp do vídeo. Permite criar, editar e excluir notas com carimbos de tempo clicáveis para navegar na aula.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Notas & Anotações",
+      "secaoId": "plat-notes",
+      "ancora": "/design-system#plat-notes",
+      "ordem": 91,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/notas-e-anotacoes/notas-e-anotacoes.png",
+          "svg": "claro/svg/plataforma/notas-e-anotacoes/notas-e-anotacoes.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/notas-e-anotacoes/notas-e-anotacoes.png",
+          "svg": "escuro/svg/plataforma/notas-e-anotacoes/notas-e-anotacoes.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 589
+      }
+    },
+    {
+      "nome": "Avaliação de Aulas",
+      "arquivo": "avaliacao-de-aulas",
+      "descricao": "Sistema de rating por estrelas com hover preview e campo de feedback textual opcional. Exibe média e distribuição de notas.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Avaliação de Aulas",
+      "secaoId": "plat-rating",
+      "ancora": "/design-system#plat-rating",
+      "ordem": 92,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/avaliacao-de-aulas/avaliacao-de-aulas.png",
+          "svg": "claro/svg/plataforma/avaliacao-de-aulas/avaliacao-de-aulas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/avaliacao-de-aulas/avaliacao-de-aulas.png",
+          "svg": "escuro/svg/plataforma/avaliacao-de-aulas/avaliacao-de-aulas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 458
+      }
+    },
+    {
+      "nome": "Certificados",
+      "arquivo": "certificados",
+      "descricao": "Certificados de conclusão emitidos automaticamente ao finalizar módulos. Card com nome do aluno, curso, data e botão de download PDF.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Certificados",
+      "secaoId": "plat-certificates",
+      "ancora": "/design-system#plat-certificates",
+      "ordem": 93,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/certificados/certificados.png",
+          "svg": "claro/svg/plataforma/certificados/certificados.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/certificados/certificados.png",
+          "svg": "escuro/svg/plataforma/certificados/certificados.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 817
+      }
+    },
+    {
+      "nome": "Comunidade & Dúvidas",
+      "arquivo": "comunidade-e-duvidas",
+      "descricao": "Fórum de dúvidas com votos positivos/negativos, respostas de instrutores destacadas, filtros por status e paginação.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Comunidade & Dúvidas",
+      "secaoId": "plat-community",
+      "ancora": "/design-system#plat-community",
+      "ordem": 94,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/comunidade-e-duvidas/comunidade-e-duvidas.png",
+          "svg": "claro/svg/plataforma/comunidade-e-duvidas/comunidade-e-duvidas.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/comunidade-e-duvidas/comunidade-e-duvidas.png",
+          "svg": "escuro/svg/plataforma/comunidade-e-duvidas/comunidade-e-duvidas.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 729
+      }
+    },
+    {
+      "nome": "Default",
+      "arquivo": "default",
+      "descricao": "Capa padrão: seção superior colorida + área inferior branca com título e sulco de lombada.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 95,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/default.png",
+          "svg": "claro/svg/plataforma/livro/default.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/default.png",
+          "svg": "escuro/svg/plataforma/livro/default.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 312
+      }
+    },
+    {
+      "nome": "Variants",
+      "arquivo": "variants",
+      "descricao": "simple remove o sulco da lombada; stripe adiciona uma faixa horizontal decorativa.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 96,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/variants.png",
+          "svg": "claro/svg/plataforma/livro/variants.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/variants.png",
+          "svg": "escuro/svg/plataforma/livro/variants.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 307
+      }
+    },
+    {
+      "nome": "Custom color",
+      "arquivo": "custom-color",
+      "descricao": "Cores via color. Ao definir textColor, a capa inteira usa a cor de destaque — ideal para capas monocromáticas.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 97,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/custom-color.png",
+          "svg": "claro/svg/plataforma/livro/custom-color.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/custom-color.png",
+          "svg": "escuro/svg/plataforma/livro/custom-color.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 312
+      }
+    },
+    {
+      "nome": "Icon",
+      "arquivo": "icon",
+      "descricao": "Ícone ou logo exibido na seção superior colorida via prop icon.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 98,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/icon.png",
+          "svg": "claro/svg/plataforma/livro/icon.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/icon.png",
+          "svg": "escuro/svg/plataforma/livro/icon.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 312
+      }
+    },
+    {
+      "nome": "Illustration",
+      "arquivo": "illustration",
+      "descricao": "Ilustração decorativa que preenche a seção superior via prop illustration.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 99,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/illustration.png",
+          "svg": "claro/svg/plataforma/livro/illustration.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/illustration.png",
+          "svg": "escuro/svg/plataforma/livro/illustration.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 312
+      }
+    },
+    {
+      "nome": "Textured",
+      "arquivo": "textured",
+      "descricao": "textured aplica uma textura de pontos sobre a capa sólida. Combine com textColor para controlar a cor do título.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 100,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/textured.png",
+          "svg": "claro/svg/plataforma/livro/textured.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/textured.png",
+          "svg": "escuro/svg/plataforma/livro/textured.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 608
+      }
+    },
+    {
+      "nome": "Sizes",
+      "arquivo": "sizes",
+      "descricao": "Largura customizável via prop width (pixels). A altura é calculada automaticamente (ratio 1:1.32).",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 101,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/sizes.png",
+          "svg": "claro/svg/plataforma/livro/sizes.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/sizes.png",
+          "svg": "escuro/svg/plataforma/livro/sizes.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 444
+      }
+    },
+    {
+      "nome": "Responsive",
+      "arquivo": "responsive",
+      "descricao": "Largura responsiva com objeto { sm, md } por breakpoint.",
+      "categoria": "plataforma",
+      "categoriaLabel": "Plataforma de Aulas",
+      "secao": "Livro",
+      "secaoId": "plat-livro",
+      "ancora": "/design-system#plat-livro",
+      "ordem": 102,
+      "arquivos": {
+        "claro": {
+          "png": "claro/png/plataforma/livro/responsive.png",
+          "svg": "claro/svg/plataforma/livro/responsive.svg"
+        },
+        "escuro": {
+          "png": "escuro/png/plataforma/livro/responsive.png",
+          "svg": "escuro/svg/plataforma/livro/responsive.svg"
+        }
+      },
+      "dimensoes": {
+        "largura": 942,
+        "altura": 307
+      }
+    }
+  ]
+}
