@@ -231,6 +231,53 @@ Liste todas as cores do Component Set que NÃO estão ligadas a uma variável.
 
 ---
 
+### 4.1 O que já foi criado
+
+Os nove componentes com `cva` viraram Component Sets, cada um na sua página, mais uma
+família de ícones que o guia original não previa:
+
+| Componente | Eixos | Variantes | Propriedades |
+|---|---|---|---|
+| `Button` | variant × size | 40 | `Label`, `Icon`, `Mostrar icone` |
+| `Badge` | variant | 4 | `Label` |
+| `Alert` | variant | 2 | `Title`, `Description`, `Icon` |
+| `Toggle` | variant × size × state | 12 | `Label` |
+| `Label` | — | 1 | `Label` |
+| `Navigation Menu Trigger` | state | 3 | `Label` |
+| `Sheet` | side | 4 | — |
+| `Toast` | variant | 2 | `Title`, `Description`, `Fechar` |
+| `Sidebar Menu Button` | variant × size | 6 | `Label`, `Icon` |
+| `Icon` | name | 10 | — |
+
+Auditoria final: **291 nós inspecionados, nenhuma cor fora de variável.**
+
+Três correções ao que o guia assumia:
+
+- **`label` e `navigation-menu` não têm eixos no `cva`.** O de `label` é só a classe base
+  `text-sm font-medium leading-none`, então virou componente simples em vez de Component Set.
+  Em `navigation-menu`, o `navigationMenuTriggerStyle` também não declara variantes — o eixo
+  `state` que criei vem dos `data-attributes` (`data-active`, `data-state=open`), não do `cva`.
+
+- **`sidebar` expõe as variantes do menu button**, não da sidebar inteira. O Component Set
+  chama-se `Sidebar Menu Button` para não prometer o que não entrega.
+
+- **`disabled` não virou propriedade booleana.** Propriedade booleana no Figma só controla
+  visibilidade de camada; não aplica os 50% de opacidade de `disabled:opacity-50`. Representá-lo
+  exigiria um terceiro eixo de variante (80 combinações no Button). Ficou documentado na página.
+
+**Ícones.** O set `Icon` traz os dez glifos do `lucide-react` mais usados no código (`Check`,
+`ChevronRight`, `ChevronDown`, `ChevronLeft`, `X`, `ArrowRight`, `Circle`, `Search`, `Info`,
+`AlertTriangle`), com os paths reais da biblioteca em 16×16. Button, Alert, Toast e Sidebar
+consomem por `INSTANCE_SWAP`, e o traço de cada instância segue o token de texto da variante —
+sem isso o ícone herda `--foreground` e some sobre os fundos escuros.
+
+> Detalhe de API que custou uma tentativa: o `defaultValue` de uma propriedade `INSTANCE_SWAP`
+> é o **node id** do componente (`"21:5"`), não a `key`. Passar a `key` devolve
+> `Property value is incompatible with component property type`.
+
+> Outro: instância invisível não expõe `children`, e `query`/`findAll` a ignoram. Para pintar o
+> ícone das variantes onde ele nasce oculto é preciso torná-lo visível, aplicar e ocultar de novo.
+
 ## 5. Fase C — Widgets complexos via code-to-canvas
 
 Os 61 `ComponentShowcase` de `src/pages/DesignSystem.tsx` e os widgets de
