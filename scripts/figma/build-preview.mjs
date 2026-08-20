@@ -85,18 +85,31 @@ ${fragmento}
 rmSync(DESTINO, { recursive: true, force: true });
 mkdirSync(DESTINO, { recursive: true });
 
-const arquivos = readdirSync(ORIGEM).filter((f) => f.endsWith(".html"));
+const todos = readdirSync(ORIGEM).filter((f) => f.endsWith(".html"));
+
+/* A família livro-* é dividida: livro-base.html tem só o <style> compartilhado
+   ("inclua uma vez", diz o comentário do arquivo) e os outros seis trazem a
+   marcação que depende dele. Capturados soltos, o base sai em branco — não tem
+   marcação nenhuma — e os demais saem sem estilo. Por isso o base entra como
+   prefixo dos irmãos e não vira captura própria. */
+const BASE_LIVRO = "livro-base.html";
+const cssLivro = todos.includes(BASE_LIVRO)
+  ? readFileSync(resolve(ORIGEM, BASE_LIVRO), "utf8")
+  : "";
+
+const arquivos = todos.filter((f) => f !== BASE_LIVRO);
 const completos = [];
 const envolvidos = [];
 
 for (const arq of arquivos) {
   const bruto = readFileSync(resolve(ORIGEM, arq), "utf8");
+  const corpo = arq.startsWith("livro-") ? `${cssLivro}\n${bruto}` : bruto;
   let saida;
-  if (bruto.includes("</head>")) {
-    saida = bruto.replace("</head>", `${TOKENS}\n${CAPTURA}\n</head>`);
+  if (corpo.includes("</head>")) {
+    saida = corpo.replace("</head>", `${TOKENS}\n${CAPTURA}\n</head>`);
     completos.push(arq);
   } else {
-    saida = envolver(arq.replace(".html", ""), bruto);
+    saida = envolver(arq.replace(".html", ""), corpo);
     envolvidos.push(arq);
   }
   writeFileSync(resolve(DESTINO, arq), saida);
