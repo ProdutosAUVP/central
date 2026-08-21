@@ -119,6 +119,13 @@
     /* === AUVP Escola (Dourado) === */
     --foreground: 220 15% 15%;
 
+    /* Texto dentro de card e popover acompanha --foreground. Sem estes dois,
+       eles herdavam o verde da Capital do :root e o texto mudava de cor ao
+       entrar num card. O bloco .light.escola já trazia a correção; aqui ela
+       chega ao tema Escola claro normal, que é o que a aplicação usa. */
+    --card-foreground: 220 15% 15%;
+    --popover-foreground: 220 15% 15%;
+
     --primary: 42 84% 63%;
     --primary-foreground: 220 15% 15%;
     /* Dourado como texto sobre branco: 42 84% 63% dá só 1.69:1.
