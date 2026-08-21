@@ -326,6 +326,31 @@ Aí a captura fica limpa e você percorre os ids seção por seção (`buttons`,
 
 ---
 
+### 5.4 Estado da Fase C e como retomar
+
+Sete widgets estão na página `03 Widgets` do arquivo: `plataforma-dashboard`,
+`plataforma-cursos`, `plataforma-comunidade`, `plataforma-notas`, `plataforma-player`,
+`plataforma-playlist` e `checkbox`. Faltam treze.
+
+**O preview é obrigatório.** Rode `node scripts/figma/build-preview.mjs` antes de capturar:
+onze snippets usam `hsl(var(--token))` e nenhum declara `:root`, então abertos direto eles
+renderizam com cor inválida. Com os tokens injetados, a captura liga sozinha cerca de **65%**
+das cores às variáveis da coleção — foram 82 de 126 pinturas no primeiro widget.
+
+**Capture pela barra de ferramentas, não pela automação.** Depois da primeira captura o script
+deixa uma barra na página com um botão de recapturar que gera ID novo sozinho. Navegando pelo
+índice em `http://localhost:8080/central/_figma-preview/` você vê na hora se o widget
+renderizou certo antes de mandar, e não depende de polling.
+
+**O que falha.** O `choicebox` não passa: três tentativas, três `A solicitação expirou` na
+barra. Provavelmente precisa ser refeito à mão. Outras capturas travam em `pending` ou
+`processing` indefinidamente — quando isso acontece, o caminho é gerar um ID novo e repetir,
+não continuar sondando. Fechar a aba no meio mata a captura em voo.
+
+**Confira antes de mandar.** Nem todo snippet renderiza sozinho. Foi assim que se descobriu
+que a família livro-* dependia de um CSS em arquivo separado — o `livro-base` tinha virado um
+frame vazio no Figma e o `livro-default`, uma linha de texto solta.
+
 ## 6. Validação antes de fechar
 
 ```

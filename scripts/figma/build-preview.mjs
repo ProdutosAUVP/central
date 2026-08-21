@@ -101,8 +101,22 @@ const arquivos = todos.filter((f) => f !== BASE_LIVRO);
 const completos = [];
 const envolvidos = [];
 
+/* marca-logos aponta os SVGs para um repositório externo no GitHub, e de lá eles
+   falham de forma intermitente — na captura, dois entraram como imagem quebrada.
+   Os três "olho" existem em public/, então apontamos para a cópia local. Os
+   demais logos não têm equivalente aqui e continuam vindo do GitHub. */
+const RAW = "https://raw.githubusercontent.com/armandocustodio-ds/designsystemauvp/main/";
+const LOCAIS = ["olho-preto.svg", "olho-branco.svg", "olho-amarelo.svg"];
+function localizarAssets(html) {
+  let saida = html;
+  for (const nome of LOCAIS) {
+    saida = saida.split(RAW + nome).join(`/central/${nome}`);
+  }
+  return saida;
+}
+
 for (const arq of arquivos) {
-  const bruto = readFileSync(resolve(ORIGEM, arq), "utf8");
+  const bruto = localizarAssets(readFileSync(resolve(ORIGEM, arq), "utf8"));
   const corpo = arq.startsWith("livro-") ? `${cssLivro}\n${bruto}` : bruto;
   let saida;
   if (corpo.includes("</head>")) {
