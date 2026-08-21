@@ -40,7 +40,11 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
   );
 
   return (
-    <div className={cn("border rounded-lg overflow-hidden bg-card", className)}>
+    <div
+      className={cn("border rounded-lg overflow-hidden bg-card", className)}
+      data-ds-showcase={title}
+      data-ds-description={description}
+    >
       <div className="px-6 py-4 border-b bg-muted/30">
         <div className="flex items-center justify-between gap-4">
           <h3 className="text-lg font-semibold min-w-0 truncate">{title}</h3>
@@ -61,7 +65,7 @@ export function ComponentShowcase({ title, description, code, htmlCode, children
       </div>
 
       <div className={cn(isDark ? "dark" : "light", brand === "escola" && "escola")}>
-        <div className="p-6 flex flex-wrap items-center gap-4 bg-background text-foreground">
+        <div className="p-6 flex flex-wrap items-center gap-4 bg-background text-foreground" data-ds-preview="">
           {children}
         </div>
       </div>

@@ -39,6 +39,8 @@ src/assets/novidades.ts → Exporta as capas como URLs (chave = destaque.imagem)
 src/assets/olhos.ts → Logos SVG
 src/lib/utils.ts    → cn() e publicUrl()
 public/             → Assets estáticos (SVGs dos logos, 404.html)
+catalogo-design-system/ → Catálogo visual: todo componente do DS em SVG e PNG, claro e escuro
+scripts/exportar-catalogo-design-system.mjs → Gera esse catálogo a partir de /design-system
 PRODUTOS FÍSICOS TRATADOS/ → Mockups tratados dos produtos físicos (fonte do catálogo)
 docs/fotos-originais/ → Fotos originais em alta resolução (não usadas no build)
 docs/fotos-originais/produtos-fisicos/ → Fotos originais (sem tratamento) dos produtos físicos
@@ -106,6 +108,18 @@ Os doze usam **a mesma** navegação de exemplo, que vive em `src/data/menusCata
 Os modelos são navegáveis de verdade — clicar troca a "página" mostrada na moldura, os painéis fecham no Esc, no clique fora e ao sair com o mouse, e o item ativo leva `aria-current`. Todo popover vive **dentro** da moldura do modelo, que reserva altura para ele e alinha o balão à borda nos itens das pontas: o `ComponentShowcase` tem `overflow-hidden` na raiz e cortaria qualquer overlay que vazasse. As cores que precisam ser literais (as faixas de produto do portal) vão em HSL inline, e não em classe da paleta Tailwind, porque as travas de contraste de `.dark` no `src/index.css` reescrevem classes hardcoded e apagariam a cor da marca no tema escuro.
 
 **Produto com frente e verso** — quando o produto tem os dois lados desenhados (a caneca AUPO11 é o caso), o card vira a foto em 3D: a frente fica em repouso e o verso aparece no hover. Não há campo novo em `src/data/produtosFisicos.ts` para isso: basta registrar o segundo WebP na chave `<slug>-verso` em `src/assets/produtosFisicos.ts` (mesmo 900×1200 da frente) que `produtosFisicos` resolve o `imgVerso` e o card liga a virada sozinho. Fora do mouse a virada continua acessível: um botão cobre a foto e vira no clique (toque) e no foco (teclado), com o selo "Frente"/"Verso" no canto indicando o lado visível.
+
+**Catálogo visual do Design System** — `catalogo-design-system/` guarda cada componente do Design System exportado sozinho, sem a interface do próprio DS em volta, nos temas claro e escuro, em SVG (vetor) e PNG 3×. O caminho reproduz a navegação de `/design-system` (`<tema>/<formato>/<categoria>/<seção>/<componente>`), e `catalogo.json` é o índice legível por máquina.
+
+Quem gera é `scripts/exportar-catalogo-design-system.mjs`: ele abre `/design-system` num Chromium headless e captura tudo que carrega o atributo `data-ds-showcase` — ou seja, todo `<ComponentShowcase>` e todo `<SectionThemeToggle>`. **Componente novo entra no catálogo sozinho**, sem tocar no script; só é preciso regerar:
+
+```bash
+npm install --no-save playwright dom-to-svg
+npm run build
+node scripts/exportar-catalogo-design-system.mjs
+```
+
+Os atributos `data-ds-showcase` (nome do componente) e `data-ds-preview` (a área que vira imagem) são a âncora dessa exportação — se sumirem dos dois wrappers, o catálogo sai vazio.
 
 ## Como adicionar uma nova página
 
