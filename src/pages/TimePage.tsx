@@ -157,16 +157,10 @@ const orgPeople: Record<string, OrgPerson> = {
     responsibilities: ["Gestão e refinamento de backlog", "Histórias de usuário e critérios de aceite", "Discovery, pesquisa e benchmarking", "Mapeamento de jornadas e fluxos", "Homologação e melhoria contínua"],
   },
   ana: {
-    id: "ana", name: "Ana Beatriz Melo", role: "Assistente de Produto",
+    id: "ana", name: "Ana Beatriz Melo", role: "Analista de Produto Jr. I",
     initials: "AB", color: "product-junior", level: "Júnior", rank: 5,
     description: "Viabiliza a execução da estratégia por meio da organização da operação, integração entre áreas e suporte analítico às iniciativas do time.",
     responsibilities: ["Suporte operacional ao time de Produto", "Organização e melhoria de processos internos", "Análise de dados, métricas e apoio à tomada de decisão", "Comunicação e alinhamento entre áreas", "Produção de copy e conteúdos para o produto", "Apoio à documentação e padronização de processos internos"],
-  },
-  hiago: {
-    id: "hiago", name: "Hiago Felipe Sousa", role: "Assistente de Produto",
-    initials: "HF", color: "product-junior", level: "Júnior", rank: 5,
-    description: "Placeholder: Assistente de produto, contribui com as demandas do time e no desenvolvimento de entregas.",
-    responsibilities: ["Suporte às demandas do time", "Análise básica de dados", "Criação de documentações", "Apoio em pesquisas"],
   },
 };
 
@@ -177,7 +171,7 @@ type CardSize = "lg" | "md" | "sm";
 
 /* A largura de `sm` é o que dita a largura total da árvore: a linha das
    categorias tem 7 cards `sm` e é a mais larga de todas. Em 132px ela fecha em
-   ~1176px e cabe inteira no container de um notebook (max-w-7xl menos o padding
+   ~1020px e cabe inteira no container de um notebook (max-w-7xl menos o padding
    do <main> = 1216px) — passando disso, o organograma volta a precisar de
    rolagem lateral. Ver o cálculo no comentário da linha das categorias. */
 const cardDims: Record<CardSize, { w: number; avatar: number }> = {
@@ -271,15 +265,13 @@ const ORG_EDGES: { from: string; to: string; kind: EdgeKind; dashed?: boolean }[
   { from: "daniel", to: "cat-designers",   kind: "v" },
   { from: "daniel", to: "cat-analistas",   kind: "v" },
   { from: "daniel", to: "cat-conteudo",    kind: "v" },
-  { from: "daniel", to: "cat-assistencia", kind: "v" },
   { from: "cat-gerencia",    to: "ariadne",  kind: "v" },
   { from: "cat-designers",   to: "armando",  kind: "v" },
   { from: "cat-designers",   to: "eria",     kind: "v" },
   { from: "cat-analistas",   to: "jeniffer", kind: "v" },
   { from: "cat-analistas",   to: "elane",    kind: "v" },
+  { from: "cat-analistas",   to: "ana",      kind: "v" },
   { from: "cat-conteudo",    to: "mateus",   kind: "v" },
-  { from: "cat-assistencia", to: "ana",      kind: "v" },
-  { from: "cat-assistencia", to: "hiago",    kind: "v" },
 ];
 
 // Corner radius (px) for the rounded turning points of the connector lines.
@@ -361,13 +353,14 @@ function CategoryColumn({
 
 // ─── Team Grid ────────────────────────────────────────────────────────────────
 
-// Lilian aparece apenas no organograma — fora do grid de cards.
+// A grade segue a mesma leitura do organograma: liderança, CX, coordenação e
+// depois os squads de produto.
 const TEAM_ORDER = [
   "raul", "beatriz",
-  "daniel", "debora",
+  "lilian", "daniel", "debora",
   "ariadne", "armando",
   "eria", "mateus", "jeniffer",
-  "elane", "ana", "hiago",
+  "elane", "ana",
 ];
 
 function MemberCard({
@@ -675,16 +668,15 @@ function OrgChart() {
 
             {/* Squads de produto — Gerência na mesma altura das demais categorias.
                 É a linha mais larga da árvore e a que define se o organograma
-                cabe na tela: 7 cards `sm` (132px) + 2 vãos internos de 8px + 4
-                vãos entre colunas. Com `gap-6` dá 1176px, dentro dos 1216px
+                cabe na tela: 7 cards `sm` (132px) + 3 vãos internos de 8px + 3
+                vãos entre colunas. Com `gap-6` dá 1020px, dentro dos 1216px
                 úteis de um notebook. Aumentar os vãos ou a largura do card
                 traz a rolagem lateral de volta. */}
             <div className="flex items-start justify-center gap-4 lg:gap-6" style={{ marginTop: ROW_GAP }}>
-              <CategoryColumn catId="cat-gerencia"    label="Gerência"    ids={["ariadne"]}            activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-designers"   label="Designers"   ids={["armando", "eria"]}    activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-analistas"   label="Analistas"   ids={["jeniffer", "elane"]}  activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-conteudo"    label="Conteúdo"    ids={["mateus"]}              activeId={activeId} onToggle={toggle} registerNode={registerNode} />
-              <CategoryColumn catId="cat-assistencia" label="Assistência" ids={["ana", "hiago"]}       activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-gerencia"  label="Gerência"  ids={["ariadne"]}                    activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-designers" label="Designers" ids={["armando", "eria"]}            activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-analistas" label="Analistas" ids={["jeniffer", "elane", "ana"]}   activeId={activeId} onToggle={toggle} registerNode={registerNode} />
+              <CategoryColumn catId="cat-conteudo"  label="Conteúdo"  ids={["mateus"]}                     activeId={activeId} onToggle={toggle} registerNode={registerNode} />
             </div>
           </div>
         </div>

@@ -25,10 +25,11 @@ export const TEAM_PHOTO_ANCHOR = "object-cover object-top";
  * aparece por cima. Como mora aqui, na âncora, vale para o Hub, /time (grade,
  * organograma e popover) e Tom e Voz de uma vez só — inclusive no Modo
  * Megabrain, que só troca a URL da foto.
+ *
+ * O mapa está vazio no momento: basta acrescentar `<id>: "IN MEMORIAM"` para
+ * a homenagem voltar a aparecer em todas as telas de uma vez.
  */
-const MEMORIAM: Record<string, string> = {
-  hiago: "IN MEMORIAM",
-};
+const MEMORIAM: Record<string, string> = {};
 
 interface TeamPhotoProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src" | "alt"> {
   /** Id do colaborador — mesma chave de `orgPeople`/`teamMembers`. */
