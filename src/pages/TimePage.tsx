@@ -353,11 +353,11 @@ function CategoryColumn({
 
 // ─── Team Grid ────────────────────────────────────────────────────────────────
 
-// A grade segue a mesma leitura do organograma: liderança, CX, coordenação e
-// depois os squads de produto.
+// A grade segue a mesma leitura do organograma: liderança, coordenação, a
+// dupla de CX e depois os squads de produto.
 const TEAM_ORDER = [
   "raul", "beatriz",
-  "lilian", "daniel", "debora",
+  "daniel", "lilian", "debora",
   "ariadne", "armando",
   "eria", "mateus", "jeniffer",
   "elane", "ana",
