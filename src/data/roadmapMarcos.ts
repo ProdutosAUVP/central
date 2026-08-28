@@ -316,10 +316,14 @@ export const marcos: Marco[] = [
     id: "plano-de-aula",
     icon: NotebookPen,
     titulo: "Plano de Aula",
+    // Entregue, mas ainda sem registro nas Atualizações da Escola — a última
+    // edição publicada é a de julho de 2026. A data segue estimada dentro de
+    // agosto até a edição do mês sair.
     quando: "Agosto de 2026",
     periodo: "Ago",
     data: "2026-08-20",
-    status: "planejado",
+    dataAssumida: true,
+    status: "concluido",
     tone: "blue",
     descricao:
       "Material que estrutura a jornada de estudo da Escola em planos de aula, para o aluno saber o que estudar e em que ordem.",

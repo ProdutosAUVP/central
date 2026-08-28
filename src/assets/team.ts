@@ -15,7 +15,6 @@ import mateus from "./team/mateus.jpg?url";
 import jeniffer from "./team/jeniffer.jpeg?url";
 import elane from "./team/elane.jpg?url";
 import ana from "./team/ana.jpg?url";
-import hiago from "./team/hiago.png?url";
 
 import raulCareca from "./team/careca/raul.webp?url";
 import beatrizCareca from "./team/careca/beatriz.webp?url";
@@ -29,7 +28,6 @@ import mateusCareca from "./team/careca/mateus.webp?url";
 import jenifferCareca from "./team/careca/jeniffer.webp?url";
 import elaneCareca from "./team/careca/elane.webp?url";
 import anaCareca from "./team/careca/ana.webp?url";
-import hiagoCareca from "./team/careca/hiago.webp?url";
 
 export const teamPhotos: Record<string, string> = {
   raul,
@@ -44,7 +42,6 @@ export const teamPhotos: Record<string, string> = {
   jeniffer,
   elane,
   ana,
-  hiago,
 };
 
 /**
@@ -65,5 +62,4 @@ export const teamPhotosCareca: Record<string, string> = {
   jeniffer: jenifferCareca,
   elane: elaneCareca,
   ana: anaCareca,
-  hiago: hiagoCareca,
 };
