@@ -378,25 +378,106 @@ o JSON de tokens e este guia.
 
 ---
 
-## 8. V2 — bidirecional
+## 8. Sincronização entre código e Figma
 
-Fica para depois, mas o caminho existe e vale desenhar já:
+O que dá para automatizar depende do plano do Figma, e vale entender a divisão
+antes de confiar em qualquer coisa.
 
-**Código → Figma (tokens).** Rodar o extrator no CI e pedir ao agente que
-atualize as variáveis quando `src/index.css` mudar. Se a AUVP tiver plano
-**Enterprise**, dá para automatizar de verdade pela REST API de variáveis
-(`POST /v1/files/:key/variables`) — é o único endpoint de escrita real da API,
-e é exclusivo desse plano.
+**A REST API de variáveis do Figma — ler e escrever — é exclusiva do plano
+Enterprise.** A AUVP está no **Pro**. Ou seja: nenhum CI consegue falar com as
+variáveis do arquivo. O caminho que funciona no Pro é a Plugin API, que só roda
+dentro do Figma — na prática, via MCP numa sessão do Claude Code.
 
-**Figma → código (tokens).** Sem Enterprise, a alternativa madura é o plugin
-**Tokens Studio**, que sincroniza tokens com um repositório GitHub nos dois
-sentidos e não depende do plano do Figma.
+Por isso a sincronia é dividida em duas metades, e só uma é automática:
 
-**Componentes.** O **Figma Code Connect** mapeia cada componente do Figma para
-o componente real do repositório, de forma que o Dev Mode mostre o código de
-verdade (`<Button variant="cta">`) em vez de CSS gerado. É o que fecha o ciclo
-sem tentar gerar React a partir do desenho — direção que, na prática, produz
-código descartável.
+| Metade | Como | Automatizável? |
+|---|---|---|
+| `src/index.css` → `design-tokens.json` | `npm run figma:tokens` | ✅ CI, sem rede |
+| `design-tokens.json` ↔ Figma | MCP + snippet | ❌ precisa de sessão com o Figma |
+
+A ponte entre as duas é um **hash canônico**: os dois lados serializam os
+tokens no mesmo formato e reduzem a um número. Números iguais, lados
+sincronizados. O hash fica gravado no próprio `design-tokens.json`.
+
+### 8.1 A metade automática
+
+```bash
+npm run figma:check
+```
+
+Regenera os tokens a partir do CSS em memória e compara com o JSON commitado.
+Se alguém mexer em `src/index.css` sem rodar o extrator, isso falha e diz
+exatamente quais tokens e em que modo:
+
+```
+✗ docs/figma/design-tokens.json está defasado — 4 divergência(s):
+   ~ --radius [capital-light] — CSS diz 14.4, JSON diz 12
+```
+
+Roda no CI pelo workflow `.github/workflows/design-tokens.yml`, disparado
+quando `src/index.css`, o JSON ou `scripts/figma/` mudam. Não tem
+dependências: é Node puro lendo dois arquivos, então o job leva segundos.
+
+### 8.2 A metade que precisa do Figma
+
+```bash
+npm run figma:snippet
+```
+
+Imprime um trecho de JavaScript. Cole em `use_figma` (MCP do Figma) com o
+arquivo do design system aberto. Ele devolve o hash do lado de lá e um dump
+canônico.
+
+- **Hashes iguais** → sincronizados, acabou.
+- **Hashes diferentes** → salve o campo `dump` num arquivo e rode:
+
+```bash
+npm run figma:diff figma-dump.txt
+```
+
+Que responde o que interessa — quais tokens divergem, em que modo, e os dois
+valores lado a lado:
+
+```
+► Valores divergentes (2):
+
+   color/base/card-foreground
+     escola-light: código=#0B2905@1.000  figma=#21242C@1.000
+```
+
+A partir daí você decide a direção: se o código está certo, o agente atualiza
+as variáveis no Figma; se o Figma está certo, a correção vai para o CSS.
+
+### 8.3 Onde a lógica mora
+
+`scripts/figma/lib/tokens.mjs` é a fonte única: leitura do CSS, forma
+canônica, hash, nomes e scopes usados no Figma. Tanto `extract-tokens.mjs`
+quanto `sync.mjs` importam de lá — duplicar essa lógica seria o jeito mais
+fácil de os dois lados divergirem sem ninguém perceber.
+
+O snippet do Figma é a exceção: ele roda no sandbox do Figma e não tem como
+importar o módulo. `sync.mjs snippet` o **gera** a partir das mesmas
+constantes, e o retorno traz `tamanho` junto do hash — se os algoritmos
+divergirem, o tamanho quase sempre difere antes do hash, o que separa
+"algoritmo quebrado" de "valor diferente".
+
+### 8.4 O que fica fora, de propósito
+
+`--spotlight` não entra na conferência automática. Ele não existe em
+`:root` (só no bloco `.light`) e nos modos escuros vale
+`hsl(var(--primary) / 0.07)`. Alias no Figma não carrega opacidade, então a
+variável guarda cor literal com alpha — forma incomparável com a do CSS por
+regra. Conferir automaticamente daria falso alarme em toda execução.
+
+Não é lacuna escondida: o `figma:check` imprime esse token e o motivo em toda
+execução, para quem mexer nele saber que precisa de olho humano.
+
+### 8.5 Componentes
+
+Tokens são o que este ferramental cobre. Para os componentes, o caminho é o
+**Figma Code Connect**, que mapeia cada componente do Figma para o do
+repositório e faz o Dev Mode mostrar `<Button variant="cta">` em vez de CSS
+gerado. Ainda não configurado.
 
 **O que não tentar:** manter o Figma como fonte da verdade e gerar
 `src/components/ui/*` a partir dele. Os componentes aqui são shadcn/ui com

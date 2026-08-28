@@ -10,7 +10,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "figma:tokens": "node scripts/figma/extract-tokens.mjs",
+    "figma:check": "node scripts/figma/sync.mjs check",
+    "figma:snippet": "node scripts/figma/sync.mjs snippet",
+    "figma:diff": "node scripts/figma/sync.mjs diff",
+    "figma:preview": "node scripts/figma/build-preview.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -1,0 +1,39 @@
+name: Design tokens
+
+# Impede que src/index.css e docs/figma/design-tokens.json se separem.
+#
+# Só confere a metade automatizável da sincronia: CSS → JSON. A metade
+# JSON → Figma depende da Plugin API, que exige o Figma aberto — a REST API de
+# variáveis é exclusiva do plano Enterprise e a AUVP está no Pro. Essa parte se
+# confere sob demanda com `npm run figma:snippet`; veja docs/figma/README.md.
+
+on:
+  pull_request:
+    paths:
+      - "src/index.css"
+      - "docs/figma/design-tokens.json"
+      - "scripts/figma/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/index.css"
+      - "docs/figma/design-tokens.json"
+      - "scripts/figma/**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # O script não tem dependências — lê o CSS e o JSON com o Node puro.
+      # Sem npm install, o job roda em segundos.
+      - name: Conferir se o JSON de tokens está em dia com o CSS
+        run: node scripts/figma/sync.mjs check
