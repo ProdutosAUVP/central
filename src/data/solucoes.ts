@@ -716,7 +716,6 @@ export const analiticaHero = {
   badge: "Dados e Ferramentas",
   img: `${gh}/Analise-de-a%C3%A7%C3%B5es-e-indicadores-AUVP-Anal%C3%ADtica.png?raw=true`,
   paraQuemE: "Tanto a investidores iniciantes quanto experientes. A missão da AUVP Analítica é fornecer dados confiáveis e ferramentas analíticas para apoiar decisões de investimentos sem recomendações.",
-  obs: "A AUVP Analítica possui em todos os planos de assinatura um período de 30 dias corridos de teste grátis. Após os 30 dias de teste, a cobrança é realizada no cartão de crédito inserido no checkout. Assim, a primeira cobrança só é realizada após os 30 dias corridos de teste.",
   oQueE: "A AUVP Analítica é um site voltado para a consulta de dados sobre investimentos em ações e fundos imobiliários.",
   freemium: "O serviço opera sob um modelo freemium, onde uma parte das funcionalidades está disponível gratuitamente para todos os usuários, enquanto recursos adicionais são oferecidos mediante assinatura paga.",
 };

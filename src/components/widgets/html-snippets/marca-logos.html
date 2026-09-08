@@ -236,7 +236,7 @@
 <div class="download-buttons">
   <a href="https://raw.githubusercontent.com/armandocustodio-ds/designsystemauvp/main/AUVP%20CAPITAL%20HORIZONTAL%20PRETA.svg" download title="Baixar SVG">SVG</a>
   <a href="#" download title="Baixar PNG">PNG</a>
-  <a href="#" download title="Baixar PDF">PDF</a>
+  <button type="button" data-imprimir-pdf="https://raw.githubusercontent.com/armandocustodio-ds/designsystemauvp/main/AUVP%20CAPITAL%20HORIZONTAL%20PRETA.svg" title="Imprimir em PDF">PDF</button>
 </div>
 
 <!-- Versão Preferencial -->
@@ -296,9 +296,58 @@
 
 <style>
   .download-buttons { display: flex; gap: 0.5rem; margin: 1rem 0 2rem; }
-  .download-buttons a {
+  .download-buttons a,
+  .download-buttons button {
     font: 700 11px 'Roboto', sans-serif; text-transform: uppercase; text-decoration: none;
     padding: 4px 12px; border: 1px solid #d4d4d4; border-radius: 6px; color: #404040;
+    background: none; cursor: pointer;
   }
-  .download-buttons a:hover { background: #f5f5f5; }
+  .download-buttons a:hover,
+  .download-buttons button:hover { background: #f5f5f5; }
 </style>
+
+<script>
+  /* Imprimir em PDF — iframe oculto na propria pagina.
+     Pop-up bloqueado nao atrapalha, a arte vai embutida (nao depende da rede
+     na hora de imprimir) e o print() so dispara depois do load da imagem.
+     @page { margin: 0 } remove o cabecalho/rodape automatico do navegador
+     (URL, data e titulo) que apareceria sobre a arte no PDF. */
+  document.querySelectorAll('[data-imprimir-pdf]').forEach(function (botao) {
+    botao.addEventListener('click', function () {
+      var src = botao.getAttribute('data-imprimir-pdf');
+      var titulo = botao.getAttribute('title') || 'logo';
+      var doc = '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">'
+        + '<title>' + titulo + '</title><style>'
+        + '@page { size: auto; margin: 0; }'
+        + 'html, body { height: 100%; margin: 0; padding: 0; background: #fff; }'
+        + 'body { box-sizing: border-box; padding: 10mm; display: flex; align-items: center; justify-content: center; }'
+        + 'img { width: 100%; height: 100%; object-fit: contain; page-break-inside: avoid; break-inside: avoid; }'
+        + '</style></head><body><img src="' + src + '" alt="' + titulo + '"></body></html>';
+
+      var iframe = document.createElement('iframe');
+      iframe.setAttribute('aria-hidden', 'true');
+      iframe.style.cssText = 'position:fixed;left:-10000px;top:0;width:210mm;height:297mm;border:0;';
+      iframe.onload = function () {
+        var janela = iframe.contentWindow;
+        var arte = janela.document.images[0];
+        var disparado = false;
+        var imprimir = function () {
+          if (disparado) return;
+          disparado = true;
+          janela.addEventListener('afterprint', function () {
+            setTimeout(function () { iframe.remove(); }, 100);
+          });
+          janela.focus();
+          janela.print();
+          setTimeout(function () { iframe.remove(); }, 60000);
+        };
+        if (!arte || arte.complete) { imprimir(); return; }
+        arte.addEventListener('load', imprimir);
+        arte.addEventListener('error', imprimir);
+        setTimeout(imprimir, 3000);
+      };
+      iframe.srcdoc = doc;
+      document.body.appendChild(iframe);
+    });
+  });
+</script>

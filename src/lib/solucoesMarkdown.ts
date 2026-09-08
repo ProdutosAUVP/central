@@ -129,8 +129,7 @@ export function gerarResumoSolucoesMarkdown(): string {
     analiticaHero.freemium,
     quickInfo(analiticaInfo),
     "### Diferenciais",
-    featureItems(analiticaFeatures),
-    `> ${analiticaHero.obs}`
+    featureItems(analiticaFeatures)
   ));
 
   /* ---------------- AUVP Internacional ---------------- */
