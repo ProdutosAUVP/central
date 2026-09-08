@@ -2,6 +2,7 @@ import React from "react";
 import { useBrand } from "@/contexts/BrandContext";
 import { cn } from "@/lib/utils";
 import { olhoBranco, olhoPreto, olhoAmarelo, downloadSvgBlob, downloadPngFromSvg } from "@/assets/olhos";
+import { imprimirImagem } from "@/lib/imprimirImagem";
 import { Star, AlertTriangle, ArrowDown, Download, FileImage, FileText } from "lucide-react";
 
 const GITHUB_RAW = "https://raw.githubusercontent.com/armandocustodio-ds/designsystemauvp/main";
@@ -71,21 +72,6 @@ async function downloadPngFetch(src: string, filename: string) {
   }
 }
 
-async function downloadPdf(src: string, filename: string) {
-  try {
-    const pdfWindow = window.open("", "_blank");
-    if (pdfWindow) {
-      pdfWindow.document.write(`
-        <html><head><title>${filename}</title>
-        <style>@media print{@page{margin:0}body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh}}</style>
-        </head><body><img src="${src}" style="max-width:100%;max-height:100vh;object-fit:contain"/><script>setTimeout(function(){window.print()},500)</script></body></html>
-      `);
-    }
-  } catch {
-    console.error("Erro ao gerar PDF");
-  }
-}
-
 // ─── Botões de download para logos externos (fetch) ─────────────────────────
 
 function DownloadButtons({ src, filename, dark = false }: { src: string; filename: string; dark?: boolean }) {
@@ -110,9 +96,9 @@ function DownloadButtons({ src, filename, dark = false }: { src: string; filenam
         <FileImage className="h-3 w-3" /> PNG
       </button>
       <button
-        onClick={() => downloadPdf(src, filename)}
+        onClick={() => imprimirImagem(src, filename)}
         className={cn("flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border transition-colors", btnClass)}
-        title="Baixar PDF"
+        title="Imprimir em PDF"
       >
         <FileText className="h-3 w-3" /> PDF
       </button>
@@ -149,9 +135,9 @@ function OlhoDownloadButtons({ svgRaw, svgUrl, filename, dark = false }: {
         <FileImage className="h-3 w-3" /> PNG
       </button>
       <button
-        onClick={() => downloadPdf(svgUrl, filename)}
+        onClick={() => imprimirImagem(svgUrl, filename, svgRaw)}
         className={cn("flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border transition-colors", btnClass)}
-        title="Baixar PDF"
+        title="Imprimir em PDF"
       >
         <FileText className="h-3 w-3" /> PDF
       </button>
