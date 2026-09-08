@@ -841,9 +841,7 @@ export default function SolucoesPage() {
             img={analiticaHero.img}
             info={analiticaInfo}
             paraQuemE={<span id="analitica-publico" className="scroll-mt-32">{analiticaHero.paraQuemE}</span>}
-          >
-            <ObsBanner>{analiticaHero.obs}</ObsBanner>
-          </ProdutoHero>
+          />
 
           <div id="analitica-o-que-e" className="scroll-mt-32 space-y-5">
             <BlocoTitle icon={BarChart3}>O que é AUVP Analítica?</BlocoTitle>
