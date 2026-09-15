@@ -1,7 +1,7 @@
 import React from "react";
 import { useBrand } from "@/contexts/BrandContext";
 import { cn } from "@/lib/utils";
-import { olhoBranco, olhoPreto, olhoAmarelo, downloadSvgBlob, downloadPngFromSvg } from "@/assets/olhos";
+import { olhoBranco, olhoPreto, olhoAmarelo, downloadSvgBlob, downloadPngFromSvg, downloadIcoFromSvg, downloadIcoFetch } from "@/assets/olhos";
 import { imprimirImagem } from "@/lib/imprimirImagem";
 import { Star, AlertTriangle, ArrowDown, Download, FileImage, FileText } from "lucide-react";
 
@@ -96,6 +96,13 @@ function DownloadButtons({ src, filename, dark = false }: { src: string; filenam
         <FileImage className="h-3 w-3" /> PNG
       </button>
       <button
+        onClick={() => downloadIcoFetch(src, filename)}
+        className={cn("flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border transition-colors", btnClass)}
+        title="Baixar ICO"
+      >
+        <FileImage className="h-3 w-3" /> ICO
+      </button>
+      <button
         onClick={() => imprimirImagem(src, filename)}
         className={cn("flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border transition-colors", btnClass)}
         title="Imprimir em PDF"
@@ -133,6 +140,13 @@ function OlhoDownloadButtons({ svgRaw, svgUrl, filename, dark = false }: {
         title="Baixar PNG"
       >
         <FileImage className="h-3 w-3" /> PNG
+      </button>
+      <button
+        onClick={() => downloadIcoFromSvg(svgRaw, filename)}
+        className={cn("flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border transition-colors", btnClass)}
+        title="Baixar ICO"
+      >
+        <FileImage className="h-3 w-3" /> ICO
       </button>
       <button
         onClick={() => imprimirImagem(svgUrl, filename, svgRaw)}
