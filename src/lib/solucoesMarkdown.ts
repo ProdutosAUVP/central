@@ -49,9 +49,10 @@ function modulos(lista: Modulo[]): string {
   return lista
     .map((m) => {
       const meta = m.meta.length ? ` _(${m.meta.join(" · ")})_` : "";
+      const certificado = m.certificadoProprio ? " 🎓 Certificado próprio" : "";
       const aulas = m.aulas.map((a) => `  - ${a.num} — ${a.titulo} (${a.duracao})`).join("\n");
       return bloco(
-        `#### ${m.titulo}${meta}`,
+        `#### ${m.titulo}${meta}${certificado}`,
         m.desc,
         m.obs && `> ${m.obs}`,
         aulas

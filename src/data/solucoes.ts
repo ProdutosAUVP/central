@@ -179,6 +179,8 @@ export interface Modulo {
   aulas: Aula[];
   /** Banner de observação exibido dentro do corpo expandido. */
   obs?: string;
+  /** Módulo extra/bônus com certificado próprio (distinto do certificado geral do treinamento). */
+  certificadoProprio?: boolean;
 }
 
 export interface InfoCard {
@@ -392,6 +394,7 @@ export const escolaModulos: Modulo[] = [
     meta: ["12 Aulas padrão", "3h 13min"],
     desc: "Descomplica a declaração de Imposto de Renda para investidores: como declarar e pagar tributos corretamente.",
     obs: "Este módulo será regravado anualmente, de acordo com mudanças na dinâmica de IR.",
+    certificadoProprio: true,
     aulas: [
       { num: "Aula 01", titulo: "O que é Imposto de Renda?", duracao: "17:41" },
       { num: "Aula 02", titulo: "Preparando a declaração", duracao: "09:05" },
@@ -412,6 +415,7 @@ export const escolaModulos: Modulo[] = [
     img: `${ghProd}/cripto.jpg?raw=true`,
     meta: ["15 Aulas", "~2 horas (131 min)"],
     desc: "Apresenta os fundamentos para investir em criptoativos com segurança.",
+    certificadoProprio: true,
     aulas: [
       { num: "Aula 0", titulo: "Introdução ao módulo de criptomoedas", duracao: "03:15" },
       { num: "Aula 01", titulo: "Por que o Bitcoin foi criado? O problema do dinheiro fiduciário e a inflação", duracao: "07:34" },
@@ -435,6 +439,7 @@ export const escolaModulos: Modulo[] = [
     img: `${ghProd}/thumb%20analitica.jpg?raw=true`,
     meta: ["10 Aulas", "~1 hora (85 min)"],
     desc: "Ensina a extrair o máximo da ferramenta de inteligência da AUVP para avaliar ativos com precisão.",
+    certificadoProprio: true,
     aulas: [
       { num: "Aula 01", titulo: "Bem-vindo à AUVP Analítica", duracao: "07:27" },
       { num: "Aula 02", titulo: "Ações, Stocks e REITs", duracao: "16:59" },
@@ -452,6 +457,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Bônus: Indicadores",
     icon: ChartPie,
     meta: ["8 Aulas", "~52 min"],
+    certificadoProprio: true,
     aulas: [
       { num: "Bônus", titulo: "ROE (Return on Equity)", duracao: "02:48" },
       { num: "Bônus", titulo: "Cotação", duracao: "12:35" },
@@ -467,6 +473,7 @@ export const escolaModulos: Modulo[] = [
     titulo: "Bônus: Masterclasses",
     icon: Presentation,
     meta: ["4 Aulas", "2h 38min"],
+    certificadoProprio: true,
     aulas: [
       { num: "Aula 01", titulo: "O que são os ETFs globais e por que eles são fundamentais?", duracao: "53:27" },
       { num: "Aula 02", titulo: "Marcação a mercado", duracao: "14:04" },

@@ -246,6 +246,11 @@ function ModuloList({ modulos, idPrefix, expandAll }: { modulos: Modulo[]; idPre
                     {mod.meta.map((m, j) => (
                       <Tag key={j} tone="neutral" className="text-[10px]">{m}</Tag>
                     ))}
+                    {mod.certificadoProprio && (
+                      <Tag tone="success" className="text-[10px] gap-1">
+                        <BadgeCheck className="h-3 w-3" /> Certificado próprio
+                      </Tag>
+                    )}
                   </div>
                   {mod.desc && (
                     <p className="text-sm text-muted-foreground font-roboto leading-relaxed mt-2">{mod.desc}</p>
