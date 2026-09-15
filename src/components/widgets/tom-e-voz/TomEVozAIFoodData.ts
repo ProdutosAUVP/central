@@ -147,7 +147,7 @@ Toda tripulação é guiada por um capitão, e o nosso é o Raul Sena — não �
 [FORMATOS ONDE A VOZ DO RAUL É OBRIGATÓRIA]
 - Cartas aos membros e ao time (assinatura pessoal obrigatória)
 - Roteiros do Investidor Sardinha (YouTube, redes pessoais)
-- Aulas e lives da AUVP Escola
+- Aulas e Atualizações de Mercado da AUVP Escola
 - Posts pessoais de opinião ou posicionamento
 - Comunicações de crise que exigem a voz do fundador
 
@@ -894,7 +894,7 @@ Objetivo: o aluno entender sem esforço. O mercado adora siglas para parecer int
 Motivação vem da realidade nua e crua. Medo estratégico (perda de poder de compra, não se aposentar) gera urgência no aprendizado.
 
 [APLICAÇÃO PRÁTICA — TOM POR CENÁRIO]
-- E-mail da Live de Segunda: próximo e relevante → "Vamos dar uma olhada no que está rolando no mercado e como isso impacta seus investimentos."
+- E-mail da Atualização de Mercado de Segunda: próximo e relevante → "Vamos dar uma olhada no que está rolando no mercado e como isso impacta seus investimentos."
 - Aula teórica: didático e sem firula → "A renda fixa pode até não ser sexy, mas faz bem pro seu bolso."
 - WhatsApp/Aviso: descontraído e humano → "Fala, NOME. Tá lembrado que nosso encontro é hoje, às 19h?"
 - Conclusão do treinamento: incentivador e pragmático → "Boa, NOME, você se tornou investidor. A prática agora é essencial."

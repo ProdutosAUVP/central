@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   Monitor, Library, Video, Palette, MessageSquareQuote, MessagesSquare,
   Tractor, Clapperboard, Sparkles, Handshake, HeartHandshake, PartyPopper,
-  Baby, Smartphone, NotebookPen, CreditCard, School,
+  Baby, Smartphone, NotebookPen, CreditCard, School, Layers,
 } from "lucide-react";
 import type { TagTone } from "@/components/widgets/Tag";
 
@@ -327,6 +327,26 @@ export const marcos: Marco[] = [
     tone: "blue",
     descricao:
       "Material que estrutura a jornada de estudo da Escola em planos de aula, para o aluno saber o que estudar e em que ordem.",
+  },
+  {
+    id: "reformulacao-escola",
+    icon: Layers,
+    titulo: "Reformulação da AUVP Escola",
+    quando: "Setembro de 2026",
+    periodo: "Set",
+    data: "2026-09-15",
+    status: "em-andamento",
+    tone: "magenta",
+    descricao:
+      "Evolução do ecossistema AUVP Escola: nomenclaturas simplificadas, módulos unificados e acesso de 1 ano para Atualização de Mercado, Módulos Extras, AUVP Analítica e Módulo Internacional.",
+    detalhes: [
+      "Atualização de Mercado — novo nome das antigas Lives",
+      "Internacional Completo — unifica o antigo AUVP Internacional 1 e 2, liberado para todos",
+      "Guia de Introdução das Plataformas — une Guia Básico de Plataforma e AUVP Analítica",
+      "Indicadores e Aulas Técnicas — une os módulos de Indicadores, Aulas Técnicas e Valuation",
+      "Módulos Extras liberados para as turmas de janeiro/2026 até hoje, agora com certificado próprio",
+      "Regravação das aulas de Boas-vindas e Ecossistema em andamento",
+    ],
   },
   {
     id: "super-app",

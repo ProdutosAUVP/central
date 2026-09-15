@@ -606,7 +606,7 @@ export const escola = {
     paragrafo: "A motivação vem da realidade nua e crua. Usamos o medo estratégico (perda do poder de compra, não se aposentar) para gerar urgência no aprendizado.",
   },
   aplicacaoPratica: [
-    { cenario: "E-mail da Live de Segunda", tom: "Próximo e relevante", exemplo: "Vamos dar uma olhada no que está rolando no mercado e como isso impacta seus investimentos." },
+    { cenario: "E-mail da Atualização de Mercado de Segunda", tom: "Próximo e relevante", exemplo: "Vamos dar uma olhada no que está rolando no mercado e como isso impacta seus investimentos." },
     { cenario: "Aula teórica", tom: "Didático e sem firula.", exemplo: "A renda fixa pode até não ser sexy, mas faz bem para o seu bolso." },
     { cenario: "WhatsApp/Aviso", tom: "Descontraído e humano.", exemplo: "Fala, NOME. Tá lembrado que nosso encontro é hoje, às 19h?" },
     { cenario: "Conclusão do treinamento", tom: "Incentivador e pragmático.", exemplo: "Boa, NOME, você se tornou investidor. A prática agora é essencial para consolidar o aprendizado." },

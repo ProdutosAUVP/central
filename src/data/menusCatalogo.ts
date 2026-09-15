@@ -89,7 +89,7 @@ export const MENU_AUVP: ItemMenu[] = [
   },
   {
     id: "lives",
-    label: "Lives",
+    label: "Atualização de Mercado",
     desc: "Agenda e histórico das transmissões",
     icon: Video,
   },

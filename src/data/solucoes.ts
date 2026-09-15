@@ -601,10 +601,11 @@ export const sempreModulos: Modulo[] = [
     ],
   },
   {
-    titulo: "AUVP Internacional (bônus com 2 primeiros módulos)",
+    titulo: "Internacional Completo",
     img: `${prod}/2025/09/thumb-treinamento-3.jpg`,
-    meta: ["Mód 1: 16 Aulas | Mód 2: 11 Aulas", "~8,73 horas (524 min)"],
-    desc: "Em dois módulos, mergulha na Renda Fixa Internacional, ensina sobre stocks, REITs e Private Equity, e explica como o ciclo econômico impacta os investimentos. Assim, ajuda a expandir oportunidades no mercado global.",
+    meta: ["5 módulos completos", "~22h19 (1339 min)"],
+    desc: "Antigo \"AUVP Internacional 1 e 2\", agora unificado e liberado para todos: reúne os 5 módulos completos do treinamento AUVP Internacional — antes vendido à parte —, dos fundamentos em dólar às estratégias avançadas de alocação, macroeconomia aplicada e blindagem sucessória no exterior.",
+    obs: "A lista de aulas abaixo cobre os módulos 1 e 2. Os módulos 3 a 5 (Macroeconomia Aplicada, Saída Fiscal e Estruturação de Portfólios) seguem a grade completa em Nossas Soluções → AUVP Internacional; a lista aula a aula aqui será atualizada assim que o conteúdo migrar para o Sempre.",
     aulas: [
       { num: "Mód 1 - 00", titulo: "Onboarding", duracao: "03:49" },
       { num: "Mód 1 - 01", titulo: "O que é e como funciona a renda fixa internacional", duracao: "31:06" },
@@ -661,7 +662,7 @@ export const sempreBeneficios: InfoCard[] = [
   { img: `${gh}/OR%C3%87AMENTO%20DOM%C3%89STICO.png?raw=true`, titulo: "Orçamento Doméstico", desc: "Ferramenta de planejamento financeiro completo para organizar o fluxo de dinheiro." },
   { img: `${ghProd}/COMUNIDADE.png?raw=true`, titulo: "Comunidade Ativa", desc: "A maior comunidade de investidores do Brasil segue disponível para tirar dúvidas, interagir com especialistas e compartilhar experiências." },
   { img: `${ghProd}/Captura%20de%20tela%202026-07-24%20113031.png?raw=true`, titulo: "Aulas Atualizadas", desc: "Acesso contínuo ao treinamento AUVP Escola com aulas e conteúdos constantemente renovados." },
-  { img: `${ghProd}/Captura%20de%20tela%202026-07-24%20112002.png?raw=true`, titulo: "Live Semanal", desc: "Live e plantão de dúvidas diretamente com o Raul toda semana. Um contato próximo e constante, enquanto for assinante." },
+  { img: `${ghProd}/Captura%20de%20tela%202026-07-24%20112002.png?raw=true`, titulo: "Atualização de Mercado Semanal", desc: "Atualização de Mercado e plantão de dúvidas diretamente com o Raul toda semana. Um contato próximo e constante, enquanto for assinante." },
 ];
 
 /* ============================================================
