@@ -68,6 +68,7 @@ import tabelaPrecosHtml from "@/components/widgets/html-snippets/tabela-precos.h
 import jornadaHeroiSrc from "@/components/widgets/JornadaHeroi?raw";
 import jornadaHeroiHtml from "@/components/widgets/html-snippets/jornada-heroi.html?raw";
 import marcaLogosSrc from "@/components/widgets/MarcaLogos?raw";
+import olho3DSrc from "@/components/widgets/Olho3D?raw";
 import marcaLogosHtml from "@/components/widgets/html-snippets/marca-logos.html?raw";
 import paletaDataVizSrc from "@/components/widgets/PaletaDataViz?raw";
 import iconesSrc from "@/components/widgets/Icones?raw";
@@ -156,6 +157,10 @@ import { sidebarNavClass, sidebarGroupLabelClass, sidebarItemClass } from "@/com
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SearchButton } from "@/components/SearchButton";
 import { useCssVarColor } from "@/hooks/use-css-var-color";
+
+// Carregado sob demanda: arrasta o @google/model-viewer (e o three.js embutido
+// nele), pesado demais para entrar no bundle principal só por causa desta seção.
+const Olho3D = React.lazy(() => import("@/components/widgets/Olho3D").then((m) => ({ default: m.Olho3D })));
 
 function ColorSwatch({ name, cssVar, fgVar }: { name: string; cssVar: string; fgVar: string }) {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -635,6 +640,14 @@ export default function DesignSystemPage() {
               </a>
             </div>
             <SectionThemeToggle bare title="Marca & Logos" description="Aplicações oficiais de marca AUVP. Use sempre os arquivos originais sem distorções nem recortes." code={marcaLogosSrc} htmlCode={marcaLogosHtml}><MarcaLogos /></SectionThemeToggle>
+
+            <h3 className="text-lg font-bold mb-2 font-anek mt-12">Olho — Modelo 3D</h3>
+            <p className="text-muted-foreground mb-6">Versão em 3D do símbolo da marca, para uso em animações, apresentações e materiais que peçam profundidade.</p>
+            <SectionThemeToggle bare title="Olho 3D" description="Modelo 3D (glTF binário) do olho AUVP, com rotação automática e controles de câmera." code={olho3DSrc} selfDocumented>
+              <React.Suspense fallback={<div className="rounded-xl border-2 border-neutral-800 bg-neutral-900 h-[360px] flex items-center justify-center text-sm text-neutral-400">Carregando modelo 3D…</div>}>
+                <Olho3D />
+              </React.Suspense>
+            </SectionThemeToggle>
           </section>
 
           <Separator />
